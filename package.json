@@ -1,0 +1,17 @@
+{
+  "name": "chengtong-vision",
+  "private": true,
+  "packageManager": "pnpm@8.15.4",
+  "workspaces": ["apps/*", "packages/*", "supabase"],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "turbo": "^1.10.10",
+    "husky": "^9.0.7"
+  },
+  "type": "module"
+}
