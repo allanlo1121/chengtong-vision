@@ -75,3 +75,9 @@ export interface  ISubProject {
   endDate: number;   // timestamp
   stateId: number | null;
 }
+
+export interface ITbmDataItem {
+  name: string;   // 如 "A组位移"
+  value: number;  // 如 1000
+  unit: string;   // 如 "mm"
+}
