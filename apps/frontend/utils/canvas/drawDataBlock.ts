@@ -89,15 +89,15 @@ export function drawDataBlock(
     unitWidth: boxUnitWidth,
     height,
   } = boxConfig.dimensions || {
-    nameWidth: 32,
-    valueWidth: 48,
+    nameWidth: 64,
+    valueWidth: 104,
     unitWidth: 32,
-    height: 20,
+    height: 48,
   };
 
   const { x, y } = boxConfig.center || { x: 0, y: 0 };
   
-  ctx.font = "12px sans-serif";
+  ctx.font = "16px sans-serif";
   ctx.fillStyle = "#000";
   ctx.textBaseline = "middle";
   ctx.textAlign = "right"; // 文字左对齐
@@ -105,29 +105,29 @@ export function drawDataBlock(
   const padding = 4;
   const boxRadius = padding; // 圆角半径
 
-  const nameWidth = ctx.measureText(name).width;
-  const computedBoxNameWidth = Math.max(boxNameWidth, nameWidth); // 方框宽度
+  // const nameWidth = ctx.measureText(name).width;
+  // const computedBoxNameWidth = Math.max(boxNameWidth, nameWidth); // 方框宽度
 
-  const valueWidth = ctx.measureText(valueStr).width;
-  const computedBoxValueWidth = Math.max(
-    valueWidth + padding * 2,
-    boxValueWidth
-  );
-  const unitWidth = ctx.measureText(unit).width; // 单位宽度
-  const computedBoxUnitWidth = Math.max(boxUnitWidth, unitWidth); // 方框宽度
+  // const valueWidth = ctx.measureText(valueStr).width;
+  // const computedBoxValueWidth = Math.max(
+  //   valueWidth + padding * 2,
+  //   boxValueWidth
+  // );
+  // const unitWidth = ctx.measureText(unit).width; // 单位宽度
+  // const computedBoxUnitWidth = Math.max(boxUnitWidth, unitWidth); // 方框宽度
   const totalWidth =boxNameWidth+boxValueWidth+boxUnitWidth; // 总宽度
-   // computedBoxNameWidth + computedBoxValueWidth + computedBoxUnitWidth; // 总宽度
-  const textHeight = parseInt(ctx.font, 10); // 字体高度
-  const boxHeight = Math.max(height, textHeight * 1.3); // 方框高度
+  //  // computedBoxNameWidth + computedBoxValueWidth + computedBoxUnitWidth; // 总宽度
+  // const textHeight = parseInt(ctx.font, 10); // 字体高度
+  // const boxHeight = Math.max(height, textHeight * 1.3); // 方框高度
 
-  const nameX = x - totalWidth / 2-nameWidth/2; // 文字居中
+  const nameX = x - totalWidth / 2-40; // 文字居中
   const nameY = y; // 文字位置
-  const boxValueX = nameX + boxNameWidth; // 方框X位置
-  const boxValueY = nameY - boxHeight / 2; // 方框Y位置
+  const boxValueX = nameX + boxNameWidth+40; // 方框X位置
+  const boxValueY = nameY - height / 2; // 方框Y位置
   const valueX = boxValueX + padding; // 数值位置
   const valueY = y; // 数值位置
   const unitY = y; // 单位位置
-  const unitX = valueX + computedBoxValueWidth; // 单位位置
+  const unitX = valueX + boxValueWidth+20; // 单位位置
 
    console.log(x, nameX, boxValueX, valueX, unitX, totalWidth)
    ctx.translate(0,0); // 平移坐标系到扇形中心
@@ -144,8 +144,8 @@ export function drawDataBlock(
   ctx.roundRect(
     boxValueX,
     boxValueY,
-    computedBoxValueWidth,
-    boxHeight,
+    boxValueWidth*1.5,
+    height,
     boxRadius
   );
   ctx.fillStyle = "#eee";

@@ -1,6 +1,15 @@
 
 
-import {ISubProject} from './tbmDataTypes'
+import {ISubProject,ITbmMainInfo} from './tbmDataTypes'
+
+export const tbmData01:ITbmMainInfo = {
+  id: 1,
+   code: "crec988", // TBM 编号
+  name: "中铁装备988", // TBM 名称
+  type: "ttm8",// TBM 类型
+  thrustAreaNumber: 6, // TBM 推力
+  earthPressureNumber: 7,// TBM 地层压力
+}
 
 
 export const subProjects:ISubProject[] = [
@@ -1669,6 +1678,5 @@ export const subProjects:ISubProject[] = [
       stateId: null
     }
   ]
-
 
 
