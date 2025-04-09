@@ -1,3 +1,7 @@
+export interface ITbmCardProps {
+  tbmcode: string;
+}
+
 export interface IPieSlice {
   // 图形相关的数据
   label: string;
@@ -43,40 +47,29 @@ export interface ITBMStatus {
 
 export interface ISubProject {
   id: number;
-  projId: number;
-  areacode: string;
-  builder: number;
-  wtype: string;
+  projectId: number;
+  areaName: string;
   ringStart: number;
   ringEnd: number;
   tbmCode: string;
-  mshift: boolean;
-  lng: number;
-  lat: number;
-  direction: boolean;
-  loc: string;
-  riskDis: number;
-  remark: string | null;
-  twins: boolean;
-  opNumStart: number;
-  opNumEnd: number;
-  pname: string | null;
-  bname: string;
-  bid: number;
-  xid: number;
-  gname: string;
-  projName: string;
-  buildName: string;
-  areaName: string;
-  hover: boolean;
-  startDate: number; // timestamp
-  endDate: number; // timestamp
-  stateId: number | null;
+  opNumStart: number | null; // 施工段起始环号
+  opNumEnd: number | null; // 施工段结束环号
+  shortName: string;
+  projectName: string;
+  startDate: Date | null; // timestamp
+  endDate: Date | null; // timestamp
+  subProjectStatus: ProjectStatus;
+}
+
+enum ProjectStatus {
+  "在建",
+  "竣工",
+  "停工", // 停工
 }
 
 export interface ITbmDataItem {
   name: string; // 如 "A组位移"
-  value: number; // 如 1000
+  value: string |number; // 如 1000
   unit: string; // 如 "mm"
 }
 
@@ -98,6 +91,11 @@ enum TbmType {
   ttm8 = "土压敞开双模",
   ttm9 = "单护盾TBM",
   ttm10 = "抽ttm",
+}
+
+enum DriverType {
+  electric = "电驱",
+  hydraulic = "液压",
 }
 
 export interface ITbmInfo {
@@ -142,7 +140,9 @@ export interface ITbmInfo {
   producerName: string;
   ownerName: string;
   tbmTypeCode: TbmType;
-  driverType: string;
+  driverType: DriverType;
+  thrustGroupNum: number;
+  earthPressureBarNum: number;
 }
 
 export interface ITbmMainInfo {
@@ -152,4 +152,10 @@ export interface ITbmMainInfo {
   type: string; // TBM 类型
   thrustAreaNumber: number; // TBM 推力
   earthPressureNumber: number; // TBM 地层压力
+}
+
+export interface ITbmScreenProps {
+  tbmcode:string;
+  tbmInfo: ITbmMainInfo;
+  subProject: ISubProject;
 }

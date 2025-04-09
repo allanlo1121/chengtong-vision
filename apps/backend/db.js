@@ -16,7 +16,7 @@ export async function saveData(topic, payload) {
       return;
     }
 
-    console.log("🕒 插入前 timestamp 类型:", typeof timestamp, timestamp);
+  //  console.log("🕒 插入前 timestamp 类型:", typeof timestamp, timestamp);
 
     const { error } = await supabase.from("tbm_data").insert([
       {
@@ -41,8 +41,8 @@ export const saveDeviceStatus = async ({
   isOnline,
   timestamp,
 }) => {
-//   console.log("设备状态:", { proj_id, tbmcode, isOnline, timestamp });
-//   console.log("🕒 插入前 timestamp 类型:", typeof timestamp, timestamp);
+  //   console.log("设备状态:", { proj_id, tbmcode, isOnline, timestamp });
+  //   console.log("🕒 插入前 timestamp 类型:", typeof timestamp, timestamp);
   // 更新当前最新状态
   const { error: statusError } = await supabase.from("device_status").upsert(
     {

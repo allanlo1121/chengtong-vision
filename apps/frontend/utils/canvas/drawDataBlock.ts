@@ -75,7 +75,8 @@ export function drawDataBlock(
 ) {
   if (!ctx) return;
   if (!data) return;
-  function formatValue(value: number, digits = 0): string {
+  function formatValue(value: string | number, digits = 0): string {
+    if (typeof value === "string") return value; // 如果是字符串，直接返回
     return value.toFixed(digits); // 保留小数
   }
   ctx.save(); // 保存当前状态
@@ -92,11 +93,11 @@ export function drawDataBlock(
     nameWidth: 64,
     valueWidth: 104,
     unitWidth: 32,
-    height: 48,
+    height: 32,
   };
 
   const { x, y } = boxConfig.center || { x: 0, y: 0 };
-  
+
   ctx.font = "16px sans-serif";
   ctx.fillStyle = "#000";
   ctx.textBaseline = "middle";
@@ -105,60 +106,43 @@ export function drawDataBlock(
   const padding = 4;
   const boxRadius = padding; // 圆角半径
 
-  // const nameWidth = ctx.measureText(name).width;
-  // const computedBoxNameWidth = Math.max(boxNameWidth, nameWidth); // 方框宽度
+  const totalWidth = boxNameWidth + boxValueWidth + boxUnitWidth; // 总宽度
 
-  // const valueWidth = ctx.measureText(valueStr).width;
-  // const computedBoxValueWidth = Math.max(
-  //   valueWidth + padding * 2,
-  //   boxValueWidth
-  // );
-  // const unitWidth = ctx.measureText(unit).width; // 单位宽度
-  // const computedBoxUnitWidth = Math.max(boxUnitWidth, unitWidth); // 方框宽度
-  const totalWidth =boxNameWidth+boxValueWidth+boxUnitWidth; // 总宽度
-  //  // computedBoxNameWidth + computedBoxValueWidth + computedBoxUnitWidth; // 总宽度
-  // const textHeight = parseInt(ctx.font, 10); // 字体高度
-  // const boxHeight = Math.max(height, textHeight * 1.3); // 方框高度
-
-  const nameX = x - totalWidth / 2-40; // 文字居中
+  const nameX = x - totalWidth / 2 - 40; // 文字居中
   const nameY = y; // 文字位置
-  const boxValueX = nameX + boxNameWidth+40; // 方框X位置
-  const boxValueY = nameY - height / 2; // 方框Y位置
+  const boxValueX = nameX + boxNameWidth + 40; // 方框X位置
+  const boxValueY = nameY - height / 2 + padding; // 方框Y位置
   const valueX = boxValueX + padding; // 数值位置
   const valueY = y; // 数值位置
   const unitY = y; // 单位位置
-  const unitX = valueX + boxValueWidth+20; // 单位位置
+  const unitX = valueX + boxValueWidth + 20; // 单位位置
 
-   console.log(x, nameX, boxValueX, valueX, unitX, totalWidth)
-   ctx.translate(0,0); // 平移坐标系到扇形中心
-   console.log("ctx",ctx.getTransform())
+ // console.log(x, nameX, boxValueX, valueX, unitX, totalWidth);
+  ctx.translate(0, 0); // 平移坐标系到扇形中心
+ // console.log("ctx", ctx.getTransform());
 
   // ctx.translate(x, y); // 平移坐标系到扇形中心
 
   // 文字：标签名
   ctx.textAlign = "left"; // 文字左对齐
+  ctx.fillStyle = "#3F3F3F";
   ctx.fillText(name, nameX, nameY);
 
   // 画方框
   ctx.beginPath();
-  ctx.roundRect(
-    boxValueX,
-    boxValueY,
-    boxValueWidth*1.5,
-    height,
-    boxRadius
-  );
-  ctx.fillStyle = "#eee";
+  ctx.roundRect(boxValueX, boxValueY, boxValueWidth, height * 0.8, boxRadius);
+  ctx.closePath();
+  ctx.fillStyle = "#E0E0E0";
   ctx.fill();
-  ctx.strokeStyle = "#999";
-  ctx.stroke();
 
   // 数值文字
-  ctx.fillStyle = "#000";
+  ctx.fillStyle = "#475CA7";
   ctx.textBaseline = "middle";
   ctx.fillText(valueStr, valueX, valueY);
 
   // 单位文字
+  ctx.font = "12px sans-serif";
+  ctx.fillStyle = "#919191";
   ctx.textBaseline = "middle";
   ctx.fillText(unit, unitX, unitY);
 
@@ -191,15 +175,25 @@ export function drawArcDataBlock(
     height: 20,
   }
 ) {
-  if (!ctx) return;
-  if (!data) return;
-  if (!sectorInfo) return;
-  function formatValue(value: number, digits = 0): string {
+  if (!ctx) {
+    console.log("ctx错误");
+    return;
+  }
+  if (!data) {
+    console.log("data错误");
+    return;
+  }
+  if (!sectorInfo) {
+    console.log("sectorInfo错误");
+    return;
+  }
+  function formatValue(value: string | number, digits = 0): string {
+    if (typeof value === "string") return value; // 如果是字符串，直接返回
     return value.toFixed(digits); // 保留小数
   }
 
   ctx.save(); // 保存当前状态
- // console.log("sectorInfo", ctx, sectorInfo);
+  // console.log("sectorInfo", ctx, sectorInfo,data);
 
   // 如果传入的是单个对象，将其转换为数组
   const dataArray = Array.isArray(data) ? data : [data];
@@ -222,7 +216,7 @@ export function drawArcDataBlock(
 
   //const { x, y } = boxConfig.center || { x: 0, y: 0 };
   ctx.font = "16px sans-serif";
-  ctx.fillStyle = "#000";
+  ctx.fillStyle = "#3F3F3F";
   ctx.textBaseline = "middle";
   ctx.textAlign = "left"; // 文字左对齐
 
@@ -233,7 +227,7 @@ export function drawArcDataBlock(
 
   dataArray.forEach((item, index) => {
     const { name, value, unit } = item;
-    const valueStr = formatValue(value, 0); // 格式化数值
+    const valueStr = formatValue(value, 2); // 格式化数值
     const nameWidth = ctx.measureText(name).width;
     const computedBoxNameWidth = Math.max(boxNameWidth, nameWidth);
 
@@ -263,6 +257,7 @@ export function drawArcDataBlock(
     const unitY = valueY; // 单位位置
 
     // 文字：标签名
+    ctx.fillStyle = "#3F3F3F";
     ctx.fillText(name, nameX, nameY);
 
     // 画方框
@@ -274,19 +269,20 @@ export function drawArcDataBlock(
       boxHeight,
       boxRadius
     );
-    ctx.fillStyle = "#eee";
+    ctx.fillStyle = "#E0E0E0";
     ctx.fill();
-    ctx.strokeStyle = "#999";
+    ctx.strokeStyle = "#C0C0C0";
     ctx.stroke();
 
-    // 数值文字
-    ctx.fillStyle = "#000";
-    ctx.textBaseline = "middle";
-    ctx.fillText(valueStr, valueX, valueY);
-
     // 单位文字
+    ctx.fillStyle = "#919191";
     ctx.textBaseline = "middle";
     ctx.fillText(unit, unitX, unitY);
+
+    // 数值文字
+    ctx.fillStyle = "#475CA7";
+    ctx.textBaseline = "middle";
+    ctx.fillText(valueStr, valueX, valueY);
   });
 
   // console.log(x, nameX, boxValueX, valueX, unitX, textHeight);

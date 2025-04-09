@@ -145,8 +145,8 @@ export default function Pie() {
       { name: "4#", value: 100, unit: "bar" },
       { name: "5#", value: 100, unit: "bar" },
       { name: "6#", value: 100, unit: "bar" },
-      { name: "7#", value: 100, unit: "bar" },
-      { name: "8#", value: 100, unit: "bar" },
+      { name: "7#", value: 100, unit: "bar" }
+      
     ];
 
     const epNum = earthPressureData.length; // 土仓压力数据个数

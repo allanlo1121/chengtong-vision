@@ -1,0 +1,22 @@
+{
+  "id": 582,
+  "code": "Robbins423",
+  "name": "Robbins423",
+  "tbmModel": "XRE 9160",
+  "tbmType": 8,
+  "diameter": 9.16,
+  "deviceLen": 110.0,
+  "deviceWeight": 1400.0,
+  "devicePower": 2970.0,
+  "cutterSpeed": "2.9-5.8",
+  "producer": 10000,
+  "driver": 1,
+  "pdate": 1585670400000,
+  "owner": 10025,
+  "ratedThrust": 9400,
+  "cutterTorque": 22277,
+  "source": true,
+  "hinge": 1,
+  "geo": "",
+  "remark": ""
+}

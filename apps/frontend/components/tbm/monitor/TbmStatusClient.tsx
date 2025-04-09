@@ -1,7 +1,7 @@
 "use client"
 
 import { useWebSocket } from '@/lib/tbm/useWebSocket';
-import { WebSocketMessage } from '@/lib/tbm/websocketTypes';
+import { WebSocketMessage } from '@/lib/tbm/webSocketTypes';
 
 export default function TbmStatusClient() {
 useWebSocket((msg: WebSocketMessage) => {

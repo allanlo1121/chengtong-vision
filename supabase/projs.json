@@ -1,0 +1,102 @@
+{
+    "msg": "success",
+    "code": 200,
+    "data": {
+        "id": 1,
+        "name": "项目列表",
+        "pid": 0,
+        "type": null,
+        "opNumStart": null,
+        "opNumEnd": null,
+        "startDate": null,
+        "endDate": null,
+        "hover": null,
+        "remark": null,
+        "children": [
+            {
+                "id": 1387,
+                "name": "深圳深大城际线",
+                "pid": 1,
+                "type": 2,
+                "opNumStart": null,
+                "opNumEnd": null,
+                "startDate": 1649520000000,
+                "endDate": 1735574400000,
+                "hover": false,
+                "remark": "深大城际机场东站~黄麻布站区间西接机场东站，东接黄麻布站。深大城际机场东站~黄麻布站区间自机场东站出发后，依次下穿航站四路公路桥(机场道)、地铁1号线后瑞~机场东高架区间、兴华路北侧建筑群，随后沿兴华路下方敷设，侧穿怡丰酒店(高层)、星航华府小区，在广深公路段下穿在建12号线黄田站附属及钟屋~黄田站区间，然后沿现状学府路下方敷设，下穿既有雨水箱涵及在建12号线机场东车辆段道岔区及上盖物业(高层)，继续前行下穿京港澳高速(跨现状学府路)公路桥，侧穿宝安第一外国语学校办公楼后，穿越筹建的深圳市创新创意设计学院，然后进入凤凰山脉下方，继续往东北侧勒杜鹃公园方向敷设，下穿九围愉盛工业园后接入黄麻布站。机场东站~黄麻布站区间左线起讫里程为:DK4+283.725-DK8+945,左线区间长4661.275m;右线起讫里程为:YDK4+283.752~ YDK8+945.339,右线区间长4700.967m (长链39.380m),区间共设置10处联络通道，其中3号联络通道(DK5+640.000)兼做废水泵房。区间于黄麻布站前设置明挖段，其它段均为双洞单线盾构隧道(双模盾构)，隧道外径8.8m、内径8m。机黄区间隧道覆土厚度为10.13～265.81m，最大纵坡为28‰，区间平面最小曲线半径568m；洞身范围穿越中、微风化花岗岩长3965m，占比87%，其余段落为砾质粘性土及全、强风化花岗岩，下穿7条断裂带和4条节理密集带。",
+                "children": [
+                    {
+                        "id": 1458,
+                        "name": "02工区01:五和站-五白1#工作井区间",
+                        "pid": 1387,
+                        "type": 3,
+                        "opNumStart": 33084.0,
+                        "opNumEnd": 37411.73,
+                        "startDate": 1637337600000,
+                        "endDate": 1756483200000,
+                        "hover": false,
+                        "remark": "",
+                        "children": [
+                            {
+                                "id": 1472,
+                                "name": "左线",
+                                "pid": 1458,
+                                "type": 4,
+                                "opNumStart": 33425.092,
+                                "opNumEnd": 37356.152,
+                                "startDate": 1637337600000,
+                                "endDate": 1756483200000,
+                                "hover": false,
+                                "remark": "五和站-五白1#工作井区间左线",
+                                "children": null,
+                                "pname": "02工区01:五和站-五白1#工作井区间",
+                                "wtype": "ttm8",
+                                "tbmCode": "Robbins423",
+                                "twins": true,
+                                "riskDis": 50.0,
+                                "areacode": "440300"
+                            },
+                            {
+                                "id": 1495,
+                                "name": "右线",
+                                "pid": 1458,
+                                "type": 4,
+                                "opNumStart": 33084.5,
+                                "opNumEnd": 37352.73,
+                                "startDate": 1605801600000,
+                                "endDate": 1756483200000,
+                                "hover": false,
+                                "remark": "五和站-五白1#工作井区间右线",
+                                "children": null,
+                                "pname": "02工区01:五和站-五白1#工作井区间",
+                                "wtype": "ttm8",
+                                "tbmCode": "CREC988",
+                                "twins": true,
+                                "riskDis": 50.0,
+                                "areacode": "440300"
+                            }
+                        ],
+                        "pname": "深圳深大城际线",
+                        "wtype": null,
+                        "tbmCode": null,
+                        "twins": null,
+                        "riskDis": null,
+                        "areacode": null
+                    }
+                ],
+                "pname": "项目列表",
+                "wtype": null,
+                "tbmCode": null,
+                "twins": null,
+                "riskDis": null,
+                "areacode": null
+            }
+        ],
+        "pname": null,
+        "wtype": null,
+        "tbmCode": null,
+        "twins": null,
+        "riskDis": null,
+        "areacode": null
+    }
+}

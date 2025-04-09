@@ -1,0 +1,3 @@
+﻿id,project_id,builder,wtype,ring_start,ring_end,tbm_code,mshift,lng,lat,direction,loc,risk_dis,remark,twins,op_num_start,op_num_end,short_name,project_name,build_name,area_name,hover,start_date,end_date,sub_project_status,create_by
+1495,9,10025,ttm8,0,2300,crec988,TRUE,114.1074965,22.64058031,FALSE,L,50,,TRUE,33084.5,37352.73,五和站-五白1#工作井区间右线,深圳深大城际线02工区01五和站-五白1#工作井区间右线,中铁二局集团有限公司,广东省深圳市,FALSE,,,在建,1
+1472,9,10025,ttm8,0,2106,rbns423,TRUE,114.1075089,22.64057648,FALSE,L,50,,TRUE,33425.092,37356.152,五和站-五白1#工作井区间左线,深圳深大城际线02工区01五和站-五白1#工作井区间左线,中铁二局集团有限公司,,FALSE,,,在建,1
