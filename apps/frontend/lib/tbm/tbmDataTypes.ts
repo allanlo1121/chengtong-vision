@@ -1,3 +1,6 @@
+import {ISubProject}from '../project/projectType'
+
+
 export interface ITbmCardProps {
   tbmcode: string;
 }
@@ -24,48 +27,6 @@ export interface ITBMCHDStatus {
   earthPressure: number;
 }
 
-export interface ITBMStatus {
-  tbmLabel: string; // TBM名称
-  tbmCode: string; // TBM编号
-  tbmStatus: number; // TBM状态
-  tbmProgressToday: number; // 今日进尺
-  tbmTPlanToday: number; // 今日计划进尺
-  tbmProgressThisWeek: number; // 本周进尺
-  tbmTPlanThisWeek: number; // 本周计划进尺
-  tbmProgressThisMonth: number; // 本月进尺
-  tbmTPlanThisMonth: number; // 本月计划进尺
-  tbmProgressThisYear: number; // 本年进尺
-  tbmTPlanThisYear: number; // 本年计划进尺
-  tbmProgressTotal: number; // 累计进尺
-  tbmTPlanTotal: number; // 累计计划进尺
-  tbmProjectName: string; // 项目名称
-  tbmSection: string; // 区间名称
-  tbmCurrentRing: number; // 当前环号
-  tbmAdvanceSpeed: number; // 前进速度
-  areaName: string; // 区域名称
-}
-
-export interface ISubProject {
-  id: number;
-  projectId: number;
-  areaName: string;
-  ringStart: number;
-  ringEnd: number;
-  tbmCode: string;
-  opNumStart: number | null; // 施工段起始环号
-  opNumEnd: number | null; // 施工段结束环号
-  shortName: string;
-  projectName: string;
-  startDate: Date | null; // timestamp
-  endDate: Date | null; // timestamp
-  subProjectStatus: ProjectStatus;
-}
-
-enum ProjectStatus {
-  "在建",
-  "竣工",
-  "停工", // 停工
-}
 
 export interface ITbmDataItem {
   name: string; // 如 "A组位移"
@@ -158,4 +119,26 @@ export interface ITbmScreenProps {
   tbmcode:string;
   tbmInfo: ITbmMainInfo;
   subProject: ISubProject;
+}
+
+
+export interface ITBMStatus {
+  tbmLabel: string; // TBM名称
+  tbmCode: string; // TBM编号
+  tbmStatus: number; // TBM状态
+  tbmProgressToday: number; // 今日进尺
+  tbmTPlanToday: number; // 今日计划进尺
+  tbmProgressThisWeek: number; // 本周进尺
+  tbmTPlanThisWeek: number; // 本周计划进尺
+  tbmProgressThisMonth: number; // 本月进尺
+  tbmTPlanThisMonth: number; // 本月计划进尺
+  tbmProgressThisYear: number; // 本年进尺
+  tbmTPlanThisYear: number; // 本年计划进尺
+  tbmProgressTotal: number; // 累计进尺
+  tbmTPlanTotal: number; // 累计计划进尺
+  tbmProjectName: string; // 项目名称
+  tbmSection: string; // 区间名称
+  tbmCurrentRing: number; // 当前环号
+  tbmAdvanceSpeed: number; // 前进速度
+  areaName: string; // 区域名称
 }

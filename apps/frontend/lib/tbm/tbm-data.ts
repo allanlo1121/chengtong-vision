@@ -1,4 +1,4 @@
-import { ITbmMainInfo, ISubProject } from "./tbmDataTypes";
+import { ITbmMainInfo } from "./tbmDataTypes";
 
 export const tbmProfile: ITbmMainInfo[] = [
   {
@@ -12,45 +12,6 @@ export const tbmProfile: ITbmMainInfo[] = [
 ];
 
 import { createClient } from "@/utils/supabase/server";
-
-// 查询子项目数据
-export async function fetchSubProjectByTbmcode(
-  tbmcode: string
-): Promise<ISubProject> {
-  const supabase = await createClient();
-  try {
-    // 查询员工信息，仅选择需要的字段，并按员工编号排序
-    const { data: sub_project, error } = await supabase
-      .from("sub_projects")
-      .select("*")
-      .eq("tbm_code", tbmcode)
-      .limit(1);
-
-    if (error) {
-      console.error("查询失败:", error);
-      throw new Error("Failed to fetch employees.");
-    }
-    const result: ISubProject = {
-      id: sub_project[0].id,
-      projectId: sub_project[0].project_id,
-      shortName: sub_project[0].short_name,
-      projectName: sub_project[0].project_name,
-      tbmCode: sub_project[0].tbm_code,
-      ringStart: sub_project[0].ring_start,
-      ringEnd: sub_project[0].ring_end,
-      opNumStart: sub_project[0].op_num_start,
-      opNumEnd: sub_project[0].op_num_end,
-      areaName: sub_project[0].area_name,
-      startDate: sub_project[0].start_date,
-      endDate: sub_project[0].end_date,
-      subProjectStatus: sub_project[0].sub_project_status,
-    };
-    return result;
-  } catch (error) {
-    console.error("Database Error:", error);
-    throw new Error("Failed to fetch employees.");
-  }
-}
 
 // 查询子项目数据
 export async function fetchTbmInfoByTbmcode(
@@ -78,6 +39,26 @@ export async function fetchTbmInfoByTbmcode(
       earthPressureNumber: sub_project[0].earth_pressure_bar_num,
     };
     return result;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch employees.");
+  }
+}
+
+export async function fetchActivatedTbms() {
+  const supabase = await createClient();
+  try {
+    // 查询员工信息，仅选择需要的字段，并按员工编号排序
+    const { data: tbmcodes, error } = await supabase
+      .from("tbm_infos")
+      .select("code")
+      .eq("is_active", true);
+
+    if (error) {
+      console.error("查询失败:", error);
+      throw new Error("Failed to fetch employees.");
+    }
+    return tbmcodes.map((item) => item.code);
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to fetch employees.");

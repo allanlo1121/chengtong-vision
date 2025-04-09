@@ -64,12 +64,19 @@ export const TbmCard: React.FC<TbmCardProps> = ({ tbmcodes }) => {
 
   return (
     <div className="p-4 border rounded shadow space-y-2">
-      {tbmcodes.map((tbmcode, index) => (
-        <div key={index} className="p-4 border rounded shadow space-y-2">
-          <h2 className="text-xl font-semibold">{tbmcode}</h2>
-        </div>
-      ))}
-
+      <h2 className="text-xl font-semibold">{data.tbmcode}</h2>
+      <p>环号: {data.s100100008 ?? "-"}</p>
+      <p>推力: {data.s050001001 ?? "-"}</p>
+      <p>状态: {data.status === 1 ? "运行中" : "暂停/异常"}</p>
+      <p className="text-xs text-gray-500">
+        更新时间: {new Date(data.timestamp).toLocaleString()}
+      </p>
+      <canvas
+        ref={canvasRef}
+        width={800}
+        height={800}
+        className="border-2"
+      ></canvas>
     </div>
   );
 };
