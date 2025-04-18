@@ -9,19 +9,18 @@ const supabase = createClient(
 
 export async function saveData(topic, payload) {
   try {
-    const { proj_id, tbmcode, timestamp, ...rest } = payload;
+    const { tbmcode, timestamp, ...rest } = payload;
 
-    if (!proj_id || !tbmcode || !timestamp) {
+    if (!tbmcode || !timestamp) {
       console.warn("⚠️ Missing proj_id, tbmcode or timestamp in payload");
       return;
     }
 
-  //  console.log("🕒 插入前 timestamp 类型:", typeof timestamp, timestamp);
+    //  console.log("🕒 插入前 timestamp 类型:", typeof timestamp, timestamp);
 
     const { error } = await supabase.from("tbm_data").insert([
       {
         id: crypto.randomUUID(),
-        proj_id,
         tbmcode,
         timestamp,
         data: rest, // 存剩下所有参数
@@ -35,24 +34,17 @@ export async function saveData(topic, payload) {
 }
 
 // 保存设备最新状态 (device_status表)
-export const saveDeviceStatus = async ({
-  proj_id,
-  tbmcode,
-  isOnline,
-  timestamp,
-}) => {
-  //   console.log("设备状态:", { proj_id, tbmcode, isOnline, timestamp });
-  //   console.log("🕒 插入前 timestamp 类型:", typeof timestamp, timestamp);
+export const saveDeviceStatus = async ({ tbmcode, isOnline, timestamp }) => {
+
   // 更新当前最新状态
   const { error: statusError } = await supabase.from("device_status").upsert(
     {
-      proj_id,
       tbmcode,
       is_online: isOnline,
       last_seen: new Date(timestamp).toISOString(),
     },
     {
-      onConflict: "proj_id,tbmcode",
+      onConflict: "tbmcode",
     }
   );
 
@@ -64,7 +56,6 @@ export const saveDeviceStatus = async ({
   const { data: lastLog, error: fetchError } = await supabase
     .from("device_status_logs")
     .select("is_online")
-    .eq("proj_id", proj_id)
     .eq("tbmcode", tbmcode)
     .order("timestamp", { ascending: false })
     .limit(1);
@@ -81,7 +72,6 @@ export const saveDeviceStatus = async ({
     const { error: logError } = await supabase
       .from("device_status_logs")
       .insert({
-        proj_id,
         tbmcode,
         is_online: isOnline,
         timestamp,
@@ -100,7 +90,7 @@ export const markOfflineDevices = async () => {
   // 查出需标记为离线的设备
   const { data: devicesToOffline, error: selectError } = await supabase
     .from("device_status")
-    .select("proj_id, tbmcode")
+    .select(" tbmcode")
     .lt("last_seen", new Date(Date.now() - 90 * 1000).toISOString())
     .neq("is_online", false);
 
@@ -127,7 +117,6 @@ export const markOfflineDevices = async () => {
 
   // 批量插入日志记录
   const logs = devicesToOffline.map((device) => ({
-    proj_id: device.proj_id,
     tbmcode: device.tbmcode,
     is_online: false,
     timestamp: offlineTimestamp,

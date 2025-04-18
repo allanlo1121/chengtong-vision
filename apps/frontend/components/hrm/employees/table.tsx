@@ -1,6 +1,5 @@
 import React from "react";
 import { UpdateEmployee, DeleteEmployee } from "@/components/hrm/employees/buttons";
-import { EmployeesTableType } from "@/lib/hrm/definitions";
 import { fetchFilteredEmployees } from "@/lib/hrm/data";
 
 export default async function employeesTable({

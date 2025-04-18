@@ -111,3 +111,13 @@ CREATE TABLE sub_projects (
 
   CONSTRAINT fk_project_id FOREIGN KEY (project_id) REFERENCES projects(id)  -- 外键约束，引用父项目的 ID
 );
+
+CREATE TABLE tbm_sub_project_history (
+  id SERIAL PRIMARY KEY,  -- 历史记录唯一标识
+  tbm_id INT NOT NULL,  -- TBM的id（外键）
+  sub_project_id INT NOT NULL,  -- 子项目的id（外键）
+  start_date DATE NOT NULL,  -- 绑定开始时间
+  end_date DATE,  -- 绑定结束时间（NULL 表示当前绑定）
+  FOREIGN KEY (tbm_id) REFERENCES tbm_infos(id) ON DELETE CASCADE,
+  FOREIGN KEY (sub_project_id) REFERENCES sub_projects(id) ON DELETE CASCADE
+);

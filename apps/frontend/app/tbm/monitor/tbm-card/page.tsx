@@ -1,14 +1,35 @@
 import React from "react";
-import { TbmCard } from "@/components/tbm/tbmCard";
+//import { ITbmMainInfo } from "@/lib/tbm/tbmDataTypes";
+//import { TbmCard } from "@/components/tbm/dashboard/TbmOverviewCard";
 import { fetchActivatedTbms } from "@/lib/tbm/tbm-data";
+// import {
+//   //fetchProjectByProjectId,
+//   fetchSubProjectByTbmcode,
+// } from "@/lib/project/project-data";
 
 export default async function Page() {
-  const tbmcodes = await fetchActivatedTbms();
-  console.log("tbmcodes", tbmcodes);
-  
+  const activatedTbms = await fetchActivatedTbms();
+//  const subProjects = [];
+ // const projects = [];
+  // for (let i = 0; i < activatedTbms.length; i++) {
+  //   const subProject = await fetchSubProjectByTbmcode(activatedTbms[i].code);
+  //   subProjects.push(subProject);
+  // }
+
+  // for (let i = 0; i < subProjects.length; i++) {
+  //   const project = await fetchProjectByProjectId(subProjects[i].projectId);
+  //   projects.push(project);
+  // }
+
+  //console.log("projects", projects);
+ // console.log("subProjects", subProjects);
+  console.log("tbmInfos", activatedTbms);
+
+  console.log("tbmcodes", activatedTbms);
+
   return (
     <div>
-      <TbmCard tbmcodes={tbmcodes} />
+       tbm-card
     </div>
   );
 }

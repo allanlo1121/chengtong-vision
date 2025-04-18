@@ -1,18 +1,19 @@
-'use client'
+"use client";
 
-import React, { useRef, useEffect} from "react";
-import { useDataContext } from "./WebSocketProvider";
+import React, { useRef, useEffect } from "react";
+import { useDataContext } from "../WebSocketProvider";
+import { ITbmMainInfo } from "@/lib/tbm/tbmDataTypes";
 
 interface TbmCardProps {
-  tbmcodes: string[];
+  activatedTbms: ITbmMainInfo[];
 }
 
-export const TbmCard: React.FC<TbmCardProps> = ({ tbmcodes }) => {
+//: React.FC<TbmCardProps>
+export const TbmStatusCard = ({ }) => {
   // const canvasRef = useRef<HTMLCanvasElement>(null);
   // const context = useDataContext();
   // const data = context?.latestData[tbmcode];
-  console.log("tbmcodes", tbmcodes);
-  
+  //console.log("tbmcodes", activatedTbms);
 
   // useEffect(() => {
   //   const canvas = canvasRef.current;
@@ -57,19 +58,20 @@ export const TbmCard: React.FC<TbmCardProps> = ({ tbmcodes }) => {
   //   ctx.restore(); // 恢复状态
   // }, [data]);
 
- 
-
-  if (!tbmcodes)
-    return <div className="p-4 border rounded shadow">等待数据...</div>;
+  // if (!activatedTbms)
+  //   return <div className="p-4 border rounded shadow">等待数据...</div>;
 
   return (
-    <div className="p-4 border rounded shadow space-y-2">
-      {tbmcodes.map((tbmcode, index) => (
-        <div key={index} className="p-4 border rounded shadow space-y-2">
-          <h2 className="text-xl font-semibold">{tbmcode}</h2>
-        </div>
-      ))}
-
-    </div>
+    <div>
+      
+      
+    <div className="w-screen grid grid-cols-4 gap-2 p-4 border rounded shadow space-y-2">
+    {/* {activatedTbms.map((tbm) => (
+      <div key={tbm.id} className="p-4 border rounded shadow space-y-2">
+        <h2 className="text-xl font-semibold">{tbm.name}</h2>
+      </div>
+    ))} */}
+  </div></div>
+   
   );
 };
