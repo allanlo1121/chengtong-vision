@@ -14,9 +14,9 @@ initWebSocket(server);
 
 // MQTT订阅初始化
 initMQTT(async (topic, payload) => {
-  console.log("MQTT Message:", topic, payload);
+  console.log("MQTT Message:", topic);
 
-  const { proj_id, tbmcode, timestamp } = payload;
+  const { tbmcode, timestamp } = payload;
 
   // const timestamp = payload.ts
   //   ? new Date(typeof payload.ts === 'number' ? payload.ts : Date.parse(payload.ts))
@@ -24,13 +24,12 @@ initMQTT(async (topic, payload) => {
 
   if (topic.startsWith("chengtong/status/")) {
     await saveDeviceStatus({
-      proj_id,
       tbmcode,
       isOnline: payload.isOnline,
       timestamp,
     });
   } else if (topic.startsWith("chengtong/data/")) {
-    console.log("save & broadcast MQTT Data:", payload);
+    console.log("save & broadcast MQTT Data:");
 
     await saveData(topic, { ...payload, timestamp });
     broadcast({ topic, payload: { ...payload, timestamp } });

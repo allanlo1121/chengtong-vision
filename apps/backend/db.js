@@ -12,7 +12,7 @@ export async function saveData(topic, payload) {
     const { tbmcode, timestamp, ...rest } = payload;
 
     if (!tbmcode || !timestamp) {
-      console.warn("⚠️ Missing proj_id, tbmcode or timestamp in payload");
+      console.warn("⚠️ Missing  tbmcode or timestamp in payload");
       return;
     }
 
@@ -35,7 +35,6 @@ export async function saveData(topic, payload) {
 
 // 保存设备最新状态 (device_status表)
 export const saveDeviceStatus = async ({ tbmcode, isOnline, timestamp }) => {
-
   // 更新当前最新状态
   const { error: statusError } = await supabase.from("device_status").upsert(
     {

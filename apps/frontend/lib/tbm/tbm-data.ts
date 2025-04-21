@@ -13,6 +13,8 @@ export const tbmProfile: ITbmMainInfo[] = [
 
 import { createClient } from "@/utils/supabase/server";
 
+import {getTDClient} from "@/utils/tdengine/client";
+
 // 查询子项目数据
 export async function fetchTbmInfoByTbmcode(
   tbmcode: string
@@ -46,9 +48,7 @@ export async function fetchTbmInfoByTbmcode(
 }
 
 // 查询子项目数据
-export async function fetchTbmInfoByTbmId(
-  id: number
-): Promise<ITbmMainInfo> {
+export async function fetchTbmInfoByTbmId(id: number): Promise<ITbmMainInfo> {
   const supabase = await createClient();
   try {
     // 查询员工信息，仅选择需要的字段，并按员工编号排序
@@ -84,11 +84,11 @@ export async function fetchActivatedTbms() {
     const { data: activatedTbms, error } = await supabase
       .from("tbm_sub_project_history")
       .select("tbm_id, sub_project_id")
-      .is("end_date", null);  // 修正为 .is("end_date", null)
+      .is("end_date", null); // 修正为 .is("end_date", null)
 
     if (error) {
       console.error("查询失败:", error);
-      throw new Error("Failed to fetch activated TBMs.");
+      throw new Error("Failed to fetch activated TBMs."+ error.message);
     }
 
     // 输出查询结果
@@ -102,5 +102,17 @@ export async function fetchActivatedTbms() {
   }
 }
 
-
-
+export async function fetchTbmDatas() {
+  try {
+    const client = await getTDClient();
+    const sql = `SELECT * FROM tbm.shield_wuxi_hrk1286
+ORDER BY ts DESC
+LIMIT 100;`;
+    const result = await client.query(sql);
+    console.log("result", result);
+    return result;
+  } catch (error) {
+    console.error("Error fetching TBM data:", error);
+    throw error; // 重新抛出错误以便调用者处理
+  }
+}

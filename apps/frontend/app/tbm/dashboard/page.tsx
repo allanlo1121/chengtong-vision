@@ -12,7 +12,7 @@ export default async function Page() {
 
   console.log("data", data); // 调试输出数据
 
-  data.pop(); // 删除最后一个元素
+  
 
   return (
     <div className="w-full h-full  px-8 grid grid-cols-4 items-center justify-start bg-gray-800 text-gray-100">

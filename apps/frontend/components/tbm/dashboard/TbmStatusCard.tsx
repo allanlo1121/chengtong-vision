@@ -54,19 +54,19 @@ export const TbmStatusCard = ({
     <div className=" h-full w-full absolute  top-0 left-0  text-xs text-gray-300">
       <div className="w-full h-28  grid grid-cols-6 gap-1 px-2 py-0">
         <div className="col-span-2 flex flex-col items-center justify-center py-0 border-2">
-          <div className="absolute -top-3 text-base text-primary font-bold leading-5 bg-foreground border-2 border-primary ">
+          <div className="absolute -top-3 px-2 text-base text-amber-100 font-bold leading-5 bg-linear-to-r/srgb from-indigo-500 to-teal-400 rounded-xl border-2 border-primary ">
             {tbmName}
           </div>
 
           <div className="w-full h-full pt-6 text-center  ">
             <p className="text-left">今日完成</p>
             <span className="text-5xl">
-              {data.s100100008 - data.s100900001}
+            {Number(data?.s100100008 ?? 0) - Number(data?.s100900001 ?? 0)}
             </span>
-            <span>/{data.s100900011 || 0}</span>
+            <span>/{data?.s100900011 ?? 0}</span>
           </div>
         </div>
-        <div className="col-span-2 border-2 items-center justify-center flex flex-col text-center">
+        <div className="col-span-2 border-2 items-center justify-center flex flex-col text-center bg-[url('/logo.svg')]  bg-size-[40px] bg-center bg-no-repeat">
           {renderStatusBlock({
             thrustMode: data.b000000001,
             segmentMode: data.b000000002,
@@ -110,7 +110,7 @@ export const TbmStatusCard = ({
               {formatNumber(data.s050109001, 2)}
             </TableCell>
             <TableCell className="w-1/12 text-center italic p-0">
-              r/min
+              mm/r
             </TableCell>
             <TableCell className="w-2/12 text-center p-0">刀盘转速</TableCell>
             <TableCell className="w-3/12 text-center p-0 text-amber-300">
