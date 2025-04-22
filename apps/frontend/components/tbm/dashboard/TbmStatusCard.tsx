@@ -6,7 +6,7 @@ import { useDataContext } from "../WebSocketProvider";
 
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 function renderStatusBlock({
   thrustMode,
@@ -28,24 +28,55 @@ function renderStatusBlock({
 
 //: React.FC<TbmCardProps>
 export const TbmStatusCard = ({
-  tbmcode,
+  tbmId,
   tbmName,
   ringEnd,
 }: {
-  tbmcode: string;
+  tbmId: number;
   tbmName: string;
   ringEnd: number;
 }) => {
   // const canvasRef = useRef<HTMLCanvasElement>(null);
   //const tbmcode = "crec988";
-  console.log("tbmcode", tbmcode);
+  const [offlineStatus, setOfflineStatus] = useState(false);
 
+  console.log("tbmcode", tbmId);
   const context = useDataContext();
-  const data = context?.latestData[tbmcode];
+  const data = context?.latestData[tbmId];
   console.log("context", context);
-  console.log(data, "data");
- 
+  // console.log("data JSON", JSON.stringify(data, null, 2));
+  // if (data) {
+  //   console.log("🟢 有数据", data);
+  // } else {
+  //   console.warn("🔴 没有数据！", data);
+  // }
   
+
+  useEffect(() => {
+  //  console.log("🟢 设备 数据 变化，重新建立轮询"); 
+    if(offlineStatus){
+      setOfflineStatus(false); // 重置掉线状态
+      return
+    }   
+    const interval = setInterval(() => {
+      const now = Date.now();
+      const ts = new Date(context?.latestData[tbmId]?.timestamp || 0).getTime();
+      const diff = now - ts;
+
+      const isOffline = diff > 1 * 60 * 1000; // 1分钟
+      setOfflineStatus((prev) => prev !== isOffline ? isOffline : prev); // 避免重复 setState
+    }, 10000); // 每10秒轮询一次
+
+    return () => clearInterval(interval); // 🧹 清理定时器
+  }, [tbmId,data?.timestamp]); // ⚠️ 依赖设备 ID，切换设备时重建
+
+  if (offlineStatus) {
+    return (
+      <div className="p-4 border rounded shadow text-red-500">
+        设备掉线中...
+      </div>
+    );
+  }
 
   if (!data)
     return <div className="p-4 border rounded shadow">等待数据...</div>;
@@ -61,7 +92,7 @@ export const TbmStatusCard = ({
           <div className="w-full h-full pt-6 text-center  ">
             <p className="text-left">今日完成</p>
             <span className="text-5xl">
-            {Number(data?.s100100008 ?? 0) - Number(data?.s100900001 ?? 0)}
+              {Number(data?.s100100008 ?? 0) - Number(data?.s100900001 ?? 0)}
             </span>
             <span>/{data?.s100900011 ?? 0}</span>
           </div>

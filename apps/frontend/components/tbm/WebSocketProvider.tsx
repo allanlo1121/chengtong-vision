@@ -21,7 +21,7 @@ function reducer(state: State, action: Action): State {
         ...state,
         latestData: {
           ...state.latestData,
-          [action.payload.tbmcode]: action.payload,
+          [action.payload.tbm_id]: action.payload,
         },
       };
     default:
@@ -44,7 +44,7 @@ export const WebSocketProvider = ({
     };
     ws.onmessage = (event) => {
       const msg = JSON.parse(event.data);
-      if (msg.topic?.startsWith("chengtong/data/")) {
+      if (msg.topic?.startsWith("chengtong/realdata/")) {
         dispatch({ type: "UPDATE", payload: msg.payload });
         console.log("Received data:", msg.payload);
       }

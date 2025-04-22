@@ -14,36 +14,45 @@ initWebSocket(server);
 
 // MQTT订阅初始化
 initMQTT(async (topic, payload) => {
-  console.log("MQTT Message:", topic);
+  console.log("MQTT Message:", topic, payload);
 
-  const { tbmcode, timestamp } = payload;
+  const { tbm_id, timestamp } = payload;
+
+  if (topic.startsWith("chengtong/realdata/")) {
+    console.log("save & broadcast MQTT Data:");
+    broadcast({ topic, payload: { ...payload, timestamp } });
+  }
+
+  //   await saveData(topic, { ...payload, timestamp });
+  //   broadcast({ topic, payload: { ...payload, timestamp } });
+  // }
 
   // const timestamp = payload.ts
   //   ? new Date(typeof payload.ts === 'number' ? payload.ts : Date.parse(payload.ts))
   //   : new Date();
 
-  if (topic.startsWith("chengtong/status/")) {
-    await saveDeviceStatus({
-      tbmcode,
-      isOnline: payload.isOnline,
-      timestamp,
-    });
-  } else if (topic.startsWith("chengtong/data/")) {
-    console.log("save & broadcast MQTT Data:");
+  // if (topic.startsWith("chengtong/status/")) {
+  //   await saveDeviceStatus({
+  //     tbmcode,
+  //     isOnline: payload.isOnline,
+  //     timestamp,
+  //   });
+  // } else if (topic.startsWith("chengtong/data/")) {
+  //   console.log("save & broadcast MQTT Data:");
 
-    await saveData(topic, { ...payload, timestamp });
-    broadcast({ topic, payload: { ...payload, timestamp } });
-  }
+  //   await saveData(topic, { ...payload, timestamp });
+  //   broadcast({ topic, payload: { ...payload, timestamp } });
+  // }
 });
 
 // 每分钟检查一次，标记90秒内无心跳设备为掉线
-cron.schedule("* * * * *", async () => {
-  try {
-    await markOfflineDevices();
-  } catch (error) {
-    console.error("Error marking offline devices:", error);
-  }
-});
+// cron.schedule("* * * * *", async () => {
+//   try {
+//     await markOfflineDevices();
+//   } catch (error) {
+//     console.error("Error marking offline devices:", error);
+//   }
+// });
 
 server.listen(8080, () => {
   console.log("Backend server listening on port 8080");

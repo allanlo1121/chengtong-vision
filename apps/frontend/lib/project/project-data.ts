@@ -1,6 +1,8 @@
 import { createClient } from "@/utils/supabase/server";
 import { ISubProject, IProject } from "./projectType";
 
+const ITEMS_PER_PAGE = 10;
+
 export async function fetchSubProjectById(
   id: number
 ): Promise<ISubProject | undefined> {
@@ -72,6 +74,129 @@ export async function fetchProjectByProjectId(
       projectStatus: project[0].project_status,
     };
     return result;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch employees.");
+  }
+}
+
+export async function fetchActivatedSubProjects() {
+  const supabase = await createClient();
+  try {
+    // 查询员工信息，仅选择需要的字段，并按员工编号排序
+    const { data: sub_projects, error } = await supabase
+      .from("v_project_subproject_summary")
+      .select("*")
+      .eq("subproject_status", "在建")
+      .order("id", { ascending: true });
+
+    if (error) {
+      console.error("查询失败:", error);
+      throw new Error("Failed to fetch employees.");
+    }
+    return sub_projects;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch employees.");
+  }
+}
+
+export async function fetchProjectsPages(query: string): Promise<number> {
+  const supabase = await createClient();
+  try {
+    // 查询员工信息，仅选择需要的字段，并按员工编号排序
+    let filterQuery = supabase
+      .from("projects")
+      .select("id,project_name,short_name,project_address_name,region", {
+        count: "exact",
+      });
+
+    if (query) {
+      const conditions = [
+        `project_name.ilike.%${query}%`,
+        `short_name.ilike.%${query}%`,
+        `project_address_name.ilike.%${query}%`,
+      ];
+      filterQuery = filterQuery.or(conditions.join(","));
+    }
+
+    const { count, error } = await filterQuery;
+
+    console.log("count", count); // 打印总记录数
+    
+
+    if (error) {
+      console.error("查询失败:", error);
+      throw new Error("Failed to fetch projects.");
+    }
+
+    if (count) {
+      const totalPages = Math.ceil(count / ITEMS_PER_PAGE);
+      console.log("Total Pages:", totalPages); // 打印总页数
+      return totalPages || 0;
+    }
+    return 0;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch projects.");
+  }
+}
+
+export async function fetchProjects(query: string,currentPage:number)  {
+  const supabase = await createClient();
+
+  const offset= (currentPage - 1) * ITEMS_PER_PAGE;   // 计算偏移量
+  try {
+    
+    // 查询员工信息，仅选择需要的字段，并按员工编号排序
+    let filterQuery = supabase
+      .from("projects")
+      .select("id,project_name,short_name,project_address_name,region"  )
+      .range(offset, offset + ITEMS_PER_PAGE - 1) // 添加偏移量;
+
+    if (query) {
+      const conditions = [
+        `project_name.ilike.%${query}%`,
+        `short_name.ilike.%${query}%`,
+        `project_address_name.ilike.%${query}%`,
+      ];
+      filterQuery = filterQuery.or(conditions.join(","));
+    }
+
+    const {data:projects,error} = await filterQuery;
+
+    console.log("projects", projects); // 打印总记录数
+    
+
+    if (error) {
+      console.error("查询失败:", error);
+      throw new Error("Failed to fetch projects.");
+    }
+
+   
+    return projects || [];
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch projects.");
+  }
+}
+
+
+export async function fetchSubProjectsPages(query: string): Promise<number> {
+  const supabase = await createClient();
+  try {
+    // 查询员工信息，仅选择需要的字段，并按员工编号排序
+    const { count, error } = await supabase
+      .from("sub_projects")
+      .select("*", { count: "exact" })
+      .ilike("project_name", `%${query}%`)
+      .order("id", { ascending: true });
+
+    if (error) {
+      console.error("查询失败:", error);
+      throw new Error("Failed to fetch employees.");
+    }
+    return count || 0;
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to fetch employees.");

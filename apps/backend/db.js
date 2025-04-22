@@ -34,12 +34,11 @@ export async function saveData(topic, payload) {
 }
 
 // 保存设备最新状态 (device_status表)
-export const saveDeviceStatus = async ({ tbmcode, isOnline, timestamp }) => {
+export const saveDeviceStatus = async ({ tbm_id, timestamp }) => {
   // 更新当前最新状态
-  const { error: statusError } = await supabase.from("device_status").upsert(
+  const { error: statusError } = await supabase.from("device_status").insert(
     {
-      tbmcode,
-      is_online: isOnline,
+      tbmcode,      
       last_seen: new Date(timestamp).toISOString(),
     },
     {

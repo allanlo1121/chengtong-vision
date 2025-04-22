@@ -1,35 +1,37 @@
 CREATE TABLE
     projects (
-        id SERIAL PRIMARY KEY, -- 项目唯一标识符
-        project_name VARCHAR(255) NOT NULL, -- 项目名称，不能为空
-        project_id VARCHAR(50), -- 项目ID，字符串类型，可以为 NULL
-        construction_costs NUMERIC, -- 施工成本（产值），可以为 NULL
-        design_units VARCHAR(255), -- 设计单位，可以为 NULL
-        project_address VARCHAR(255), -- 项目地址，可以为 NULL
-        project_lon_lat VARCHAR(50), -- 项目经纬度，可以为 NULL
-        project_address_name VARCHAR(255), -- 项目地址名称，可以为 NULL
-        supervision_unit VARCHAR(255), -- 监理单位，可以为 NULL
-        contract_start_date DATE, -- 合同开工日期，可以为 NULL
-        contract_end_date DATE, -- 合同结束日期，可以为 NULL
-        actual_start_date DATE, -- 实际开始日期，可以为 NULL
-        actual_end_date DATE, -- 实际结束日期，可以为 NULL
-        project_status VARCHAR(20), -- 项目状态：前期、大干、收尾、竣工、未开工
-        project_leader VARCHAR(255), -- 项目负责人，可以为 NULL
-        project_leader_phone VARCHAR(20), -- 项目负责人电话，可以为 NULL
-        project_introduction TEXT, -- 项目简介，可以为 NULL
-        satellite_img BYTEA, -- 卫星图像，可以为 NULL
-        floor_plan BYTEA, -- 平面图，可以为 NULL
-        profile_map BYTEA, -- 剖面图，可以为 NULL
-        project_length VARCHAR(50), -- 项目长度，可以为 NULL
-        del_flag BOOLEAN DEFAULT FALSE, -- 删除标记，表示项目是否已删除，默认值为 FALSE       
-        create_by INTEGER, -- 创建者 ID，不能为空
-        create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 创建时间，不能为空
-        update_by INTEGER, -- 更新者 ID，可以为 NULL
-        update_time TIMESTAMP, -- 更新时间，可以为 NULL
-        remark TEXT, -- 备注，可以为 NULL
-        params JSONB, -- 附加参数，可以为 NULL
-        owner_name VARCHAR(255), -- 业主（建设单位）名称，可以为 NULL
-        areacode VARCHAR(50) -- 区域编码，可以为 NULL
+    id SERIAL PRIMARY KEY,
+    project_name character varying(255) NOT NULL,
+    project_id character varying(50),
+    construction_costs numeric,
+    design_units character varying(255),
+    project_address character varying(255),
+    project_lon_lat character varying(50),
+    project_address_name character varying(255),
+    supervision_unit character varying(255),
+    contract_start_date date,
+    contract_end_date date,
+    actual_start_date date,
+    actual_end_date date,
+    project_status character varying(20),
+    project_leader character varying(255),
+    project_leader_phone character varying(20),
+    project_introduction text,
+    satellite_img bytea,
+    floor_plan bytea,
+    profile_map bytea,
+    project_length character varying(50),
+    del_flag boolean DEFAULT false,
+    create_by integer,
+    create_time timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    update_by integer,
+    update_time timestamp without time zone,
+    remark text,
+    params jsonb,
+    owner_name character varying(255),
+    areacode character varying(50),
+    short_name character varying,
+    region public.region_enum DEFAULT '华东'::public.region_enum NOT NULL
     );
 
 
@@ -64,3 +66,33 @@ CREATE TABLE sub_projects (
 
   CONSTRAINT fk_project_id FOREIGN KEY (project_id) REFERENCES projects(id)  -- 外键约束，引用父项目的 ID
 );
+
+
+
+CREATE VIEW v_project_subproject_summary AS
+SELECT 
+  sp.id,
+  sp.short_name AS subproject_short_name,
+  sp.project_id,
+  p.short_name AS project_short_name,
+  p.region
+FROM 
+  sub_projects sp
+JOIN 
+  projects p ON sp.project_id = p.id;
+
+CREATE OR REPLACE VIEW v_project_subproject_summary AS
+SELECT 
+  sp.id,
+  sp.short_name AS subproject_short_name,
+  sp.project_id,
+  p.short_name AS project_short_name,
+  p.region,
+  sp.sub_project_status AS subproject_status,
+  h.tbm_id AS current_tbm_id  -- 新增字段
+FROM 
+  sub_projects sp
+JOIN 
+  projects p ON sp.id = p.id
+LEFT JOIN 
+  tbm_sub_project_history h ON sp.id = h.sub_project_id AND h.end_date IS NULL;

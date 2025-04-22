@@ -1,6 +1,6 @@
 export interface DevicePayload {
     proj_id: number;
-    tbmcode: string;
+    tbm_id: number;
     timestamp: number;
     [key: `s${string}` | `b${string}`]: number;
   }

@@ -136,7 +136,7 @@ export default function ThrustMode({ speed = 0 }: { speed?: number }) {
             type="rotate"
             from="0 50 50"
             to="360 50 50"
-            dur={`${5 / speed}s`}
+            dur={`${5 / Math.abs(speed)}s`}
             repeatCount="indefinite"
           />
         </g>

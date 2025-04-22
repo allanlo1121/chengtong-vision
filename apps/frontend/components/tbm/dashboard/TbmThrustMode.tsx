@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
-import { animate, type JSAnimation } from 'animejs';
+import { useEffect, useRef } from "react";
+import { animate, type JSAnimation } from "animejs";
 
 interface RotatingSVGProps {
   speed: number; // r/s
@@ -9,7 +9,7 @@ interface RotatingSVGProps {
 
 function getCurrentRotation(el: HTMLElement): number {
   const transform = getComputedStyle(el).transform;
-  if (transform === 'none') return 0;
+  if (transform === "none") return 0;
 
   const matrix = new DOMMatrix(transform);
   const angle = Math.round(Math.atan2(matrix.b, matrix.a) * (180 / Math.PI));
@@ -33,10 +33,10 @@ const TbmThrustMode: React.FC<RotatingSVGProps> = ({ speed }) => {
     }
 
     // 创建新动画，从当前角度开始，到 current + 360
-    animationRef.current = animate('.logo', {
+    animationRef.current = animate(".logo", {
       rotate: [currentAngle, currentAngle + 360],
-      duration: (1 / speed) * 10000,
-      ease: 'linear',
+      duration: (1 / Math.abs(speed)) * 10000,
+      ease: "linear",
       loop: true,
     });
   }, [speed]);
@@ -47,7 +47,7 @@ const TbmThrustMode: React.FC<RotatingSVGProps> = ({ speed }) => {
       style={{
         width: 100,
         height: 100,
-        transformOrigin: 'center',
+        transformOrigin: "center",
       }}
     >
       <svg
@@ -58,7 +58,7 @@ const TbmThrustMode: React.FC<RotatingSVGProps> = ({ speed }) => {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-    <g>
+        <g>
           <rect width="100" height="100" fill="none" />
           <g filter="url(#filter0_d_3345_824)">
             <circle
@@ -261,7 +261,6 @@ const TbmThrustMode: React.FC<RotatingSVGProps> = ({ speed }) => {
             stroke="#1E3A8A"
           />
           <line x1="30" y1="50" x2="70" y2="50" stroke="#1E3A8A" />
-          
         </g>
       </svg>
     </div>

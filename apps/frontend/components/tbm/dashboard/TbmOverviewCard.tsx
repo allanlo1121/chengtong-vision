@@ -61,7 +61,7 @@ export default async function TbmOverviewCard({
   return (
     <div className="w-100 h-60 relative rounded-2xl shadow-lg  ">
       <main className="absolute top-0 left-0 w-full h-52  bg-blue-500/20 border-4 border-blue-500/60  flex flex-col items-center justify-center">
-      <TbmStatusCard tbmcode={tbmInfo.code} tbmName={tbmInfo.name} ringEnd={subProjectInfo.ringEnd} /></main>
+      <TbmStatusCard tbmId={tbmId} tbmName={tbmInfo.name} ringEnd={subProjectInfo.ringEnd} /></main>
 
       <footer className="absolute bottom-0 left-0 w-full h-8 bg-foreground  ">
         <div className="h-full flex  items-center  ">         
