@@ -9,6 +9,7 @@ import {
   Employer,
   IEmployeeForm,
   IManager,
+  Leader,
 } from "./definitions";
 
 import { cleanNullValues } from "@/lib/utils";
@@ -253,7 +254,11 @@ export async function fetchFilteredDepartments(
       throw new Error("Failed to fetch departments.");
     }
     const result: DepartmentsTableType[] = (departments || []).map(
-      (department: { id: number; department_name: string; manager_name: string }) => ({
+      (department: {
+        id: number;
+        department_name: string;
+        manager_name: string;
+      }) => ({
         id: department.id,
         departmentName: department.department_name,
         managerName: department.manager_name,
@@ -491,6 +496,41 @@ export async function fetchEmployeeById(
       notes: result.notes,
     };
     return employeeData;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch department.");
+  }
+}
+
+export async function fetchEmployeeByPosition(
+  position: string
+): Promise<Leader[]> {
+  const supabase = await createClient();
+  try {
+    // 查询部门信息，包括关联的 manager 数据
+    const { data: leaders, error } = await supabase
+      .from("employee_full_name_view") // 查询视图
+      .select("id,full_name")
+      .eq("position", position);
+
+    // if (!employee) {
+    //   return null; // 如果未找到，返回 null
+    // }
+
+    if (error) {
+      console.error("查询失败:", error);
+      throw new Error("Failed to fetch department.");
+    }
+    // console.log("部门数据:", employee);
+
+    const result: Leader[] = leaders.map(
+      (leader: { id: number; full_name: string }) => ({
+        id: leader.id,
+        fullName: leader.full_name,
+      })
+    );
+
+    return result;
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to fetch department.");

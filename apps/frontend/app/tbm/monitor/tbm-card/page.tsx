@@ -1,7 +1,7 @@
 import React from "react";
 //import { ITbmMainInfo } from "@/lib/tbm/tbmDataTypes";
 //import { TbmCard } from "@/components/tbm/dashboard/TbmOverviewCard";
-import { fetchActivatedTbms } from "@/lib/tbm/tbm-data";
+import { fetchActivatedTbms } from "@/lib/tbm/data";
 // import {
 //   //fetchProjectByProjectId,
 //   fetchSubProjectByTbmcode,

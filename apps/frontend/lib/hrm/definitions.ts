@@ -152,6 +152,11 @@ export enum Gender {
   Unknown = "未知",
 }
 
+export type Leader = {
+  id: number;
+  fullName: string;
+}
+
 // 定义政治身份枚举
 export enum PoliticalStatus {
   PartyMember = "中共党员",

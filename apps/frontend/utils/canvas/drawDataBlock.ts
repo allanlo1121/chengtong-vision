@@ -3,7 +3,7 @@ import {
   IBoxConfig,
   IBoxDimensions,
 } from "@/lib/canvas/canvasTypes";
-import { ITbmDataItem } from "@/lib/tbm/tbmDataTypes";
+import { ITbmDataItem } from "@/lib/tbm/types";
 
 export function createSectorInfo(
   index: number,

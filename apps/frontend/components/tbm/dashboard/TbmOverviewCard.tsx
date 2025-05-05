@@ -1,14 +1,14 @@
 import {
   fetchProjectByProjectId,
   fetchSubProjectById,
-} from "@/lib/project/project-data";
+} from "@/lib/project/data";
 import {
   ISubProject,
   IProject,
   ProjectStatus,
-} from "@/lib/project/projectType";
-import { fetchTbmInfoByTbmId } from "@/lib/tbm/tbm-data";
-import { ITbmMainInfo } from "@/lib/tbm/tbmDataTypes";
+} from "@/lib/project/types";
+import { fetchTbmInfoByTbmId } from "@/lib/tbm/data";
+import { ITbmMainInfo } from "@/lib/tbm/types";
 import { TbmStatusCard } from "./TbmStatusCard";
 import React from "react";
 

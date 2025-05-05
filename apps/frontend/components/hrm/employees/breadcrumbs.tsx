@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 import Link from 'next/link';
-import { notoSans } from '@/components/fonts';
+import { notoSans } from '@/components/ui/fonts';
 
 interface Breadcrumb {
   label: string;

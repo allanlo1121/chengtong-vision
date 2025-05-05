@@ -21,7 +21,11 @@ const FormInput: FC<FormInputProps> = ({
   IconComponent,
   ...props
 }) => {
+  console.log("errors", errors);  
   const hasError = errors.length > 0;
+
+  console.log(id,"hasError", hasError,errors);
+  
 
   return (
     <div className="mb-4">
@@ -48,7 +52,7 @@ const FormInput: FC<FormInputProps> = ({
         )}
       </div>
 
-      {hasError && (
+      {hasError ? (
         <div id={`${id}-error`} aria-live="polite" aria-atomic="true">
           {errors.map((error, index) => (
             <p className="mt-2 text-sm text-red-500" key={index}>
@@ -56,6 +60,8 @@ const FormInput: FC<FormInputProps> = ({
             </p>
           ))}
         </div>
+      ): (
+        <p className="text-xs text-gray-400 mt-2">无错误</p>
       )}
     </div>
   );

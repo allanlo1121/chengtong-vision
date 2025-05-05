@@ -17,12 +17,11 @@ export default async function Page(props: {
     page?: string;
   }>;
 }) {
-  const searchParams = await props.searchParams;
-  //console.log("searchParams",searchParams);  
+  const searchParams = await props.searchParams;  
   const query = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 1;
-
   const totalPages = await fetchEmployeesPages(query);
+  //console.log("totalPages", totalPages);  
 
   return (
     <div className="w-full">

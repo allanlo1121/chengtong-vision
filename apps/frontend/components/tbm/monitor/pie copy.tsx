@@ -7,7 +7,7 @@ import {
 import { IPosition, ISectorInfo, IBoxConfig } from "@/lib/canvas/canvasTypes";
 
 import React, { useRef, useEffect } from "react";
-import { ITbmDataItem } from "@/lib/tbm/tbmDataTypes";
+import { ITbmDataItem } from "@/lib/tbm/types";
 
 export default function Pie() {
   const canvasRef = useRef<HTMLCanvasElement>(null);

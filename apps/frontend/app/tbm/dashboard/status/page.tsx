@@ -1,6 +1,6 @@
 
-import { fetchActivatedTbms, fetchTbmInfoByTbmId} from "@/lib/tbm/tbm-data";  // 假设这些API函数已经实现
-import {  fetchSubProjectById, fetchProjectByProjectId } from "@/lib/project/project-data"; 
+import { fetchActivatedTbms, fetchTbmInfoByTbmId} from "@/lib/tbm/data";  // 假设这些API函数已经实现
+import {  fetchSubProjectById, fetchProjectByProjectId } from "@/lib/project/data"; 
 
 
 export default async  function Page() {

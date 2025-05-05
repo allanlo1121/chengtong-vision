@@ -123,3 +123,65 @@ CREATE TABLE tbm_sub_project_history (
 );
 
 
+CREATE OR REPLACE VIEW v_tbms_subproject_overview AS
+SELECT
+  tuh.tbm_id,
+  tuh.usage_type,
+  tuh.start_date,
+  sp.id AS subproject_id,
+  sp.short_name AS subproject_short_name,
+  sp.status AS subproject_status,
+  p.id AS project_id,
+  p.short_name AS project_short_name,  
+  r.name AS region_name,
+  tb.name AS tbm_name,
+  tb.code AS tbm_code
+FROM tbm_usage_history tuh
+JOIN subprojects sp ON sp.id = tuh.related_id
+LEFT JOIN projects p ON sp.project_id = p.id
+LEFT JOIN regions r ON p.region_id = r.id
+LEFT JOIN tbms tb ON tb.id = tuh.tbm_id
+WHERE tuh.usage_type = 'subproject' AND tuh.end_date IS NULL;
+
+
+
+  CREATE TABLE log_tbm_change (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  source_type TEXT NOT NULL,            -- 来源类型（'tunnel'、'base'、'yard'等）
+  source_id UUID NOT NULL,               -- 来源记录的id
+  previous_tbm_id UUID,                  -- 原 tbm_id
+  current_tbm_id UUID,                   -- 现 tbm_id
+  changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE OR REPLACE FUNCTION log_tbm_change_func() RETURNS trigger AS $$
+DECLARE
+  source_type TEXT;
+BEGIN
+  -- 取触发器传进来的第一个参数
+  source_type := TG_ARGV[0];
+
+  IF NEW.tbm_id IS DISTINCT FROM OLD.tbm_id THEN
+    INSERT INTO log_tbm_change (
+      source_type,
+      source_id,
+      previous_tbm_id,
+      current_tbm_id
+    ) VALUES (
+      source_type,
+      NEW.id,
+      OLD.tbm_id,
+      NEW.tbm_id
+    );
+  END IF;
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER trg_log_tunnel_tbm_change
+AFTER UPDATE ON tunnels
+FOR EACH ROW
+WHEN (OLD.tbm_id IS DISTINCT FROM NEW.tbm_id)
+EXECUTE FUNCTION log_tbm_change_func('tunnel');

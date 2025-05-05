@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { ITBMStatus, ISubProject } from "@/lib/tbm/tbmDataTypes";
+import { ITBMStatus, ISubProject } from "@/lib/tbm/types";
 import TbmStatusCard from "@/components/tbm/dashboard/TbmOverviewCard";
-import { subProjects } from "@/lib/tbm/tbm-data";
+import { subProjects } from "@/lib/tbm/data";
 import {
   Select,
   SelectContent,

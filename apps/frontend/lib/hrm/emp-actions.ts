@@ -52,7 +52,7 @@ const CreateEmployee = FormSchema;
 const UpdateEmployee = FormSchema;
 
 export async function createEmployee(prevState: State, formData: FormData) {
-  // console.log("formData", formData);
+   console.log("formData", formData);
   //Validate from using Zod
   const validatedFields = CreateEmployee.safeParse({
     firstName: formData.get("firstName"),
@@ -98,7 +98,7 @@ export async function createEmployee(prevState: State, formData: FormData) {
     email: validatedFields.data.email,
     phone_number: validatedFields.data.phoneNumber,
     position: validatedFields.data.position,
-    avatar: validatedFields,
+    avatar: validatedFields.data.avatar,
     education_level: validatedFields.data.educationLevel,
     political_status: validatedFields.data.politicalStatus,
     department_name: validatedFields.data.departmentId,
@@ -111,6 +111,7 @@ export async function createEmployee(prevState: State, formData: FormData) {
     employment_type_id: validatedFields.data.employmentTypeId,
     employer_id: validatedFields.data.employerId,
   };
+   console.log("data", data);
 
   const supabase = await createClient();
 

@@ -16,16 +16,16 @@ initWebSocket(server);
 initMQTT(async (topic, payload) => {
   console.log("MQTT Message:", topic, payload);
 
-  const { tbm_id, timestamp } = payload;
+  const { tbmcode, timestamp } = payload;
 
   if (topic.startsWith("chengtong/realdata/")) {
     console.log("save & broadcast MQTT Data:");
     broadcast({ topic, payload: { ...payload, timestamp } });
   }
 
-  //   await saveData(topic, { ...payload, timestamp });
-  //   broadcast({ topic, payload: { ...payload, timestamp } });
-  // }
+   // await saveData(topic, { ...payload, timestamp });
+    broadcast({ topic, payload: { ...payload, timestamp } });
+  //}
 
   // const timestamp = payload.ts
   //   ? new Date(typeof payload.ts === 'number' ? payload.ts : Date.parse(payload.ts))

@@ -17,7 +17,7 @@ import {
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import FormInput from "@/components/hrm/ui/form-input";
-import { useActionState, useState } from "react";
+import { useActionState } from "react";
 import FormSelect from "@/components/hrm/ui/form-select";
 import { createEmployee, State } from "@/lib/hrm/emp-actions";
 
@@ -124,6 +124,7 @@ export default function Form({
             label="电话号码"
             type="text"
             placeholder="输入电话号码"
+            errors={state.errors?.phoneNumber|| []}
             IconComponent={CurrencyDollarIcon}
           />
 

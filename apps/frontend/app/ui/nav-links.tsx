@@ -17,7 +17,6 @@
 //   SidebarHeader,
 // } from "@/components/ui/sidebar"
 
-
 // // Map of links to display in the side navigation.
 // // Depending on the size of the application, this would be stored in a database.
 // const links = [
@@ -79,16 +78,16 @@
 //   );
 // }
 
-import * as React from "react"
-import { ChevronRight } from "lucide-react"
+import * as React from "react";
+import { ChevronRight } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { SearchForm } from "@/components/search-form"
-import { VersionSwitcher } from "@/components/version-switcher"
+import { SearchForm } from "@/components/search-form";
+import { VersionSwitcher } from "@/components/version-switcher";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/collapsible";
 import {
   Sidebar,
   SidebarContent,
@@ -101,7 +100,7 @@ import {
   SidebarMenuItem,
   SidebarProvider,
   SidebarRail,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 // This is sample data.
 const data = {
@@ -137,25 +136,48 @@ const data = {
         {
           title: "薪酬",
           url: "/hrm/salaries",
-        }
+        },
       ],
     },
     {
       title: "项目管理",
-      url: "#",
+      url: "/project",
       items: [
         {
-          title: "Components",
-          url: "#",
+          title: "项目部",
+          url: "/project/projects",
         },
         {
-          title: "File Conventions",
-          url: "#",
+          title: "隧道区间",
+          url: "/project/subprojects",
         },
         {
-          title: "Functions",
+          title: "进度管理",
           url: "#",
-        }   
+        },
+      ],
+    },
+    {
+      title: "资源中心",
+      url: "/resource-center",
+      items: [
+        {
+          title: "区间",
+          url: "/resource-center/tunnel",
+        },
+        {
+          title: "车站",
+          url: "/resource-center/station",
+        },
+
+        {
+          title: "盾构机",
+          url: "/resource-center/tbms",
+        },
+        {
+          title: "其他设备",
+          url: "/resource-center/others",
+        },
       ],
     },
     {
@@ -173,7 +195,7 @@ const data = {
         {
           title: "Next.js Compiler",
           url: "#",
-        }
+        },
       ],
     },
     {
@@ -187,60 +209,65 @@ const data = {
       ],
     },
   ],
-}
+};
 
-export default function NavLinks({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export default function NavLinks({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
-  console.log("pathname",pathname);
-  
+  console.log("pathname", pathname);
+
   return (
     <SidebarProvider>
-    <Sidebar {...props}>
-      <SidebarHeader>
-        <VersionSwitcher
-          versions={data.versions}
-          defaultVersion={data.versions[0]}
-        />
-        <SearchForm />
-      </SidebarHeader>
-      <SidebarContent className="gap-0">
-        {/* We create a collapsible SidebarGroup for each parent. */}
-        {data.navMain.map((item) => (
-          <Collapsible
-            key={item.title}
-            title={item.title}
-            defaultOpen
-            className="group/collapsible"
-          >
-            <SidebarGroup>
-              <SidebarGroupLabel
-                asChild
-                className="group/label text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-              >
-                <CollapsibleTrigger>
-                  {item.title}{" "}
-                  <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
-                </CollapsibleTrigger>
-              </SidebarGroupLabel>
-              <CollapsibleContent>
-                <SidebarGroupContent>
-                  <SidebarMenu>
-                    {item.items.map((item) => (
-                      <SidebarMenuItem key={item.title}>
-                        <SidebarMenuButton asChild isActive={item.url === pathname}>
-                          <a href={item.url}>{item.title}</a>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    ))}
-                  </SidebarMenu>
-                </SidebarGroupContent>
-              </CollapsibleContent>
-            </SidebarGroup>
-          </Collapsible>
-        ))}
-      </SidebarContent>
-      <SidebarRail />
-    </Sidebar>
+      <Sidebar {...props}>
+        <SidebarHeader>
+          <VersionSwitcher
+            versions={data.versions}
+            defaultVersion={data.versions[0]}
+          />
+          <SearchForm />
+        </SidebarHeader>
+        <SidebarContent className="gap-0">
+          {/* We create a collapsible SidebarGroup for each parent. */}
+          {data.navMain.map((item) => (
+            <Collapsible
+              key={item.title}
+              title={item.title}
+              defaultOpen
+              className="group/collapsible"
+            >
+              <SidebarGroup>
+                <SidebarGroupLabel
+                  asChild
+                  className="group/label text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                >
+                  <CollapsibleTrigger>
+                    {item.title}{" "}
+                    <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                  </CollapsibleTrigger>
+                </SidebarGroupLabel>
+                <CollapsibleContent>
+                  <SidebarGroupContent>
+                    <SidebarMenu>
+                      {item.items.map((item) => (
+                        <SidebarMenuItem key={item.title}>
+                          <SidebarMenuButton
+                            asChild
+                            isActive={item.url === pathname}
+                          >
+                            <a href={item.url}>{item.title}</a>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      ))}
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </CollapsibleContent>
+              </SidebarGroup>
+            </Collapsible>
+          ))}
+        </SidebarContent>
+        <SidebarRail />
+      </Sidebar>
     </SidebarProvider>
-  )
+  );
 }
