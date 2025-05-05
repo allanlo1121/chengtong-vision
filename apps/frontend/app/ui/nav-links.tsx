@@ -158,6 +158,29 @@ const data = {
       ],
     },
     {
+      title: "指挥中心",
+      url: "/production-center",
+      items: [
+        {
+          title: "施工进度",
+          url: "/production-center/construction-progress",
+        },
+        {
+          title: "任务调度",
+          url: "/production-center/task-dispatch",
+        },
+
+        {
+          title: "项目监控",
+          url: "/production-center/tbm-monitor",
+        },
+        {
+          title: "报表统计",
+          url: "/production-center/work-report",
+        },
+      ],
+    },
+    {
       title: "资源中心",
       url: "/resource-center",
       items: [

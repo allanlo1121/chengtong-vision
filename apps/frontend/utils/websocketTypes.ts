@@ -1,7 +1,7 @@
 export interface DevicePayload {
-    proj_id: number;
-    tbm_id: number;
-    timestamp: number;
+    tbmcode: string;
+    isPlcOnline: boolean;
+    timestamp: string;
     [key: `s${string}` | `b${string}`]: number;
   }
 

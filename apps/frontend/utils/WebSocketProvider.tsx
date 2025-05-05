@@ -21,7 +21,7 @@ function reducer(state: State, action: Action): State {
         ...state,
         latestData: {
           ...state.latestData,
-          [action.payload.tbm_id]: action.payload,
+          [action.payload.tbmcode]: action.payload,
         },
       };
     default:

@@ -35,7 +35,7 @@ const FormSchema = z.object({
     }),
   actualLaunchDate: z.string().optional(),
   actualBreakthroughDate: z.string().optional(),
-  tbmId: z.coerce.string().min(1, { message: "请选择TBM机型。" }),
+  tbmId: z.string().nullable().optional(), 
   projectId: z.coerce.string().min(1, { message: "请选择所属项目。" }),
   wtype: z.coerce.string().optional(),
   status: z.nativeEnum(ProjectStatus, {
@@ -93,7 +93,7 @@ export async function createTunnel(prevState: State, formData: FormData) {
     status,
   } = validatedFields.data;
 
-  const data: Omit<ITunnelBasicForm, "id"> = {
+  const data: Omit<ITunnelBasicForm,"id"> = {
     name: name,
     shortName: shortName,
     ringStart: Number(ringStart),
@@ -139,8 +139,7 @@ export async function updateTunnel(
 ) {
   console.log("formData", formData);
 
-  //Validate from using Zod
-  const validatedFields = UpdateTunnel.safeParse({
+  const rawForm = {
     name: formData.get("name"),
     shortName: formData.get("shortName"),
     ringStart: formData.get("ringStart"),
@@ -149,10 +148,33 @@ export async function updateTunnel(
     opNumEnd: formData.get("opNumEnd"),
     planLaunchDate: formData.get("planLaunchDate"),
     planBreakthroughDate: formData.get("planBreakthroughDate"),
-    tbmId: formData.get("tbmId"),
+    actualLaunchDate: formData.get("actualLaunchDate"),
+    actualBreakthroughDate: formData.get("actualBreakthroughDate"),
+    tbmId: formData.get("tbmId"), 
     projectId: formData.get("projectId"),
+    wtype: formData.get("wtype"),
     status: formData.get("status"),
-  });
+  };
+  
+  const validatedFields = CreateTunnel.safeParse(rawForm);
+
+
+
+
+  //Validate from using Zod
+  // const validatedFields = UpdateTunnel.safeParse({
+  //   name: formData.get("name"),
+  //   shortName: formData.get("shortName"),
+  //   ringStart: formData.get("ringStart"),
+  //   ringEnd: formData.get("ringEnd"),
+  //   opNumStart: formData.get("opNumStart"),
+  //   opNumEnd: formData.get("opNumEnd"),
+  //   planLaunchDate: formData.get("planLaunchDate"),
+  //   planBreakthroughDate: formData.get("planBreakthroughDate"),
+  //   tbmId: formData.get("tbmId"),
+  //   projectId: formData.get("projectId"),
+  //   status: formData.get("status"),
+  // });
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     console.log("validatedFields", validatedFields);
@@ -173,6 +195,8 @@ export async function updateTunnel(
     opNumEnd,
     planLaunchDate,
     planBreakthroughDate,
+    actualLaunchDate,
+    actualBreakthroughDate,
     tbmId,
     projectId,
     status,
@@ -190,6 +214,8 @@ export async function updateTunnel(
       opNumEnd: Number(opNumEnd),
       planLaunchDate: planLaunchDate,
       planBreakthroughDate: planBreakthroughDate,
+      actualLaunchDate: actualLaunchDate,
+      actualBreakthroughDate: actualBreakthroughDate,
       projectId: projectId,
       tbmId: tbmId,
       status: status,

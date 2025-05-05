@@ -65,7 +65,7 @@ export interface ITunnelBasicForm {
   ringStart: number;
   ringEnd: number;
   wtype?: string; // TBM 类型
-  tbmId: string;
+  tbmId: string | null; // TBM ID
   opNumStart: number; // 施工段起始环号
   opNumEnd: number; // 施工段结束环号
   planLaunchDate: string; // timestamp

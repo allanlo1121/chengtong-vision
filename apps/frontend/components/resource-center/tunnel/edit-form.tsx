@@ -88,11 +88,14 @@ export default function EditProjectForm({
             id="tbmId"
             name="tbmId"
             label="采用的盾构机"
-            options={tbms.map((tbm: ITbmBaseInfo) => ({
-              value: tbm.id.toString(),
-              label: tbm.name,
-            }))}
-            defaultValue={String(tunnel.tbmId)}
+            options={[
+              { value: "", label: "未知" },  // 👈 空值代表 null
+              ...tbms.map((tbm: ITbmBaseInfo) => ({
+                value: tbm.id.toString(),
+                label: tbm.name,
+              }))
+            ]}
+            defaultValue={tunnel.tbmId ? String(tunnel.tbmId) : ""}
             IconComponent={CurrencyDollarIcon}
           />
           <FormInput
@@ -171,21 +174,21 @@ export default function EditProjectForm({
         <div className="grid grid-cols-3 gap-4">
           {/* 开工日期 */}
           <FormInput
-            id="planLaunchDate"
-            name="planLaunchDate"
+            id="actualLaunchDate"
+            name="actualLaunchDate"
             label="实际始发日期"
             type="date"
-            defaultValue={formatDateForInput(tunnel.planLaunchDate)}
+            defaultValue={formatDateForInput(tunnel.actualLaunchDate)}
             placeholder="输入实际始发日期"
             IconComponent={CurrencyDollarIcon}
           />
           {/* 竣工日期 */}
           <FormInput
-            id="planBreakthroughDate"
-            name="planBreakthroughDate"
+            id="actualBreakthroughDate"
+            name="actualBreakthroughDate"
             label="实际贯通日期"
             type="date"
-            defaultValue={formatDateForInput(tunnel.planBreakthroughDate)}
+            defaultValue={formatDateForInput(tunnel.actualBreakthroughDate)}
             placeholder="输入实际贯通日期"
             IconComponent={CurrencyDollarIcon}
           />

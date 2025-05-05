@@ -84,6 +84,7 @@ SELECT
   t.op_num_end,
   t.status,
   tb.name AS tbm_name
+  tb.code AS tbm_code,
 FROM tunnels t
 LEFT JOIN projects p ON t.project_id = p.id
 LEFT JOIN regions r ON p.region_id = r.id
@@ -92,4 +93,4 @@ GROUP BY
   t.id, t.name, t.short_name, r.name, p.short_name,
   t.ring_start, t.ring_end, t.wtype,
   t.plan_launch_date, t.plan_breakthrough_date, t.actual_launch_date,t.actual_breakthrough_date,t.mshift, t.twins,
-  t.op_num_start, t.op_num_end, t.status, tb.name;
+  t.op_num_start, t.op_num_end, t.status, tb.name,tb.code;
