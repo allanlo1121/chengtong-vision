@@ -1,28 +1,30 @@
-import Form from "@/components/resource-center/tunnel/create-form";
+import Form from "@/components/resource-center/tbm/create-form";
 import Breadcrumbs from "@/components/ui/breadcrumbs";
 import { fetchAllProjectsBasic } from "@/lib/project/data";
+import { fetchTbmOwners, fetchTbmProducers, fetchTbmTypes } from "@/lib/resource-center/tbm/data";
 import { fetchAllTbms } from "@/lib/tbm/data";
 import { ITbmBaseInfo } from "@/lib/tbm/types";
 
 export default async function Page() {
   // Fetch data for the form
   
-  const projects = await fetchAllProjectsBasic();
-  const tbms: ITbmBaseInfo[] = await fetchAllTbms(); 
+ const producers = await fetchTbmProducers();
+ const owners = await fetchTbmOwners();
+ const types = await fetchTbmTypes();
  
   return (
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: "区间", href: "/resource-center/tunnel" },
+          { label: "盾构机", href: "/resource-center/tbm" },
           {
-            label: "新建区间",
-            href: "/resource-center/tunnel/create",
+            label: "添加盾构机",
+            href: "/resource-center/tbm/create",
             active: true,
           },
         ]}
       />
-      <Form projects={projects} tbms={tbms} />
+      <Form producers={producers} owners={owners} types={types} />
     </main>
   );
 }

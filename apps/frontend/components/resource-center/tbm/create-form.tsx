@@ -10,23 +10,32 @@ import { Button } from "@/components/ui/button";
 import FormInput from "@/components/ui/form-input";
 import { useActionState } from "react";
 import FormSelect from "@/components/ui/form-select";
-import { createSubproject, State } from "@/lib/project/subproject/actions";
+import { createTbm, State } from "@/lib/resource-center/tbm/actions";
 import { ITbmBaseInfo } from "@/lib/tbm/types";
+import { ITbmOwner, ITbmProducer,ITbmType } from "@/lib/resource-center/tbm/types";
 
 export default function Form({
-  projects,
-  tbms,
+  producers,
+  owners,
+  types,
 }: {
-  projects: IProjectBasic[];
-  tbms: ITbmBaseInfo[];
+  producers: ITbmProducer[];
+  owners: ITbmOwner[];
+  types:ITbmType[]
 }) {
   const initialState: State = { message: null, errors: {} };
-  const [state, formAction] = useActionState(createSubproject, initialState);
- // console.log("state:", state);
+  const [state, formAction] = useActionState(createTbm, initialState);
+  // console.log("state:", state);
 
-  return (
+  console.log("producers",producers);
+  console.log("owner",owners);
+  console.log("types",types);
+  
+  
+
+
+  return     (
     <form action={formAction}>
-     
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Project Name */}
         <FormInput
@@ -40,22 +49,22 @@ export default function Form({
         />
 
         <FormInput
-          id="shortName"
-          name="shortName"
+          id="code"
+          name="code"
           label="区间简称"
           type="text"
           placeholder="输入区间简称"
-          errors={state.errors?.shortName || []}
+          errors={state.errors?.code || []}
           IconComponent={UserCircleIcon}
         />
 
         <FormSelect
-          id="projectId"
-          name="projectId"
-          label="所属项目"
-          options={projects.map((project) => ({
-            value: project.id.toString(),
-            label: project.shortName,
+          id="producerId"
+          name="producerId"
+          label="生产厂家"
+          options={producers.map((producer) => ({
+            value: producer.id.toString(),
+            label: producer.name,
           }))}
           defaultValue=""
           IconComponent={CurrencyDollarIcon}
@@ -75,11 +84,33 @@ export default function Form({
           IconComponent={CurrencyDollarIcon}
         />
         <div className="grid grid-cols-2 gap-4">
+          {/* tbm*/}
+          <FormSelect
+            id="ownerId"
+            name="ownerId"
+            label="拥有者"
+            options={owners.map((owner) => ({
+              value: owner.id.toString(),
+              label: owner.name,
+            }))}
+            IconComponent={CurrencyDollarIcon}
+          />{" "}
+          <FormInput
+            id="dia"
+            name="wtype"
+            label="地质情况"
+            type="text"
+            placeholder="输入地质情况"
+            errors={state.errors?.shortName || []}
+            IconComponent={UserCircleIcon}
+          />
+        </div>
+        <div className="grid grid-cols-2 gap-4">
           <FormInput
             id="ringStart"
             name="ringStart"
             label="起始环号"
-            type="number"            
+            type="number"
             placeholder="请输入起始环号"
             IconComponent={CurrencyDollarIcon}
           />
@@ -87,7 +118,7 @@ export default function Form({
             id="ringEnd"
             name="ringEnd"
             label="结束环号"
-            type="number"            
+            type="number"
             placeholder="请输入结束环号"
             IconComponent={CurrencyDollarIcon}
           />
@@ -97,7 +128,7 @@ export default function Form({
             id="opNumStart"
             name="opNumStart"
             label="起始里程"
-            type="number"            
+            type="number"
             placeholder="请输入起始里程"
             IconComponent={CurrencyDollarIcon}
           />
@@ -105,7 +136,7 @@ export default function Form({
             id="opNumEnd"
             name="opNumEnd"
             label="结束里程"
-            type="number"            
+            type="number"
             placeholder="请输入结束里程"
             IconComponent={CurrencyDollarIcon}
           />
@@ -113,8 +144,8 @@ export default function Form({
         <div className="grid grid-cols-3 gap-4">
           {/* 开工日期 */}
           <FormInput
-            id="planStartDate"
-            name="planStartDate"
+            id="planLaunchDate"
+            name="planLaunchDate"
             label="计划始发日期"
             type="date"
             defaultValue={new Date().toISOString().split("T")[0]}
@@ -123,8 +154,8 @@ export default function Form({
           />
           {/* 竣工日期 */}
           <FormInput
-            id="planEndDate"
-            name="planEndDate"
+            id="planBreakthroughDate"
+            name="planBreakthroughDate"
             label="计划贯通日期"
             type="date"
             defaultValue={new Date().toISOString().split("T")[0]}
@@ -132,18 +163,26 @@ export default function Form({
             IconComponent={CurrencyDollarIcon}
           />
         </div>
-
-        {/* tbm*/}
-        <FormSelect
-          id="tbmId"
-          name="tbmId"
-          label="采用的盾构机"
-          options={tbms.map((tbm) => ({
-            value: tbm.id.toString(),
-            label: tbm.name,
-          }))}
-          IconComponent={CurrencyDollarIcon}
-        />
+        <div className="grid grid-cols-3 gap-4">
+          {/* 开工日期 */}
+          <FormInput
+            id="actualLaunchDate"
+            name="actualLaunchDate"
+            label="实际始发日期"
+            type="date"
+            placeholder="输入计划始发日期"
+            IconComponent={CurrencyDollarIcon}
+          />
+          {/* 竣工日期 */}
+          <FormInput
+            id="actualBreakthroughDate"
+            name="actualBreakthroughDate"
+            label="实际贯通日期"
+            type="date"
+            placeholder="输入计划贯通日期"
+            IconComponent={CurrencyDollarIcon}
+          />
+        </div>
 
         <div className="mt-6 flex justify-end gap-4">
           <Link
@@ -157,4 +196,6 @@ export default function Form({
       </div>
     </form>
   );
+
+
 }

@@ -147,7 +147,7 @@ export async function fetchFilteredTunnelsPages(
     if (!count) return 0; // 如果没有数据，返回 0
 
     const totalPages = Math.ceil(count / ITEMS_PER_PAGE);
-    console.log("Total Pages:", totalPages); // 打印总页数
+   // console.log("Total Pages:", totalPages); // 打印总页数
     return totalPages;
   } catch (error) {
     console.error("Database Error:", error);

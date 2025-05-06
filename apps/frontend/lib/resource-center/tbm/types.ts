@@ -34,7 +34,7 @@ export interface ITbmType {
   id: number;
   code: string;
   name: string;
-  remark: string;
+  remark?: string;
 }
 
 export enum TbmType {
@@ -166,4 +166,15 @@ export interface ITbmMainForm extends ITbmBaseInfo {
   ownerId: string; // TBM所有单位
   geo: string | null; // 地质类型
   remark?: string | null; // 备注信息
+}
+
+
+export interface ITbmProducer {
+  id: string; // 生产厂家ID
+  name: string; // 生产厂家名称
+}
+
+export interface ITbmOwner {
+  id: string; // 所有单位ID
+  name: string; // 所有单位名称
 }

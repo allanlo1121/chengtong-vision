@@ -28,3 +28,9 @@ select create_hypertable('tbmrealdata', 'timestamp', if_not_exists => true);
 -- 创建组合索引，加速某设备近期查询
 create index if not exists idx_tbmrealdata_device_time
 on tbmrealdata (tbm_id, timestamp desc);
+
+
+SELECT * FROM tbmrealdata
+WHERE tbm_id = '0dd82825-6f10-482e-973b-d1575e5ff092'
+ORDER BY timestamp DESC
+LIMIT 100;

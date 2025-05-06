@@ -18,8 +18,8 @@ export type State = {
 };
 
 const FormSchema = z.object({
-  name: z.string().min(1, { message: "必须输入一个工程名称。" }),
-  type: z.string().min(1, { message: "必须输入一个工程类型。" }), 
+  name: z.string().min(1, { message: "必须输入一个盾构机名称。" }),
+  type: z.string().min(1, { message: "必须输入一个盾构机类型。" }),
   diameter: z.coerce.number().min(0, { message: "必须输入一个直径。" }),
   segmentOuter: z.coerce.number().min(1, { message: "必须输入一个外径。" }),
   productionDate: z.string().min(1, { message: "必须输入一个生产日期。" }),
@@ -36,7 +36,7 @@ export async function createTbm(prevState: State, formData: FormData) {
   //Validate from using Zod
   const validatedFields = CreateTbm.safeParse({
     name: formData.get("name"),
-    type: formData.get("type"),    
+    type: formData.get("type"),
     diameter: formData.get("diameter"),
     segmentOuter: formData.get("segmentOuter"),
     productionDate: formData.get("productionDate"),
@@ -57,7 +57,7 @@ export async function createTbm(prevState: State, formData: FormData) {
 
   const {
     name,
-    type,    
+    type,
     diameter,
     segmentOuter,
     productionDate,
@@ -68,7 +68,7 @@ export async function createTbm(prevState: State, formData: FormData) {
 
   const data: Omit<ITbmMainForm, "id"> = {
     name: name,
-    type: type,    
+    type: type,
     diameter: Number(diameter),
     segmentOuter: Number(segmentOuter),
     productionDate: productionDate,
@@ -107,7 +107,7 @@ export async function updateTbm(
   //Validate from using Zod
   const validatedFields = UpdateTbm.safeParse({
     name: formData.get("name"),
-    type: formData.get("type"),    
+    type: formData.get("type"),
     diameter: formData.get("diameter"),
     segmentOuter: formData.get("segmentOuter"),
     productionDate: formData.get("productionDate"),
@@ -127,7 +127,7 @@ export async function updateTbm(
   //Prepare data for insertion into the database
   const {
     name,
-    type,    
+    type,
     diameter,
     segmentOuter,
     productionDate,
@@ -146,7 +146,7 @@ export async function updateTbm(
       productionDate: productionDate,
       ownerId: ownerId,
       geo: geo ?? null,
-      remark: remark,      
+      remark: remark,
     };
     console.log("data", data);
     console.log("id", id);

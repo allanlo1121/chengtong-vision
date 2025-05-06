@@ -13,5 +13,8 @@
     "mqtt": "^5.10.4",
     "node-cron": "^3.0.3",
     "ws": "^8.18.1"
+  },
+  "devDependencies": {
+    "@types/papaparse": "^5.3.15"
   }
 }

@@ -94,3 +94,15 @@ GROUP BY
   t.ring_start, t.ring_end, t.wtype,
   t.plan_launch_date, t.plan_breakthrough_date, t.actual_launch_date,t.actual_breakthrough_date,t.mshift, t.twins,
   t.op_num_start, t.op_num_end, t.status, tb.name,tb.code;
+
+
+CREATE TABLE tunnel_daily_plans (
+  id SERIAL PRIMARY KEY,
+  tunnel_id UUID NOT NULL,
+  plan_at TIMESTAMPTZ NOT NULL,               -- 计划时间（与report_date统一为 timestampz）
+  plan_ring_count INT NOT NULL,               -- 计划推进环数
+  created_at TIMESTAMPTZ DEFAULT now(),
+  
+  CONSTRAINT unique_tunnel_date UNIQUE (tunnel_id, plan_at),
+  CONSTRAINT fk_tunnel FOREIGN KEY (tunnel_id) REFERENCES tunnels(id) ON DELETE CASCADE
+);

@@ -17,11 +17,15 @@ export async function insertTunnelMutation(
       op_num_end: input.opNumEnd,
       plan_launch_date: input.planLaunchDate,
       plan_breakthrough_date: input.planBreakthroughDate,
-      actual_launch_date: input.actualLaunchDate,
-      actual_breakthrough_date: input.actualBreakthroughDate,
-      wtype: input.wtype,
+      actual_launch_date:
+        input.actualLaunchDate === "" ? null : input.actualLaunchDate,
+      actual_breakthrough_date:
+        input.actualBreakthroughDate === ""
+          ? null
+          : input.actualBreakthroughDate,
+      tbm_id: input.tbmId === "" ? null : input.tbmId,
+      wtype: input.wtype === "" ? null : input.wtype,
       project_id: input.projectId,
-      tbm_id: input.tbmId,
       status: input.status,
     })
     .select("id")
@@ -48,11 +52,15 @@ export async function updateTunnelMutation(
       op_num_end: input.opNumEnd,
       plan_launch_date: input.planLaunchDate,
       plan_breakthrough_date: input.planBreakthroughDate,
-      actual_launch_date: input.actualLaunchDate === "" ? null : input.actualLaunchDate,
-      actual_breakthrough_date: input.actualBreakthroughDate === "" ? null : input.actualBreakthroughDate,
+      actual_launch_date:
+        input.actualLaunchDate === "" ? null : input.actualLaunchDate,
+      actual_breakthrough_date:
+        input.actualBreakthroughDate === ""
+          ? null
+          : input.actualBreakthroughDate,
       tbm_id: input.tbmId === "" ? null : input.tbmId,
       wtype: input.wtype === "" ? null : input.wtype,
-      project_id: input.projectId,     
+      project_id: input.projectId,
       status: input.status,
     })
     .eq("id", id);

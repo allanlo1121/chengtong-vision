@@ -195,7 +195,7 @@ const data = {
 
         {
           title: "盾构机",
-          url: "/resource-center/tbms",
+          url: "/resource-center/tbm",
         },
         {
           title: "其他设备",

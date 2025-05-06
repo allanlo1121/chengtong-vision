@@ -16,7 +16,7 @@ export default async function Table({
   currentPage: number;
 }) {
   const tunnels:ITunnelBasic[] = await fetchFilteredTunnels(query, currentPage);
-   console.log("tunnels", tunnels);
+  // console.log("tunnels", tunnels);
 
   return (
     <div className="mt-6 flow-root">

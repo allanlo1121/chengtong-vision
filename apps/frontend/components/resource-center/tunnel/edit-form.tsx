@@ -135,6 +135,7 @@ export default function EditProjectForm({
             name="opNumStart"
             label="起始里程"
             type="number"
+            step="any"
             placeholder="请输入起始里程"
             defaultValue={tunnel.opNumStart}
             IconComponent={CurrencyDollarIcon}
@@ -144,6 +145,7 @@ export default function EditProjectForm({
             name="opNumEnd"
             label="结束里程"
             type="number"
+            step="any"
             placeholder="请输入结束里程"
             defaultValue={tunnel.opNumEnd}
             IconComponent={CurrencyDollarIcon}

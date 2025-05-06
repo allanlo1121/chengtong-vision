@@ -1,11 +1,94 @@
-import { ITbmMainInfo, ITbmBaseInfo,  ITbmWorkInfo } from "./types";
+import {
+  ITbmMainInfo,
+  ITbmBaseInfo,
+  ITbmWorkInfo,
+  ITbmType,
+  ITbmOwner,
+  ITbmProducer,
+} from "./types";
 
 const ITEMS_PER_PAGE = 20;
 
 import { createClient } from "@/utils/supabase/server";
 
+export async function fetchTbmTypes(): Promise<ITbmType[]> {
+  const supabase = await createClient();
+  try {
+    // 查询员工信息，仅选择需要的字段，并按员工编号排序I
+    const { data, error } = await supabase
+      .from("tbm_types")
+      .select("id,code,name")
+      .order("name", { ascending: true });
 
+    if (error) {
+      console.error("查询失败:", error);
+      throw new Error("Failed to fetch tbm types.");
+    }
 
+    const tbmTypes: ITbmType[] = data.map((item) => ({
+      id: item.id,
+      code: item.code,
+      name: item.name,
+    }));
+
+    return tbmTypes;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch tbm types.");
+  }
+}
+
+export async function fetchTbmProducers(): Promise<ITbmProducer[]> {
+  const supabase = await createClient();
+  try {
+    // 查询员工信息，仅选择需要的字段，并按员工编号排序
+    const { data, error } = await supabase
+      .from("producers")
+      .select("id,name")
+      .order("name", { ascending: true });
+
+    if (error) {
+      console.error("查询失败:", error);
+      throw new Error("Failed to fetch tbm producers.");
+    }
+
+    const tbmProducers = data.map((item) => ({
+      id: item.id,
+      name: item.name,
+    }));
+
+    return tbmProducers;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch tbm producers.");
+  }
+}
+
+export async function fetchTbmOwners(): Promise<ITbmOwner[]> {
+  const supabase = await createClient();
+  try {
+    // 查询员工信息，仅选择需要的字段，并按员工编号排序
+    const { data, error } = await supabase
+      .from("owners")
+      .select("id,name")
+      .order("name", { ascending: true });
+
+    if (error) {
+      console.error("查询失败:", error);
+      throw new Error("Failed to fetch tbm owners.");
+    }
+
+    const tbmOwners = data.map((item) => ({
+      id: item.id,
+      name: item.name,
+    }));
+
+    return tbmOwners;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch tbm owners.");
+  }
+}
 
 export async function fetchActivatedTbms(): Promise<ITbmWorkInfo[]> {
   const supabase = await createClient();
@@ -78,7 +161,6 @@ export async function fetchFilteredTbms(
 ): Promise<ITbmMainInfo[]> {
   const supabase = await createClient();
   try {
-
     const offset = (currentPage - 1) * ITEMS_PER_PAGE; // 计算偏移量
     // 查询员工信息，仅选择需要的字段，并按员工编号排序
     const { data, error } = await supabase
