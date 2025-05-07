@@ -8,8 +8,6 @@ const ITEMS_PER_PAGE = 20;
 export async function fetchSubprojectById(
   id: string
 ): Promise<ISubprojectForm> {
-  console.log("spbyid", id); // 打印总记录数
-
   const supabase = await createClient();
   try {
     // 查询员工信息，仅选择需要的字段，并按员工编号排序
@@ -237,6 +235,73 @@ export async function fetchFilteredTunnelsPages(
     const totalPages = Math.ceil(count / ITEMS_PER_PAGE);
     console.log("Total Pages:", totalPages); // 打印总页数
     return totalPages;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch projects.");
+  }
+}
+
+export async function fetchFilteredAllTunnels(
+  query: string
+): Promise<ITunnelBasic[]> {
+  const supabase = await createClient();
+
+  try {
+    // 查询工程项目信息，仅选择需要的字段，并按编号排序
+    let filterQuery = supabase
+      .from("v_tunnels_overview")
+      .select("*")
+      .order("id", { ascending: true });
+
+    if (query) {
+      if (Object.values(ProjectStatus).includes(query as ProjectStatus)) {
+        filterQuery = filterQuery.in("status", [query]);
+      } else {
+        const conditions = [
+          `name.ilike.%${query}%`,
+          `short_name.ilike.%${query}%`,
+          `project_short_name.ilike.%${query}%`,
+          `region_name.ilike.%${query}%`,
+          `tbm_name.ilike.%${query}%`,
+        ];
+        filterQuery = filterQuery.or(conditions.join(","));
+      }
+    }
+
+    const { data: tunnels, error } = await filterQuery;
+
+    //  console.log("subprojects", subprojects); // 打印总记录数
+
+    if (error) {
+      console.error("查询失败:", error);
+      throw new Error("Failed to fetch projects.");
+    }
+
+    if (tunnels && tunnels.length > 0) {
+      // 转换为 camelCase 命名
+      //const camelData = convertKeysToCamelCase(subprojects);
+      //  console.log("camelData", camelData); // 打印总记录数
+
+      const result: ITunnelBasic[] = tunnels.map((tunnel) => ({
+        id: tunnel.id,
+        name: tunnel.name,
+        shortName: tunnel.short_name,
+        projectShortName: tunnel.project_short_name,
+        regionName: tunnel.region_name,
+        tbmName: tunnel.tbm_name,
+        ringStart: tunnel.ring_start,
+        ringEnd: tunnel.ring_end,
+        opNumStart: tunnel.op_num_start,
+        opNumEnd: tunnel.op_num_end,
+        planStartDate: tunnel.plan_start_date,
+        planEndDate: tunnel.plan_end_date,
+        status: tunnel.status as ProjectStatus,
+      }));
+      // console.log("result", result); // 打印总记录数
+      return result;
+    }
+
+    return [];
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to fetch projects.");

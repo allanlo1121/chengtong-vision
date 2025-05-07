@@ -27,10 +27,13 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: "项目", href: "/project/projects" },
           {
-            label: "编辑项目",
-            href: "/project/projects/${id}/edit",
+            label: "隧道进度",
+            href: "/production-center/construction-progress",
+          },
+          {
+            label: "编辑进度",
+            href: "/production-center/construction-progress/${id}/edit",
             active: true,
           },
         ]}

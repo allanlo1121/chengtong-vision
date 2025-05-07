@@ -1,7 +1,10 @@
 "use client";
 
 import { useDataContext } from "@/utils/WebSocketProvider";
-import { TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { TableCell, TableRow } from "@/components/ui/table";
+import { EditProgress } from "./buttons"
+import Link from "next/link";
+import { Edit } from "lucide-react";
 
 export default function TableItem({
   tunnel,
@@ -12,9 +15,9 @@ export default function TableItem({
 }) {
   const context = useDataContext();
   const realtimeData = context?.latestData[tunnel.tbmcode];
-  console.log("context", context);  
+  console.log("context", context);
   console.log("realtimeData", realtimeData);
-  console.log("tunnel", tunnel);  
+  console.log("tunnel", tunnel);
 
   tunnel = {
     ...tunnel,
@@ -25,9 +28,11 @@ export default function TableItem({
   };
 
   return (
-    <TableRow >
+    <TableRow>
       <TableCell className="font-medium">{index + 1}</TableCell>
-      <TableCell>{tunnel.projectShortName}</TableCell>
+      <TableCell>
+        <EditProgress tunnel={tunnel} />
+      </TableCell>
       <TableCell>{tunnel.shortName}</TableCell>
       <TableCell>{tunnel.tbmName || "未绑定"}</TableCell>
       <TableCell>{tunnel.ringEnd}</TableCell>

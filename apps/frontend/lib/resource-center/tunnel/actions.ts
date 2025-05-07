@@ -1,6 +1,5 @@
 "use server";
 
-import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import {
@@ -8,10 +7,8 @@ import {
   updateTunnelMutation,
   deleteTunnelMutation,
 } from "./mutations";
-import { ITunnelBasicForm } from "./types";
-import { ProjectStatus } from "../types";
-import { insertManyTunnelPlanData } from "@/lib/project/progress/plan/mutations";
-import { ITunnelPlanData } from "@/lib/project/progress/types";
+import { ITunnelBasicForm, TunnelSchema } from "./types";
+import { initialTunnelProgressData } from "@/lib/project/progress/actions";
 
 export type State = {
   errors?: {
@@ -21,40 +18,8 @@ export type State = {
   message?: string | null;
 };
 
-const FormSchema = z.object({
-  name: z.string().min(1, { message: "必须输入一个工程名称。" }),
-  shortName: z.string().min(1, { message: "必须输入一个工程简称。" }),
-  ringStart: z.coerce.number().min(0, { message: "必须输入一个起始环号。" }),
-  ringEnd: z.coerce.number().min(1, { message: "必须输入一个结束环号。" }),
-  opNumStart: z.coerce.number().min(0, { message: "必须输入一个起始里程。" }),
-  opNumEnd: z.coerce.number().min(1, { message: "必须输入一个结束里程。" }),
-  planLaunchDate: z.string().min(1, { message: "必须填写始发时间。" }),
-  planBreakthroughDate:z.string().min(1, { message: "必须填写始发时间。" }),
-  actualLaunchDate: z.string().optional(),
-  actualBreakthroughDate: z.string().optional(),
-  tbmId: z.string().nullable().optional(),
-  projectId: z.coerce.string().min(1, { message: "请选择所属项目。" }),
-  wtype: z.coerce.string().optional(),
-  status: z.nativeEnum(ProjectStatus, {
-    errorMap: () => ({ message: "必须选择一个项目状态。" }),
-  }),
-});
-
-const CreateTunnel = FormSchema;
-const UpdateTunnel = FormSchema;
-
-function generateDateRange(start: string, end: string): Date[] {
-  const result: Date[] = []
-  const current = new Date(start)
-  const last = new Date(end)
-
-  while (current <= last) {
-    result.push(new Date(current)) // clone
-    current.setDate(current.getDate() + 1)
-  }
-
-  return result
-}
+const CreateTunnel = TunnelSchema.omit({ id: true });
+const UpdateTunnel = TunnelSchema.omit({ id: true });
 
 export async function createTunnel(prevState: State, formData: FormData) {
   console.log("formData", formData);
@@ -130,26 +95,13 @@ export async function createTunnel(prevState: State, formData: FormData) {
       throw new Error("项目区间插入失败");
     }
 
-    const dates = generateDateRange(planLaunchDate, planBreakthroughDate)
+    const res = await initialTunnelProgressData(
+      planLaunchDate,
+      planBreakthroughDate,
+      tunnelId
+    );
 
-    console.log("dates", dates);
-    
-
-    const planInsertData:ITunnelPlanData[] = dates.map((d) => ({
-      tunnel_id: tunnelId,
-      plan_at: d.toISOString(),
-      plan_ring_count: null,
-      //created_at:new Date().toISOString()             // 初始为 null
-    }))
-
-    console.log("计划数据", planInsertData);
-    
-
-    const planData  = await    insertManyTunnelPlanData(planInsertData)
-
-    console.log("计划数据插入成功", planData);
-    
-
+    console.log("插入进度数据", res);
   } catch (error) {
     console.error("创建项目区间失败：", error);
     return {
@@ -186,24 +138,10 @@ export async function updateTunnel(
     wtype: formData.get("wtype"),
     status: formData.get("status"),
   };
+ console.log("rawForm", rawForm);
+ 
+  const validatedFields = UpdateTunnel.safeParse(rawForm);
 
-  const validatedFields = CreateTunnel.safeParse(rawForm);
-
-  //Validate from using Zod
-  // const validatedFields = UpdateTunnel.safeParse({
-  //   name: formData.get("name"),
-  //   shortName: formData.get("shortName"),
-  //   ringStart: formData.get("ringStart"),
-  //   ringEnd: formData.get("ringEnd"),
-  //   opNumStart: formData.get("opNumStart"),
-  //   opNumEnd: formData.get("opNumEnd"),
-  //   planLaunchDate: formData.get("planLaunchDate"),
-  //   planBreakthroughDate: formData.get("planBreakthroughDate"),
-  //   tbmId: formData.get("tbmId"),
-  //   projectId: formData.get("projectId"),
-  //   status: formData.get("status"),
-  // });
-  // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     console.log("validatedFields", validatedFields);
     return {
@@ -251,6 +189,7 @@ export async function updateTunnel(
     console.log("data", data);
     console.log("id", id);
     await updateTunnelMutation(id, data);
+    await initialTunnelProgressData(planLaunchDate, planBreakthroughDate, id);
   } catch (error) {
     console.error("修改项目区间失败：", error);
     return {

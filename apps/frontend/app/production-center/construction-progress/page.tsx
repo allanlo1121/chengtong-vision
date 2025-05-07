@@ -1,6 +1,6 @@
 import { fetchProgressByTunnelId } from '@/lib/production-center/progress/data'
 import ProgressTable from '@/components/production-center/construction-progress/table'
-import Progress from '@/components/production-center/construction-progress/progress'
+import Progress from '@/components/production-center/construction-progress/edit-progress'
 import React from 'react'
 import { fetchInprogressTunnels } from '@/lib/resource-center/tunnel/data'
 

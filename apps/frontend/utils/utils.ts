@@ -10,12 +10,10 @@ import { redirect } from "next/navigation";
 export function encodedRedirect(
   type: "error" | "success",
   path: string,
-  message: string,
+  message: string
 ) {
   return redirect(`${path}?${type}=${encodeURIComponent(message)}`);
 }
-
-
 
 /* 格式化数字为固定小数位数，默认保留两位。
  * 支持 null/undefined 安全处理。
@@ -30,3 +28,4 @@ export function formatDecimal(
   }
   return Number(value).toFixed(digits);
 }
+
