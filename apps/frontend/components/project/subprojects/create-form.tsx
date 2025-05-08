@@ -11,7 +11,7 @@ import FormInput from "@/components/ui/form-input";
 import { useActionState } from "react";
 import FormSelect from "@/components/ui/form-select";
 import { createSubproject, State } from "@/lib/project/subproject/actions";
-import { ITbmBaseInfo } from "@/lib/tbm/types";
+import { ITbmBaseInfo } from "@/lib/tbm_del/types";
 
 export default function Form({
   projects,

@@ -307,3 +307,47 @@ export async function fetchFilteredAllTunnels(
     throw new Error("Failed to fetch projects.");
   }
 }
+
+export async function fetchInprogressTunnels() {
+  const supabase = await createClient();
+
+  try {
+    const { data, error } = await supabase
+      .from("v_tunnels_overview")
+      .select("id,project_short_name,short_name,tbm_name,tbm_code,ring_start,ring_end,op_num_start,op_num_end,plan_launch_date,plan_breakthrough_date,actual_launch_date,actual_breakthrough_date")
+      
+      .eq("status", "InProgress")
+      .order("project_short_name", { ascending: true });
+
+    if (error) {
+      console.error("查询失败:", error);
+      throw new Error("Failed to fetch tunnels.");
+    }
+
+    if (data && data.length > 0) {
+      console.log("Fetched Tunnels:", data); // 打印获取的隧道数据
+      const result = data.map((item) => ({
+        id: item.id,
+        projectShortName: item.project_short_name,
+        shortName: item.short_name,
+        tbmName: item.tbm_name,
+        tbmcode: item.tbm_code,
+        ringStart: item.ring_start,
+        ringEnd: item.ring_end,
+        opNumStart: item.op_num_start,
+        opNumEnd: item.op_num_end,
+        planLaunchDate: item.plan_launch_date,
+        planBreakthroughDate: item.plan_breakthrough_date,
+        actualLaunchDate: item.actual_launch_date,
+        actualBreakthroughDate: item.actual_breakthrough_date,
+      }));
+
+      return result;
+    }
+
+    return [];
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch tunnels.");
+  }
+}

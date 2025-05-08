@@ -1,5 +1,5 @@
 
-import {fetchTbmDatas }from '@/lib/tbm/data'
+import {fetchTbmDatas }from '@/lib/tbm_del/data'
 import React from 'react'
 
 export default async function Page() {

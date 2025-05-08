@@ -29,6 +29,8 @@ export default async function ProgressTable() {
             <TableHead>盾构机型号</TableHead>
             <TableHead>设计环数</TableHead>
             <TableHead>累计完成</TableHead>
+            <TableHead>今日计划</TableHead>
+            <TableHead>今日完成</TableHead>
             <TableHead>PLC状态</TableHead>            
             {/*  <TableHead>剩余</TableHead>
             <TableHead>掘进环数</TableHead> */}

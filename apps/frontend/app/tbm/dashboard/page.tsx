@@ -1,6 +1,6 @@
 import React from "react";
 import TbmOverviewCard from "@/components/tbm/dashboard/TbmOverviewCard";
-import { fetchActivatedTbms } from "@/lib/tbm/data";
+import { fetchActivatedTbms } from "@/lib/tbm_del/data";
 // import {
 //   Select,
 //   SelectContent,

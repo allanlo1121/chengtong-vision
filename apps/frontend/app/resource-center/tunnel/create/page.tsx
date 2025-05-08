@@ -6,10 +6,10 @@ import { ITbmBaseInfo } from "@/lib/tbm/types";
 
 export default async function Page() {
   // Fetch data for the form
-  
+
   const projects = await fetchAllProjectsBasic();
-  const tbms: ITbmBaseInfo[] = await fetchAllTbms(); 
- 
+  const tbms: ITbmBaseInfo[] = await fetchAllTbms();
+
   return (
     <main>
       <Breadcrumbs

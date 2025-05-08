@@ -3,7 +3,7 @@ import { ThrustScreen } from "@/components/tbm/monitor/ThrustScreen";
 import {
   fetchSubProjectByTbmcode,
   fetchTbmInfoByTbmcode,
-} from "@/lib/tbm/data"; // 引入 tbmData01 数据
+} from "@/lib/tbm_del/data"; // 引入 tbmData01 数据
 
 export default async function Page() {
   const tbmcode = "crec988";

@@ -1,6 +1,6 @@
 import React from "react";
 import { UpdateTbm, DeleteTbm } from "./buttons";
-import { fetchFilteredTbms } from "@/lib/resource-center/tbm/data";
+import { fetchFilteredTbms } from "@/lib/tbm/data";
 
 export default async function Table({
   query,

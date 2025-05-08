@@ -3,7 +3,7 @@ import Breadcrumbs from "@/components/ui/breadcrumbs";
 import { fetchSubprojectById } from "@/lib/project/subproject/data";
 import { notFound } from "next/navigation";
 import { fetchAllProjectsBasic } from "@/lib/project/data";
-import { fetchAllTbms } from "@/lib/tbm/data";
+import { fetchAllTbms } from "@/lib/tbm_del/data";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;

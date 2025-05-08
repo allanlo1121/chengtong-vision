@@ -9,158 +9,151 @@ import { Button } from "@/components/ui/button";
 import FormInput from "@/components/ui/form-input";
 import { useActionState } from "react";
 import FormSelect from "@/components/hrm/ui/form-select";
-import { updateTunnel, State } from "@/lib/resource-center/tunnel/actions";
+import { updateTbm, State } from "@/lib/tbm/actions";
 import { IProjectBasic, ProjectStatus } from "@/lib/resource-center/types";
 import { ITunnelBasicForm } from "@/lib/resource-center/tunnel/types";
-import { ITbmBaseInfo } from "@/lib/tbm/types";
+import { ITbmBaseInfo } from "@/lib/tbm_del/types";
+import {
+  ITbmOwner,
+  ITbmProducer,
+  ITbmType,
+  TypeTbmFormSchema,
+} from "@/lib/tbm/types";
+import { formatDateForInput } from "@/utils/dateFormat";
 
-export default function EditProjectForm({
-  tunnel,
-  projects,
-  tbms,
+export default function EditTbmForm({
+  tbm,
+  producers,
+  owners,
+  types,
 }: {
-  tunnel: ITunnelBasicForm;
-  projects: IProjectBasic[];
-  tbms: ITbmBaseInfo[];
+  tbm: TypeTbmFormSchema;
+  producers: ITbmProducer[];
+  owners: ITbmOwner[];
+  types: ITbmType[];
 }) {
   const initialState: State = { message: null, errors: {} };
-  const updateTunnelWithId = updateTunnel.bind(null, tunnel.id);
-  const [state, formAction] = useActionState(updateTunnelWithId, initialState);
+  const updateTbmWithId = updateTbm.bind(null, tbm.id);
+  const [state, formAction] = useActionState(updateTbmWithId, initialState);
   console.log("state", state);
 
   return (
     <form action={formAction}>
-      <input type="hidden" name="id" value={tunnel.id} />
+      <input type="hidden" name="id" value={tbm.id} />
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
-        {/* Project Name */}
+        {/* tbm Name */}
         <FormInput
           id="name"
           name="name"
-          label="区间名称"
+          label="盾构机名称"
           type="text"
-          placeholder="输入区间名称"
-          defaultValue={tunnel.name}
+          placeholder="输入盾构机名称"
+          defaultValue={tbm.name}
           errors={state.errors?.name || []}
           IconComponent={UserCircleIcon}
         />
 
         <FormInput
-          id="shortName"
-          name="shortName"
-          label="区间简称"
+          id="code"
+          name="code"
+          label="盾构机代码"
+          required
           type="text"
-          placeholder="输入区间简称"
-          defaultValue={tunnel.shortName}
-          errors={state.errors?.shortName || []}
+          placeholder="输入盾构机代码"
+          defaultValue={tbm.code}
           IconComponent={UserCircleIcon}
         />
 
         <FormSelect
-          id="projectId"
-          name="projectId"
-          label="所属项目"
-          options={projects.map((project: IProjectBasic) => ({
-            value: project.id.toString(),
-            label: project.shortName,
+          id="typeId"
+          name="typeId"
+          label="盾构机类型"
+          options={types.map((type) => ({
+            value: type.id.toString(),
+            label: type.name,
           }))}
-          defaultValue={String(tunnel.projectId)}
+          defaultValue={String(tbm.typeId)}
           IconComponent={CurrencyDollarIcon}
         />
+
+        <FormInput
+          id="diameter"
+          name="diameter"
+          label="盾构机直径"
+          type="number"
+          placeholder="输入盾构机直径"
+          defaultValue={tbm.diameter ? tbm.diameter : "-"}
+          IconComponent={UserCircleIcon}
+        />
+
+        <FormInput
+          id="segmentOuter"
+          name="segmentOuter"
+          label="管片外径"
+          type="number"
+          placeholder="输入管片外径"
+          defaultValue={tbm.segmentOuter ? tbm.segmentOuter : "-"}
+          IconComponent={UserCircleIcon}
+        />
+
         <FormSelect
-          id="status"
-          name="status"
-          label="工程状态"
-          options={[
-            ...Object.entries(ProjectStatus).map(([key, value]) => ({
-              value: key,
-              label: value,
-            })),
-          ]}
-          defaultValue={tunnel.status}
-          showPlaceholder={false}
+          id="producerId"
+          name="producerId"
+          label="生产厂家"
+          options={producers.map((producer) => ({
+            value: producer.id.toString(),
+            label: producer.name,
+          }))}
+          defaultValue={String(tbm.producerId)}
+          IconComponent={CurrencyDollarIcon}
+        />
+        <FormInput
+          id="productionDate"
+          name="productionDate"
+          label="生产日期"
+          type="date"
+          defaultValue={formatDateForInput(tbm.productionDate)}
+          placeholder="输入生产日期"
           IconComponent={CurrencyDollarIcon}
         />
         <div className="grid grid-cols-2 gap-4">
-          <FormInput
-            id="ringStart"
-            name="ringStart"
-            label="起始环号"
-            type="number"
-            placeholder="请输入起始环号"
-            defaultValue={tunnel.ringStart}
+          {/* tbm*/}
+          <FormSelect
+            id="ownerId"
+            name="ownerId"
+            label="拥有者"
+            options={owners.map((owner) => ({
+              value: owner.id.toString(),
+              label: owner.name,
+            }))}
+            defaultValue={String(tbm.ownerId)}
             IconComponent={CurrencyDollarIcon}
-          />
+          />{" "}
           <FormInput
-            id="ringEnd"
-            name="ringEnd"
-            label="结束环号"
-            type="number"
-            placeholder="请输入结束环号"
-            defaultValue={tunnel.ringEnd}
-            IconComponent={CurrencyDollarIcon}
-          />
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <FormInput
-            id="opNumStart"
-            name="opNumStart"
-            label="起始里程"
-            type="number"
-            placeholder="请输入起始里程"
-            defaultValue={tunnel.opNumStart}
-            IconComponent={CurrencyDollarIcon}
-          />
-          <FormInput
-            id="opNumEnd"
-            name="opNumEnd"
-            label="结束里程"
-            type="number"
-            placeholder="请输入结束里程"
-            defaultValue={tunnel.opNumEnd}
-            IconComponent={CurrencyDollarIcon}
-          />
-        </div>
-        <div className="grid grid-cols-3 gap-4">
-          {/* 开工日期 */}
-          <FormInput
-            id="planStartDate"
-            name="planStartDate"
-            label="计划始发日期"
-            type="date"
-            defaultValue={tunnel.planStartDate}
-            placeholder="输入计划始发日期"
-            IconComponent={CurrencyDollarIcon}
-          />
-          {/* 竣工日期 */}
-          <FormInput
-            id="planEndDate"
-            name="planEndDate"
-            label="计划贯通日期"
-            type="date"
-            defaultValue={ tunnel.planEndDate
-              ? new Date(tunnel.planEndDate).toISOString().split("T")[0]
-              : ""}
-            placeholder="输入计划贯通日期"
-            IconComponent={CurrencyDollarIcon}
+            id="geo"
+            name="geo"
+            label="适应地质"
+            type="text"
+            placeholder="输入适应地质"
+            defaultValue={tbm.geo ? tbm.geo : ""}
+            IconComponent={UserCircleIcon}
           />
         </div>
 
-        {/* tbm*/}
-        <FormSelect
-          id="tbmId"
-          name="tbmId"
-          label="采用的盾构机"
-          options={tbms.map((tbm: ITbmBaseInfo) => ({
-            value: tbm.id.toString(),
-            label: tbm.name,
-          }))}
-          defaultValue={String(tunnel.tbmId)}
+        {/* 备注 */}
+        <FormInput
+          id="remark"
+          name="remark"
+          label="备注"
+          type="text"
+          placeholder="输入备注"
+          defaultValue={tbm.remark ? tbm.remark : ""}
           IconComponent={CurrencyDollarIcon}
         />
 
         <div className="mt-6 flex justify-end gap-4">
           <Link
-            href="/project/subprojects"
+            href="/resource-center/tbm"
             className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
           >
             取消

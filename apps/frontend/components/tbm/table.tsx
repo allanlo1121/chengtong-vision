@@ -1,7 +1,7 @@
 import React from "react";
 
-import { ITbmWorkInfo } from "@/lib/tbm/types";
-import { fetchActivatedTbms } from "@/lib/tbm/data";
+import { ITbmWorkInfo } from "@/lib/tbm_del/types";
+import { fetchActivatedTbms } from "@/lib/tbm_del/data";
 
 export default async function Table() {
   const tbms: ITbmWorkInfo[] = await fetchActivatedTbms();

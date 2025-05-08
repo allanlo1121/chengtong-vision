@@ -1,3 +1,6 @@
+
+import { ISubproject } from "../project/types";
+
 export interface ITbmCardProps {
   tbmcode: string;
 }
@@ -34,10 +37,10 @@ export interface ITbmType {
   id: number;
   code: string;
   name: string;
-  remark?: string;
+  remark: string;
 }
 
-export enum TbmType {
+enum TbmType {
   ttm1 = "敞开式TBM",
   ttm2 = "双护盾TBM",
   ttm3 = "土压平衡盾构机",
@@ -50,72 +53,72 @@ export enum TbmType {
   ttm10 = "抽ttm",
 }
 
-export enum DriverType {
+enum DriverType {
   electric = "电驱",
   hydraulic = "液压",
 }
 
-// export interface ITbmInfo {
-//   id: number;
-//   code: string;
-//   name: string;
-//   tbmModel: string;
-//   tbmType: number;
-//   diameter: number;
-//   deviceLen: number;
-//   deviceWeight: number;
-//   devicePower: number;
-//   cutterSpeed: number;
-//   producer: string;
-//   driver: string;
-//   pdate: Date;
-//   owner: number;
-//   ratedThrust: number;
-//   cutterTorque: number;
-//   source: boolean;
-//   hinge: number;
-//   geo: string;
-//   remark: string;
-//   cutterOpen: number | null;
-//   ctbmCode: string;
-//   motorNum: number;
-//   frequency: number;
-//   gfIds: number;
-//   screwTorque: number | null;
-//   screwPower: number | null;
-//   segmentOuter: number;
-//   worth: number | null;
-//   segmentParam: string;
-//   useDate: number | null;
-//   particleSize: number | null;
-//   fpPower: number | null;
-//   bootSupport: number | null;
-//   mainBeltSpeed: number | null;
-//   leBeltSpeed: number | null;
-//   plcFileIds: string;
-//   alarmTimeLimit: number;
-//   producerName: string;
-//   ownerName: string;
-//   tbmTypeCode: TbmType;
-//   driverType: DriverType;
-//   thrustGroupNum: number;
-//   earthPressureBarNum: number;
-// }
+export interface ITbmInfo {
+  id: number;
+  code: string;
+  name: string;
+  tbmModel: string;
+  tbmType: number;
+  diameter: number;
+  deviceLen: number;
+  deviceWeight: number;
+  devicePower: number;
+  cutterSpeed: number;
+  producer: string;
+  driver: string;
+  pdate: Date;
+  owner: number;
+  ratedThrust: number;
+  cutterTorque: number;
+  source: boolean;
+  hinge: number;
+  geo: string;
+  remark: string;
+  cutterOpen: number | null;
+  ctbmCode: string;
+  motorNum: number;
+  frequency: number;
+  gfIds: number;
+  screwTorque: number | null;
+  screwPower: number | null;
+  segmentOuter: number;
+  worth: number | null;
+  segmentParam: string;
+  useDate: number | null;
+  particleSize: number | null;
+  fpPower: number | null;
+  bootSupport: number | null;
+  mainBeltSpeed: number | null;
+  leBeltSpeed: number | null;
+  plcFileIds: string;
+  alarmTimeLimit: number;
+  producerName: string;
+  ownerName: string;
+  tbmTypeCode: TbmType;
+  driverType: DriverType;
+  thrustGroupNum: number;
+  earthPressureBarNum: number;
+}
 
-// export interface ITbmMainInfo {
-//   id: string; // TBM ID
-//   code: string; // TBM 编号
-//   name: string; // TBM 名称
-//   type: string; // TBM 类型
-//   thrustAreaNumber: number; // TBM 推力
-//   earthPressureNumber: number; // TBM 地层压力
-// }
+export interface ITbmMainInfo {
+  id: number; // TBM ID
+  code: string; // TBM 编号
+  name: string; // TBM 名称
+  type: string; // TBM 类型
+  thrustAreaNumber: number; // TBM 推力
+  earthPressureNumber: number; // TBM 地层压力
+}
 
-// export interface ITbmScreenProps {
-//   tbmcode: string;
-//   tbmInfo: ITbmMainInfo;
-//   subProject: ISubproject;
-// }
+export interface ITbmScreenProps {
+  tbmcode: string;
+  tbmInfo: ITbmMainInfo;
+  subProject: ISubproject;
+}
 
 export interface ITBMStatus {
   tbmLabel: string; // TBM名称
@@ -144,37 +147,17 @@ export interface ITbmBaseInfo {
   type: string;
 }
 
-export interface ITbmMainInfo extends ITbmBaseInfo { 
+export interface ITbmInfoForm extends ITbmBaseInfo {
   diameter: number; // TBM直径
   segmentOuter: number; // TBM外径
   productionDate: string; // TBM生产日期
-  owner: string; // TBM所有单位
   geo: string | null; // 地质类型
   remark?: string | null; // 备注信息
 }
+
 
 export interface ITbmWorkInfo extends ITbmBaseInfo {
   regionName: string; // 所在片区名称
   projectShortName: string; // 所在片区简称
   subprojectShortName: string; // 所在项目名称
-}
-
-export interface ITbmMainForm extends ITbmBaseInfo {  
-  diameter: number; // TBM直径
-  segmentOuter: number; // TBM外径
-  productionDate: string; // TBM生产日期
-  ownerId: string; // TBM所有单位
-  geo: string | null; // 地质类型
-  remark?: string | null; // 备注信息
-}
-
-
-export interface ITbmProducer {
-  id: string; // 生产厂家ID
-  name: string; // 生产厂家名称
-}
-
-export interface ITbmOwner {
-  id: string; // 所有单位ID
-  name: string; // 所有单位名称
 }

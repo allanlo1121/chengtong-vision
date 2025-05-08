@@ -5,6 +5,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { EditProgress } from "./buttons"
 import Link from "next/link";
 import { Edit } from "lucide-react";
+import { pl } from "date-fns/locale";
 
 export default function TableItem({
   tunnel,
@@ -24,6 +25,8 @@ export default function TableItem({
     isPlcOnline: realtimeData?.isPlcOnline ?? false,
     thrustSpeed: realtimeData?.s010109001 ?? 0,
     currentRing: realtimeData?.s100100008 ?? 0,
+    planRingCount: realtimeData?.s100900011 ?? 0,
+    ringStart: realtimeData?.s100900001 ?? 0,
     // 可以继续添加你需要的字段
   };
 
@@ -36,7 +39,9 @@ export default function TableItem({
       <TableCell>{tunnel.shortName}</TableCell>
       <TableCell>{tunnel.tbmName || "未绑定"}</TableCell>
       <TableCell>{tunnel.ringEnd}</TableCell>
-      <TableCell>{tunnel.currentRing}</TableCell>
+      <TableCell>{tunnel.currentRing}</TableCell>      
+      <TableCell>{tunnel.planRingCount}</TableCell>
+      <TableCell>{tunnel.currentRing-tunnel.ringStart}</TableCell>
       <TableCell>{tunnel.isPlcOnline ? "在线" : "离线"}</TableCell>
       <TableCell className="text-right">编辑</TableCell>
     </TableRow>

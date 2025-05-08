@@ -12,7 +12,7 @@ import FormSelect from "@/components/hrm/ui/form-select";
 import { updateTunnel, State } from "@/lib/resource-center/tunnel/actions";
 import { IProjectBasic, ProjectStatus } from "@/lib/resource-center/types";
 import { ITunnelBasicForm } from "@/lib/resource-center/tunnel/types";
-import { ITbmBaseInfo } from "@/lib/tbm/types";
+import { ITbmBaseInfo } from "@/lib/tbm_del/types";
 import { formatDateForInput } from "@/utils/dateFormat";
 
 export default function EditProjectForm({

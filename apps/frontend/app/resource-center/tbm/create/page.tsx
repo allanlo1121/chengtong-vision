@@ -1,9 +1,9 @@
 import Form from "@/components/resource-center/tbm/create-form";
 import Breadcrumbs from "@/components/ui/breadcrumbs";
 import { fetchAllProjectsBasic } from "@/lib/project/data";
-import { fetchTbmOwners, fetchTbmProducers, fetchTbmTypes } from "@/lib/resource-center/tbm/data";
-import { fetchAllTbms } from "@/lib/tbm/data";
-import { ITbmBaseInfo } from "@/lib/tbm/types";
+import { fetchTbmOwners, fetchTbmProducers, fetchTbmTypes } from "@/lib/tbm/data";
+import { fetchAllTbms } from "@/lib/tbm_del/data";
+import { ITbmBaseInfo } from "@/lib/tbm_del/types";
 
 export default async function Page() {
   // Fetch data for the form

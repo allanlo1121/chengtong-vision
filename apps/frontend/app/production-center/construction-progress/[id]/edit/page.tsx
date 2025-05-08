@@ -1,6 +1,6 @@
 //import Form from "@/components/project/projects/edit-form";
 import Breadcrumbs from "@/components/ui/breadcrumbs";
-import { fetchProgressByTunnelId } from "@/lib/production-center/progress/data";
+import { fetchProgressByTunnelId } from "@/lib/project/progress/data";
 // import { fetchAllRegion, fetchProjectById } from "@/lib/project/data";
 // import { fetchEmployeeByPosition } from "@/lib/hrm/data";
 import EditProgressForm from "@/components/production-center/construction-progress/edit-progress";
@@ -15,8 +15,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   if (!progressData) {
     notFound();
   }
-  console.log("edit progressData ", progressData);
-
+  // console.log("edit progressData ", progressData);
 
   return (
     <main>
@@ -34,7 +33,6 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         ]}
       />
       <EditProgressForm progressData={progressData} />
-      {/* <Form project={project} regions={regions} leaders={leaders} /> */}
     </main>
   );
 }

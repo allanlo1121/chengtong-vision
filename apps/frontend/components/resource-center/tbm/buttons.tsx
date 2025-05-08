@@ -1,6 +1,6 @@
 import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { deleteTbm } from "@/lib/resource-center/tbm/actions";
+import { deleteTbm } from "@/lib/tbm/actions";
 
 export function CreateTbm() {
   return (

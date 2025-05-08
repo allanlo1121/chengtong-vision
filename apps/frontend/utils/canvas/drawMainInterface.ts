@@ -1,5 +1,5 @@
 import { ISectorInfo } from "@/lib/canvas/canvasTypes";
-import { ITbmDataItem } from "@/lib/tbm/types";
+import { ITbmDataItem } from "@/lib/tbm_del/types";
 import { createSectorInfo, drawDataBlock } from "./drawDataBlock";
 
 // 将弧度转换为角度的函数

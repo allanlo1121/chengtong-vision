@@ -34,6 +34,7 @@ export async function initialTunnelProgressData(
 // ✅ 类型定义
 const TunnelProgressSchema = z.object({
   id: z.string().uuid(),
+  plan_ring_count: z.coerce.number().nullable(),
   ring_start: z.coerce.number().nullable(),
   ring_end: z.coerce.number().nullable(),
   op_num_start: z.coerce.number().nullable(),
@@ -45,8 +46,11 @@ export async function updateTunnelProgressDataAction(
   prevState: any,
   formData: FormData
 ) {
+  console.log("formData", formData);
+
   const raw = {
     id: formData.get("id"),
+    plan_ring_count: formData.get("plan_ring_count"),
     ring_start: formData.get("ring_start"),
     ring_end: formData.get("ring_end"),
     op_num_start: formData.get("op_num_start"),
@@ -63,6 +67,8 @@ export async function updateTunnelProgressDataAction(
   }
 
   const { id, ...updateData } = parseResult.data;
+
+  console.log("更新进度数据", id, updateData);
 
   updateTunnelProgressData({
     id,

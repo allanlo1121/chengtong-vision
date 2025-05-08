@@ -10,7 +10,7 @@ import {
 } from "@/utils/canvas/drawMainInterface";
 
 import React, { useRef, useEffect } from "react";
-import { ITbmDataItem, ITbmScreenProps } from "@/lib/tbm/types";
+import { ITbmDataItem, ITbmScreenProps } from "@/lib/tbm_del/types";
 import { useDataContext } from "../WebSocketProvider";
 
 export const ThrustScreen: React.FC<ITbmScreenProps> = ({

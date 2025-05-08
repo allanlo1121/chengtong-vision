@@ -1,8 +1,8 @@
 import Form from "@/components/project/subprojects/create-form";
 import Breadcrumbs from "@/components/ui/breadcrumbs";
 import { fetchAllProjectsBasic } from "@/lib/project/data";
-import { fetchAllTbms } from "@/lib/tbm/data";
-import { ITbmBaseInfo } from "@/lib/tbm/types";
+import { fetchAllTbms } from "@/lib/tbm_del/data";
+import { ITbmBaseInfo } from "@/lib/tbm_del/types";
 
 export default async function Page() {
   // Fetch data for the form

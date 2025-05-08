@@ -1,5 +1,5 @@
 
-import { fetchActivatedTbms, fetchTbmInfoByTbmId} from "@/lib/tbm/data";  // 假设这些API函数已经实现
+import { fetchActivatedTbms, fetchTbmInfoByTbmId} from "@/lib/tbm_del/data";  // 假设这些API函数已经实现
 import {  fetchSubProjectById, fetchProjectByProjectId } from "@/lib/project/data"; 
 
 

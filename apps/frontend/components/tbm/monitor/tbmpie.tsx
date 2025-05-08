@@ -4,7 +4,7 @@ import { drawInterface } from "@/utils/canvas/drawMainInterface";
 
 import React, { useRef, useEffect } from "react";
 
-import { tbmData01 } from "@/lib/tbm/data";
+import { tbmData01 } from "@/lib/tbm_del/data";
 
 export default function Tbmpie(tbm) {
   const canvasRef = useRef<HTMLCanvasElement>(null);

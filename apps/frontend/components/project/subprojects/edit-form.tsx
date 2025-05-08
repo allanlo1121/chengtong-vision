@@ -15,7 +15,7 @@ import {
   ISubprojectForm,
   ProjectStatus,
 } from "@/lib/project/types";
-import { ITbmBaseInfo } from "@/lib/tbm/types";
+import { ITbmBaseInfo } from "@/lib/tbm_del/types";
 
 export default function EditProjectForm({
   subproject,

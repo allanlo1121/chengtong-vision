@@ -1,20 +1,24 @@
-import Form from "@/components/resource-center/tunnel/edit-form";
+import Form from "@/components/resource-center/tbm/edit-form";
 import Breadcrumbs from "@/components/ui/breadcrumbs";
-import { fetchTunnelById } from "@/lib/resource-center/tunnel/data";
 import { notFound } from "next/navigation";
-import { fetchAllProjectsBasic } from "@/lib/project/data";
-import { fetchAllTbms } from "@/lib/tbm/data";
+import {
+  fetchTbmFormByTbmId,
+  fetchTbmOwners,
+  fetchTbmProducers,
+  fetchTbmTypes,
+} from "@/lib/tbm/data";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
-  const id = params.id; 
-  const [tunnel, projects, tbms] = await Promise.all([
-    fetchTunnelById(id),
-    fetchAllProjectsBasic(),
-    fetchAllTbms(),
+  const id = params.id;
+  const [tbm, producers, owners, types] = await Promise.all([
+    fetchTbmFormByTbmId(id),
+    fetchTbmProducers(),
+    fetchTbmOwners(),
+    fetchTbmTypes(),
   ]);
 
-  if (!tunnel) {
+  if (!tbm) {
     notFound();
   }
 
@@ -22,15 +26,15 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: "工程区间", href: "/resource-center/tunnel" },
+          { label: "盾构机", href: "/resource-center/tbm" },
           {
-            label: "编辑工程区间",
-            href: "/resource-center/tunnel/${id}/edit",
+            label: "编辑盾构机信息",
+            href: "/resource-center/tbm/${id}/edit",
             active: true,
           },
         ]}
       />
-      <Form tunnel={tunnel} projects={projects} tbms={tbms} />
+      <Form tbm={tbm} producers={producers} owners={owners} types={types} />
     </main>
   );
 }

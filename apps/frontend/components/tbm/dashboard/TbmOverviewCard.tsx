@@ -7,8 +7,8 @@ import {
   IProject,
   ProjectStatus,
 } from "@/lib/project/types";
-import { fetchTbmInfoByTbmId } from "@/lib/tbm/data";
-import { ITbmMainInfo } from "@/lib/tbm/types";
+import { fetchTbmInfoByTbmId } from "@/lib/tbm_del/data";
+import { ITbmMainInfo } from "@/lib/tbm_del/types";
 import { TbmStatusCard } from "./TbmStatusCard";
 import React from "react";
 

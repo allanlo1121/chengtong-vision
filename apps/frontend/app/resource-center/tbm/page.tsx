@@ -2,7 +2,7 @@ import React from "react";
 import { notoSans } from "@/app/ui/fonts";
 import Search from "@/components/ui/search";
 import Pagination from "@/components/ui/pagination";
-import { fetchFilteredTbmsPages } from "@/lib/resource-center/tbm/data";
+import { fetchFilteredTbmsPages } from "@/lib/tbm/data";
 import Table from "@/components/resource-center/tbm/table";
 import { CreateTbm } from "@/components/resource-center/tbm/buttons";
 import { Suspense } from "react";
