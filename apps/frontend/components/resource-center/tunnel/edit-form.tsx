@@ -9,9 +9,9 @@ import { Button } from "@/components/ui/button";
 import FormInput from "@/components/ui/form-input";
 import { useActionState } from "react";
 import FormSelect from "@/components/hrm/ui/form-select";
-import { updateTunnel, State } from "@/lib/resource-center/tunnel/actions";
-import { IProjectBasic, ProjectStatus } from "@/lib/resource-center/types";
-import { ITunnelBasicForm } from "@/lib/resource-center/tunnel/types";
+import { updateTunnel, State } from "@/lib/project/tunnel/actions";
+import { IProjectBasic, ProjectStatus } from "@/lib/project/types";
+import { ITunnelBasicForm } from "@/lib/project/tunnel/types";
 import { ITbmBaseInfo } from "@/lib/tbm_del/types";
 import { formatDateForInput } from "@/utils/dateFormat";
 
@@ -28,7 +28,7 @@ export default function EditProjectForm({
   const updateTunnelWithId = updateTunnel.bind(null, tunnel.id);
   const [state, formAction] = useActionState(updateTunnelWithId, initialState);
   console.log("state", state);
-  console.log("tunnel", tunnel); 
+  console.log("tunnel", tunnel);
 
   return (
     <form action={formAction}>
@@ -89,11 +89,11 @@ export default function EditProjectForm({
             name="tbmId"
             label="采用的盾构机"
             options={[
-              { value: "", label: "未知" },  // 👈 空值代表 null
+              { value: "", label: "未知" }, // 👈 空值代表 null
               ...tbms.map((tbm: ITbmBaseInfo) => ({
                 value: tbm.id.toString(),
                 label: tbm.name,
-              }))
+              })),
             ]}
             defaultValue={tunnel.tbmId ? String(tunnel.tbmId) : ""}
             IconComponent={CurrencyDollarIcon}

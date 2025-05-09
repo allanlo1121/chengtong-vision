@@ -1,83 +1,5 @@
 "use client";
 
-// import {
-//   UserGroupIcon,
-//   HomeIcon,
-//   UserIcon,
-//   CurrencyDollarIcon,
-// } from "@heroicons/react/24/outline";
-// import Link from "next/link";
-// import { usePathname } from "next/navigation";
-// import clsx from "clsx";
-// import {
-//   Sidebar,
-//   SidebarContent,
-//   SidebarFooter,
-//   SidebarGroup,
-//   SidebarHeader,
-// } from "@/components/ui/sidebar"
-
-// // Map of links to display in the side navigation.
-// // Depending on the size of the application, this would be stored in a database.
-// const links = [
-//   { name: "Home", href: "/dashboard", icon: HomeIcon },
-//   {
-//     name: "HRM",
-//     href: "/hrm",
-//     icon: UserIcon,
-//     children: [
-//       { name: "Departments", href: "/hrm/departments", icon: UserGroupIcon },
-//       { name: "Employees", href: "/hrm/employees", icon: UserGroupIcon },
-//       { name: "Salaries", href: "/hrm/salaries", icon: CurrencyDollarIcon },
-//     ],
-//   },
-//   { name: "Projects", href: "/proj", icon: UserGroupIcon },
-//   { name: "Others", href: "/oth", icon: CurrencyDollarIcon },
-// ];
-
-// export default function NavLinks() {
-//   return (
-//     <NavigationMenu orientation="vertical">
-//       <NavigationMenuList className="flex-col items-start">
-//       {links.map((link) => {
-//         const LinkIcon = link.icon;
-//         return (
-//         <NavigationMenuItem key={link.name}>
-//           <NavigationMenuTrigger>
-//           <Link href={link.href} className="flex items-center gap-2">
-//             <LinkIcon className="w-6" />
-//             <span>{link.name}</span>
-//           </Link>
-//           </NavigationMenuTrigger>
-//           {link.children && (
-//           <NavigationMenuContent>
-//             <NavigationMenuList>
-//             {link.children.map((child) => {
-//               const ChildIcon = child.icon;
-//               return (
-//               <NavigationMenuItem key={child.name}>
-//                 <NavigationMenuLink asChild>
-//                 <Link href={child.href} className="flex items-center gap-2">
-//                   <ChildIcon className="w-6" />
-//                   <span>{child.name}</span>
-//                 </Link>
-//                 </NavigationMenuLink>
-//               </NavigationMenuItem>
-//               );
-//             })}
-//             </NavigationMenuList>
-//           </NavigationMenuContent>
-//           )}
-//         </NavigationMenuItem>
-//         );
-//       })}
-//       </NavigationMenuList>
-//       <NavigationMenuIndicator />
-//       <NavigationMenuViewport />
-//     </NavigationMenu>
-//   );
-// }
-
 import * as React from "react";
 import { ChevronRight } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -116,43 +38,6 @@ const data = {
         },
         {
           title: "个人情况",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "人力资源管理",
-      url: "#",
-      items: [
-        {
-          title: "部门",
-          url: "/hrm/departments",
-        },
-        {
-          title: "员工",
-          url: "/hrm/employees",
-          isActive: true,
-        },
-        {
-          title: "薪酬",
-          url: "/hrm/salaries",
-        },
-      ],
-    },
-    {
-      title: "项目管理",
-      url: "/project",
-      items: [
-        {
-          title: "项目部",
-          url: "/project/projects",
-        },
-        {
-          title: "隧道区间",
-          url: "/project/subprojects",
-        },
-        {
-          title: "进度管理",
           url: "#",
         },
       ],
@@ -204,29 +89,38 @@ const data = {
       ],
     },
     {
-      title: "其他",
+      title: "人力资源管理",
       url: "#",
       items: [
         {
-          title: "Accessibility",
-          url: "#",
+          title: "部门",
+          url: "/hrm/departments",
         },
         {
-          title: "Fast Refresh",
-          url: "#",
+          title: "员工",
+          url: "/hrm/employees",
+          isActive: true,
         },
         {
-          title: "Next.js Compiler",
-          url: "#",
+          title: "薪酬",
+          url: "/hrm/salaries",
         },
       ],
     },
     {
-      title: "Community",
-      url: "#",
+      title: "项目管理",
+      url: "/project",
       items: [
         {
-          title: "Contribution Guide",
+          title: "项目部",
+          url: "/project/projects",
+        },
+        {
+          title: "隧道区间",
+          url: "/project/subprojects",
+        },
+        {
+          title: "进度管理",
           url: "#",
         },
       ],

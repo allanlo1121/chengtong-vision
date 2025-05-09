@@ -39,7 +39,7 @@ export const updateSession = async (request: NextRequest) => {
     // https://supabase.com/docs/guides/auth/server-side/nextjs
     const user = await supabase.auth.getUser();
 
-   // console.log("user", user);
+    // console.log("user", user);
     // console.log(true && !user.error);
     // console.log(request.nextUrl.pathname.startsWith("/protected") && user.error);
 
@@ -51,21 +51,21 @@ export const updateSession = async (request: NextRequest) => {
     // }
 
     // protected routes
-    if (request.nextUrl.pathname.startsWith("/protected") && user.error) {
-      return NextResponse.redirect(new URL("/sign-in", request.url));
-    }
+    // if (request.nextUrl.pathname.startsWith("/protected") && user.error) {
+    //   return NextResponse.redirect(new URL("/sign-in", request.url));
+    // }
 
-    if (request.nextUrl.pathname.startsWith("/dashboard") && user.error) {
-      return NextResponse.redirect(new URL("/sign-in", request.url));
-    }
+    // if (request.nextUrl.pathname.startsWith("/dashboard") && user.error) {
+    //   return NextResponse.redirect(new URL("/sign-in", request.url));
+    // }
 
     // if (request.nextUrl.pathname.startsWith("/hrm") && user.error) {
     //   return NextResponse.redirect(new URL("/sign-in", request.url));
     // }
 
-    if (request.nextUrl.pathname === "/" && !user.error) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
+    // if (request.nextUrl.pathname === "/" && !user.error) {
+    //   return NextResponse.redirect(new URL("/dashboard", request.url));
+    // }
 
     return response;
   } catch (e) {

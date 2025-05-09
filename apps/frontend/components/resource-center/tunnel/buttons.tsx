@@ -1,6 +1,6 @@
 import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { deleteTunnel} from "@/lib/resource-center/tunnel/actions";
+import { deleteTunnel} from "@/lib/project/tunnel/actions";
 
 export function CreateTunnel() {
   return (

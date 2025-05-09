@@ -2,7 +2,7 @@ import React from "react";
 import { notoSans } from "@/app/ui/fonts";
 import Search from "@/components/ui/search";
 import Pagination from "@/components/ui/pagination";
-import { fetchFilteredTunnelsPages } from "@/lib/resource-center/tunnel/data";
+import { fetchFilteredTunnelsPages } from "@/lib/project/tunnel/data";
 import Table from "@/components/resource-center/tunnel/table";
 import { CreateTunnel } from "@/components/resource-center/tunnel/buttons";
 import { Suspense } from "react";

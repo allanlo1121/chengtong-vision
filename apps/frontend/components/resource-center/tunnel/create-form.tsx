@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import FormInput from "@/components/ui/form-input";
 import { useActionState } from "react";
 import FormSelect from "@/components/ui/form-select";
-import { createTunnel, State } from "@/lib/resource-center/tunnel/actions";
+import { createTunnel, State } from "@/lib/project/tunnel/actions";
 import { ITbmBaseInfo } from "@/lib/tbm_del/types";
 
 export default function Form({

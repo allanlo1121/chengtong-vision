@@ -11,11 +11,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { fetchInprogressTunnels } from "@/lib/resource-center/tunnel/data";
 
-export default async function ProgressTable() {
-  const tunnels = await fetchInprogressTunnels();
-  console.log("tunnels", tunnels);
+export default async function ProgressTable({tunnels}) {
+  // const tunnels = await fetchInprogressTunnels();
+   console.log("tunnels", tunnels);
 
   return (
     <div className="mt-6 mx-10 px-10 flow-root">
@@ -31,7 +30,7 @@ export default async function ProgressTable() {
             <TableHead>累计完成</TableHead>
             <TableHead>今日计划</TableHead>
             <TableHead>今日完成</TableHead>
-            <TableHead>PLC状态</TableHead>            
+            <TableHead>PLC状态</TableHead>
             {/*  <TableHead>剩余</TableHead>
             <TableHead>掘进环数</TableHead> */}
             <TableHead className="text-right">操作</TableHead>

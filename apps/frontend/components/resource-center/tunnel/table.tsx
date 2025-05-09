@@ -3,11 +3,11 @@ import {
   UpdateTunnel,
   DeleteTunnel,
 } from "@/components/resource-center/tunnel/buttons";
-import { fetchFilteredTunnels } from "@/lib/resource-center/tunnel/data";
+import { fetchFilteredTunnels } from "@/lib/project/tunnel/data";
 import { formatDecimal } from "@/utils/utils";
 import dayjs from "dayjs";
-import { ITunnelBasic } from "@/lib/resource-center/tunnel/types";
-import {ProjectStatusLabels} from "@/lib/resource-center/types";
+import { ITunnelBasic } from "@/lib/project/tunnel/types";
+import {ProjectStatusLabels} from "@/lib/project/types";
 export default async function Table({
   query,
   currentPage,

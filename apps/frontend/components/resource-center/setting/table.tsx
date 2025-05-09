@@ -5,10 +5,9 @@ import {
 } from "@/components/resource-center/tunnel/buttons";
 import { EditTunnel } from "./buttons";
 import { fetchFilteredAllTunnels } from "@/lib/project/tunnel/data";
-import { formatDecimal } from "@/utils/utils";
-import dayjs from "dayjs";
+
 import { ITunnelBasic } from "@/lib/project/tunnel/types";
-import { ProjectStatusLabels } from "@/lib/resource-center/types";
+
 export default async function Table({ query }: { query: string }) {
   const tunnels: ITunnelBasic[] = await fetchFilteredAllTunnels(query);
   console.log("tunnels", tunnels);
