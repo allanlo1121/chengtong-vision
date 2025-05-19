@@ -1,13 +1,13 @@
 import { createClient } from "@/utils/supabase/server";
-import { ITunnelBasicForm } from "./types";
+import { TypeTunnelFormSchema } from "./types";
 
 export async function insertTunnelMutation(
-  input: Omit<ITunnelBasicForm, "id" >
+  input: Omit<TypeTunnelFormSchema, "id">
 ): Promise<string> {
   if (!input) throw new Error("No input provided");
   const supabase = await createClient();
   const { data, error } = await supabase
-    .from("Tunnels")
+    .from("tunnels")
     .insert({
       name: input.name,
       short_name: input.shortName,
@@ -15,10 +15,17 @@ export async function insertTunnelMutation(
       ring_end: input.ringEnd,
       op_num_start: input.opNumStart,
       op_num_end: input.opNumEnd,
-      plan_start_date: input.planStartDate,
-      plan_end_date: input.planEndDate,
+      plan_launch_date: input.planLaunchDate,
+      plan_breakthrough_date: input.planBreakthroughDate,
+      actual_launch_date:
+        input.actualLaunchDate === "" ? null : input.actualLaunchDate,
+      actual_breakthrough_date:
+        input.actualBreakthroughDate === ""
+          ? null
+          : input.actualBreakthroughDate,
+      tbm_id: input.tbmId === "" ? null : input.tbmId,
+      wtype: input.wtype === "" ? null : input.wtype,
       project_id: input.projectId,
-      tbm_id: input.tbmId,
       status: input.status,
     })
     .select("id")
@@ -30,12 +37,12 @@ export async function insertTunnelMutation(
 
 export async function updateTunnelMutation(
   id: string,
-  input: Partial<ITunnelBasicForm>
+  input: Partial<TypeTunnelFormSchema>
 ): Promise<void> {
   if (!input) throw new Error("No input provided");
   const supabase = await createClient();
   const { error } = await supabase
-    .from("Tunnels")
+    .from("tunnels")
     .update({
       name: input.name,
       short_name: input.shortName,
@@ -43,10 +50,17 @@ export async function updateTunnelMutation(
       ring_end: input.ringEnd,
       op_num_start: input.opNumStart,
       op_num_end: input.opNumEnd,
-      plan_start_date: input.planStartDate,
-      plan_end_date: input.planEndDate,
+      plan_launch_date: input.planLaunchDate,
+      plan_breakthrough_date: input.planBreakthroughDate,
+      actual_launch_date:
+        input.actualLaunchDate === "" ? null : input.actualLaunchDate,
+      actual_breakthrough_date:
+        input.actualBreakthroughDate === ""
+          ? null
+          : input.actualBreakthroughDate,
+      tbm_id: input.tbmId === "" ? null : input.tbmId,
+      wtype: input.wtype === "" ? null : input.wtype,
       project_id: input.projectId,
-      tbm_id: input.tbmId,
       status: input.status,
     })
     .eq("id", id);
@@ -56,6 +70,6 @@ export async function updateTunnelMutation(
 
 export async function deleteTunnelMutation(id: string): Promise<void> {
   const supabase = await createClient();
-  const { error } = await supabase.from("Tunnels").delete().eq("id", id);
+  const { error } = await supabase.from("tunnels").delete().eq("id", id);
   if (error) throw error;
 }

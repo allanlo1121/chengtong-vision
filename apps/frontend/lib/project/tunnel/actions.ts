@@ -1,6 +1,5 @@
 "use server";
 
-import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import {
@@ -8,7 +7,8 @@ import {
   updateTunnelMutation,
   deleteTunnelMutation,
 } from "./mutations";
-import { ITunnelBasicForm, ProjectStatus } from "./types";
+import { TunnelSchema, TypeTunnelFormSchema } from "./types";
+import { initialTunnelProgressData } from "@/lib/project/progress/actions";
 
 export type State = {
   errors?: {
@@ -18,24 +18,8 @@ export type State = {
   message?: string | null;
 };
 
-const FormSchema = z.object({
-  name: z.string().min(1, { message: "必须输入一个工程名称。" }),
-  shortName: z.string().min(1, { message: "必须输入一个工程简称。" }),
-  ringStart: z.coerce.number().min(0, { message: "必须输入一个起始环号。" }),
-  ringEnd: z.coerce.number().min(1, { message: "必须输入一个结束环号。" }),
-  opNumStart: z.coerce.number().min(0, { message: "必须输入一个起始里程。" }),
-  opNumEnd: z.coerce.number().min(1, { message: "必须输入一个结束里程。" }),
-  planStartDate: z.string().min(1, { message: "必须填写始发时间。" }),
-  planEndDate: z.string().min(1, { message: "必须填写贯通时间。" }),
-  tbmId: z.coerce.string().min(1, { message: "请选择TBM机型。" }),
-  projectId: z.coerce.string().min(1, { message: "请选择所属项目。" }),
-  status: z.nativeEnum(ProjectStatus, {
-    errorMap: () => ({ message: "必须选择一个项目状态。" }),
-  }),
-});
-
-const CreateTunnel = FormSchema;
-const UpdateTunnel = FormSchema;
+const CreateTunnel = TunnelSchema.omit({ id: true });
+const UpdateTunnel = TunnelSchema.omit({ id: true });
 
 export async function createTunnel(prevState: State, formData: FormData) {
   console.log("formData", formData);
@@ -47,10 +31,13 @@ export async function createTunnel(prevState: State, formData: FormData) {
     ringEnd: formData.get("ringEnd"),
     opNumStart: formData.get("opNumStart"),
     opNumEnd: formData.get("opNumEnd"),
-    planStartDate: formData.get("planStartDate"),
-    planEndDate: formData.get("planEndDate"),
+    planLaunchDate: formData.get("planLaunchDate"),
+    planBreakthroughDate: formData.get("planBreakthroughDate"),
+    actualLaunchDate: formData.get("actualLaunchDate"),
+    actualBreakthroughDate: formData.get("actualBreakthroughDate"),
     tbmId: formData.get("tbmId"),
     projectId: formData.get("projectId"),
+    wtype: formData.get("wtype"),
     status: formData.get("status"),
   });
 
@@ -71,22 +58,28 @@ export async function createTunnel(prevState: State, formData: FormData) {
     ringEnd,
     opNumStart,
     opNumEnd,
-    planStartDate,
-    planEndDate,
+    planLaunchDate,
+    planBreakthroughDate,
+    actualLaunchDate,
+    actualBreakthroughDate,
     tbmId,
     projectId,
+    wtype,
     status,
   } = validatedFields.data;
 
-  const data: Omit<ITunnelBasicForm, "id"> = {
+  const data: Omit<TypeTunnelFormSchema, "id"> = {
     name: name,
     shortName: shortName,
     ringStart: Number(ringStart),
     ringEnd: Number(ringEnd),
     opNumStart: Number(opNumStart),
     opNumEnd: Number(opNumEnd),
-    planStartDate: planStartDate,
-    planEndDate: planEndDate,
+    planLaunchDate: planLaunchDate,
+    planBreakthroughDate: planBreakthroughDate,
+    actualLaunchDate: actualLaunchDate,
+    actualBreakthroughDate: actualBreakthroughDate,
+    wtype: wtype,
     projectId: projectId,
     tbmId: tbmId,
     status: status,
@@ -96,11 +89,19 @@ export async function createTunnel(prevState: State, formData: FormData) {
 
   try {
     // 1. 插入项目
-    const TunnelId = await insertTunnelMutation(data);
+    const tunnelId = await insertTunnelMutation(data);
 
-    if (!TunnelId) {
+    if (!tunnelId) {
       throw new Error("项目区间插入失败");
     }
+
+    const res = await initialTunnelProgressData(
+      planLaunchDate,
+      planBreakthroughDate,
+      tunnelId
+    );
+
+    console.log("插入进度数据", res);
   } catch (error) {
     console.error("创建项目区间失败：", error);
     return {
@@ -110,8 +111,8 @@ export async function createTunnel(prevState: State, formData: FormData) {
   }
 
   // 3. 跳转页面（刷新 + 重定向）
-  revalidatePath("/resource-center/tunnels");
-  redirect("/resource-center/tunnels");
+  revalidatePath("/resource-center/tunnel");
+  redirect("/resource-center/tunnel");
 }
 
 export async function updateTunnel(
@@ -121,21 +122,26 @@ export async function updateTunnel(
 ) {
   console.log("formData", formData);
 
-  //Validate from using Zod
-  const validatedFields = UpdateTunnel.safeParse({
+  const rawForm = {
     name: formData.get("name"),
     shortName: formData.get("shortName"),
     ringStart: formData.get("ringStart"),
     ringEnd: formData.get("ringEnd"),
     opNumStart: formData.get("opNumStart"),
     opNumEnd: formData.get("opNumEnd"),
-    planStartDate: formData.get("planStartDate"),
-    planEndDate: formData.get("planEndDate"),
+    planLaunchDate: formData.get("planLaunchDate"),
+    planBreakthroughDate: formData.get("planBreakthroughDate"),
+    actualLaunchDate: formData.get("actualLaunchDate"),
+    actualBreakthroughDate: formData.get("actualBreakthroughDate"),
     tbmId: formData.get("tbmId"),
     projectId: formData.get("projectId"),
+    wtype: formData.get("wtype"),
     status: formData.get("status"),
-  });
-  // If form validation fails, return errors early. Otherwise, continue.
+  };
+  console.log("rawForm", rawForm);
+
+  const validatedFields = UpdateTunnel.safeParse(rawForm);
+
   if (!validatedFields.success) {
     console.log("validatedFields", validatedFields);
     return {
@@ -148,12 +154,15 @@ export async function updateTunnel(
   const {
     name,
     shortName,
+    wtype,
     ringStart,
     ringEnd,
     opNumStart,
     opNumEnd,
-    planStartDate,
-    planEndDate,
+    planLaunchDate,
+    planBreakthroughDate,
+    actualLaunchDate,
+    actualBreakthroughDate,
     tbmId,
     projectId,
     status,
@@ -161,21 +170,26 @@ export async function updateTunnel(
 
   try {
     //1. 更新项目
-    const data: Partial<ITunnelBasicForm> = {
+    const data: Partial<TypeTunnelFormSchema> = {
       name: name,
       shortName: shortName,
+      wtype: wtype,
       ringStart: Number(ringStart),
       ringEnd: Number(ringEnd),
       opNumStart: Number(opNumStart),
       opNumEnd: Number(opNumEnd),
-      planStartDate: planStartDate,
-      planEndDate: planEndDate,
+      planLaunchDate: planLaunchDate,
+      planBreakthroughDate: planBreakthroughDate,
+      actualLaunchDate: actualLaunchDate,
+      actualBreakthroughDate: actualBreakthroughDate,
       projectId: projectId,
       tbmId: tbmId,
       status: status,
     };
+    console.log("data", data);
+    console.log("id", id);
     await updateTunnelMutation(id, data);
-    //2. 更新项目负责人
+    await initialTunnelProgressData(planLaunchDate, planBreakthroughDate, id);
   } catch (error) {
     console.error("修改项目区间失败：", error);
     return {
@@ -184,8 +198,8 @@ export async function updateTunnel(
     };
   }
 
-  revalidatePath("/resource-center/tunnels");
-  redirect("/resource-center/tunnels");
+  revalidatePath("/resource-center/tunnel");
+  redirect("/resource-center/tunnel");
 }
 
 export async function deleteTunnel(id: string): Promise<void> {
@@ -200,6 +214,6 @@ export async function deleteTunnel(id: string): Promise<void> {
   }
 
   // 刷新路径，重定向
-  revalidatePath("/resource-center/tunnels");
-  redirect("/resource-center/tunnels");
+  revalidatePath("/resource-center/tunnel");
+  redirect("/resource-center/tunnel");
 }

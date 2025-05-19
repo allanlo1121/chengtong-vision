@@ -84,3 +84,11 @@ export interface ITbmType {
   name: string;
   remark: string;
 }
+
+
+export interface ITbmAdvanceParam {
+  id: number;
+  code: string;
+  name: string;
+  digits: number;
+}

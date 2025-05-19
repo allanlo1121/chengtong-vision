@@ -2,7 +2,7 @@
 import mqtt from "mqtt";
 
 const options = {
-  host: "132.232.160.223",
+  host: "localhost",
   port: 1883,
   username: "server_listener",
   password: "Luo112781",
@@ -25,7 +25,7 @@ export const initMQTT = (messageHandler) => {
     let payload;
     try {
       payload = JSON.parse(message.toString());
-      console.log("Received message:", topic, payload);      
+     // console.log("Received message:", topic);      
     } catch (err) {
       console.error("Invalid JSON payload", err);
       return;

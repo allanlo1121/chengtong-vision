@@ -1,6 +1,6 @@
 import Form from "@/components/resource-center/tunnel/edit-form";
 import Breadcrumbs from "@/components/ui/breadcrumbs";
-import { fetchTunnelById } from "@/lib/resource-center/tunnel/data";
+import { fetchTunnelById } from "@/lib/project/tunnel/data";
 import { notFound } from "next/navigation";
 import { fetchAllProjectsBasic } from "@/lib/project/data";
 import { fetchAllTbms } from "@/lib/tbm/data";

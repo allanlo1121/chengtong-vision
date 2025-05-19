@@ -6,6 +6,7 @@ import {
   ITbmOwner,
   ITbmProducer,
   TypeTbmFormSchema,
+  ITbmAdvanceParam,
 } from "./types";
 
 const ITEMS_PER_PAGE = 20;
@@ -18,7 +19,7 @@ export async function fetchTbmTypes(): Promise<ITbmType[]> {
     // 查询员工信息，仅选择需要的字段，并按员工编号排序I
     const { data, error } = await supabase
       .from("tbm_types")
-      .select("id,code,name")
+      .select("id,code,name,remark")
       .order("name", { ascending: true });
 
     if (error) {
@@ -30,6 +31,7 @@ export async function fetchTbmTypes(): Promise<ITbmType[]> {
       id: item.id,
       code: item.code,
       name: item.name,
+      remark: item.remark,
     }));
 
     return tbmTypes;
@@ -245,7 +247,7 @@ export async function fetchTbmFormByTbmId(
       id: tbm[0].id,
       name: tbm[0].name,
       code: tbm[0].code,
-      type: tbm[0].type,
+      typeId: tbm[0].type_id,
       diameter: tbm[0].diameter,
       segmentOuter: tbm[0].segment_outer,
       producerId: tbm[0].producer_id,
@@ -258,5 +260,34 @@ export async function fetchTbmFormByTbmId(
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to fetch employees.");
+  }
+}
+
+
+export async function fetchTbmAdvanceParams(): Promise<ITbmAdvanceParam[]> {
+  const supabase = await createClient();
+  try {
+    // 查询员工信息，仅选择需要的字段，并按员工编号排序I
+    const { data, error } = await supabase
+      .from("tbm_advance_parameters")
+      .select("id,name,code,digits")
+      .order("name", { ascending: true });
+
+    if (error) {
+      console.error("查询失败:", error);
+      throw new Error("Failed to fetch tbm types.");
+    }
+
+    const tbmAdvanceParams: ITbmAdvanceParam[] = data.map((item) => ({
+      id: item.id,
+      code: item.code,
+      name: item.name,
+      digits: item.digits,
+    }));
+
+    return tbmAdvanceParams;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch tbm types.");
   }
 }

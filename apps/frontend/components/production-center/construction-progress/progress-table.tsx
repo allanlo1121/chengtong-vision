@@ -21,12 +21,32 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ProgressEditDialog } from "./progress-edit-dialog";
 import { ITunnelProgressData } from "@/lib/project/progress/types";
+import { TypeTunnelFormSchema } from "@/lib/project/tunnel/types";
+import { fetchFilterTunnelProgress } from "@/lib/project/progress/data";
 
-export default function ProgressTable({
-  progressData,
+export default async function ProgressTable({
+  tunnelData,
+  from,
+  to,
+  currentPage,
 }: {
-  progressData: ITunnelProgressData[] | undefined;
+  tunnelData: TypeTunnelFormSchema;
+  from?: Date;
+  to?: Date;
+  currentPage: number;
 }) {
+
+ // console.log("tunnelData", tunnelData);
+ // console.log("from", from);
+ // console.log("to", to);
+
+  const progressData = await fetchFilterTunnelProgress(tunnelData.id, currentPage, {
+    from: from,
+    to: to,
+  })
+
+ // console.log("progressData", progressData);
+
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
@@ -90,11 +110,11 @@ export default function ProgressTable({
                   </td>
                   <td className="whitespace-nowrap px-3 py-1">
                     {progress.op_num_end != null &&
-                    progress.op_num_start != null
+                      progress.op_num_start != null
                       ? formatDecimal(
-                          Math.abs(progress.op_num_end - progress.op_num_start),
-                          2
-                        )
+                        Math.abs(progress.op_num_end - progress.op_num_start),
+                        2
+                      )
                       : "-"}
                   </td>
                   <td className="whitespace-nowrap px-3 py-1">
@@ -107,9 +127,9 @@ export default function ProgressTable({
                   <td className="whitespace-nowrap px-3 py-1">
                     {progress.ring_end != null && progress.ring_start != null
                       ? formatDecimal(
-                          Math.abs(progress.ring_end - progress.ring_start),
-                          0
-                        )
+                        Math.abs(progress.ring_end - progress.ring_start),
+                        0
+                      )
                       : "-"}
                   </td>
                   <td className="whitespace-nowrap px-3 py-1">

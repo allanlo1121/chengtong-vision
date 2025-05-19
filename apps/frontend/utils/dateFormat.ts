@@ -33,3 +33,31 @@ export function generateDateRange(start: string, end: string): Date[] {
 
   return result;
 }
+
+
+import { startOfYear, startOfMonth, startOfWeek } from "date-fns";
+import { zhCN } from "date-fns/locale";
+
+/**
+ * 获取某个日期所在年份的第一天
+ * @param date 默认当前日期
+ */
+export function getStartOfYear(date: Date = new Date()): Date {
+  return startOfYear(date);
+}
+
+/**
+ * 获取某个日期所在月份的第一天
+ * @param date 默认当前日期
+ */
+export function getStartOfMonth(date: Date = new Date()): Date {
+  return startOfMonth(date);
+}
+
+/**
+ * 获取某个日期所在周的第一天（以周一为起始）
+ * @param date 默认当前日期
+ */
+export function getStartOfWeek(date: Date = new Date()): Date {
+  return startOfWeek(date, { weekStartsOn: 1, locale: zhCN }); // 周一
+}

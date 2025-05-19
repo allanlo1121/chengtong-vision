@@ -94,7 +94,7 @@ export interface ISubprojectForm {
   id: string;
   name: string;
   shortName: string;
-  projectId: string;  
+  projectId: string;
   ringStart: number;
   ringEnd: number;
   tbmId: string;
@@ -104,3 +104,4 @@ export interface ISubprojectForm {
   planEndDate: string; // timestamp
   status: ProjectStatus;
 }
+

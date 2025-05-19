@@ -5,6 +5,7 @@ import { DateRange } from "react-day-picker";
 import { subDays } from "date-fns";
 import { useFilteredProgress } from "@/hooks/useFilteredProgress";
 import { DatePickerWithRange } from "@/components/ui/date-picker-with-range";
+import { DatePickerSeparate } from "@/components/ui/date-picker-separate";
 import ProgressTable from "./progress-table";
 import { ITunnelProgressData } from "@/lib/project/progress/types";
 
@@ -15,23 +16,31 @@ export default function EditProgressForm({
   // progressData: IProgressForm;
 }) {
   const yesterday = subDays(new Date(), 1);
-  const from = subDays(yesterday, 30);
-  const [range, setRange] = useState<DateRange | undefined>({
-    from,
-    to: yesterday,
-  });
-
-  const filtered: ITunnelProgressData[] = useFilteredProgress(
-    progressData,
-    range
-  );
- // console.log("progressData", progressData);
- // console.log("filtered", filtered);
+  // const from = subDays(yesterday, 30);
+  // const [range, setRange] = useState<DateRange | undefined>({
+  //   from,
+  //   to: yesterday,
+  // });
+  const [dates, setDates] = useState<{
+    startDate?: Date;
+    endDate?: Date;
+  }>({});
+  // const filtered: ITunnelProgressData[] = useFilteredProgress(
+  //   progressData,
+  //   range
+  // );
+  // console.log("progressData", progressData);
+  // console.log("filtered", filtered);
 
   return (
     <div className="space-y-4">
-      <DatePickerWithRange value={range} onChange={setRange} />
-      <ProgressTable progressData={filtered} />
+      {/* <DatePickerWithRange value={range} onChange={setRange} /> */}
+      <DatePickerSeparate
+        startDate={dates.startDate}
+        endDate={dates.endDate}
+        onChange={(newDates) => setDates(newDates)}
+      />
+       {/* <ProgressTable progressData={filtered} /> */}
     </div>
   );
 }

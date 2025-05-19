@@ -2,8 +2,9 @@
 
 import { z } from "zod";
 import { generateDateRange } from "@/utils/dateFormat";
-import { ITunnelProgressData } from "./types";
+import { ITunnelProgressData,TunnelProgressSchema,TypeTunnelProgressSchema } from "./types";
 import {
+  insertTunnelProgressData,
   insertManyTunnelProgressData,
   updateTunnelProgressData,
 } from "./mutations";
@@ -31,22 +32,68 @@ export async function initialTunnelProgressData(
   return data;
 }
 
-// ✅ 类型定义
-const TunnelProgressSchema = z.object({
-  id: z.string().uuid(),
-  plan_ring_count: z.coerce.number().nullable(),
-  ring_start: z.coerce.number().nullable(),
-  ring_end: z.coerce.number().nullable(),
-  op_num_start: z.coerce.number().nullable(),
-  op_num_end: z.coerce.number().nullable(),
-});
+const createProgress = TunnelProgressSchema.omit({ id: true });
+const updateProgress = TunnelProgressSchema.omit({ tunnel_id: true, progress_at: true });
+
+// ✅ server action，接收 formData，校验 + 更新
+export async function createTunnelProgressDataAction(
+  prevState: any,
+  formData: FormData
+) {
+  console.log("formData", formData);
+
+  const raw = {
+    tunnel_id: formData.get("tunnel_id"),
+    progress_at: formData.get("progress_at"),
+    plan_ring_count: formData.get("plan_ring_count"),
+    ring_start: formData.get("ring_start"),
+    ring_end: formData.get("ring_end"),
+    op_num_start: formData.get("op_num_start"),
+    op_num_end: formData.get("op_num_end"),
+  };
+
+  const parseResult = createProgress.safeParse(raw);
+
+  if (!parseResult.success) {
+    return {
+      success: false,
+      errors: parseResult.error.flatten().fieldErrors,
+    };
+  }
+
+  const {
+    tunnel_id,
+    progress_at,
+    plan_ring_count,
+    ring_start,
+    ring_end,
+    op_num_start,
+    op_num_end,
+  } = parseResult.data;
+
+  const inserDate:Omit<TypeTunnelProgressSchema, "id"> = {
+    tunnel_id,
+    progress_at,
+    plan_ring_count,
+    ring_start,
+    ring_end,
+    op_num_start,
+    op_num_end,
+  };
+
+  console.log("新增进度数据", inserDate);
+
+  await insertTunnelProgressData(inserDate); // 👈 记得 await
+
+  return { success: true };
+}
 
 // ✅ server action，接收 formData，校验 + 更新
 export async function updateTunnelProgressDataAction(
   prevState: any,
   formData: FormData
 ) {
-  console.log("formData", formData);
+ // console.log("formData", formData);
 
   const raw = {
     id: formData.get("id"),
@@ -57,7 +104,7 @@ export async function updateTunnelProgressDataAction(
     op_num_end: formData.get("op_num_end"),
   };
 
-  const parseResult = TunnelProgressSchema.safeParse(raw);
+  const parseResult = updateProgress.safeParse(raw);
 
   if (!parseResult.success) {
     return {

@@ -38,7 +38,7 @@ export const WebSocketProvider = ({
 
   useEffect(() => {
     console.log("WebSocketProvider mounted");    
-    const ws = new WebSocket("ws://localhost:8080");
+    const ws = new WebSocket(`ws://${process.env.NEXT_PUBLIC_WS_HOST}`);
     ws.onopen = () => {
       console.log("WebSocket connection established.");
     };
@@ -46,7 +46,7 @@ export const WebSocketProvider = ({
       const msg = JSON.parse(event.data);
       if (msg.topic?.startsWith("chengtong/realdata/")) {
         dispatch({ type: "UPDATE", payload: msg.payload });
-        console.log("Received data:", msg.payload);
+       // console.log("Received data:", msg.payload);
       }
     };
 
@@ -62,4 +62,13 @@ export const WebSocketProvider = ({
   return <DataContext.Provider value={state}>{children}</DataContext.Provider>;
 };
 
-export const useDataContext = () => useContext(DataContext);
+// export const useDataContext = () => useContext(DataContext);
+
+export const useDataContext = (): State => {
+  const context = useContext(DataContext);
+  if (!context) {
+    throw new Error("useDataContext must be used within a WebSocketProvider");
+  }
+  return context;
+};
+

@@ -57,7 +57,7 @@ const data = {
 
         {
           title: "项目监控",
-          url: "/production-center/tbm-monitor",
+          url: "/production-center/project-monitor",
         },
         {
           title: "报表统计",
@@ -132,7 +132,7 @@ export default function NavLinks({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
-  console.log("pathname", pathname);
+  //console.log("pathname", pathname);
 
   return (
     <SidebarProvider>

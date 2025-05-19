@@ -1,8 +1,8 @@
 import { createClient } from "@/utils/supabase/server";
-import { ITunnelProgressData } from "./types";
+import { ITunnelProgressData, TypeTunnelProgressSchema } from "./types";
 
 export async function insertTunnelProgressData(
-  tunnelProgressData: Omit<ITunnelProgressData, "id">
+  tunnelProgressData: Omit<TypeTunnelProgressSchema, "id">
 ) {
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -42,7 +42,7 @@ export async function insertManyTunnelProgressData(
 }
 
 export async function updateTunnelProgressData(
-  tunnelProgressData: Partial<ITunnelProgressData> & { id: string }
+  tunnelProgressData: Partial<TypeTunnelProgressSchema> & { id: string }
 ) {
   const supabase = await createClient();
   const { data, error } = await supabase

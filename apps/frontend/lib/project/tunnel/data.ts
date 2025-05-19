@@ -1,7 +1,8 @@
 import { createClient } from "@/utils/supabase/server";
 import { convertKeysToCamelCase } from "../../utils";
 import { ISubproject, ProjectStatus, ISubprojectForm } from "../types";
-import { ITunnelBasic } from "./types";
+import { ITunnelBasic, ITunnelBasicForm, ITunnelProgress, ITunnelTask, TypeTunnelFormSchema } from "./types";
+import { getProgressAtTimestamp } from "./utils";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -308,14 +309,14 @@ export async function fetchFilteredAllTunnels(
   }
 }
 
-export async function fetchInprogressTunnels() {
+export async function fetchInprogressTunnels(): Promise<ITunnelTask[]> {
   const supabase = await createClient();
 
   try {
     const { data, error } = await supabase
       .from("v_tunnels_overview")
       .select("id,project_short_name,short_name,tbm_name,tbm_code,ring_start,ring_end,op_num_start,op_num_end,plan_launch_date,plan_breakthrough_date,actual_launch_date,actual_breakthrough_date")
-      
+
       .eq("status", "InProgress")
       .order("project_short_name", { ascending: true });
 
@@ -325,8 +326,8 @@ export async function fetchInprogressTunnels() {
     }
 
     if (data && data.length > 0) {
-      console.log("Fetched Tunnels:", data); // 打印获取的隧道数据
-      const result = data.map((item) => ({
+      //  console.log("Fetched Tunnels:", data); // 打印获取的隧道数据
+      const result: ITunnelTask[] = data.map((item) => ({
         id: item.id,
         projectShortName: item.project_short_name,
         shortName: item.short_name,
@@ -351,3 +352,76 @@ export async function fetchInprogressTunnels() {
     throw new Error("Failed to fetch tunnels.");
   }
 }
+
+export async function fetchTunnelById(id: string): Promise<TypeTunnelFormSchema> {
+  const supabase = await createClient();
+  try {
+    // 查询员工信息，仅选择需要的字段，并按员工编号排序
+    const { data: tunnel, error } = await supabase
+      .from("tunnels")
+      .select("*")
+      .eq("id", id)
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!tunnel) throw new Error("tunnel not found.");
+
+    const result: TypeTunnelFormSchema = {
+      id: id,
+      name: tunnel.name,
+      shortName: tunnel.short_name,
+      projectId: tunnel.project_id,
+      ringStart: tunnel.ring_start,
+      ringEnd: tunnel.ring_end,
+      opNumStart: tunnel.op_num_start,
+      opNumEnd: tunnel.op_num_end,
+      planLaunchDate: tunnel.plan_launch_date,
+      planBreakthroughDate: tunnel.plan_breakthrough_date,
+      actualLaunchDate: tunnel.actual_launch_date,
+      actualBreakthroughDate: tunnel.actual_breakthrough_date,
+      wtype: tunnel.wtype,
+      tbmId: tunnel.tbm_id,
+      status: tunnel.status,
+    };
+    return result;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch employees.");
+  }
+}
+
+
+export async function ensureTodayProgressRecord(tunnelId: string): Promise<ITunnelProgress | null> {
+  const supabase = await createClient();
+  const progressAt = getProgressAtTimestamp();
+
+  const { data, error } = await supabase
+    .from("tunnel_daily_progress")
+    .select("id,tunnel_id,ring_start,ring_end,op_num_start,op_num_end,progress_at,plan_ring_count")
+    .eq("tunnel_id", tunnelId)
+    .eq("progress_at", progressAt)
+    .maybeSingle();
+
+  if (error) {
+    console.error("查询失败:", error);
+    throw new Error("Failed to fetch progress.");
+  }
+  if (!data) return null;
+
+  const result: ITunnelProgress = {
+    id: data.id,
+    tunnel_id: data.tunnel_id,
+    ring_start: data.ring_start,
+    ring_end: data.ring_end,
+    op_num_start: data.op_num_start,
+    op_num_end: data.op_num_end,
+    progress_at: data.progress_at,
+    plan_ring_count: data.plan_ring_count,
+
+  };
+
+  return result;
+
+}
+
+

@@ -7,24 +7,25 @@ import { initWebSocket, broadcast } from "./websocket.js";
 import { saveData, saveDeviceStatus, markOfflineDevices } from "./db.js";
 
 const app = express();
-const server = http.createServer(app);
+const PORT = 8080;
+const server = http.createServer({ port: PORT, host: "0.0.0.0" }, app);
 
 // 初始化 WebSocket
 initWebSocket(server);
 
 // MQTT订阅初始化
 initMQTT(async (topic, payload) => {
-  console.log("MQTT Message:", topic, payload);
+ // console.log("MQTT Message:", topic, payload);
 
   const { tbmcode, timestamp } = payload;
 
   if (topic.startsWith("chengtong/realdata/")) {
-    console.log("save & broadcast MQTT Data:");
+   // console.log("save & broadcast MQTT Data:");
     broadcast({ topic, payload: { ...payload, timestamp } });
   }
 
    // await saveData(topic, { ...payload, timestamp });
-    broadcast({ topic, payload: { ...payload, timestamp } });
+   // broadcast({ topic, payload: { ...payload, timestamp } });
   //}
 
   // const timestamp = payload.ts
