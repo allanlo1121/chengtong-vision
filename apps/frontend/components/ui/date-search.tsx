@@ -1,14 +1,13 @@
 "use client";
 
-import { CalendarIcon } from "lucide-react";
-import { subDays } from "date-fns";
+
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import { DatePickerSeparate } from "@/components/ui/date-picker-separate";
 import { format, startOfToday, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from "date-fns";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { de } from "date-fns/locale";
+
 
 export default function DateSearch({
   defaultRange,

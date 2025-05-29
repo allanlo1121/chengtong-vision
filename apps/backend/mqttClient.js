@@ -2,10 +2,10 @@
 import mqtt from "mqtt";
 
 const options = {
-  host: "localhost",
+  host: "218.89.187.59",
   port: 1883,
-  username: "server_listener",
-  password: "Luo112781",
+  username: "ct50809",
+  password: "ct50809",
   clientId: "backend-receiver",
   clean: true,
 };

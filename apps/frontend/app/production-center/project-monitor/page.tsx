@@ -6,7 +6,7 @@ import { fetchTbmAdvanceParams } from "@/lib/tbm/data";
 
 export default async function Page() {
   const tunnels = await fetchInprogressTunnels();
-  const tbmAdvanceParams =await fetchTbmAdvanceParams();
+  const tbmAdvanceParams = await fetchTbmAdvanceParams();
 
   return (
     <div>

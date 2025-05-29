@@ -32,3 +32,17 @@ export const TunnelProgressSchema = z.object({
 });
 
 export type TypeTunnelProgressSchema = z.infer<typeof TunnelProgressSchema>;
+
+export interface CardStats {
+  tunnelCount: number;
+  completedTunnelCount: number;
+  ringCountOfWeek: number;
+  ringCountOfMonth: number;
+  ringCountOfYear: number;
+}
+
+export interface ITunnelProgressChartData {
+  label: string;
+  plan: number;
+  completed: number;
+}

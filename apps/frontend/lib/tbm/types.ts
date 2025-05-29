@@ -1,4 +1,4 @@
-import { id } from "date-fns/locale";
+
 import { z } from "zod";
 
 export interface ITBMStatus {
@@ -65,14 +65,15 @@ export interface ITbmOwner {
 export const TbmFormSchema = z.object({
   id: z.string().uuid(),
   name: z.string().min(1, { message: "必须输入一个盾构机名称。" }),
-  code: z.string().min(1, { message: "必须输入一个盾构机代码。" }),
+  code: z.string().min(1, { message: "必须输入一个英文盾构机代码。" }),
   typeId: z.coerce.number().min(1, { message: "必须输入一个盾构机类型。" }),
-  diameter: z.coerce.number().min(0, { message: "必须输入一个直径。" }),
+  diameter: z.coerce.number().min(1, { message: "必须输入大于1的一个直径。" }),
   segmentOuter: z.coerce.number().optional(),
   producerId: z.coerce.string().optional(),
   productionDate: z.string().optional(),
   ownerId: z.coerce.string().optional(),
   geo: z.string().optional(),
+  createMqttUser: z.coerce.boolean().default(true),
   remark: z.string().optional(),
 });
 

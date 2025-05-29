@@ -43,6 +43,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --color-jue-400: var(--chart-jue);
 }
 
 :root {
@@ -65,10 +66,10 @@
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-1: oklch(0.5241 0.149756 250.3548);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-4: oklch(0.828 0.89 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
   --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
@@ -79,6 +80,10 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --chart-jue: oklch(0.789 0.154 211.53);
+  --chart-pin: oklch(0.765 0.177 163.223);
+  --chart-idle: oklch(0.828 0.189 84.429);
+  --chart-offline: oklch(0.704 0.191 22.216);
 }
 
 .dark {
@@ -114,6 +119,20 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
+  --color-jue: oklch(0.789 0.154 211.53);
+  --color-pin: oklch(0.765 0.177 163.223);
+  --color-idle: oklch(0.828 0.189 84.429);
+  --color-offline: oklch(0.704 0.191 22.216);
+}
+/* 隐藏 number 输入框右侧的上下箭头按钮 */
+input[type="number"].hide-spin-buttons::-webkit-inner-spin-button,
+input[type="number"].hide-spin-buttons::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"].hide-spin-buttons {
+  -moz-appearance: textfield; /* Firefox */
 }
 
 @layer base {

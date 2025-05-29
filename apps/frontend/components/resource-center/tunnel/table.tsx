@@ -40,9 +40,9 @@ export default async function Table({
                 <th scope="col" className="px-3 py-1 font-medium">
                   盾构机
                 </th>
-                <th scope="col" className="px-3 py-1 font-medium">
+                {/* <th scope="col" className="px-3 py-1 font-medium">
                   工况
-                </th>
+                </th> */}
                 <th scope="col" className="px-3 py-1 font-medium">
                   起始环号
                 </th>
@@ -96,9 +96,9 @@ export default async function Table({
                   <td className="whitespace-nowrap px-3 py-1">
                     { tunnel.tbmName}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-1">
+                  {/* <td className="whitespace-nowrap px-3 py-1">
                     { tunnel.wtype}
-                  </td>
+                  </td> */}
                   <td className="whitespace-nowrap px-3 py-1">
                     {tunnel.ringStart}
                   </td>

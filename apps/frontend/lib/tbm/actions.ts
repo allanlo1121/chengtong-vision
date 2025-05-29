@@ -8,44 +8,68 @@ import {
   updateTbmMutation,
   deleteTbmMutation,
 } from "./mutations";
+
 import { TbmFormSchema, TypeTbmFormSchema } from "./types";
 
 export type State = {
   errors?: {
     name?: string[];
+    code?: string[];
+    typeId?: string[];
+    diameter?: string[];
   };
   message?: string | null;
+  success?: boolean;  
+  formValues?: Record<string, string>;
+  tbmId?: string;
+  tbmCode?: string;
+  createMqttUser?: boolean;
 };
 
 const CreateTbm = TbmFormSchema.omit({ id: true });
 const UpdateTbm = TbmFormSchema.omit({ id: true });
 
 export async function createTbm(prevState: State, formData: FormData) {
- // console.log("createTbm");
-  
- console.log("TbmFormData", formData);
+  // console.log("createTbm");
+
+  // console.log("TbmFormData", formData);
   //Validate from using Zod
   const validatedFields = CreateTbm.safeParse({
     name: formData.get("name"),
     code: formData.get("code"),
-    typeId: formData.get("typeId"),
+    typeId: Number(formData.get("typeId")),
     diameter: formData.get("diameter"),
     segmentOuter: formData.get("segmentOuter"),
-    producerId: formData.get("producerId"),
+    producerId: formData.get("producerId") || null,
     productionDate: formData.get("productionDate"),
-    ownerId: formData.get("ownerId"),
+    ownerId: formData.get("ownerId") || null,
     geo: formData.get("geo"),
+    createMqttUser: formData.get("createMqttUser"),
     remark: formData.get("remark"),
   });
 
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     console.error("❌ 表单校验失败:", validatedFields.error.format());
-  
+
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       fullError: validatedFields.error.format(), // 更详细的嵌套结构（含 _errors）
       message: "表单字段缺失或不合法，创建失败。",
+      success: false,
+      formValues: {
+        name: formData.get("name")?.toString()||"",
+        code: formData.get("code")?.toString()||"",
+        typeId: formData.get("typeId")?.toString()||"",
+        diameter: formData.get("diameter")?.toString()||"",
+        segmentOuter: formData.get("segmentOuter")?.toString()||"",
+        producerId: formData.get("producerId")?.toString()||"",
+        productionDate: formData.get("productionDate")?.toString()||"",
+        ownerId: formData.get("ownerId")?.toString()||"",
+        geo: formData.get("geo")?.toString()||"",
+        createMqttUser: formData.get("createMqttUser")?.toString()||"",
+        remark: formData.get("remark")?.toString()||"",
+      }
     };
   }
 
@@ -60,10 +84,11 @@ export async function createTbm(prevState: State, formData: FormData) {
     productionDate,
     ownerId,
     geo,
+    createMqttUser,
     remark,
   } = validatedFields.data;
 
-  const data: Omit<TypeTbmFormSchema, "id"> = {
+  const data: Omit<TypeTbmFormSchema, "id" | "createMqttUser"> = {
     name: name,
     code: code,
     typeId: Number(typeId),
@@ -75,26 +100,37 @@ export async function createTbm(prevState: State, formData: FormData) {
     geo: geo,
     remark: remark,
   };
-console.log("data", data);
+  console.log("data", data);
 
-try {
-    // 1. 插入项目
+  try {
+    // 1. 插入 tbm
     const tbmId = await insertTbmMutation(data);
-
     if (!tbmId) {
-      throw new Error("盾构机创建失败");
+      return {
+        success: false,
+        message: "盾构机创建失败 ❌",
+      };
     }
-  } catch (error) {
-    console.error("盾构机创建失败：", error);
     return {
-      message: "创建盾构机失败，请稍后重试。",
-      error,
+      success: true,
+      message: "盾构机创建成功 ✅",
+      tbmId,
+      tbmCode: code,
+      createMqttUser: createMqttUser === true, // boolean
+      
+    };
+
+
+
+  } catch (error) {
+    console.error("创建失败：", error);
+    return {
+      success: false,
+      message: "创建失败，请稍后重试。",
     };
   }
 
-  // 3. 跳转页面（刷新 + 重定向）
-  revalidatePath("/resource-center/tbm");
-  redirect("/resource-center/tbm");
+
 }
 
 export async function updateTbm(
@@ -159,7 +195,7 @@ export async function updateTbm(
 
     await updateTbmMutation(id, data);
     console.log("盾构机信息修改成功，ID:", id);
-    
+
   } catch (error) {
     console.error("修改盾构机信息失败：", error);
     return {

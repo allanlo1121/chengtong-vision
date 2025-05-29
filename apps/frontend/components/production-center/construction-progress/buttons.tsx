@@ -2,6 +2,25 @@ import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { deleteTbm } from "@/lib/tbm/actions";
 import { ITunnelBasic } from "@/lib/project/tunnel/types";
+import { ReactNode } from "react";
+
+
+type Tunnel = {
+    id: string;
+    short_name: string;
+    region_name: string;
+    status: string;
+    project_short_name: string;
+    ring_start: number;
+    ring_end: number;
+    total: number;
+    op_num_start: number;
+    op_num_end: number;
+    current_op: number;
+    current_ring: number;
+    tbm_name: string;
+};
+
 
 export function CreateTbm() {
   return (
@@ -59,46 +78,23 @@ export function EditTunnel({
   );
 }
 
-export function EditProgress({ tunnel }: { tunnel: ITunnelBasic }) {
+
+
+export function EditProgress({
+  tunnelId,
+  children,
+}: {
+  tunnelId: string;
+  children: ReactNode;
+}) {
   return (
     <Link
       className="text-blue-500 hover:text-blue-700"
-      href={`/production-center/construction-progress/${tunnel.id}/edit`}
+      href={`/production-center/construction-progress/${tunnelId}/edit`}
     >
-      {tunnel.shortName}
+      {children}
     </Link>
   );
 }
 
 
-// export function EditTunnel({
-//   tunnel,
-//   index,
-// }: {
-//   tunnel: ITunnelBasic;
-//   index: number;
-// }) {
-//   return (
-//     <Link href={`/resource-center/tunnel/${tunnel.id}/edit`}>
-//       <div
-//         className="col-span-1 w-3/4 h-12 border-blue-500 border-4 rounded-l-2xl p-0   hover:bg-blue-50 hover:cursor-pointer"
-//         key={tunnel.id}
-//       >
-//         <span className="pl-2 leading-10 font-bold">{index + 1}</span>
-//         <span className="pl-2 leading-10">{tunnel.projectShortName}</span>
-//         <span className="pl-1 leading-10"> {tunnel.shortName}</span>
-//       </div>
-//     </Link>
-//   );
-// }
-
-// export function EditProgress({ tunnel }: { tunnel: ITunnelBasic }) {
-//   return (
-//     <Link
-//       className="text-blue-500 hover:text-blue-700"
-//       href={`/production-center/construction-progress/${tunnel.id}/edit`}
-//     >
-//       {tunnel.projectShortName}
-//     </Link>
-//   );
-// }

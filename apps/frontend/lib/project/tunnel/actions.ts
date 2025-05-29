@@ -95,13 +95,7 @@ export async function createTunnel(prevState: State, formData: FormData) {
       throw new Error("项目区间插入失败");
     }
 
-    const res = await initialTunnelProgressData(
-      planLaunchDate,
-      planBreakthroughDate,
-      tunnelId
-    );
 
-    console.log("插入进度数据", res);
   } catch (error) {
     console.error("创建项目区间失败：", error);
     return {
@@ -186,10 +180,9 @@ export async function updateTunnel(
       tbmId: tbmId,
       status: status,
     };
-    console.log("data", data);
-    console.log("id", id);
+   
     await updateTunnelMutation(id, data);
-    await initialTunnelProgressData(planLaunchDate, planBreakthroughDate, id);
+    
   } catch (error) {
     console.error("修改项目区间失败：", error);
     return {

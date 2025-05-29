@@ -47,6 +47,10 @@ const data = {
       url: "/production-center",
       items: [
         {
+          title: "总览",
+          url: "/production-center"
+        },
+        {
           title: "施工进度",
           url: "/production-center/construction-progress",
         },
@@ -58,6 +62,24 @@ const data = {
         {
           title: "项目监控",
           url: "/production-center/project-monitor",
+        },
+        {
+          title: "数据统计",
+          url: "/production-center/big-data",
+          items: [
+            {
+              title: "数据统计",
+              url: "/production-center/big-data/summary",
+            },
+            {
+              title: "数据明细",
+              url: "/production-center/big-data/detail",
+            },
+            {
+              title: "时效分析",
+              url: "/production-center/big-data/time-analysis",
+            },
+          ]
         },
         {
           title: "报表统计",
@@ -128,6 +150,42 @@ const data = {
   ],
 };
 
+function renderMenuItems(items: any[], pathname: string) {
+  return items.map((item) => {
+    const hasChildren = Array.isArray(item.items) && item.items.length > 0;
+
+    if (hasChildren) {
+      return (
+        <Collapsible key={item.title} defaultOpen>
+          <SidebarMenuItem>
+            <CollapsibleTrigger className="flex w-full items-center justify-between pr-2 text-left">
+              {item.title}
+              <ChevronRight className="transition-transform group-data-[state=open]/collapsible:rotate-90" />
+            </CollapsibleTrigger>
+          </SidebarMenuItem>
+          <CollapsibleContent>
+            <SidebarMenu className="pl-4">
+              {renderMenuItems(item.items, pathname)}
+            </SidebarMenu>
+          </CollapsibleContent>
+        </Collapsible>
+      );
+    }
+
+    return (
+      <SidebarMenuItem key={item.title}>
+        <SidebarMenuButton
+          asChild
+          isActive={item.url === pathname}
+        >
+          <a href={item.url}>{item.title}</a>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+    );
+  });
+}
+
+
 export default function NavLinks({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
@@ -153,6 +211,7 @@ export default function NavLinks({
               defaultOpen
               className="group/collapsible"
             >
+
               <SidebarGroup>
                 <SidebarGroupLabel
                   asChild
@@ -161,21 +220,13 @@ export default function NavLinks({
                   <CollapsibleTrigger>
                     {item.title}{" "}
                     <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+
                   </CollapsibleTrigger>
                 </SidebarGroupLabel>
                 <CollapsibleContent>
                   <SidebarGroupContent>
                     <SidebarMenu>
-                      {item.items.map((item) => (
-                        <SidebarMenuItem key={item.title}>
-                          <SidebarMenuButton
-                            asChild
-                            isActive={item.url === pathname}
-                          >
-                            <a href={item.url}>{item.title}</a>
-                          </SidebarMenuButton>
-                        </SidebarMenuItem>
-                      ))}
+                      {renderMenuItems(item.items, pathname)}
                     </SidebarMenu>
                   </SidebarGroupContent>
                 </CollapsibleContent>

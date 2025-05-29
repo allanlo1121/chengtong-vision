@@ -1,8 +1,7 @@
 'use client'
 
 import React, { useMemo } from "react";
-import TableItem from "./TableItem";
-import { useDataContext } from "@/utils/WebSocketProvider";
+
 import {
   Table,
   TableBody,
@@ -13,26 +12,42 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ITunnelTask } from "@/lib/project/tunnel/types";
-import { getSortedTunnelsByTask, getTotalExcavatedRings } from "@/lib/project/tunnel/utils";
+import { Button } from "@/components/ui/button";
+import { EditProgress } from "./buttons"
+import { Progress } from "@/components/ui/progress"
+import { useTunnelFilter } from "@/contexts/TunnelFilterProvider";
+import { formatDecimal } from "@/utils/formatDecimal";
 
 
 
-export default function ProgressTable({ tunnels }: { tunnels: ITunnelTask[] }) {
-  // const tunnels = await fetchInprogressTunnels();
-  // console.log("tunnels", tunnels);
+type Tunnel = {
+  id: string;
+  short_name: string;
+  region_name: string;
+  status: string;
+  project_short_name: string;
+  ring_start: number;
+  ring_end: number;
+  total: number;
+  op_num_start: number;
+  op_num_end: number;
+  current_op: number;
+  current_ring: number;
+  tbm_name: string;
+};
 
-  const { latestData } = useDataContext();
-  //console.log("latestData", latestData);
 
-  // 整合 realdata + 排序
-  const enrichedAndSorted = useMemo(() => {
-    return getSortedTunnelsByTask(tunnels, latestData)
-  }, [tunnels, latestData])
 
-  const totalRings = useMemo(() => {
-    return getTotalExcavatedRings(enrichedAndSorted);
-  }, [enrichedAndSorted]);
+
+
+export default function ProgressTable() {
+
+
+  const { tunnels } = useTunnelFilter();
+
+  if (!tunnels || tunnels.length === 0) {
+    return <div className="text-center text-gray-500">没有数据</div>;
+  }
 
   return (
     <div className="mt-6 mx-10 px-10 flow-root">
@@ -45,27 +60,32 @@ export default function ProgressTable({ tunnels }: { tunnels: ITunnelTask[] }) {
             <TableHead className="text-center">区间名称</TableHead>
             <TableHead className="text-center">盾构机型号</TableHead>
             <TableHead className="text-center">设计环数</TableHead>
-            <TableHead className="text-center">累计完成</TableHead>
-            <TableHead className="text-center">今日计划</TableHead>
-            <TableHead className="text-center">掘进环号</TableHead>
-            <TableHead className="text-center">今日完成</TableHead>
-            <TableHead className="text-center">里程范围</TableHead>
-             <TableHead className="text-center">掘进距离</TableHead>
-            <TableHead className="text-center">PLC状态</TableHead>
-            {/*  <TableHead>剩余</TableHead>
-            <TableHead>掘进环数</TableHead> */}
+            <TableHead className="text-center">累计完成环数</TableHead>
+            <TableHead className="text-center">累计掘进距离</TableHead>
+
             <TableHead className="text-right">操作</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {enrichedAndSorted.map((tunnel, index) => (
-            <TableItem tunnel={tunnel} index={index} key={tunnel.id} />
+          {tunnels.map((tunnel, index) => (
+            <TableRow key={tunnel.id} className="h-8 text-center border-b border-b-slate-200 "           >
+              <TableCell className="font-medium">{index + 1}</TableCell>
+              <TableCell>{tunnel.projectShortName}</TableCell>
+              <TableCell>
+                <EditProgress tunnelId={tunnel.id}><Button variant="outline">{tunnel.shortName} </Button></EditProgress>     </TableCell>
+              <TableCell>{tunnel.tbmName || "未绑定"}</TableCell>
+              <TableCell>{tunnel.ringEnd}</TableCell>
+              <TableCell className="w-40 grid grid-cols-12 items-center"><Progress className="col-span-10" value={tunnel.currentRing / tunnel.ringEnd * 100} /><div className="col-span-2">{tunnel.currentRing}</div></TableCell>
+              <TableCell>{formatDecimal((tunnel.currentOp - tunnel.opNumStart), 0)}</TableCell>
+
+              <TableCell className="text-right">编辑</TableCell>
+            </TableRow>
           ))}
         </TableBody>
         <TableFooter>
           <TableRow>
             <TableCell colSpan={3}>Total</TableCell>
-            <TableCell className="text-right">{totalRings} 环</TableCell>
+            <TableCell className="text-right"> 环</TableCell>
           </TableRow>
         </TableFooter>
       </Table>

@@ -73,7 +73,7 @@ export interface IProjectForm {
 }
 
 export interface ISubProjectBasic {
-  id: number;
+  id: string;
   name: string;
   shortName: string;
   projectShortName: string;
@@ -87,8 +87,10 @@ export interface ITunnelBasic extends ISubProjectBasic {
   tbmName: string;
   opNumStart: number; // 施工段起始环号
   opNumEnd: number; // 施工段结束环号
-  planStartDate: string; // timestamp
-  planEndDate: string | null; // timestamp
+  planLaunchDate: string;
+  planBreakthroughDate: string;
+  actualLaunchDate?: string;
+  actualBreakthroughDate?: string;
 }
 
 // export interface ITunnelBasicForm {
@@ -163,7 +165,7 @@ export interface ITunnelTask {
   planBreakthroughDate: string;
   actualLaunchDate?: string;
   actualBreakthroughDate?: string;
-} 
+}
 
 
 export interface ITunnelProgress {

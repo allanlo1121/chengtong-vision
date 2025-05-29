@@ -2,7 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { TypeTbmFormSchema } from "./types";
 
 export async function insertTbmMutation(
-  input: Omit<TypeTbmFormSchema, "id">
+  input: Omit<TypeTbmFormSchema, "id"|"createMqttUser">
 ): Promise<string> {
   if (!input) throw new Error("No input provided");
   console.log("input", input);

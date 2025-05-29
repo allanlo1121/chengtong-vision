@@ -1,4 +1,4 @@
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/client";
 import { startOfDay, endOfDay,format } from "date-fns";
 import {
     getStartOfYear,
@@ -116,7 +116,7 @@ async function fetchStartRingSumBetween(supabase, from: Date, to: Date): Promise
 }
 
 export async function fetchCardData(): Promise<CardStats> {
-    const supabase = await createClient();
+    const supabase =  createClient();
 
     try {
         const startOfYear = getStartOfYear();
@@ -201,7 +201,7 @@ export async function fetchDayRingsSum(
 }
 
 export async function getDailyProgressChartData(from: Date, to: Date): Promise<any[]> {
-    const supabase = await createClient();
+    const supabase = createClient();
     const { data, error } = await supabase
         .from("tunnel_daily_progress")
         .select("progress_at, ring_start, ring_end,plan_ring_count")

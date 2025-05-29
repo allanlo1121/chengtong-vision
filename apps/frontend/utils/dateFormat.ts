@@ -26,7 +26,7 @@ export function generateDateRange(start: string, end: string): Date[] {
 
   while (current <= last) {
     let clone = new Date(current); // clone
-    clone.setUTCHours(11, 0, 0, 0); // // UTC+0 的 11:00，相当于北京时间 19:00
+    clone.setUTCHours(0, 0, 0, 0); // // UTC+0 的 11:00，相当于北京时间 19:00
     result.push(clone); // clone
     current.setDate(current.getDate() + 1);
   }
@@ -60,4 +60,12 @@ export function getStartOfMonth(date: Date = new Date()): Date {
  */
 export function getStartOfWeek(date: Date = new Date()): Date {
   return startOfWeek(date, { weekStartsOn: 1, locale: zhCN }); // 周一
+}
+
+
+export function getTimeRangeForDay(day: string): [string, string] {
+  const start = new Date(`${day}T19:00:00+08:00`);
+  start.setDate(start.getDate() - 1);
+  const end = new Date(`${day}T19:00:00+08:00`);
+  return [start.toISOString(), end.toISOString()];
 }

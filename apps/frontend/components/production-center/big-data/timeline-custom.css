@@ -1,0 +1,76 @@
+/* 
+
+/* === 移除网格线与竖线 === */
+.vis-grid,
+.vis-labelset,
+.vis-time-axis .vis-grid.vis-horizontal,
+.vis-time-axis .vis-grid.vis-vertical {
+  display: none !important;
+}
+
+.vis-content {
+  height: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.vis-itemset {
+  height: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.vis-foreground .vis-group {
+  height: 40px !important;
+  margin-top: 12px !important;
+  margin-bottom: 12px !important;
+  background-color: var(--color-gray-50) !important;
+}
+/* === 各类状态颜色 === */
+
+.vis-item.phase-jue {
+  background-color: var(--color-blue-400);
+  border-color: var(--color-blue-400);
+  text-align: center;
+  top: 0px !important;
+  height: 100% !important;
+}
+
+/* === 各类状态颜色 === */
+.vis-item.phase-ring-light {
+  background-color: var(--color-stone-300);
+  border-color: var(--color-stone-300);
+  text-align: center;
+  top: 0px !important;
+  height: 100% !important;
+}
+
+.vis-item.phase-ring-dark {
+  background-color: var(--color-stone-400);
+  border-color: var(--color-stone-400);
+  text-align: center;
+  top: 0px !important;
+  height: 100% !important;
+}
+
+.vis-item.phase-pin {
+  background-color: var(--color-green-400);
+  border-color: var(--color-green-400);
+  text-align: center;
+  top: 0px !important;
+  height: 100% !important;
+}
+
+.vis-item.phase-idle {
+  background-color: var(--color-amber-400);
+  border-color: var(--color-amber-400);
+  text-align: center;
+  top: 0px !important;
+  height: 100% !important;
+}
+
+.vis-item.phase-offline {
+  background-color: var(--color-red-400);
+  border-color: var(--color-red-400);
+  text-align: center;
+  top: 0px !important;
+  height: 100% !important;
+}
