@@ -30,7 +30,7 @@ export function broadcast(data) {
   wss.clients.forEach((client) => {
     // console.log("📡 Broadcasting to client:", client); // Debugging line
     if (client.readyState === 1) {
-    //  console.log("📡 Sent message to client:", message);
+     // console.log("📡 Sent message to client:", message);
       client.send(message);
     }
   });
