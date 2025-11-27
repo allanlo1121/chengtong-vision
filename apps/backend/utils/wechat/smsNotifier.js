@@ -6,7 +6,7 @@ const DEFAULT_SMS_CONFIG = {
     endpoint: "https://back.aichitu.com/api/vi/sendMessage",
     username: "13636685581",
     password: "$2a$10$oIIKUzCeEDG2F2eCCJuV2eLMbNdRSBe3Ni6PiWkxqoCf0db7PnT7m",
-    mobiles: ["13636685581","18200238495","13540677814"],
+    mobiles: ["13636685581", "18200238495", "13540677814"],
 };
 
 const buildSignature = (username, password, timestamp) => {
@@ -66,7 +66,7 @@ export const sendSmsNotification = async ({
 
     content = `【百事通】 ${content}`;
 
-   // console.log("content", content);
+    // console.log("content", content);
 
 
     const timestamp = Date.now().toString();
@@ -94,7 +94,7 @@ export const sendSmsNotification = async ({
         content,
     };
 
-   // console.log("smsSend", payload);
+    // console.log("smsSend", payload);
 
 
     if (scheduleTime) {
@@ -102,9 +102,9 @@ export const sendSmsNotification = async ({
     }
 
     try {
-       // console.log("[SmsSender] POST headers:", headers);
+        // console.log("[SmsSender] POST headers:", headers);
         const response = await axios.post(endpoint, payload, { headers });
-      //  console.log("smsSend", response);
+        //  console.log("smsSend", response);
 
         return response.data;
     } catch (error) {
