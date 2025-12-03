@@ -1,7 +1,8 @@
 // src/core/eventbus/eventBus.ts
 import { EventEmitter } from "events";
 
-import type { AlarmEvent } from "@models/alarm-event.types";
+import type { EventType } from "./types";
+
 
 
 
@@ -9,24 +10,14 @@ import type { AlarmEvent } from "@models/alarm-event.types";
  * 2. Validation
  * ============================================================ */
 
-export function validateEvent(ev: AlarmEvent): string | null {
+export function validateEvent(ev: EventType): string | null {
   if (!ev) return "event is null";
 
-  if (!ev.topic) return "missing topic";
-  if (!ev.alarmType) return "missing alarmType";
   if (!ev.tbmId) return "missing tbmId";
   if (!ev.timestamp) return "missing timestamp";
-  if (!ev.severity) return "missing severity";
+  if (ev.severity === undefined || ev.severity === null)
+    return "missing severity";
 
-  // parameters 是可选的，但如果存在必须合法
-  if (ev.parameters) {
-    if (!Array.isArray(ev.parameters)) return "parameters should be array";
-    for (const p of ev.parameters) {
-      if (!p.code) return "parameter missing code";
-      if (p.value === undefined || Number.isNaN(p.value)) return "parameter missing/invalid value";
-      if (!p.severity) return "parameter missing severity";
-    }
-  }
 
   return null;
 }
@@ -35,9 +26,9 @@ export function validateEvent(ev: AlarmEvent): string | null {
  * 3. Event Creator
  * ============================================================ */
 
-export function createEvent(event: AlarmEvent): AlarmEvent {
-  const now = new Date().toISOString();
-  const ev: AlarmEvent = {
+export function createEvent(event: EventType): EventType {
+  const now = new Date().getTime();
+  const ev: EventType = {
     ...event,
     timestamp: event.timestamp ?? now,
   };
@@ -57,7 +48,7 @@ export function createEvent(event: AlarmEvent): AlarmEvent {
 const bus = new EventEmitter();
 
 /** 发布事件 */
-export function publishEvent(topic: string, event: AlarmEvent) {
+export function publishEvent(topic: string, event: EventType) {
   const full = createEvent(event);
   process.nextTick(() => bus.emit(`event:${topic}`, full));
 }
@@ -65,13 +56,13 @@ export function publishEvent(topic: string, event: AlarmEvent) {
 /** 订阅事件 */
 export function subscribeEvent(
   topic: string,
-  handler: (ev: AlarmEvent) => void
+  handler: (ev: EventType) => void
 ) {
   bus.on(`event:${topic}`, handler);
 }
 
 /** 用于调试时打印所有事件 */
-export function subscribeAll(handler: (topic: string, ev: AlarmEvent) => void) {
+export function subscribeAll(handler: (topic: string, ev: EventType) => void) {
   bus.on("newListener", (eventName) => {
     // only subscribe if eventName matches event:*
     if (String(eventName).startsWith("event:")) {

@@ -244,6 +244,30 @@ export type Database = {
           },
         ]
       }
+      alarm_severity_levels: {
+        Row: {
+          id: number
+          label: string | null
+          name: string
+          notify_channels: string[]
+          resend_interval_ms: number
+        }
+        Insert: {
+          id: number
+          label?: string | null
+          name: string
+          notify_channels?: string[]
+          resend_interval_ms?: number
+        }
+        Update: {
+          id?: number
+          label?: string | null
+          name?: string
+          notify_channels?: string[]
+          resend_interval_ms?: number
+        }
+        Relationships: []
+      }
       allowance_standard: {
         Row: {
           allowance_type: string
@@ -3099,63 +3123,70 @@ export type Database = {
       }
       tbm_active_operational_events: {
         Row: {
-          alarm_type: string
           created_at: string | null
           created_by: string | null
-          group_name: string | null
           id: string
           message: string | null
           notified_channels: Json | null
           notified_users: Json | null
+          occurred_at: string | null
           param_code: string
           parameters: Json | null
           payload: Json | null
           ring_no: number | null
-          severity: string
+          severity_id: number | null
           tbm_id: string
           updated_at: string | null
           updated_by: string | null
           value: number | null
+          window_ms: number
         }
         Insert: {
-          alarm_type: string
           created_at?: string | null
           created_by?: string | null
-          group_name?: string | null
           id?: string
           message?: string | null
           notified_channels?: Json | null
           notified_users?: Json | null
+          occurred_at?: string | null
           param_code: string
           parameters?: Json | null
           payload?: Json | null
           ring_no?: number | null
-          severity: string
+          severity_id?: number | null
           tbm_id: string
           updated_at?: string | null
           updated_by?: string | null
           value?: number | null
+          window_ms?: number
         }
         Update: {
-          alarm_type?: string
           created_at?: string | null
           created_by?: string | null
-          group_name?: string | null
           id?: string
           message?: string | null
           notified_channels?: Json | null
           notified_users?: Json | null
+          occurred_at?: string | null
           param_code?: string
           parameters?: Json | null
           payload?: Json | null
           ring_no?: number | null
-          severity?: string
+          severity_id?: number | null
           tbm_id?: string
           updated_at?: string | null
           updated_by?: string | null
           value?: number | null
+          window_ms?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "fk_active_event_severity"
+            columns: ["severity_id"]
+            isOneToOne: false
+            referencedRelation: "alarm_severity_levels"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "tbm_active_operational_events_tbm_id_fkey"
             columns: ["tbm_id"]
@@ -3369,6 +3400,63 @@ export type Database = {
           timestamp?: string
         }
         Relationships: []
+      }
+      tbm_delta_threshold_overrides: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          delta_critical_abs: number | null
+          delta_warning_abs: number | null
+          id: number
+          is_active: boolean | null
+          param_id: number
+          tbm_id: string
+          updated_at: string | null
+          updated_by: string | null
+          window_ms: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          delta_critical_abs?: number | null
+          delta_warning_abs?: number | null
+          id?: number
+          is_active?: boolean | null
+          param_id: number
+          tbm_id: string
+          updated_at?: string | null
+          updated_by?: string | null
+          window_ms?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          delta_critical_abs?: number | null
+          delta_warning_abs?: number | null
+          id?: number
+          is_active?: boolean | null
+          param_id?: number
+          tbm_id?: string
+          updated_at?: string | null
+          updated_by?: string | null
+          window_ms?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tbm_delta_threshold_overrides_param_id_fkey"
+            columns: ["param_id"]
+            isOneToOne: false
+            referencedRelation: "tbm_runtime_parameters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tbm_delta_threshold_overrides_tbm_id_fkey"
+            columns: ["tbm_id"]
+            isOneToOne: false
+            referencedRelation: "tbms"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       tbm_event_notifications: {
         Row: {
@@ -3677,11 +3765,9 @@ export type Database = {
       tbm_operational_events: {
         Row: {
           action: string | null
-          alarm_type: string
           created_at: string | null
           created_by: string | null
           event_id: string
-          group_name: string | null
           id: string
           message: string | null
           notified_channels: Json | null
@@ -3691,18 +3777,18 @@ export type Database = {
           parameters: Json | null
           payload: Json | null
           ring_no: number | null
-          severity: string
+          severity_id: number | null
           tbm_id: string
           updated_at: string | null
           updated_by: string | null
+          value: number | null
+          window_ms: number
         }
         Insert: {
           action?: string | null
-          alarm_type: string
           created_at?: string | null
           created_by?: string | null
           event_id: string
-          group_name?: string | null
           id?: string
           message?: string | null
           notified_channels?: Json | null
@@ -3712,18 +3798,18 @@ export type Database = {
           parameters?: Json | null
           payload?: Json | null
           ring_no?: number | null
-          severity: string
+          severity_id?: number | null
           tbm_id: string
           updated_at?: string | null
           updated_by?: string | null
+          value?: number | null
+          window_ms?: number
         }
         Update: {
           action?: string | null
-          alarm_type?: string
           created_at?: string | null
           created_by?: string | null
           event_id?: string
-          group_name?: string | null
           id?: string
           message?: string | null
           notified_channels?: Json | null
@@ -3733,12 +3819,21 @@ export type Database = {
           parameters?: Json | null
           payload?: Json | null
           ring_no?: number | null
-          severity?: string
+          severity_id?: number | null
           tbm_id?: string
           updated_at?: string | null
           updated_by?: string | null
+          value?: number | null
+          window_ms?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "fk_tbm_event_severity"
+            columns: ["severity_id"]
+            isOneToOne: false
+            referencedRelation: "alarm_severity_levels"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "tbm_operational_events_tbm_id_fkey"
             columns: ["tbm_id"]
@@ -3779,7 +3874,15 @@ export type Database = {
           updated_by?: string | null
           window_ms?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_delta_thresholds_param"
+            columns: ["param_id"]
+            isOneToOne: false
+            referencedRelation: "tbm_runtime_parameters"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       tbm_parameter_excludes: {
         Row: {
@@ -3863,7 +3966,15 @@ export type Database = {
           updated_by?: string | null
           use_absolute?: boolean | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_thresholds_param"
+            columns: ["param_id"]
+            isOneToOne: false
+            referencedRelation: "tbm_runtime_parameters"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       tbm_plc_history: {
         Row: {
@@ -4103,11 +4214,14 @@ export type Database = {
           create_time: string | null
           delete_flag: boolean
           digits: number | null
+          group_code: string | null
+          group_name: string | null
           id: number
           is_virtual: boolean | null
           name: string
           remark: string | null
           sub_system: string
+          subsystem_id: number
           ttm1: boolean
           ttm2: boolean
           ttm3: boolean
@@ -4123,11 +4237,14 @@ export type Database = {
           create_time?: string | null
           delete_flag?: boolean
           digits?: number | null
+          group_code?: string | null
+          group_name?: string | null
           id?: number
           is_virtual?: boolean | null
           name: string
           remark?: string | null
           sub_system: string
+          subsystem_id: number
           ttm1?: boolean
           ttm2?: boolean
           ttm3?: boolean
@@ -4143,11 +4260,14 @@ export type Database = {
           create_time?: string | null
           delete_flag?: boolean
           digits?: number | null
+          group_code?: string | null
+          group_name?: string | null
           id?: number
           is_virtual?: boolean | null
           name?: string
           remark?: string | null
           sub_system?: string
+          subsystem_id?: number
           ttm1?: boolean
           ttm2?: boolean
           ttm3?: boolean
@@ -4156,7 +4276,15 @@ export type Database = {
           unit?: string
           update_time?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "tbm_runtime_parameters_subsystem_id_fkey"
+            columns: ["subsystem_id"]
+            isOneToOne: false
+            referencedRelation: "tbm_subsystems"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       tbm_status_history: {
         Row: {
@@ -4325,6 +4453,75 @@ export type Database = {
           update_time?: string | null
         }
         Relationships: []
+      }
+      tbm_threshold_overrides: {
+        Row: {
+          alert_lower: number | null
+          alert_lower_lower: number | null
+          alert_upper: number | null
+          alert_upper_upper: number | null
+          baseline_lower: number | null
+          baseline_upper: number | null
+          created_at: string | null
+          created_by: string | null
+          id: number
+          is_active: boolean | null
+          param_id: number
+          tbm_id: string
+          updated_at: string | null
+          updated_by: string | null
+          use_absolute: boolean | null
+        }
+        Insert: {
+          alert_lower?: number | null
+          alert_lower_lower?: number | null
+          alert_upper?: number | null
+          alert_upper_upper?: number | null
+          baseline_lower?: number | null
+          baseline_upper?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: number
+          is_active?: boolean | null
+          param_id: number
+          tbm_id: string
+          updated_at?: string | null
+          updated_by?: string | null
+          use_absolute?: boolean | null
+        }
+        Update: {
+          alert_lower?: number | null
+          alert_lower_lower?: number | null
+          alert_upper?: number | null
+          alert_upper_upper?: number | null
+          baseline_lower?: number | null
+          baseline_upper?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: number
+          is_active?: boolean | null
+          param_id?: number
+          tbm_id?: string
+          updated_at?: string | null
+          updated_by?: string | null
+          use_absolute?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tbm_threshold_overrides_param_id_fkey"
+            columns: ["param_id"]
+            isOneToOne: false
+            referencedRelation: "tbm_runtime_parameters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tbm_threshold_overrides_tbm_id_fkey"
+            columns: ["tbm_id"]
+            isOneToOne: false
+            referencedRelation: "tbms"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       tbm_types: {
         Row: {

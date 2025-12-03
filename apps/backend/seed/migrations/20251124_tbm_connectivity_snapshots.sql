@@ -23,7 +23,10 @@ CREATE TABLE public.tbm_connectivity_snapshots (
     last_realdata_payload JSONB NULL,
 
     -- 更新时间
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    created_at TIMESTAMPTZ DEFAULT now(),
+    updated_at TIMESTAMPTZ DEFAULT now(),
+    created_by UUID REFERENCES auth.users(id) DEFAULT '6b7b6472-da9a-411d-94a0-27bd8fcd822e',
+    updated_by UUID REFERENCES auth.users(id) DEFAULT '6b7b6472-da9a-411d-94a0-27bd8fcd822e'
 );
 
 CREATE OR REPLACE FUNCTION set_updated_at()

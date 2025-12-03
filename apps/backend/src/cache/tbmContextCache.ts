@@ -12,7 +12,7 @@
 
 import { supabase } from "../core/supabase/client.js";
 import { logger } from "../core/logger.js";
-import type { Database } from "@models/supabase.types.js";
+import type { Database } from "@core/supabase/supabase.types.js";
 
 // 从数据库 types 自动推导视图结构
 type TbmOverviewRow =

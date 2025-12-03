@@ -53,22 +53,42 @@ export function extractTbmTimestamp(payload: any): string {
   // ③ 兜底用系统时间
   return new Date().toISOString();
 }
+export function extractTbmTimestampMs(payload: any): number {
+  const now = Date.now();
+
+  if (!payload) return now;
+
+  // ① 优先使用 PLC/设备发送的 recorded_at（字符串或数字都兼容）
+  if (payload.recorded_at) {
+    const t = new Date(payload.recorded_at).getTime();
+    return Number.isFinite(t) ? t : now;
+  }
+
+  // ② 再用 ts（一般是毫秒时间戳）
+  if (payload.ts) {
+    const t = Number(payload.ts); // 避免 ts 不是 number 的情况
+    return Number.isFinite(t) ? t : now;
+  }
+
+  // ③ 兜底用当前时间
+  return now;
+}
 
 // -----------------------------
 // 提取 ring（盾构机环号）
 // 一般来自 payload.s100100008
 // -----------------------------
 export function extractRing(payload: any): number | null {
-    if (!payload) return null;
+  if (!payload) return null;
 
-    const candidate =
-        payload.s100100008 ??
-        payload.ring ??
-        payload.RING ??
-        null;
+  const candidate =
+    payload.s100100008 ??
+    payload.ring ??
+    payload.RING ??
+    null;
 
-    if (candidate == null) return null;
+  if (candidate == null) return null;
 
-    const num = Number(candidate);
-    return Number.isFinite(num) ? num : null;
+  const num = Number(candidate);
+  return Number.isFinite(num) ? num : null;
 }

@@ -5,12 +5,17 @@ import {
   getActiveTbmIds,
 } from "@/cache/tbmContextCache.js";
 
+import { upsertSpecialAlarm } from "@/core/alarm/services/SystemAlarmService";
+
+import { EventType } from "@/core/eventbus/types";
+
 import {
   getConnectivitySnapshot,
   markHeartbeatOffline,
   markHeartbeatOnline,
   markPlcOffline,
   markPlcOnline,
+  getAllConnectivitySnapshots,
 } from "../domain/tbm/tbmConnectivityService.js";
 
 export interface ConnectivityTimeoutConfig {
@@ -19,8 +24,8 @@ export interface ConnectivityTimeoutConfig {
 }
 
 const DEFAULT_TIMEOUT: ConnectivityTimeoutConfig = {
-  heartbeatTimeoutMs: 60 * 1000, // 60 秒心跳超时
-  plcTimeoutMs: 60 * 1000,       // 60 秒 PLC 数据超时
+  heartbeatTimeoutMs: 3 * 60 * 1000, // 60 秒心跳超时
+  plcTimeoutMs: 3 * 60 * 1000,       // 5 分钟 PLC 数据超时
 };
 
 let isRunning = false;
@@ -48,6 +53,8 @@ export function startConnectivityScanner(
   }, scanIntervalMs);
 }
 
+
+
 /**
  * 扫描所有 active TBMs
  */
@@ -58,90 +65,97 @@ async function scanAllTbms(config: ConnectivityTimeoutConfig) {
   const now = Date.now();
 
   for (const tbmId of tbmIds) {
-    const snap = await getConnectivitySnapshot(tbmId);
-    if (!snap) continue;
+    //1. 检查心跳状态
+    const snaps = await getAllConnectivitySnapshots(tbmId);
+    if (!snaps) continue;
     //console.log("snap", snap);
+    const heartbeat = snaps.heartbeat;
+    const plc = snaps.plc;
 
     // --- 检查心跳掉线 ---
-    if (snap.last_heartbeat_at) {
-      const ts = new Date(snap.last_heartbeat_at).getTime();
+    if (heartbeat && heartbeat.updated_at) {
+      const ts = new Date(heartbeat.updated_at).getTime();
 
       const diff = now - ts;
-      if (diff > config.heartbeatTimeoutMs && snap.heartbeat_status !== "offline") {
-
+      if (diff > config.heartbeatTimeoutMs && heartbeat.status !== "OFFLINE") {
         logger.warn(`⚠ Heartbeat timeout: TBM ${tbmId} → OFFLINE`);
 
-        publishEvent("ALARM", {
-          topic: "ALARM",
-          alarmType: "CONNECTIVITY",
+        await upsertSpecialAlarm(
           tbmId,
+          "n010000002",
+          2,     // 红色严重
+          0,     // offline
+          heartbeat   // payload
+        );
+        // ② 构造统一事件对象
+        const event: EventType = {
+          topic: "alarm/heartbeat",
+          tbmId: tbmId,
           paramCode: "n010000002",
+          ringNo: null,
+
+          severity: 2,
+          level: 0,
+
           value: 0,
-          severity: "critical",          
-          timestamp: new Date().toISOString(),
-          message: "采集盒子掉线，心跳信号丢失。",
-          payload: snap
-        });
+          rule: null,
+          payload: null,
+
+          timestamp: Date.now(),
+
+        };
+
+        // ③ 发送事件（MQTT / EventBus / Kafka）
+        publishEvent(event.topic, event);
+
 
         await markHeartbeatOffline(tbmId);
       }
-      // --- 心跳恢复 ---
-      else if (snap.heartbeat_status === "online" && snap.heartbeat_status === snap.last_heartbeat_status) {
-        logger.info(`💚 Heartbeat recovered: TBM ${tbmId} back ONLINE`);
-
-        publishEvent("ALARM", {
-          topic: "ALARM",
-          alarmType: "CONNECTIVITY",
-          tbmId,
-          paramCode: "n010000002",
-          value: 1,
-          severity: "info",          
-          timestamp: new Date().toISOString(),
-          message: "采集盒子心跳恢复。",
-          payload: snap
-        });
-
-        await markHeartbeatOnline(tbmId);
-      }
     }
 
+    //2. 检查plc状态
 
-    // --- 检查 PLC 掉线 ---
-    if (snap.last_realdata_at) {
-      const ts = new Date(snap.last_realdata_at).getTime();
-      const diff = now - ts;
 
-      if (diff > config.plcTimeoutMs && snap.plc_status !== "offline") {
+    if (plc && plc.updated_at) {
+      const plcTs = new Date(plc.updated_at).getTime();
+      const plcDiff = now - plcTs;
 
+      if (plcDiff > config.plcTimeoutMs && plc.status !== "OFFLINE") {
         logger.warn(`⚠ PLC timeout: TBM ${tbmId} → OFFLINE`);
-        publishEvent("ALARM", {
-          topic: "ALARM",
-          alarmType: "CONNECTIVITY",
+        await upsertSpecialAlarm(
           tbmId,
+          "n010000001",
+          2,     // 红色严重
+          0,     // offline
+          plc   // payload
+        );
+        // ② 构造统一事件对象
+        const event: EventType = {
+          topic: "alarm/plc",
+          tbmId: tbmId,
           paramCode: "n010000001",
+          ringNo: null,
+
+          severity: 2,
+          level: 0,
+
           value: 0,
-          severity: "critical",          
-          timestamp: new Date().toISOString(),
-          message: "采集程序掉线，数据采集丢失。",
-          payload: snap
-        });
+          rule: null,
+          payload: null,
+
+          timestamp: Date.now(),
+
+        };
+
+        // ③ 发送事件（MQTT / EventBus / Kafka）
+        publishEvent(event.topic, event);
         await markPlcOffline(tbmId);
-      } else if (snap.last_plc_status === snap.plc_status && snap.plc_status === "online") {
-        logger.info(`💚 PLC recovered: TBM ${tbmId} back ONLINE`);
-        publishEvent("ALARM", {
-          topic: "ALARM",
-          alarmType: "CONNECTIVITY",
-          tbmId,
-          paramCode: "n010000002",
-          value: 1,
-          severity: "info",     
-          timestamp: new Date().toISOString(),
-          message: "采集程序已恢复，数据采集正常。",
-          payload: snap
-        });
-        await markPlcOnline(tbmId);
       }
     }
+
+
+
   }
 }
+
 

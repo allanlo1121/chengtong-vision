@@ -1,5 +1,9 @@
+import { EventType } from "@/core/eventbus/types";
 import axios, { AxiosResponse } from "axios";
 import crypto from "crypto";
+import { alarmSmsGroupTemplate } from "@/notify/templates/alarmSmsTemple";
+import { getRecipientsForAlarm } from "@domain/tbm/alarmNotificationService.js"
+import { getParameterMetadata } from "@/cache/parameterMetadataCache.js";
 
 /* ---------------------------------------------------------
  * 1. 类型定义
@@ -64,18 +68,93 @@ export function buildSignature(
  * 4. 主发送函数（已支持 prefix）
  * --------------------------------------------------------- */
 
-export async function sendSmsNotification(
-    mobiles: string[] | string,
-    content: string,              // 内容
+// export async function sendSmsNotification(
+//     mobiles: string[] | string,
+//     content: string,              // 内容
+//     prefix: string = DEFAULT_SMS_CONFIG.prefix
+// ): Promise<SmsApiResponse> {
+//     // 如果输入是单个手机号，转为数组
+//     const mobileList = Array.isArray(mobiles) ? mobiles : [mobiles];
+
+//     if (mobileList.length === 0) {
+//         throw new Error("Mobiles must be a non-empty array");
+//     }
+
+
+//     if (!content) throw new Error("Missing SMS content");
+
+//     // ⭐ 填充短信内容：前缀 + 内容
+//     const finalContent = `${prefix} ${content}`;
+
+//     const timestamp = Date.now().toString();
+//     const signature = buildSignature(
+//         DEFAULT_SMS_CONFIG.username,
+//         DEFAULT_SMS_CONFIG.password,
+//         timestamp
+//     );
+
+//     const headers = {
+//         Accept: "application/json",
+//         "Content-Type": "application/json;charset=utf-8",
+//         "X-Timestamp": timestamp,
+//         "X-Signature": signature,
+//     };
+
+//     const payload = {
+//         username: DEFAULT_SMS_CONFIG.username,
+//         password: DEFAULT_SMS_CONFIG.password,
+//         mobiles: mobileList,
+//         content: finalContent,
+//     };
+
+
+
+//     try {
+//         const response: AxiosResponse<SmsApiResponse> = await axios.post(
+//             DEFAULT_SMS_CONFIG.endpoint,
+//             payload,
+//             { headers }
+//         );
+
+//         return response.data;
+//     } catch (error: any) {
+//         console.error(
+//             "Error sending SMS notification:",
+//             error.response?.data || error.message
+//         );
+//         throw error;
+//     }
+// }
+
+
+export async function sendSmsNotify(
+    topic:string,
+    event: EventType,              // 内容
     prefix: string = DEFAULT_SMS_CONFIG.prefix
 ): Promise<SmsApiResponse> {
     // 如果输入是单个手机号，转为数组
-    const mobileList = Array.isArray(mobiles) ? mobiles : [mobiles];
 
-    if (mobileList.length === 0) {
-        throw new Error("Mobiles must be a non-empty array");
-    }
-    if (!content) throw new Error("Missing SMS content");
+    const { tbmId, paramCode } = event;
+
+    const paramMeta = getParameterMetadata(paramCode);
+
+
+    const content = await alarmSmsGroupTemplate(event);
+
+
+    const recipients = await getRecipientsForAlarm(event.tbmId, paramMeta?.subsystem_code || 's10');
+
+    console.log("recipients",recipients);
+    
+
+    const mobiles = recipients
+        .map(r => r.phone)
+        .filter(Boolean) as string[];
+
+
+
+
+
 
     // ⭐ 填充短信内容：前缀 + 内容
     const finalContent = `${prefix} ${content}`;
@@ -97,7 +176,7 @@ export async function sendSmsNotification(
     const payload = {
         username: DEFAULT_SMS_CONFIG.username,
         password: DEFAULT_SMS_CONFIG.password,
-        mobiles: mobileList,
+        mobiles,
         content: finalContent,
     };
 

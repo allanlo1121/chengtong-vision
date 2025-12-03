@@ -14,7 +14,7 @@ import { supabase } from "@core/supabase/client.js";
 import { logger } from "@core/logger.js";
 import { getTbmContext } from "@cache/tbmContextCache.js";
 
-import type { AlarmType } from "@models/alarm-type.types.js";
+// import type { AlarmType } from "@models/alarm-type.types.js";
 import type { Database } from "@models/supabase.types";
 import type { Recipient } from "@models/notification/recipient.types";
 
@@ -32,7 +32,7 @@ type PositionRow = Database["public"]["Tables"]["employee_position_history"]["Ro
 
 export async function getRecipientsForAlarm(
     tbmId: string,
-    alarmType: AlarmType
+    alarmType: string
 ): Promise<Recipient[]> {
 
     const ctx = await getTbmContext(tbmId);
@@ -79,7 +79,7 @@ export async function getRecipientsForAlarm(
  * ================================================================== */
 async function getProjectRoleRecipients(
     projectId: string,
-    alarmType: AlarmType
+    alarmType: string
 ): Promise<Recipient[]> {
     try {
         // 先查岗位规则
@@ -124,7 +124,7 @@ async function getProjectRoleRecipients(
  * ================================================================== */
 async function getSpecialProjectRecipients(
     projectId: string,
-    alarmType: AlarmType
+    alarmType: string
 ): Promise<Recipient[]> {
     try {
         const { data, error } = await supabase
@@ -153,7 +153,7 @@ async function getSpecialProjectRecipients(
  * ③ 获取公司级固定通知人员（全局）
  * ================================================================== */
 async function getGlobalRecipients(
-    alarmType: AlarmType
+    alarmType: string
 ): Promise<Recipient[]> {
     try {
         const { data, error } = await supabase

@@ -1,6 +1,7 @@
 // thresholds/thresholdTypes.ts
 
-import type { EventSeverity } from "../alarm-event.types";
+import type { EventSeverity, EventParameterDetail } from "../alarm-event.types";
+
 /* ------------------------------
  * 阀值规则类型定义
  * ------------------------------ */
@@ -30,6 +31,9 @@ export type ThresholdRule = ThresholdRuleStatic | ThresholdRuleDelta;
 export interface ThresholdProfile {
     param_id: string;
     param_code: string; // s100206003
+    sub_system: string | null; // TBM Subsystem
+    group_code: string | null; //guidance
+    group_name: string | null;  //导向偏差
     rules: ThresholdRule[];
 }
 
@@ -41,9 +45,11 @@ export interface ThresholdEvent {
     tbmId: string;
     paramCode: string;
     alarmType: "GUIDANCE" | "ADVANCE" | "SAFETY";
+    groupCode?: string | null;
     severity: EventSeverity;
     value: number;
     message: string;
+    parameters?: EventParameterDetail[]; // 多参数模式，可选
     timestamp: string;
     payload?: any;
 }

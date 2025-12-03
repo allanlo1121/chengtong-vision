@@ -16,6 +16,8 @@ import { logger } from "../core/logger.js";
 import { refreshMultipleTbmContext } from "../cache/tbmContextCache.js";
 import { ensureSnapshot, deleteSnapshot } from "../domain/tbm/tbmConnectivityService.js";
 import { loadAllThresholds } from "@cache/tbmThresoldCache.js"
+import { refreshParameterMetadata } from "@cache/parameterMetadataCache.js";
+import { log } from "console";
 
 
 
@@ -194,6 +196,28 @@ export function startRealtimeListeners() {
             });
     }
 
+
+
+
+
+    const parameterTables = [
+        "tbm_runtime_parameters",
+        "tbm_subsystems"
+    ];
+
+    for (const table of parameterTables) {
+        supabase
+            .channel(`realtime_param_${table}`)
+            .on("postgres_changes", { event: "*", schema: "public", table }, async () => {
+                logger.warn(`⚙️ Parameter table changed → ${table}, reloading metadata...`);
+                await refreshParameterMetadata();
+            })
+            .subscribe((status) => {
+                if (status === "SUBSCRIBED") {
+                    logger.info(`📡 Subscribed parameter table → ${table}`);
+                }
+            });
+    }
     logger.info("🚀 All realtime listeners registered ✓");
 
 }
@@ -221,10 +245,27 @@ export async function handleChange(payload: any) {
 
         // 2. Snapshot 逻辑（仅 tbm_assignments 有状态）
         if (table === "tbm_assignments") {
-            const tbmId = payload.new?.tbm_id || payload.old?.tbm_id;
-            const status = payload.new?.tbm_operation_status;
+            console.log("tbm_assignments payload", payload);
 
-            if (!tbmId) return;
+            const eventType = payload.eventType;
+            const tbmId = payload.new?.tbm_id || payload.old?.tbm_id;
+
+            if (!tbmId) {
+                logger.warn("⚠️ tbm_assignments event but no TBM ID");
+                return;
+            }
+
+            if (eventType === "DELETE") {
+                logger.info(`🗑 tbm_assignments DELETE → 清理 TBM=${tbmId}`);
+
+                await deleteSnapshot(tbmId);
+                await clearActiveParameterState(tbmId);  // 👈 你新增的逻辑
+
+                return;
+            }
+
+            // 其余 INSERT / UPDATE 沿用旧逻辑
+            const status = payload.new?.operation_status;
 
             if (status === "WORKING") {
                 await ensureSnapshot(tbmId);
@@ -234,5 +275,19 @@ export async function handleChange(payload: any) {
         }
     } catch (err) {
         logger.error("❌ Error handling realtime change:", err);
+    }
+}
+
+
+async function clearActiveParameterState(tbmId: string) {
+    const { error } = await supabase
+        .from("tbm_active_parameter_state")
+        .delete()
+        .eq("tbm_id", tbmId);
+
+    if (error) {
+        logger.error("❌ 删除 tbm_active_parameter_state 出错", error);
+    } else {
+        logger.info(`🧹 清理 active_parameter_state 完成 → TBM=${tbmId}`);
     }
 }
