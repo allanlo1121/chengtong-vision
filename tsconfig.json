@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "ignoreDeprecations": "6.0",
+    "baseUrl": ".",
+    "paths": {
+      "@core/*": ["packages/core/*"],
+      "@backend/*": ["apps/backend/src/*"],
+      "@frontend/*": ["apps/frontend/*"]
+    }
+  }
+}

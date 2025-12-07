@@ -1,0 +1,24 @@
+# dependencies
+node_modules/
+
+# next.js
+apps/frontend/.next/
+apps/frontend/out/
+
+# turbo
+.turbo/
+
+# build
+dist/
+apps/backend/dist/
+
+# env
+*.env
+*.env.local
+apps/frontend/.env.local
+apps/backend/.env
+
+# supabase local data
+supabase/
+docker/
+volumes/

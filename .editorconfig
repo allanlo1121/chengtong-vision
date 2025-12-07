@@ -1,0 +1,20 @@
+# 最顶层 EditorConfig 文件
+root = true
+
+# 所有文件使用 LF
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+
+# 缩进规则
+indent_style = space
+indent_size = 2
+
+# Markdown 允许较宽行
+[*.md]
+max_line_length = off
+
+# JSON、YAML
+[*.{json,yml,yaml}]
+indent_size = 2
