@@ -88,6 +88,13 @@ export type Database = {
             referencedRelation: "employees";
             referencedColumns: ["id"];
           },
+          {
+            foreignKeyName: "alarm_global_notification_employee_id_fkey";
+            columns: ["employee_id"];
+            isOneToOne: false;
+            referencedRelation: "v_current_employee";
+            referencedColumns: ["employee_id"];
+          },
         ];
       };
       alarm_notification_special: {
@@ -128,6 +135,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "employees";
             referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "alarm_notification_special_employee_id_fkey";
+            columns: ["employee_id"];
+            isOneToOne: false;
+            referencedRelation: "v_current_employee";
+            referencedColumns: ["employee_id"];
           },
           {
             foreignKeyName: "alarm_notification_special_project_id_fkey";
@@ -209,6 +223,13 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "employee_positional_titles_employee_id_fkey";
+            columns: ["employee_id"];
+            isOneToOne: false;
+            referencedRelation: "v_current_employee";
+            referencedColumns: ["employee_id"];
+          },
+          {
             foreignKeyName: "employee_positional_titles_job_title_id_fkey";
             columns: ["job_title_id"];
             isOneToOne: false;
@@ -217,8 +238,56 @@ export type Database = {
           },
         ];
       };
+      employee_roles: {
+        Row: {
+          created_at: string;
+          created_by: string | null;
+          employee_id: string;
+          id: string;
+          role_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          created_by?: string | null;
+          employee_id: string;
+          id?: string;
+          role_id: string;
+        };
+        Update: {
+          created_at?: string;
+          created_by?: string | null;
+          employee_id?: string;
+          id?: string;
+          role_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "employee_roles_employee_fkey";
+            columns: ["employee_id"];
+            isOneToOne: false;
+            referencedRelation: "employees";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employee_roles_employee_fkey";
+            columns: ["employee_id"];
+            isOneToOne: false;
+            referencedRelation: "v_current_employee";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "employee_roles_role_fkey";
+            columns: ["role_id"];
+            isOneToOne: false;
+            referencedRelation: "roles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       employees: {
         Row: {
+          auth_user_id: string | null;
+          avatar_url: string | null;
           birthdate: string | null;
           code: string;
           company_id: string | null;
@@ -243,6 +312,8 @@ export type Database = {
           updated_by: string | null;
         };
         Insert: {
+          auth_user_id?: string | null;
+          avatar_url?: string | null;
           birthdate?: string | null;
           code: string;
           company_id?: string | null;
@@ -267,6 +338,8 @@ export type Database = {
           updated_by?: string | null;
         };
         Update: {
+          auth_user_id?: string | null;
+          avatar_url?: string | null;
           birthdate?: string | null;
           code?: string;
           company_id?: string | null;
@@ -740,6 +813,13 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "project_leader_history_employee_id_fkey";
+            columns: ["employee_id"];
+            isOneToOne: false;
+            referencedRelation: "v_current_employee";
+            referencedColumns: ["employee_id"];
+          },
+          {
             foreignKeyName: "project_leader_history_leader_role_id_fkey";
             columns: ["leader_role_id"];
             isOneToOne: false;
@@ -985,6 +1065,36 @@ export type Database = {
           },
         ];
       };
+      roles: {
+        Row: {
+          code: string;
+          created_at: string;
+          id: string;
+          is_active: boolean;
+          name: string;
+          permissions: Json;
+          updated_at: string;
+        };
+        Insert: {
+          code: string;
+          created_at?: string;
+          id?: string;
+          is_active?: boolean;
+          name: string;
+          permissions: Json;
+          updated_at?: string;
+        };
+        Update: {
+          code?: string;
+          created_at?: string;
+          id?: string;
+          is_active?: boolean;
+          name?: string;
+          permissions?: Json;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       tbm_active_connectivity_state: {
         Row: {
           source: string;
@@ -1123,6 +1233,13 @@ export type Database = {
         };
         Relationships: [
           {
+            foreignKeyName: "tbm_assignment_history_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_current_employee";
+            referencedColumns: ["auth_user_id"];
+          },
+          {
             foreignKeyName: "tbm_assignment_history_tbm_id_fkey";
             columns: ["tbm_id"];
             isOneToOne: false;
@@ -1142,6 +1259,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_tbm_assignments_overview";
             referencedColumns: ["tunnel_id"];
+          },
+          {
+            foreignKeyName: "tbm_assignment_history_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_current_employee";
+            referencedColumns: ["auth_user_id"];
           },
         ];
       };
@@ -1184,6 +1308,13 @@ export type Database = {
         };
         Relationships: [
           {
+            foreignKeyName: "tbm_assignments_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_current_employee";
+            referencedColumns: ["auth_user_id"];
+          },
+          {
             foreignKeyName: "tbm_assignments_tbm_id_fkey";
             columns: ["tbm_id"];
             isOneToOne: true;
@@ -1203,6 +1334,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_tbm_assignments_overview";
             referencedColumns: ["tunnel_id"];
+          },
+          {
+            foreignKeyName: "tbm_assignments_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_current_employee";
+            referencedColumns: ["auth_user_id"];
           },
         ];
       };
@@ -1792,6 +1930,33 @@ export type Database = {
       };
     };
     Views: {
+      v_current_employee: {
+        Row: {
+          auth_user_id: string | null;
+          avatar_url: string | null;
+          code: string | null;
+          company_id: string | null;
+          department_id: string | null;
+          employee_id: string | null;
+          name: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "employees_company_id_fkey";
+            columns: ["company_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employees_department_id_fkey";
+            columns: ["department_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       v_tbm_assignments_overview: {
         Row: {
           assignment_id: string | null;

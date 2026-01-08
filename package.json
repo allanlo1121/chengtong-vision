@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "turbo run dev --parallel",
+    "dev": "powershell -ExecutionPolicy Bypass -File ./scripts/dev.ps1",
     "prepare": "husky"
   },
   "packageManager": "pnpm@9.15.9",
