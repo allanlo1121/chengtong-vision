@@ -22,7 +22,7 @@
 
 
 
-import { getParameterMetadata } from "@cache/parameterMetadataCache.js";
+import { getParameterMetadata } from "@/metadata/parameterMetadataCache.js";
 
 export function formatParamDisplay(paramCode: string, value: any) {
     const meta = getParameterMetadata(paramCode);

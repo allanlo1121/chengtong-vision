@@ -1,6 +1,6 @@
 
 import { EventCollector, buildAlarmEventsByParameters } from "@/events/eventCollector";
-import { addGuidanceWindow, getGuidanceWindow } from "@cache/realdataWindowCache";
+import { addGuidanceWindow, getGuidanceWindow } from "@/cache/realdataWindowCache";
 
 import { runGuidanceRobustCheck } from "./guidanceRobust";
 import { runGuidanceThreshold, runGuidanceDeltaThreshold } from "./thresholdProcessor";
@@ -70,8 +70,8 @@ export async function runGuidancePipeline(tbmId: string, payload: Record<string,
 
     events.push(...deltaEvents);
 
-    console.log("evnets",events);
-    
+    console.log("evnets", events);
+
 
     // ---------------------------------------------------------------------
     // 6) 将阈值事件写入 collector

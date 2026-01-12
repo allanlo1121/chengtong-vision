@@ -2,7 +2,7 @@
 
 import { StaticAlarmRenderer } from "./StaticAlarmRenderer.js";
 import { EventType } from "@/core/eventbus/types.js";
-import { getTbmContext } from "@cache/tbmContextCache.js";
+import { getTbmContext } from "@/metadata/tbmContextCache.js";
 import { ParameterMetadataEngine } from "@/metadata/ParameterMetadataEngine.js"
 
 export class GroupAlarmRenderer extends StaticAlarmRenderer {
@@ -30,7 +30,7 @@ export class GroupAlarmRenderer extends StaticAlarmRenderer {
 
     // ⭐ 重写 render（覆盖父类）
     async render(event: EventType): Promise<string> {
-       
+
         const tbmMeta = await getTbmContext(event.tbmId);
         if (!tbmMeta) {
             throw new Error(`TbmContext not found for tbmId: ${event.tbmId}`);

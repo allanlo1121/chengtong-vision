@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { severityIcon } from "@utils/alarmSeverity";
-import { getParameterMetadata } from "@/cache/parameterMetadataCache.js";
+import { getParameterMetadata } from "@/metadata/parameterMetadataCache.js";
 import { formatParamDisplay } from "./hangdelEventParameter"
 
 import type { AlarmEvent, EventUpdateType } from "@core/eventbus/types";

@@ -147,3 +147,16 @@ WHEN (
 )
 EXECUTE FUNCTION log_connectivity_history();
 
+
+
+
+CREATE TABLE public.tbm_connectivity_snapshots (    
+    tbm_id UUID PRIMARY KEY REFERENCES tbms(id) ON DELETE CASCADE,
+
+    param_code TEXT NOT NULL CHECK (param_code IN ('n010000001','n010000002')),
+    statue BOOLEAN NOT NULL,  -- true=online, false=offline 
+    start_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    end_at   TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);

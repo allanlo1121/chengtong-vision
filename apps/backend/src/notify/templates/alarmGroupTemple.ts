@@ -1,5 +1,5 @@
 
-import { getParameterMetadata } from "@cache/parameterMetadataCache.js";
+import { getParameterMetadata } from "@/metadata/parameterMetadataCache.js";
 import { ActiveStaticState } from "@/core/alarm/types/ActiveState.js";
 
 /** 企业微信 Markdown 的颜色样式 */

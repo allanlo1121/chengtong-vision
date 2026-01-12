@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from "axios";
 import crypto from "crypto";
 import { alarmSmsGroupTemplate } from "@/notify/templates/alarmSmsTemple";
 import { getRecipientsForAlarm } from "@domain/tbm/alarmNotificationService.js"
-import { getParameterMetadata } from "@/cache/parameterMetadataCache.js";
+import { getParameterMetadata } from "@/metadata/parameterMetadataCache.js";
 
 /* ---------------------------------------------------------
  * 1. 类型定义
@@ -128,7 +128,7 @@ export function buildSignature(
 
 
 export async function sendSmsNotify(
-    topic:string,
+    topic: string,
     event: EventType,              // 内容
     prefix: string = DEFAULT_SMS_CONFIG.prefix
 ): Promise<SmsApiResponse> {
@@ -144,8 +144,8 @@ export async function sendSmsNotify(
 
     const recipients = await getRecipientsForAlarm(event.tbmId, paramMeta?.subsystem_code || 's10');
 
-    console.log("recipients",recipients);
-    
+    console.log("recipients", recipients);
+
 
     const mobiles = recipients
         .map(r => r.phone)

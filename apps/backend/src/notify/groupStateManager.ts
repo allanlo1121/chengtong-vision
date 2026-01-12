@@ -3,7 +3,7 @@
 // ============================================================================
 
 import { supabase } from "@core/supabase/client.js";
-import { getParameterMetadata } from "@cache/parameterMetadataCache.js";
+import { getParameterMetadata } from "@/metadata/parameterMetadataCache.js";
 import { Severity } from "@core/alarm/types/Severity.js";
 
 export class GroupAlarmManager {

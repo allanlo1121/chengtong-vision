@@ -2,7 +2,7 @@
 
 import { ParameterMetadataEngine } from "@/metadata/ParameterMetadataEngine.js";
 import { severityIcon } from "../renderer/severityIcons";   // 你已有的图标方法
-import { getTbmContext, type TbmContext } from "@cache/tbmContextCache.js";
+import { getTbmContext, type TbmContext } from "@/metadata/tbmContextCache.js";
 import { EventType } from "@/core/eventbus/types.js";
 import { Severity } from "../types/Severity";
 

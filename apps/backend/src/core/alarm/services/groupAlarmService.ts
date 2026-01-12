@@ -1,4 +1,4 @@
-import { getParameterMetadata } from "@cache/parameterMetadataCache.js";
+import { getParameterMetadata } from "@/metadata/parameterMetadataCache.js";
 import { ActiveRepo } from "../reposistory/activeRepo.js";
 import { ActiveStaticState } from "../types/ActiveState.js";
 

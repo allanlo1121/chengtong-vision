@@ -13,10 +13,10 @@
 
 import { supabase } from "../core/supabase/client.js";
 import { logger } from "../core/logger.js";
-import { refreshMultipleTbmContext } from "../cache/tbmContextCache.js";
+import { refreshMultipleTbmContext } from "../metadata/tbmContextCache.js";
 import { ensureSnapshot, deleteSnapshot } from "../domain/tbm/tbmConnectivityService.js";
-import { loadAllThresholds } from "@cache/tbmThresoldCache.js"
-import { refreshParameterMetadata } from "@cache/parameterMetadataCache.js";
+import { loadAllThresholds } from "@/metadata/tbmThresoldCache.js"
+import { refreshParameterMetadata } from "@/metadata/parameterMetadataCache.js";
 import { log } from "console";
 
 

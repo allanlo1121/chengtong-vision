@@ -1,8 +1,8 @@
 import { logger } from "@core/logger.js";
-import { isTbmActive } from "@cache/tbmContextCache.js";
+import { isTbmActive } from "@/metadata/tbmContextCache.js";
 import { EventCollector, handleAlarmEvent } from "@/events/eventCollector";
 import { alarmEngine } from "@core/alarm/engine";
-import { getThresholdProfile } from "@/cache/tbmThresoldCache.js";
+import { getThresholdProfile } from "@/metadata/tbmThresoldCache.js";
 import { addWindowValue, getWindowSeries } from "@/cache/realdataWindowCache.js";
 import { upsertSpecialAlarm } from "@/core/alarm/services/SystemAlarmService";
 

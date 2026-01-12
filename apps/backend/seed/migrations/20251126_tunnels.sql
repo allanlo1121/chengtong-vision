@@ -25,3 +25,9 @@ CREATE TABLE tunnels (
     updated_by UUID REFERENCES auth_users(id)
 
 );
+
+
+
+ALTER TABLE tunnels
+   ADD COLUMN start_stake  NUMERIC(10,3),
+   ADD COLUMN end_stake  NUMERIC(10,3);

@@ -2,7 +2,7 @@
 
 import { severityIcon } from "./severityIcons.js";
 import { ParameterMetadataEngine } from "@/metadata/ParameterMetadataEngine.js";
-import { getTbmContext } from "@cache/tbmContextCache.js";
+import { getTbmContext } from "@/metadata/tbmContextCache.js";
 import { EventType } from "@/core/eventbus/types.js";
 import { Severity } from "../types/Severity.js";
 

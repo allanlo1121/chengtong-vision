@@ -5,7 +5,7 @@ import { extractTbmId } from "@utils/realdataExtractor.js";
 
 import { registerHeartbeat } from "./realdata/registerConnectivityStatus.js";
 
-import { isTbmActive } from "@cache/tbmContextCache.js";
+import { isTbmActive } from "@/metadata/tbmContextCache.js";
 import { upsertSpecialAlarm } from "@/core/alarm/services/SystemAlarmService";
 
 

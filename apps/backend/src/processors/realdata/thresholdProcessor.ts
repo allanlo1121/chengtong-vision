@@ -10,7 +10,7 @@ import type {
     ThresholdRuleStatic,
     ThresholdRuleDelta,
 } from "@/models/tbm/threshold.types";
-import { getAllEffectiveThresholds } from "@cache/tbmThresoldCache"
+import { getAllEffectiveThresholds } from "@/metadata/tbmThresoldCache"
 import { evaluateStaticRule } from "./thresholdEvaluator";
 import { evaluateDeltaRule } from "./evaluteDeltaRule";
 

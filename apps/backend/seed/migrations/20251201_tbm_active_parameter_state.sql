@@ -8,19 +8,17 @@ CREATE TABLE IF NOT EXISTS public.tbm_active_static_events (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
     tbm_id UUID NOT NULL REFERENCES public.tbms(id) ON DELETE CASCADE,
-    param_code TEXT NOT NULL,                 -- s100206003  
-    ring_no INT,
+    param_code TEXT NOT NULL,                 -- s100206003     
     
     value NUMERIC,                            -- 最新值
-    severity SMALLINT NOT NULL DEFAULT 0,     -- 0 normal, 1 warning, 2 critical
-    level SMALLINT DEFAULT 0,               -- 告警级别
+    severity SMALLINT NOT NULL DEFAULT 0,     -- 0 normal, 1 warning, 2 critical    
     trend TEXT CHECK (trend IN ('rising','falling','stable')),
     data_quality SMALLINT DEFAULT 0,          -- 数据质量
    
     payload JSONB,                           -- 可选：原始数据
     rule JSONB,                          -- 可选：规则细节
     occurred_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    
 
 
     -- 唯一性：同一个 TBM，同一个参数，同一种规则，同一个窗口大小 = 一条记录
@@ -28,24 +26,18 @@ CREATE TABLE IF NOT EXISTS public.tbm_active_static_events (
 );
 
 
-
+DROP TABLE IF exists tbm_active_static_events CASCADE;
 
 CREATE TABLE IF NOT EXISTS public.tbm_static_operational_events (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
     tbm_id UUID NOT NULL REFERENCES public.tbms(id) ON DELETE CASCADE,
-    param_code TEXT NOT NULL,
-    ring_no INT,
+    param_code TEXT NOT NULL,   
     
-    old_value NUMERIC,               -- 上一次的值
-    value NUMERIC,
     old_severity SMALLINT,               -- 上一次的状态
-    severity SMALLINT NOT NULL,          -- 本次状态（0/1/2）
-    old_level SMALLINT,               -- 上一次的告警级别
-    level SMALLINT DEFAULT 0,           -- 告警级别
+    severity SMALLINT NOT NULL,          -- 本次状态（0/1/2） 
     data_quality SMALLINT DEFAULT 0,     -- 数据质量
-    trend TEXT,
-  
+    trend TEXT, 
 
     occurred_at TIMESTAMPTZ NOT NULL DEFAULT now(),  -- 事件发生时间
 
@@ -54,8 +46,8 @@ CREATE TABLE IF NOT EXISTS public.tbm_static_operational_events (
 
     action TEXT,
 
-    created_at TIMESTAMPTZ DEFAULT now(),
-    updated_at TIMESTAMPTZ DEFAULT now()
+    created_at TIMESTAMPTZ DEFAULT now()
+    
 );
 
 
@@ -64,15 +56,12 @@ RETURNS trigger AS $$
 BEGIN
     INSERT INTO public.tbm_static_operational_events (
         tbm_id,
-        param_code,
-        ring_no,
+        param_code,        
 
         old_value,
         value,
         old_severity,
         severity,
-        old_level,
-        level,
         trend,
         data_quality,
 
@@ -85,15 +74,12 @@ BEGIN
     )
     VALUES (
         NEW.tbm_id,
-        NEW.param_code,
-        NEW.ring_no,
+        NEW.param_code,        
 
         NULL,                   -- 新事件无旧值
         NEW.value,
         NULL,                   -- 新事件无旧值
         NEW.severity,
-        NULL,
-        NEW.level,
         NEW.trend,
         NEW.data_quality,
 
@@ -124,15 +110,12 @@ BEGIN
 
     INSERT INTO public.tbm_static_operational_events (
         tbm_id,
-        param_code,
-        ring_no,
+        param_code,        
 
         old_value,
         value,        
         old_severity,
         severity,
-        old_level,
-        level,
         trend,
         data_quality,
 
@@ -145,15 +128,12 @@ BEGIN
     )
     VALUES (
         NEW.tbm_id,
-        NEW.param_code,
-        NEW.ring_no,
+        NEW.param_code,        
 
         OLD.value,
         NEW.value,
         OLD.severity,
         NEW.severity,
-        OLD.level,
-        NEW.level,
         NEW.trend,
         NEW.data_quality,
         
@@ -179,15 +159,12 @@ RETURNS trigger AS $$
 BEGIN
     INSERT INTO public.tbm_static_operational_events (
         tbm_id,
-        param_code,
-        ring_no,
+        param_code,        
 
         old_value,
         value,        
         old_severity,
         severity,
-        old_level,
-        level,
         trend,
         data_quality,
 
@@ -200,14 +177,11 @@ BEGIN
     )
     VALUES (
         OLD.tbm_id,
-        OLD.param_code,
-        OLD.ring_no,
+        OLD.param_code,        
 
         OLD.value,
         NULL,
         OLD.severity,
-        NULL,
-        OLD.level,
         NULL,
         OLD.trend,
         OLD.data_quality,

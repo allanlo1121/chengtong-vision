@@ -1,6 +1,6 @@
 import { EventType } from "@/core/eventbus/types";
-import { getParameterMetadata } from "@/cache/parameterMetadataCache";
-import { getTbmContext } from "@/cache/tbmContextCache";
+import { getParameterMetadata } from "@/metadata/parameterMetadataCache";
+import { getTbmContext } from "@/metadata/tbmContextCache";
 import { formatGroupEventsForDisplay } from "./alarmGroupTemple";
 import { severityIcon } from "@utils/alarmSeverity";
 import { Trend } from "@/core/alarm/types/ActiveState";

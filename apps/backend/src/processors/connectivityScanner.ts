@@ -3,7 +3,7 @@ import { logger } from "../core/logger.js";
 import { publishEvent } from "../core/eventbus/eventBus.js";
 import {
   getActiveTbmIds,
-} from "@/cache/tbmContextCache.js";
+} from "@/metadata/tbmContextCache.js";
 
 import { upsertSpecialAlarm } from "@/core/alarm/services/SystemAlarmService";
 
