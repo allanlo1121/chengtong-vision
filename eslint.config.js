@@ -11,6 +11,7 @@ export default [
   {
     files: ["**/*.{ts,tsx,js,jsx}"],
     ignores: [
+      "**/*.md",
       "node_modules",
       "dist",
       ".turbo",

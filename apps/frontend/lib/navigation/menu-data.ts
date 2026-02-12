@@ -11,6 +11,7 @@ import {
   Settings2,
   Map,
   Factory,
+  Monitor,
 } from "lucide-react";
 
 export const menuData = {
@@ -36,7 +37,7 @@ export const menuData = {
       items: [
         { title: "项目总览", url: "/dashboard/projects" },
         { title: "在建隧道", url: "/dashboard/tunnels" },
-        { title: "盾构机状态", url: "/dashboard/tbm" },
+        { title: "盾构机状态", url: "/dashboard/tbms" },
       ],
     },
     {
@@ -46,13 +47,13 @@ export const menuData = {
       items: [
         { title: "项目管理", url: "/projects" },
         { title: "隧道区间", url: "/tunnels" },
-        { title: "盾构机列表", url: "/tbm" },
+        { title: "盾构机列表", url: "/tbms" },
       ],
     },
     {
       title: "实时监控",
       url: "#",
-      icon: Activity,
+      icon: Monitor,
       items: [
         { title: "实时参数", url: "/realtime/parameters" },
         { title: "PLC 在线状态", url: "/realtime/connectivity" },
