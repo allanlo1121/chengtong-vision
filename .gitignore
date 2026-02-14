@@ -19,6 +19,5 @@ apps/frontend/.env.local
 apps/backend/.env
 
 # supabase local data
-supabase/
 docker/
 volumes/
