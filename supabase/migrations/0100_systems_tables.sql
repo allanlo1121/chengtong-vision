@@ -26,8 +26,14 @@ create table system.versions (
   deployed_at timestamptz default now()
 );
 
-create table system.feature_flags (
-  key text primary key,
-  enabled boolean not null default false,
-  config jsonb
+-- create table system.feature_flags (
+--   key text primary key,
+--   enabled boolean not null default false,
+--   config jsonb
+-- );
+
+create table if not exists system.bootstrap_state (
+  version text primary key,
+  completed boolean not null default false,
+  executed_at timestamptz
 );
