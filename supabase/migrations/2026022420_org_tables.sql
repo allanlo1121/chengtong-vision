@@ -28,8 +28,8 @@ create table public.organizations (
   is_disabled boolean default false,
   created_at timestamptz not null default now(),
   updated_at timestamptz,
-  created_by uuid,
-  updated_by uuid,
+  created_by uuid references auth.users(id) on delete set null,
+  updated_by uuid references auth.users(id) on delete set null,
   deleted boolean not null default false,
 
   check (latitude between -90 and 90),

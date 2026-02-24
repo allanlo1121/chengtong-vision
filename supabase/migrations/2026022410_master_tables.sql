@@ -11,8 +11,8 @@ create table public.master_definitions (
   
   created_at timestamptz not null default now(),
   updated_at timestamptz,
-  created_by uuid,
-  updated_by uuid,
+  created_by uuid references auth.users(id) on delete set null,
+  updated_by uuid references auth.users(id) on delete set null,
   deleted boolean not null default false
 
 ) TABLESPACE pg_default;
@@ -31,8 +31,8 @@ create table public.master_data (
   is_disabled boolean not null default false,
   created_at timestamptz not null default now(),
   updated_at timestamptz,
-  created_by uuid,
-  updated_by uuid,
+  created_by uuid references auth.users(id) on delete set null,
+  updated_by uuid references auth.users(id) on delete set null,
   deleted boolean not null default false,
 
   constraint uq_master_data_def_code 
