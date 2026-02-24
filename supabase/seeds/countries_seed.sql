@@ -46,7 +46,7 @@ INSERT INTO public.countries (code,name,english_name)
     ('CF','中非','CENTRAL_AFRICAN_REPUBLIC'),
     ('CG','刚果(布)','REPUBLIC_OF_CONGO'),
     ('CH','瑞士','SWITZERLAND'),
-    ('CI','科特迪瓦', "COTE_D''IVOIRE"),
+    ('CI','科特迪瓦','COTE_D''IVOIRE'),
     ('CK','库克群岛','COOK_ISLANDS'),
     ('CL','智利','CHILE'),
     ('CM','喀麦隆','CAMEROON'),
