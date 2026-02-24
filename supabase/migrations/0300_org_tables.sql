@@ -15,7 +15,7 @@ create table public.organizations (
   sort_order integer default 0,
 
   org_type_id uuid not null references public.master_data(id),
-  business_id uuid not null references public.master_data(id),
+  business_id uuid  references public.master_data(id),
 
 
   region_id uuid not null references public.master_data(id),
@@ -39,3 +39,5 @@ create table public.organizations (
 
 create index idx_organizations_parent
 on public.organizations(parent_id);
+
+

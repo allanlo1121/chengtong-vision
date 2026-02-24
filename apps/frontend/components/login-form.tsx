@@ -1,7 +1,7 @@
 "use client";
 
-import { cn } from "@frontend/lib/utils";
-import { createClient } from "@frontend/lib/supabase/client";
+import { cn } from "@frontend/lib/core/utils";
+import { createClient } from "@frontend/lib/core/supabase/client";
 import { Button } from "@frontend/components/ui/button";
 import {
   Card,

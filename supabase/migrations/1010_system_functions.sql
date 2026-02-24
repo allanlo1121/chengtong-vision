@@ -50,42 +50,33 @@ is 'Optional soft delete trigger helper';
 
 
 -- ============================================
--- 4️ 其他系统级函数（如有需要）
+-- 4️ 首次进入建立管理员账户的函数
 -- ============================================
 
-create or replace function system.bootstrap()
+create or replace function system.bootstrap(p_user_id uuid)
 returns void
 language plpgsql
 security definer
-set search_path = system, public
 as $$
 declare
-  v_user_id uuid;
   v_role_id uuid;
+  v_sys_org_id uuid;
 begin
 
-  --------------------------------------------------
-  -- 0️⃣ 只允许 service_role 调用
-  --------------------------------------------------
-  if current_user <> 'service_role' then
+  if auth.role() <> 'service_role' then
     raise exception 'permission denied';
   end if;
 
-  --------------------------------------------------
-  -- 1️⃣ 已完成则拒绝
-  --------------------------------------------------
   if exists (
     select 1
     from system.bootstrap_state
     where version = '1.0.0'
       and completed = true
   ) then
-    raise exception 'bootstrap already completed';
+    return;
   end if;
 
-  --------------------------------------------------
-  -- 2️⃣ 创建 SUPER_ADMIN
-  --------------------------------------------------
+  -- 创建角色
   insert into rbac.roles (code, name)
   values ('SUPER_ADMIN', '超级管理员')
   on conflict (code) do nothing;
@@ -94,75 +85,42 @@ begin
   from rbac.roles
   where code = 'SUPER_ADMIN';
 
-  --------------------------------------------------
-  -- 3️⃣ 创建 admin 用户
-  --------------------------------------------------
-  insert into auth.users (
-    id,
-    email,
-    encrypted_password,
-    email_confirmed_at,
-    raw_app_meta_data,
-    raw_user_meta_data,
-    role,
-    aud
-  )
-  values (
-    gen_random_uuid(),
-    'admin@system.local',
-    crypt('Admin123456', gen_salt('bf')),
-    now(),
-    '{}',
-    '{}',
-    'authenticated',
-    'authenticated'
-  )
-  on conflict (email) do nothing
-  returning id into v_user_id;
+  -- 创建 employee
+  select id into v_sys_org_id
+  from public.organizations
+  where code = 'SYS';
 
-  if v_user_id is null then
-    select id into v_user_id
-    from auth.users
-    where email = 'admin@system.local';
+  if v_sys_org_id is null then
+    raise exception 'SYS organization not found';
   end if;
 
-  --------------------------------------------------
-  -- 4️⃣ 创建 employee
-  --------------------------------------------------
   insert into public.employees (
     id,
     name,
     code,
+    org_node_id,
     is_active
   )
   values (
-    v_user_id,
+    p_user_id,
     '系统管理员',
     'admin',
+    v_sys_org_id,
     true
   )
   on conflict (id) do nothing;
 
-  --------------------------------------------------
-  -- 5️⃣ 绑定角色
-  --------------------------------------------------
+  -- 绑定角色
   insert into rbac.user_roles (user_id, role_id)
-  values (v_user_id, v_role_id)
+  values (p_user_id, v_role_id)
   on conflict do nothing;
 
-  --------------------------------------------------
-  -- 6️⃣ 标记完成
-  --------------------------------------------------
+  -- 标记完成
   insert into system.bootstrap_state (version, completed, executed_at)
   values ('1.0.0', true, now())
   on conflict (version)
   do update set completed = true,
                 executed_at = now();
-
-  --------------------------------------------------
-  -- 7️⃣ 自动锁死：撤销自身执行权限
-  --------------------------------------------------
-  revoke execute on function system.bootstrap() from service_role;
 
 end;
 $$;

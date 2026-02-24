@@ -1,7 +1,7 @@
 "use client";
 
 import { Column } from "@tanstack/react-table";
-import { cn } from "@frontend/lib/utils";
+import { cn } from "@frontend/lib/core/utils";
 import {
   Select,
   SelectContent,
