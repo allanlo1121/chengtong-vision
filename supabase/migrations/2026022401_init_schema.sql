@@ -52,7 +52,10 @@ create table public.master_data (
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now(),
   created_by uuid,
-  updated_by uuid
+  updated_by uuid,
+
+  constraint uq_master_data_def_code 
+      unique (definition_id, code)
 
 ) TABLESPACE pg_default;
 
