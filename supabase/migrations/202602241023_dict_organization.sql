@@ -57,19 +57,3 @@ ON true
 WHERE md.key = 'ORG_LEADER_ROLE'
 ON CONFLICT (definition_id, code) DO NOTHING;
 
-    ('10230007', '代局指'),
-    ('10230008', '多元业务单位'),
-    ('10230009', '分组（虚拟组织）'),
-    ('10230010', '专业技术组'),
-    ('10230011', '生产组织'),
-    ('10230012', '区域指挥部'),
-    ('10230013', '分公司（四级）'),
-    ('10230014', '阶段性工作机构'),
-    ('10230015', '科室'),
-    ('10230016', '虚拟项目部'),
-    ('10230017', '子公司区域指挥部'),
-    ('10230018', '工程指挥部')
-) AS v(code, name)
-ON true
-WHERE md.key = 'ORG_CATEGORY'
-ON CONFLICT (definition_id, code) DO NOTHING;
