@@ -17,7 +17,6 @@ apps/backend/dist/
 *.env.local
 apps/frontend/.env.local
 apps/backend/.env
-supabase/config.toml
 
 # supabase local data
 docker/
