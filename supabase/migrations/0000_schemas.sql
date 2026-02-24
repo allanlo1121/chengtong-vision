@@ -1,3 +1,20 @@
+
+create schema if not exists system;
+create schema if not exists rbac;
+create schema if not exists audit;
+create schema if not exists hr;
+create schema if not exists project;
+
+
+-- ================================
+-- 01_extensions.sql
+-- ================================
+
+create extension if not exists "uuid-ossp";
+create extension if not exists pgcrypto;
+create extension if not exists btree_gin;
+
+
 -- ============================================
 -- Base Audit Infrastructure
 -- Version: 2026022402
@@ -9,7 +26,7 @@
 
 
 -- ============================================
--- 1️⃣ 通用 updated_at 触发器函数
+-- 1️ 通用 updated_at 触发器函数
 -- ============================================
 
 create or replace function public.set_updated_at()
@@ -23,7 +40,7 @@ $$ language plpgsql;
 
 
 -- ============================================
--- 2️⃣ 可选：通用软删除函数（如果需要统一调用）
+-- 2️ 可选：通用软删除函数（如果需要统一调用）
 -- ============================================
 
 create or replace function public.soft_delete_row()
@@ -38,7 +55,7 @@ $$ language plpgsql;
 
 
 -- ============================================
--- 3️⃣ 建议的标准审计字段规范（说明性注释）
+-- 3️ 建议的标准审计字段规范（说明性注释）
 -- ============================================
 
 comment on function public.set_updated_at()

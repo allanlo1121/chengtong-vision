@@ -5,7 +5,7 @@ create or replace function hr.trg_employee_insert_init_history()
 returns trigger as $$
 begin
 
-    insert into public.employee_org_history (
+    insert into hr.employee_org_history (
         employee_id,
         org_node_id,
         job_title_id,
@@ -36,13 +36,13 @@ begin
        or (new.job_title_id is distinct from old.job_title_id) then
 
         -- 关闭旧记录
-        update public.employee_org_history
+        update hr.employee_org_history
         set end_at = now()
         where employee_id = old.id
           and end_at is null;
 
         -- 插入新记录
-        insert into public.employee_org_history (
+        insert into hr.employee_org_history (
             employee_id,
             org_node_id,
             job_title_id,
@@ -64,3 +64,5 @@ begin
     return new;
 end;
 $$ language plpgsql;
+
+
