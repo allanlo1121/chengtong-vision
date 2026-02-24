@@ -27,19 +27,19 @@ INSERT INTO public.countries (code,name,english_name)
     ('BE','比利时','BELGIUM'),
     ('BF','布基纳法索','BURKINA_FASO'),
     ('BG','保加利亚','BULGARIA'),
-    ('BH','巴林','BAHRAIN')，
-    ('BI','布隆迪','BURUNDI')，
-    ('BJ','贝宁','BENIN')，
-    ('BM','百慕大','BERMUDA')，
-    ('BN','文莱','BRUNEI')，
-    ('BO','玻利维亚','BOLIVIA')，
-    ('BR','巴西','BRAZIL')，
-    ('BS','巴哈马','BAHAMAS')，
-    ('BT','不丹','BHUTAN')，
-    ('BV','布维岛','BOUVET')，
-    ('BW','博茨瓦纳','BOTSWANA')，
-    ('BY','白俄罗斯','BELARUS')，
-    ('BZ','伯利兹','BELIZE')，
+    ('BH','巴林','BAHRAIN'),
+    ('BI','布隆迪','BURUNDI'),
+    ('BJ','贝宁','BENIN'),
+    ('BM','百慕大','BERMUDA'),
+    ('BN','文莱','BRUNEI'),
+    ('BO','玻利维亚','BOLIVIA'),
+    ('BR','巴西','BRAZIL'),
+    ('BS','巴哈马','BAHAMAS'),
+    ('BT','不丹','BHUTAN'),
+    ('BV','布维岛','BOUVET'),
+    ('BW','博茨瓦纳','BOTSWANA'),
+    ('BY','白俄罗斯','BELARUS'),
+    ('BZ','伯利兹','BELIZE'),
     ('CA','加拿大','CANADA'),
     ('CC','科科斯(基林)群岛','COCOS_ISLANDS'),
     ('CD','刚果(金)','DEMOCRATIC_REPUBLIC_OF_THE_CONGO'),
@@ -73,27 +73,27 @@ INSERT INTO public.countries (code,name,english_name)
     ('ET','埃塞俄比亚','ETHIOPIA'),
     ('FI','芬兰','FINLAND'),
     ('FJ','斐济','FIJI'),
-    ('FK','福克兰群岛(马尔维纳斯)','FALKLAND_ISLANDS')，
-    ('FM','密克罗尼西亚联邦','MICRONESIA,_FEDERATED_STATES_OF')，
-    ('FO','法罗群岛','FAROE_ISLANDS')，
-    ('FR','法国','FRANCE')，
-    ('GA','加蓬','GABON')，
-    ('GB','英国','UNITED_KINGDOM')，
-    ('GD','格林纳达','GRENADA')，
-    ('GE','格鲁吉亚','GEORGIA')，
-    ('GF','法属圭亚那','FRENCH_GUIANA')，
-    ('GH','加纳','GHANA')，
-    ('GI','直布罗陀','GIBRALTAR')，
-    ('GL','格陵兰','GREENLAND')，
-    ('GM','冈比亚','GAMBIA')，
-    ('GN','几内亚','GUINEA')，
-    ('GP','法属瓜德罗普','FRENCH_GUIANA')，
-    ('GQ','赤道几内亚','EQUATORIAL_GUINEA')，
-    ('GR','希腊','GREECE')，
-    ('GS','南乔治亚和南桑威奇群岛','SOUTH_GEORGIA_AND_SOUTH_SANDWICH_ISLANDS')，
-    ('GT','危地马拉','GUATEMALA')，
-    ('GU','关岛','GUAM')，
-    ('GW','几内亚比绍','GUINEA-BISSAU')，
+    ('FK','福克兰群岛(马尔维纳斯)','FALKLAND_ISLANDS'),
+    ('FM','密克罗尼西亚联邦','MICRONESIA,_FEDERATED_STATES_OF'),
+    ('FO','法罗群岛','FAROE_ISLANDS'),
+    ('FR','法国','FRANCE'),
+    ('GA','加蓬','GABON'),
+    ('GB','英国','UNITED_KINGDOM'),
+    ('GD','格林纳达','GRENADA'),
+    ('GE','格鲁吉亚','GEORGIA'),
+    ('GF','法属圭亚那','FRENCH_GUIANA'),
+    ('GH','加纳','GHANA'),
+    ('GI','直布罗陀','GIBRALTAR'),
+    ('GL','格陵兰','GREENLAND'),
+    ('GM','冈比亚','GAMBIA'),
+    ('GN','几内亚','GUINEA'),
+    ('GP','法属瓜德罗普','FRENCH_GUIANA'),
+    ('GQ','赤道几内亚','EQUATORIAL_GUINEA'),
+    ('GR','希腊','GREECE'),
+    ('GS','南乔治亚和南桑威奇群岛','SOUTH_GEORGIA_AND_SOUTH_SANDWICH_ISLANDS'),
+    ('GT','危地马拉','GUATEMALA'),
+    ('GU','关岛','GUAM'),
+    ('GW','几内亚比绍','GUINEA-BISSAU'),
     ('GY','圭亚那','GUYANA'),
     ('HK','中国香港','HONG_KONG'),
     ('HM','赫德岛和麦克唐纳群岛','HEARD_ISLAND_AND_MCDONALD_ISLANDS'),
@@ -118,21 +118,21 @@ INSERT INTO public.countries (code,name,english_name)
     ('KE','肯尼亚','KENYA'),
     ('KG','吉尔吉斯斯坦','KYRGYZSTAN'),
     ('KH','柬埔寨','CAMBODIA'),
-    ('KI','基里巴斯','KIRIBATI')，
-    ('KM','科摩罗','COMOROS')，
-    ('KN','圣基茨和尼维斯','SAINT_KITTS_AND_NEVIS')，
-    ('KP','朝鲜','NORTH_KOREA')，
-    ('KR','韩国','SOUTH_KOREA')，
-    ('KW','科威特','KUWAIT')，
-    ('KY','开曼群岛','CAYMAN_ISLANDS')，
-    ('KZ','哈萨克斯坦','KAZAKHSTAN')，
-    ('LA','老挝','LAOS')，
-    ('LB','黎巴嫩','LEBANON')，
-    ('LC','圣卢西亚','SAINT_LUCIA')，
-    ('LI','列支敦士登','LIECHTENSTEIN')，
-    ('LK','斯里兰卡','SRI_LANKA')，
-    ('LR','利比里亚','LIBERIA')，
-    ('LS','莱索托','LESOTHO')，
+    ('KI','基里巴斯','KIRIBATI'),
+    ('KM','科摩罗','COMOROS'),
+    ('KN','圣基茨和尼维斯','SAINT_KITTS_AND_NEVIS'),
+    ('KP','朝鲜','NORTH_KOREA'),
+    ('KR','韩国','SOUTH_KOREA'),
+    ('KW','科威特','KUWAIT'),
+    ('KY','开曼群岛','CAYMAN_ISLANDS'),
+    ('KZ','哈萨克斯坦','KAZAKHSTAN'),
+    ('LA','老挝','LAOS'),
+    ('LB','黎巴嫩','LEBANON'),
+    ('LC','圣卢西亚','SAINT_LUCIA'),
+    ('LI','列支敦士登','LIECHTENSTEIN'),
+    ('LK','斯里兰卡','SRI_LANKA'),
+    ('LR','利比里亚','LIBERIA'),
+    ('LS','莱索托','LESOTHO'),
     ('LT','立陶宛','LITHUANIA'),
     ('LU','卢森堡','LUXEMBOURG'),
     ('LV','拉脱维亚','LATVIA'),
@@ -141,13 +141,13 @@ INSERT INTO public.countries (code,name,english_name)
     ('MC','摩纳哥','MONACO'),
     ('MD','摩尔多瓦','MOLDOVA'),
     ('ME','黑山','MONTENEGRO'),
-    ('MF','法属圣马丁','SAINT_MARTIN')，
-    ('MG','马达加斯加','MADAGASCAR')，
-    ('MH','马绍尔群岛','MARSHALL_ISLANDS')，
-    ('MK','北马其顿','NORTH_MACEDONIA')，
-    ('ML','马里','MALI')，
-    ('MM','缅甸','MYANMAR')，
-    ('MN','蒙古国','MONGOLIA')，
+    ('MF','法属圣马丁','SAINT_MARTIN'),
+    ('MG','马达加斯加','MADAGASCAR'),
+    ('MH','马绍尔群岛','MARSHALL_ISLANDS'),
+    ('MK','北马其顿','NORTH_MACEDONIA'),
+    ('ML','马里','MALI'),
+    ('MM','缅甸','MYANMAR'),
+    ('MN','蒙古国','MONGOLIA'),
     ('MO','中国澳门特别行政区','MACAO'),
     ('MP','北马里亚纳群岛','NORTHERN_MARIANA_ISLANDS'),
     ('MQ','法属马提尼克','MARTINIQUE'),
@@ -163,27 +163,27 @@ INSERT INTO public.countries (code,name,english_name)
     ('NA','纳米比亚','NAMIBIA'),
     ('NC','新喀里多尼亚','NEW_CALEDONIA'),
     ('NE','尼日尔','NIGER'),
-    ('NF','诺福克岛','NORFOLK_ISLAND')，
-    ('NG','尼日利亚','NIGERIA')，
-    ('NI','尼加拉瓜','NICARAGUA')，
-    ('NL','荷兰','NETHERLANDS')，
-    ('NO','挪威','NORWAY')，
-    ('NP','尼泊尔','NEPAL')，
-    ('NR','瑙鲁','NAURU')，
-    ('NU','纽埃','NIUE')，
-    ('NZ','新西兰','NEW_ZEALAND')，
-    ('OM','阿曼','OMAN')，
-    ('PA','巴拿马','PANAMA')，
-    ('PE','秘鲁','PERU')，
-    ('PF','法属波利尼西亚','FRENCH_POLYNESIA')，
-    ('PG','巴布亚新几内亚','PAPUA_NEW_GUINEA')，
-    ('PH','菲律宾','PHILIPPINES')，
-    ('PK','巴基斯坦','PAKISTAN')，
-    ('PL','波兰','POLAND')，
+    ('NF','诺福克岛','NORFOLK_ISLAND'),
+    ('NG','尼日利亚','NIGERIA'),
+    ('NI','尼加拉瓜','NICARAGUA'),
+    ('NL','荷兰','NETHERLANDS'),
+    ('NO','挪威','NORWAY'),
+    ('NP','尼泊尔','NEPAL'),
+    ('NR','瑙鲁','NAURU'),
+    ('NU','纽埃','NIUE'),
+    ('NZ','新西兰','NEW_ZEALAND'),
+    ('OM','阿曼','OMAN'),
+    ('PA','巴拿马','PANAMA'),
+    ('PE','秘鲁','PERU'),
+    ('PF','法属波利尼西亚','FRENCH_POLYNESIA'),
+    ('PG','巴布亚新几内亚','PAPUA_NEW_GUINEA'),
+    ('PH','菲律宾','PHILIPPINES'),
+    ('PK','巴基斯坦','PAKISTAN'),
+    ('PL','波兰','POLAND'),
     ('PM','圣皮埃尔和密克隆群岛','SAINT_PIERRE_AND_MIQUELON'),
     ('PN','皮特凯恩群岛','PITCAIRN_ISLANDS'),
     ('PR','波多黎各','PUERTO_RICO'),
-    ('PS','巴勒斯坦','PALESTINE')，
+    ('PS','巴勒斯坦','PALESTINE'),
     ('PT','葡萄牙','PORTUGAL'),
     ('PW','帕劳','PALAU'),
     ('PY','巴拉圭','PARAGUAY'),
@@ -194,22 +194,22 @@ INSERT INTO public.countries (code,name,english_name)
     ('RU','俄罗斯','RUSSIA'),
     ('RW','卢旺达','RWANDA'),
     ('SA','沙特阿拉伯','SAUDI_ARABIA'),
-    ('SB','所罗门群岛','SOLOMON_ISLANDS')，
-    ('SC','塞舌尔','SEYCHELLES')，
-    ('SD','苏丹','SUDAN')，
-    ('SE','瑞典','SWEDEN')，
-    ('SG','新加坡','SINGAPORE')，
-    ('SH','圣赫勒拿、阿森松和特里斯坦-达库尼亚','SAINT_HELENA_ASCENSION_AND_TRISTAN_DA_CUNHA')，
-    ('SI','斯洛文尼亚','SLOVENIA')，
-    ('SJ','斯瓦尔巴和扬马延群岛','SVALBARD_AND_JAN_MAYEN')，
-    ('SK','斯洛伐克','SLOVAKIA')，
-    ('SL','塞拉利昂','SIERRA_LEONE')，
-    ('SM','圣马力诺','SAN_MARINO')，
-    ('SN','塞内加尔','SENEGAL')，
-    ('SO','索马里','SOMALIA')，
-    ('SR','苏里南','SURINAME')，
-    ('SS','南苏丹','SOUTH_SUDAN')，
-    ('ST','圣多美和普林西比','SAO_TOME_AND_PRINCIPE')，
+    ('SB','所罗门群岛','SOLOMON_ISLANDS'),
+    ('SC','塞舌尔','SEYCHELLES'),
+    ('SD','苏丹','SUDAN'),
+    ('SE','瑞典','SWEDEN'),
+    ('SG','新加坡','SINGAPORE'),
+    ('SH','圣赫勒拿、阿森松和特里斯坦-达库尼亚','SAINT_HELENA_ASCENSION_AND_TRISTAN_DA_CUNHA'),
+    ('SI','斯洛文尼亚','SLOVENIA'),
+    ('SJ','斯瓦尔巴和扬马延群岛','SVALBARD_AND_JAN_MAYEN'),
+    ('SK','斯洛伐克','SLOVAKIA'),
+    ('SL','塞拉利昂','SIERRA_LEONE'),
+    ('SM','圣马力诺','SAN_MARINO'),
+    ('SN','塞内加尔','SENEGAL'),
+    ('SO','索马里','SOMALIA'),
+    ('SR','苏里南','SURINAME'),
+    ('SS','南苏丹','SOUTH_SUDAN'),
+    ('ST','圣多美和普林西比','SAO_TOME_AND_PRINCIPE'),
     ('SV','萨尔瓦多','EL_SALVADOR'),
     ('SX','荷属圣马丁','SAINT_MARTIN'),
     ('SY','叙利亚','SYRIA'),
@@ -224,31 +224,31 @@ INSERT INTO public.countries (code,name,english_name)
     ('TL','东帝汶','TIMOR-LESTE'),
     ('TM','土库曼斯坦','TURKMENISTAN'),
     ('TN','突尼斯','TUNISIA'),
-    ('TO','汤加','TONGA')，
-    ('TR','土耳其','TURKEY')，
-    ('TT','特立尼达和多巴哥','TRINIDAD_AND_TOBAGO')，
-    ('TV','图瓦卢','TUVALU')，
-    ('TW','中国台湾','TAIWAN')，
-    ('TZ','坦桑尼亚','TANZANIA')，
-    ('UA','乌克兰','UKRAINE')，
-    ('UG','乌干达','UGANDA')，
-    ('UM','美国本土外小岛屿','UNITED_STATES_MINOR_OUTLYING_ISLANDS')，
-    ('US','美国','UNITED_STATES')，
-    ('UY','乌拉圭','URUGUAY')，
-    ('UZ','乌兹别克斯坦','UZBEKISTAN')，
-    ('VA','梵蒂冈城国','VATICAN_CITY')，
-    ('VC','圣文森特和格林纳丁斯','SAINT_VINCENT_AND_THE_GRENADINES')，
+    ('TO','汤加','TONGA'),
+    ('TR','土耳其','TURKEY'),
+    ('TT','特立尼达和多巴哥','TRINIDAD_AND_TOBAGO'),
+    ('TV','图瓦卢','TUVALU'),
+    ('TW','中国台湾','TAIWAN'),
+    ('TZ','坦桑尼亚','TANZANIA'),
+    ('UA','乌克兰','UKRAINE'),
+    ('UG','乌干达','UGANDA'),
+    ('UM','美国本土外小岛屿','UNITED_STATES_MINOR_OUTLYING_ISLANDS'),
+    ('US','美国','UNITED_STATES'),
+    ('UY','乌拉圭','URUGUAY'),
+    ('UZ','乌兹别克斯坦','UZBEKISTAN'),
+    ('VA','梵蒂冈城国','VATICAN_CITY'),
+    ('VC','圣文森特和格林纳丁斯','SAINT_VINCENT_AND_THE_GRENADINES'),
     ('VE','委内瑞拉','VENEZUELA'),
     ('VG','英属维尔京群岛','BRITISH_VIRGIN_ISLANDS'),
     ('VI','美属维尔京群岛','U.S._VIRGIN_ISLANDS'),
     ('VN','越南','VIETNAM'),
     ('VU','瓦努阿图','VANUATU'),
-    ('WF','瓦利斯和富图纳','WALLIS_AND_FUTUNA')，
-    ('WS','萨摩亚','SAMOA')，
-    ('YE','也门','YEMEN')，
-    ('YT','马约特','MAYOTTE')，
-    ('ZA','南非','SOUTH_AFRICA')，
-    ('ZM','赞比亚','ZAMBIA')，
+    ('WF','瓦利斯和富图纳','WALLIS_AND_FUTUNA'),
+    ('WS','萨摩亚','SAMOA'),
+    ('YE','也门','YEMEN'),
+    ('YT','马约特','MAYOTTE'),
+    ('ZA','南非','SOUTH_AFRICA'),
+    ('ZM','赞比亚','ZAMBIA'),
     ('ZW','津巴布韦','ZIMBABWE')
 ON CONFLICT (code) DO NOTHING;
 
