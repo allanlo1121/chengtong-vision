@@ -45,8 +45,7 @@ create table public.employees (
     remark              text
 );
 
-create index idx_employees_org on public.employees(org_id);
-create index idx_employees_department on public.employees(department_id);
+create index idx_employees_org_node on public.employees(org_node_id);
 create index idx_employees_active on public.employees(is_active);
 create index idx_employees_job on public.employees(job_title_id);
 
