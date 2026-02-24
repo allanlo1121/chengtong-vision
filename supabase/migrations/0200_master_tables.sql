@@ -66,9 +66,7 @@ create table public.countries (
   updated_at timestamptz
 );
 
-create trigger trg_countries_updated
-before update on public.countries
-for each row execute function system.set_updated_at();
+
 
 
 create table public.admin_regions (
@@ -90,6 +88,3 @@ create table public.admin_regions (
   updated_at timestamptz
 );
 
-create trigger trg_admin_regions_updated
-before update on public.admin_regions
-for each row execute function system.set_updated_at();

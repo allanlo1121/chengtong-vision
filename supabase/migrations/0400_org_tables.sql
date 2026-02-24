@@ -35,9 +35,7 @@ create table public.organizations (
   check (latitude between -90 and 90),
   check (longitude between -180 and 180)
 );
-create trigger trg_organizations_updated
-before update on public.organizations
-for each row execute function system.set_updated_at();
+
 
 create index idx_organizations_parent
 on public.organizations(parent_id);
