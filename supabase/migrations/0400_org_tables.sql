@@ -1,5 +1,5 @@
 -- ==============================
--- 20 ORGANIZATION TABLES
+-- 0400 ORGANIZATION TABLES
 -- ==============================
 
 create table public.organizations (
@@ -37,7 +37,7 @@ create table public.organizations (
 );
 create trigger trg_organizations_updated
 before update on public.organizations
-for each row execute function public.set_updated_at();
+for each row execute function system.set_updated_at();
 
 create index idx_organizations_parent
 on public.organizations(parent_id);

@@ -19,7 +19,7 @@ create table public.master_definitions (
 
 create trigger trg_master_definitions_updated
 before update on master_definitions
-for each row execute function set_updated_at();
+for each row execute function system.set_updated_at();
 
 create table public.master_data (
   id uuid primary key default gen_random_uuid(),
@@ -42,7 +42,7 @@ create table public.master_data (
 
 create trigger trg_master_data_updated
 before update on master_data
-for each row execute function set_updated_at();
+for each row execute function system.set_updated_at();
 
 create index idx_master_data_definition
 on public.master_data(definition_id);
@@ -68,7 +68,7 @@ create table public.countries (
 
 create trigger trg_countries_updated
 before update on public.countries
-for each row execute function public.set_updated_at();
+for each row execute function system.set_updated_at();
 
 
 create table public.admin_regions (
@@ -92,4 +92,4 @@ create table public.admin_regions (
 
 create trigger trg_admin_regions_updated
 before update on public.admin_regions
-for each row execute function public.set_updated_at();
+for each row execute function system.set_updated_at();

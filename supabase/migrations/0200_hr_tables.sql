@@ -49,7 +49,7 @@ create index idx_employees_org_node on public.employees(org_node_id);
 create index idx_employees_active on public.employees(is_active);
 create index idx_employees_job on public.employees(job_title_id);
 
-create or replace function public.set_updated_at()
+create or replace function system.set_updated_at()
 returns trigger as $$
 begin
   new.updated_at = now();
@@ -59,7 +59,7 @@ $$ language plpgsql;
 
 create trigger trg_employees_updated_at
 before update on public.employees
-for each row execute procedure public.set_updated_at();
+for each row execute procedure system.set_updated_at();
 
 
 create table hr.employee_org_history (
