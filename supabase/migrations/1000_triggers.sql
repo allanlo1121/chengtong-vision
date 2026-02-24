@@ -1,5 +1,13 @@
 
 
+create trigger trg_master_definitions_updated
+before update on master_definitions
+for each row execute function system.set_updated_at();
+
+create trigger trg_master_data_updated
+before update on master_data
+for each row execute function system.set_updated_at();
+
 create trigger trg_countries_updated
 before update on public.countries
 for each row execute function system.set_updated_at();

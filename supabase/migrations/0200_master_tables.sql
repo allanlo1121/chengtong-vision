@@ -1,5 +1,5 @@
 -- ==============================
--- 10 MASTER TABLES
+-- 0200 MASTER TABLES
 -- ==============================
 
 create table public.master_definitions (
@@ -17,9 +17,7 @@ create table public.master_definitions (
 
 ) TABLESPACE pg_default;
 
-create trigger trg_master_definitions_updated
-before update on master_definitions
-for each row execute function system.set_updated_at();
+
 
 create table public.master_data (
   id uuid primary key default gen_random_uuid(),
@@ -40,9 +38,7 @@ create table public.master_data (
 
 ) TABLESPACE pg_default;
 
-create trigger trg_master_data_updated
-before update on master_data
-for each row execute function system.set_updated_at();
+
 
 create index idx_master_data_definition
 on public.master_data(definition_id);
