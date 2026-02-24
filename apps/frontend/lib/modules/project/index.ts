@@ -1,2 +1,2 @@
 // index.ts
-export * from "./service";
+// export * from "./service";

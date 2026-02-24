@@ -125,13 +125,24 @@ begin
 end;
 $$;
 
+create or replace function public.bootstrap()
+returns void
+language plpgsql
+security definer
+as $$
+begin
+  perform system.bootstrap();
+end;
+$$;
+
 -- 移除默认权限
-revoke execute on function system.bootstrap() from public;
-revoke execute on function system.bootstrap() from anon;
-revoke execute on function system.bootstrap() from authenticated;
+revoke execute on function public.bootstrap() from public;
+revoke execute on function public.bootstrap() from anon;
+revoke execute on function public.bootstrap() from authenticated;
 
 -- 只给 service_role
-grant execute on function system.bootstrap() to service_role;
+grant execute on function public.bootstrap() to service_role;
+
 
 -- 确保 owner 是 postgres
-alter function system.bootstrap() owner to postgres;
+alter function public.bootstrap() owner to postgres;
