@@ -106,7 +106,7 @@ export const menuData = {
       url: "#",
       icon: Settings2,
       items: [
-        { title: "组织结构", url: "/system/org" },
+        { title: "组织结构", url: "/system/orgs" },
         { title: "人员管理", url: "/system/employees" },
         { title: "权限管理", url: "/system/roles" },
         { title: "系统配置", url: "/system/config" },
