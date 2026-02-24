@@ -44,7 +44,7 @@ for each row execute function set_updated_at();
 create table public.master_data (
   id uuid primary key default uuid_generate_v4(),
   code text not null,
-  definiton_id uuid not null references master_definitions(id) on delete restrict,
+  definition_id uuid not null references master_definitions(id) on delete restrict,
   name text not null,
   description text null,
 
