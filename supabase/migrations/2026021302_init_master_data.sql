@@ -56,7 +56,7 @@ JOIN (
     ('10050001', '地方政府'),
     ('10050002', '国资委管理的中央企业'),
     ('10050003', '中国国家铁路集团有限公司'),
-    ('10050004', '中央部门管理的企业（不含中国国家铁路集团有限公司'),
+    ('10050004', '中央部门管理的企业（不含中国国家铁路集团有限公司)'),
     ('10050006', '地方国有企业（不含地方政府融资平台）'),
     ('10050007', '民营企业（不含民营房地产开发企业）'),
     ('10050008', '海外企业/政府'),
@@ -68,7 +68,7 @@ JOIN (
 ) AS v(code,name)
 ON true
 WHERE md.key = 'CUSTOMER_NATURE' 
-
+ON CONFLICT (definition_id, code) DO NOTHING;
 
 INSERT INTO "public"."master_data" ("definition_id","code","name") 
 SELECT md.id,v.code,v.name
@@ -86,6 +86,7 @@ JOIN (
 ) AS v(code,name)
 ON true
 WHERE md.key = 'PROJECT_CATALOG_TYPE' 
+ON CONFLICT (definition_id, code) DO NOTHING;
 
 INSERT INTO "public"."master_data" ("definition_id","code","name") 
 SELECT md.id,v.code,v.name
@@ -119,7 +120,8 @@ JOIN (
     ('10030025', '机电专业')
 ) AS v(code,name)
 ON true
-WHERE md.key = 'PROJECT_MAJOR' 
+WHERE md.key = 'PROJECT_MAJOR'
+ON CONFLICT (definition_id, code) DO NOTHING; 
 
 
 INSERT INTO "public"."master_data" ("definition_id","code","name") 
@@ -138,7 +140,8 @@ JOIN (
     ('10080009', 'PPP')
 ) AS v(code,name)
 ON true
-WHERE md.key = 'CONTRACT_CODE' 
+WHERE md.key = 'CONTRACT_CODE'
+ON CONFLICT (definition_id, code) DO NOTHING;
 
 
 INSERT INTO "public"."master_data" ("definition_id","code","name") 
@@ -158,7 +161,8 @@ JOIN (
     ('10090010', '海外区域')
 ) AS v(code,name)
 ON true
-WHERE md.key = 'REGION' 
+WHERE md.key = 'REGION'
+ON CONFLICT (definition_id, code) DO NOTHING;
 
 INSERT INTO "public"."master_data" ("definition_id","code","name")
 SELECT md.id,v.code,v.name
@@ -180,7 +184,8 @@ JOIN (
     ('10100013', '其他')
 ) AS v(code,name)
 ON true
-WHERE md.key = 'BUSSINESS'
+WHERE md.key = 'BUSINESS'
+ON CONFLICT (definition_id, code) DO NOTHING;
 
 INSERT INTO "public"."master_data" ("definition_id","code","name")
 SELECT md.id,v.code,v.name
@@ -197,5 +202,6 @@ JOIN (
 ) AS v(code,name)
 ON true
 WHERE md.key = 'PROJECT_TYPE'
+ON CONFLICT (definition_id, code) DO NOTHING;
 
 
