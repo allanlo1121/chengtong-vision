@@ -49,27 +49,42 @@ comment on function system.soft_delete_row()
 is 'Optional soft delete trigger helper';
 
 
+-- ============================================
+-- 4️ 其他系统级函数（如有需要）
+-- ============================================
+
 create or replace function system.bootstrap()
 returns void
 language plpgsql
+security definer
+set search_path = system, public
 as $$
 declare
   v_user_id uuid;
   v_role_id uuid;
 begin
 
-  -- 已执行则退出
+  --------------------------------------------------
+  -- 0️⃣ 只允许 service_role 调用
+  --------------------------------------------------
+  if current_user <> 'service_role' then
+    raise exception 'permission denied';
+  end if;
+
+  --------------------------------------------------
+  -- 1️⃣ 已完成则拒绝
+  --------------------------------------------------
   if exists (
     select 1
     from system.bootstrap_state
     where version = '1.0.0'
       and completed = true
   ) then
-    return;
+    raise exception 'bootstrap already completed';
   end if;
 
   --------------------------------------------------
-  -- 1️ 创建 SUPER_ADMIN
+  -- 2️⃣ 创建 SUPER_ADMIN
   --------------------------------------------------
   insert into rbac.roles (code, name)
   values ('SUPER_ADMIN', '超级管理员')
@@ -80,7 +95,7 @@ begin
   where code = 'SUPER_ADMIN';
 
   --------------------------------------------------
-  -- 2️ 创建 admin 用户
+  -- 3️⃣ 创建 admin 用户
   --------------------------------------------------
   insert into auth.users (
     id,
@@ -112,7 +127,7 @@ begin
   end if;
 
   --------------------------------------------------
-  -- 3️ 创建 employee
+  -- 4️⃣ 创建 employee
   --------------------------------------------------
   insert into public.employees (
     id,
@@ -129,14 +144,14 @@ begin
   on conflict (id) do nothing;
 
   --------------------------------------------------
-  -- 4️ 绑定角色
+  -- 5️⃣ 绑定角色
   --------------------------------------------------
   insert into rbac.user_roles (user_id, role_id)
   values (v_user_id, v_role_id)
   on conflict do nothing;
 
   --------------------------------------------------
-  -- 5️ 标记 bootstrap 完成
+  -- 6️⃣ 标记完成
   --------------------------------------------------
   insert into system.bootstrap_state (version, completed, executed_at)
   values ('1.0.0', true, now())
@@ -144,13 +159,21 @@ begin
   do update set completed = true,
                 executed_at = now();
 
+  --------------------------------------------------
+  -- 7️⃣ 自动锁死：撤销自身执行权限
+  --------------------------------------------------
+  revoke execute on function system.bootstrap() from service_role;
+
 end;
 $$;
 
--- 1️ 先移除所有默认权限
+-- 移除默认权限
 revoke execute on function system.bootstrap() from public;
 revoke execute on function system.bootstrap() from anon;
 revoke execute on function system.bootstrap() from authenticated;
 
--- 2️ 只允许 service_role 调用
+-- 只给 service_role
 grant execute on function system.bootstrap() to service_role;
+
+-- 确保 owner 是 postgres
+alter function system.bootstrap() owner to postgres;
