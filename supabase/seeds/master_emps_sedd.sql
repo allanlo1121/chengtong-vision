@@ -2,9 +2,9 @@
 -- 性别 GENDER
 -- ==========================================
 
-INSERT INTO public.master_definitions (name, key)
+INSERT INTO public.master_definitions (name, code)
 VALUES ('性别', 'GENDER')
-ON CONFLICT (key) DO NOTHING;
+ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO public.master_data (definition_id, code, name)
 SELECT md.id, v.code, v.name
@@ -17,7 +17,7 @@ JOIN (
     ('10160004', '未说明的性别')
 ) AS v(code, name)
 ON true
-WHERE md.key = 'GENDER'
+WHERE md.code = 'GENDER'
 ON CONFLICT (definition_id, code) DO NOTHING;
 
 
@@ -25,9 +25,9 @@ ON CONFLICT (definition_id, code) DO NOTHING;
 -- 人员类型 PERSON_TYPE
 -- ==========================================
 
-INSERT INTO public.master_definitions (name, key)
+INSERT INTO public.master_definitions (name, code)
 VALUES ('人员类型', 'PERSON_TYPE')
-ON CONFLICT (key) DO NOTHING;
+ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO public.master_data (definition_id, code, name)
 SELECT md.id, v.code, v.name
@@ -42,16 +42,16 @@ JOIN (
     ('10170006', '外部人员')
 ) AS v(code, name)
 ON true
-WHERE md.key = 'PERSON_TYPE'
+WHERE md.code = 'PERSON_TYPE'
 ON CONFLICT (definition_id, code) DO NOTHING;
 
 -- ==========================================
 -- 文化程度 EDU_LEVEL
 -- ==========================================
 
-INSERT INTO public.master_definitions (name, key)
+INSERT INTO public.master_definitions (name, code)
 VALUES ('文化程度', 'EDU_LEVEL')
-ON CONFLICT (key) DO NOTHING;
+ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO public.master_data (definition_id, code, name)
 SELECT md.id, v.code, v.name
@@ -70,16 +70,16 @@ JOIN (
     ('10270010', '未知')
 ) AS v(code, name)
 ON true
-WHERE md.key = 'EDU_LEVEL'
+WHERE md.code = 'EDU_LEVEL'
 ON CONFLICT (definition_id, code) DO NOTHING;
 
 -- ==========================================
 -- 岗位 JOB_TITLE
 -- ==========================================
 
-INSERT INTO public.master_definitions (name, key)
+INSERT INTO public.master_definitions (name, code)
 VALUES ('岗位', 'JOB_TITLE')
-ON CONFLICT (key) DO NOTHING;
+ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO public.master_data (definition_id, code, name)
 SELECT md.id, v.code, v.name
@@ -204,7 +204,7 @@ JOIN (
     ('10180116', '商务经理')
 ) AS v(code, name)
 ON true
-WHERE md.key = 'JOB_TITLE'
+WHERE md.code = 'JOB_TITLE'
 ON CONFLICT (definition_id, code) DO NOTHING;
 
 

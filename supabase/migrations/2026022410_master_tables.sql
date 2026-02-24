@@ -1,0 +1,95 @@
+-- ==============================
+-- 10 MASTER TABLES
+-- ==============================
+
+create table public.master_definitions (
+  id uuid  primary key default gen_random_uuid(),
+  code text not null unique,
+  name text not null,
+  description text,
+  is_disabled boolean not null default false,
+  
+  created_at timestamptz not null default now(),
+  updated_at timestamptz,
+  created_by uuid,
+  updated_by uuid,
+  deleted boolean not null default false
+
+) TABLESPACE pg_default;
+
+create trigger trg_master_definitions_updated
+before update on master_definitions
+for each row execute function set_updated_at();
+
+create table public.master_data (
+  id uuid primary key default gen_random_uuid(),
+  code text not null,
+  definition_id uuid not null references master_definitions(id) on delete restrict,
+  name text not null,
+  description text null,
+
+  is_disabled boolean not null default false,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz,
+  created_by uuid,
+  updated_by uuid,
+  deleted boolean not null default false,
+
+  constraint uq_master_data_def_code 
+      unique (definition_id, code)
+
+) TABLESPACE pg_default;
+
+create trigger trg_master_data_updated
+before update on master_data
+for each row execute function set_updated_at();
+
+create index idx_master_data_definition
+on public.master_data(definition_id);
+
+create index idx_master_data_deleted
+on public.master_data(deleted);
+
+
+create table public.countries (
+  code text primary key,  -- ISO alpha-2
+
+  name text not null,
+  english_name text,
+  alpha3_code text unique,
+  numeric_code text unique,
+
+  sort_order integer not null default 0,
+  is_active boolean not null default true,
+
+  created_at timestamptz not null default now(),
+  updated_at timestamptz
+);
+
+create trigger trg_countries_updated
+before update on public.countries
+for each row execute function public.set_updated_at();
+
+
+create table public.admin_regions (
+  code text primary key,  -- 国家统计局编码
+
+  name text not null,
+  short_name text,
+  full_name text,
+
+  level integer not null,
+  parent_code text references public.admin_regions(code) on delete restrict,
+
+  pinyin_code text,
+
+  sort_order integer not null default 0,
+  is_active boolean not null default true,
+
+  created_at timestamptz not null default now(),
+  updated_at timestamptz
+);
+
+create trigger trg_admin_regions_updated
+before update on public.admin_regions
+for each row execute function public.set_updated_at();
