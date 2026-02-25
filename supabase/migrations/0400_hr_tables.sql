@@ -39,6 +39,8 @@ create table public.employees (
     updated_at          timestamptz,
     created_by          uuid references auth.users(id) on delete set null,
     updated_by          uuid references auth.users(id) on delete set null,
+    deleted_at          timestamptz,
+    deleted_by          uuid references auth.users(id) on delete set null,
 
 
     -- 预留

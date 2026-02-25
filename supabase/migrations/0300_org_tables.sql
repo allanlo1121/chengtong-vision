@@ -25,12 +25,13 @@ create table public.organizations (
   latitude numeric(10,6),
   longitude numeric(10,6),
 
-  is_disabled boolean default false,
+  is_active boolean default true,
   created_at timestamptz not null default now(),
   updated_at timestamptz,
   created_by uuid references auth.users(id) on delete set null,
   updated_by uuid references auth.users(id) on delete set null,
-  deleted boolean not null default false,
+  deleted_at timestamptz,
+  deleted_by uuid references auth.users(id) on delete set null,
 
   check (latitude between -90 and 90),
   check (longitude between -180 and 180)

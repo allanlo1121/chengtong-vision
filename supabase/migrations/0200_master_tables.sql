@@ -13,7 +13,8 @@ create table public.master_definitions (
   updated_at timestamptz,
   created_by uuid references auth.users(id) on delete set null,
   updated_by uuid references auth.users(id) on delete set null,
-  deleted boolean not null default false
+  deleted_at timestamptz,
+  deleted_by uuid references auth.users(id) on delete set null,
 
 ) TABLESPACE pg_default;
 
@@ -31,7 +32,8 @@ create table public.master_data (
   updated_at timestamptz,
   created_by uuid references auth.users(id) on delete set null,
   updated_by uuid references auth.users(id) on delete set null,
-  deleted boolean not null default false,
+  deleted_at timestamptz,
+  deleted_by uuid references auth.users(id) on delete set null,
 
   constraint uq_master_data_def_code 
       unique (definition_id, code)
@@ -44,7 +46,7 @@ create index idx_master_data_definition
 on public.master_data(definition_id);
 
 create index idx_master_data_deleted
-on public.master_data(deleted);
+on public.master_data(deleted_at);
 
 
 create table public.countries (
@@ -56,7 +58,7 @@ create table public.countries (
   numeric_code text unique,
 
   sort_order integer not null default 0,
-  is_active boolean not null default true,
+  is_disabled boolean not null default false,
 
   created_at timestamptz not null default now(),
   updated_at timestamptz
@@ -78,7 +80,7 @@ create table public.admin_regions (
   pinyin_code text,
 
   sort_order integer not null default 0,
-  is_active boolean not null default true,
+  is_disabled boolean not null default false,
 
   created_at timestamptz not null default now(),
   updated_at timestamptz

@@ -1,0 +1,11 @@
+{
+  "name": "@chengtong/core",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@supabase/supabase-js": "^2.97.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.0"
+  }
+}
