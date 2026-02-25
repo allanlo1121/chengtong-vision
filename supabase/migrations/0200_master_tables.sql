@@ -14,7 +14,7 @@ create table public.master_definitions (
   created_by uuid references auth.users(id) on delete set null,
   updated_by uuid references auth.users(id) on delete set null,
   deleted_at timestamptz,
-  deleted_by uuid references auth.users(id) on delete set null,
+  deleted_by uuid references auth.users(id) on delete set null
 
 ) TABLESPACE pg_default;
 
