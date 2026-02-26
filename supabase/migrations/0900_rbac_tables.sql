@@ -61,3 +61,18 @@ create table rbac.user_roles (
 
   primary key (user_id, role_id)
 );
+
+-- =====================================================
+-- RBAC SCHEMA PERMISSIONS
+-- =====================================================
+
+-- 允许 API 访问 schema
+grant usage on schema rbac to anon, authenticated, service_role;
+
+-- 允许读取表
+grant select on all tables in schema rbac
+to anon, authenticated, service_role;
+
+-- 未来新表自动授权
+alter default privileges in schema rbac
+grant select on tables to anon, authenticated, service_role;
