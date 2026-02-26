@@ -4,28 +4,28 @@
 -- ============================================
 
 -- 1️⃣ 基础角色
-insert into rbac.roles (code, name, is_system)
+insert into rbac.roles (code, name)
 values
-  ('SUPER_ADMIN', '超级管理员', true),
-  ('COMPANY_LEADER', '公司领导', true),
-  ('PROJECT_ADMIN', '项目管理员', true),
-  ('PROJECT_LEADER', '项目领导', true),
-  ('USER', '普通用户', true)
+  ('SUPER_ADMIN', '超级管理员'),
+  ('COMPANY_LEADER', '公司领导'),
+  ('PROJECT_ADMIN', '项目管理员'),
+  ('PROJECT_LEADER', '项目领导'),
+  ('USER', '普通用户')
 on conflict (code) do nothing;
 
 
 
 -- 2️⃣ 基础权限
-insert into rbac.permissions (code, name, module, action, is_system)
+insert into rbac.permissions (code, name, module, action)
 values
-  ('employee.read', '查看员工', 'employee', 'read', true),
-  ('employee.write', '编辑员工', 'employee', 'write', true),
+  ('employee.read', '查看员工', 'employee', 'read'),
+  ('employee.write', '编辑员工', 'employee', 'write'),
 
-  ('project.read', '查看项目', 'project', 'read', true),
-  ('project.write', '编辑项目', 'project', 'write', true),
+  ('project.read', '查看项目', 'project', 'read'),
+  ('project.write', '编辑项目', 'project', 'write'),
 
-  ('organization.read', '查看组织架构', 'organization', 'read', true),
-  ('organization.write', '编辑组织架构', 'organization', 'write', true  )
+  ('organization.read', '查看组织架构', 'organization', 'read'),
+  ('organization.write', '编辑组织架构', 'organization', 'write'  )
 on conflict (code) do nothing;
 
 
