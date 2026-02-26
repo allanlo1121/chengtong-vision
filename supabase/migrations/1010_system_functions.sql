@@ -76,14 +76,28 @@ begin
 end;
 $$;
 
+create or replace function public.bootstrap(p_user_id uuid)
+returns void
+language plpgsql
+security definer
+as $$
+begin
+  if auth.role() <> 'service_role' then
+    raise exception 'permission denied';
+  end if;
+
+  perform system.bootstrap(p_user_id);
+end;
+$$;
 
 -- 移除默认权限
-revoke execute on function system.bootstrap(p_user_id uuid) from anon;
-revoke execute on function system.bootstrap(p_user_id uuid) from authenticated;
+revoke execute on function public.bootstrap(p_user_id uuid) from anon;
+revoke execute on function public.bootstrap(p_user_id uuid) from authenticated;
 
 -- 只给 service_role
-grant execute on function system.bootstrap(p_user_id uuid) to service_role;
+grant execute on function public.bootstrap(p_user_id uuid) to service_role;
 
 
 -- 确保 owner 是 postgres
 alter function system.bootstrap(p_user_id uuid) owner to postgres;
+alter function public.bootstrap(p_user_id uuid) owner to postgres;
