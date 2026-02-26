@@ -1,8 +1,8 @@
 "use client";
 
-import { columns } from "@frontend/components/tbmConnectivitys/TbmConnectivityTable/columns";
-import { DataTable } from "@frontend/components/tbmConnectivitys/TbmConnectivityTable/TbmConnectivityTable";
-import { useTbmConnectivityRealtime } from "@frontend/hooks/useTbmConnectivityRealtime";
+import { columns } from "@/components/tbmConnectivitys/TbmConnectivityTable/columns";
+import { DataTable } from "@/components/tbmConnectivitys/TbmConnectivityTable/TbmConnectivityTable";
+import { useTbmConnectivityRealtime } from "@/hooks/useTbmConnectivityRealtime";
 
 import React from "react";
 

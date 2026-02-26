@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
-import type { RealtimeEvent } from "@frontend/types/realtime/realtime-events";
-import { EventEmitter } from "@frontend/core/event/EventEmitter";
-import { RealtimeEventBusContext } from "@frontend/core/event/RealtimeEventBus";
+import type { RealtimeEvent } from "@/types/realtime/realtime-events";
+import { EventEmitter } from "@/core/event/EventEmitter";
+import { RealtimeEventBusContext } from "@/core/event/RealtimeEventBus";
 
 /** ✅ 全局唯一 EventEmitter */
 const emitter = new EventEmitter<RealtimeEvent>();

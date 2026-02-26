@@ -3,13 +3,13 @@
 import { type Table } from "@tanstack/react-table";
 import { X } from "lucide-react";
 
-import { Button } from "@frontend/components/ui/button";
-import { Input } from "@frontend/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { DataTableViewOptions } from "./data-table-view-options";
 
 import { projectStatuses, projectTypes, regions } from "../data/data";
-// import { useMasterData } from "@frontend/hooks/use-master-data"
-// import { MASTER_DOMAIN } from "@frontend/constants/master-data-type"
+// import { useMasterData } from "@/hooks/use-master-data"
+// import { MASTER_DOMAIN } from "@/constants/master-data-type"
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
 
 interface DataTableToolbarProps<TData> {

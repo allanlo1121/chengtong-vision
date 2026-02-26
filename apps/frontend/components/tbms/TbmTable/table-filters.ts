@@ -1,6 +1,6 @@
 // components/projects/ProjectTable/table-filters.ts
 
-import type { ProjectOverview } from "@frontend/types/projects/project-overview";
+import type { ProjectOverview } from "@/types/projects/project-overview";
 
 export type MasterOptionsKey = "projectStatusOptions" | "projectTypeOptions" | "regionOptions";
 

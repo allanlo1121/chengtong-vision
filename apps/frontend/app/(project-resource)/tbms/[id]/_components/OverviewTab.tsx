@@ -2,10 +2,10 @@
 "use client";
 
 import Link from "next/link";
-import { ReadOnlyField } from "@frontend/components/ui/readonly-field";
+import { ReadOnlyField } from "@/components/ui/readonly-field";
 
-import { Button } from "@frontend/components/ui/button";
-import { TbmOverview } from "@frontend/lib/types/tbm.type";
+import { Button } from "@/components/ui/button";
+import { TbmOverview } from "@/lib/types/tbm.type";
 
 export default function OverviewTab(tbmOverview: TbmOverview) {
   const initialState = { success: undefined, errors: {} as Record<string, string[]> };

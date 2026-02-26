@@ -2,14 +2,14 @@
 
 import { type ColumnDef } from "@tanstack/react-table";
 
-import { Checkbox } from "@frontend/components/ui/checkbox";
+import { Checkbox } from "@/components/ui/checkbox";
 
 import { tbmOperationStatuses } from "../data/data";
-import { type TbmConnectivityRow } from "@frontend/types/realtime";
+import { type TbmConnectivityRow } from "@/types/realtime";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
-import { Badge } from "@frontend/components/ui/badge";
-import OnlineDot from "@frontend/components/online-dot";
+import { Badge } from "@/components/ui/badge";
+import OnlineDot from "@/components/online-dot";
 
 export const columns: ColumnDef<TbmConnectivityRow>[] = [
   {

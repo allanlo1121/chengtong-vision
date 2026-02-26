@@ -1,6 +1,6 @@
-import { columns } from "@frontend/components/tbms/TbmTable/columns";
-import { DataTable } from "@frontend/components/tbms/TbmTable/TbmTable";
-import { fetchTbms } from "@frontend/lib/repositories/tbm.repository";
+import { columns } from "@/components/tbms/TbmTable/columns";
+import { DataTable } from "@/components/tbms/TbmTable/TbmTable";
+import { fetchTbms } from "@/lib/repositories/tbm.repository";
 
 import React from "react";
 

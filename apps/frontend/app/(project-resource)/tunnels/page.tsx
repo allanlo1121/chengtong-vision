@@ -1,6 +1,6 @@
-import { columns } from "@frontend/components/tunnels/TunnelTable/columns";
-import { DataTable } from "@frontend/components/tunnels/TunnelTable/TunnelTable";
-import { fetchTunnels } from "@frontend/services/tunnels/queries";
+import { columns } from "@/components/tunnels/TunnelTable/columns";
+import { DataTable } from "@/components/tunnels/TunnelTable/TunnelTable";
+import { fetchTunnels } from "@/services/tunnels/queries";
 import React from "react";
 
 export default async function page() {

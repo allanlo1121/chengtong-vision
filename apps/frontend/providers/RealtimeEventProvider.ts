@@ -1,8 +1,8 @@
 "use client";
 
-import { createClient } from "@frontend/lib/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 import { useEffect } from "react";
-import { useRealtimeEventBus } from "@frontend/core/event/RealtimeEventBus";
+import { useRealtimeEventBus } from "@/core/event/RealtimeEventBus";
 import { useDebouncedEventEmitter } from "./useDebouncedEventEmitter.ts";
 
 export function SupabaseRealtimeBridge() {

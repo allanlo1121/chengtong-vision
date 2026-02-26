@@ -5,10 +5,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 import { updateTbmAction } from "../actions";
-import FormInput from "@frontend/components/form-input";
-import FormSelect from "@frontend/components/form-select";
-import { TbmForm } from "@frontend/lib/schemas/tbm.schema";
-import { Button } from "@frontend/components/ui/button";
+import FormInput from "@/components/form-input";
+import FormSelect from "@/components/form-select";
+import { TbmForm } from "@/lib/schemas/tbm.schema";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 type Option = {
   value: string;

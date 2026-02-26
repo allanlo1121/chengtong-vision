@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Row } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 
-import { Button } from "@frontend/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,10 +16,10 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@frontend/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 
 // import { tbmTypes } from "../data/data"
-// import { tbmOverviewSchema } from "@frontend/types/tbms"
+// import { tbmOverviewSchema } from "@/types/tbms"
 // import { z } from "zod"
 
 interface DataTableRowActionsProps<Tdata> {

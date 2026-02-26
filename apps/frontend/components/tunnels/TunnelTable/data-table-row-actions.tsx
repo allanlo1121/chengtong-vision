@@ -3,7 +3,7 @@
 import { Row } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 
-import { Button } from "@frontend/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,10 +15,10 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@frontend/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 
 import { tunnelStatuses } from "../data/data";
-import { tunnelOverviewSchema } from "@frontend/types/tunnels/tunnel-overview";
+import { tunnelOverviewSchema } from "@/types/tunnels/tunnel-overview";
 import { z } from "zod";
 
 interface DataTableRowActionsProps<Tdata> {

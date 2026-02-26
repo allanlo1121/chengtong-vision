@@ -8,8 +8,8 @@
 //     useState,
 //     ReactNode,
 // } from 'react'
-// import { createClient } from '@frontend/lib/supabase/client'
-// import type { RealtimeEvent } from '@frontend/types/realtime/realtime-events'
+// import { createClient } from '@/lib/supabase/client'
+// import type { RealtimeEvent } from '@/types/realtime/realtime-events'
 // import { useDebouncedEventEmitter } from './useDebouncedEventEmitter.ts'
 
 // type RealtimeEventContextValue = {

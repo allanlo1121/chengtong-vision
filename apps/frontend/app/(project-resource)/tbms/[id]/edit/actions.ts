@@ -1,9 +1,9 @@
 "use server";
 
-import { tbmUpdateSchema } from "@frontend/lib/schemas/tbm.schema";
-import { updateTbm } from "@frontend/lib/repositories/tbm.repository";
-import { insertInitialTbmCodeHistory } from "@frontend/lib/repositories/tbm-code-history.reository";
-import { createUpdateAction } from "@frontend/lib/actions/createUpdateAction";
+import { tbmUpdateSchema } from "@/lib/schemas/tbm.schema";
+import { updateTbm } from "@/lib/repositories/tbm.repository";
+import { insertInitialTbmCodeHistory } from "@/lib/repositories/tbm-code-history.reository";
+import { createUpdateAction } from "@/lib/actions/createUpdateAction";
 
 /**
  * Update TBM Action

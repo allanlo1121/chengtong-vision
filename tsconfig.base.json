@@ -4,8 +4,6 @@
     "baseUrl": ".",
     "paths": {
       "@chengtong/core/*": ["packages/core/*"],
-      "@chengtong/backend/*": ["apps/backend/src/*"],
-      "@chengtong/frontend/*": ["apps/frontend/*"],
       "@chengtong/modules/*": ["packages/modules/*"]
     }
   }

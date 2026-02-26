@@ -1,16 +1,10 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@frontend/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@frontend/components/ui/tabs";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import notFound from "./not-found";
-import { fetchTbmById } from "@frontend/lib/repositories/tbm.repository";
+import { fetchTbmById } from "@/lib/repositories/tbm.repository";
 import OverviewTab from "./_components/OverviewTab";
-import { getSubjectOptions } from "@frontend/lib/services/subject/subject-option";
-import { getMasterOptions } from "@frontend/lib/services/master-data/master-option";
+import { getSubjectOptions } from "@/lib/services/subject/subject-option";
+import { getMasterOptions } from "@/lib/services/master-data/master-option";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;

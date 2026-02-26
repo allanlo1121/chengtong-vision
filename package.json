@@ -11,13 +11,17 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "powershell -ExecutionPolicy Bypass -File ./scripts/dev.ps1",
-    "prepare": "husky"
+    "prepare": "husky",
+    "generate:permissions": "tsx scripts/generate-permissions.ts"
   },
   "packageManager": "pnpm@9.15.9",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@supabase/supabase-js": "^2.97.0",
+    "@types/node": "^25.3.1",
+    "dotenv": "^17.3.1",
     "eslint": "^9",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
@@ -25,6 +29,7 @@
     "lint-staged": "^16.2.7",
     "prettier": "^3.7.4",
     "supabase": "^2.76.14",
+    "tsx": "^4.20.6",
     "turbo": "^2.6.3"
   }
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { useRealtimeEventBus } from "@frontend/core/event/RealtimeEventBus";
+import { useRealtimeEventBus } from "@/core/event/RealtimeEventBus";
 
 export function useTbmConnectivityRealtime() {
   const { lastEvent } = useRealtimeEventBus();

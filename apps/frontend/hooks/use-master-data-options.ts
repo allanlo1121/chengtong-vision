@@ -1,8 +1,8 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import type { MasterDomainCode } from "@frontend/constants/master-data-type";
-import { fetchMasterOptionsClient } from "@frontend/services/master-data/fetch.client";
+import type { MasterDomainCode } from "@/constants/master-data-type";
+import { fetchMasterOptionsClient } from "@/services/master-data/fetch.client";
 
 export function useMasterOptions(domainCode: MasterDomainCode) {
   return useQuery({

@@ -1,7 +1,7 @@
 // lib/modules/bootstrap/auth.ts
 "use server";
 
-import { createAdminClient } from "@frontend/lib/core/supabase/adminSupabase";
+import { createAdminClient } from "@/lib/core/supabase/adminSupabase";
 
 export async function createAdminUser() {
   const supabase = createAdminClient();

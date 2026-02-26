@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AppSidebar } from "@frontend/components/app-sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,9 +7,9 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@frontend/components/ui/breadcrumb";
-import { Separator } from "@frontend/components/ui/separator";
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@frontend/components/ui/sidebar";
+} from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 export async function LayoutContent({ children }: { children: React.ReactNode }) {
   return (

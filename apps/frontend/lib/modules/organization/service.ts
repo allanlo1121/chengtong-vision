@@ -1,20 +1,13 @@
-import { createClient } from "@frontend/lib/core/supabase/server";
+import { OrganizationDetail, OrganizationListItem } from "./types";
+import { ActionResult } from "../shared/types/common.types";
 
-import { mapOrganizationDetail } from "./mapper";
-import { OrganizationDetail, OrganizationDetailRow } from "./types";
+import { getOrganizationList } from "./repository";
 
-export async function getOrganizationDetail(id: string): Promise<OrganizationDetail> {
-  const supabase = await createClient();
-
-  const { data, error } = await supabase
-    .from("v_organization_detail")
-    .select("*")
-    .eq("id", id)
-    .single();
-
-  if (error) {
-    throw error;
+export async function getOrganizationListAction(): Promise<ActionResult<OrganizationListItem[]>> {
+  try {
+    const data = await getOrganizationList();
+    return { success: true, data };
+  } catch (e: any) {
+    return { success: false, error: e.message };
   }
-
-  return mapOrganizationDetail(data as OrganizationDetailRow);
 }

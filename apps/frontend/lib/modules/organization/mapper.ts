@@ -1,4 +1,9 @@
-import { OrganizationDetail, OrganizationDetailRow } from "./types";
+import {
+  OrganizationDetail,
+  OrganizationDetailRow,
+  OrganizationListItem,
+  OrganizationListRow,
+} from "./types";
 
 export function mapOrganizationDetail(row: OrganizationDetailRow): OrganizationDetail {
   return {
@@ -53,5 +58,22 @@ export function mapOrganizationDetail(row: OrganizationDetailRow): OrganizationD
     createdBy: row.created_by ?? undefined,
     updatedAt: row.updated_at ?? undefined,
     updatedBy: row.updated_by ?? undefined,
+  };
+}
+
+export function mapOrganizationList(rows: OrganizationListRow): OrganizationListItem {
+  return {
+    id: rows.id,
+    name: rows.name,
+    parentName: rows.parent_name ?? undefined,
+    isActive: rows.is_active,
+
+    orgTypeName: rows.org_type_name,
+    businessName: rows.business_name ?? undefined,
+    regionName: rows.region_name,
+    countryName: rows.country_name,
+    adminRegionName: rows.admin_region_name ?? undefined,
+
+    createdAt: rows.created_at,
   };
 }

@@ -1,4 +1,4 @@
-// import type { ProjectOverview } from "@frontend/types/projects/project-overview"
+// import type { ProjectOverview } from "@/types/projects/project-overview"
 // import type { MasterOptionsKey } from "./table-filters"
 
 // export function createMasterFilter<

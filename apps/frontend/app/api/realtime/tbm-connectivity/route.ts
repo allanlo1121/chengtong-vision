@@ -1,5 +1,5 @@
 // app/api/tbm-connectivity/route.ts
-import { fetchTbmConnectivity } from "@frontend/services/tbm-connectivity/queries";
+import { fetchTbmConnectivity } from "@/services/tbm-connectivity/queries";
 
 export async function GET() {
   console.log("fetchTbmConnectivity---");

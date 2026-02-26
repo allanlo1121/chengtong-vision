@@ -1,17 +1,11 @@
 "use client";
 
-import { cn } from "@frontend/lib/core/utils";
-import { createClient } from "@frontend/lib/supabase/client";
-import { Button } from "@frontend/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@frontend/components/ui/card";
-import { Input } from "@frontend/components/ui/input";
-import { Label } from "@frontend/components/ui/label";
+import { cn } from "@/lib/core/utils";
+import { createClient } from "@/lib/core/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 

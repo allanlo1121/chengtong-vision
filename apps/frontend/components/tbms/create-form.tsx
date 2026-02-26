@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { useActionState, useEffect } from "react";
-import { Button } from "@frontend/components/ui/button";
-import FormInput from "@frontend/components/form-input";
-import FormSelect from "@frontend/components/form-select";
+import { Button } from "@/components/ui/button";
+import FormInput from "@/components/form-input";
+import FormSelect from "@/components/form-select";
 import { useRouter } from "next/navigation";
-import { createTbmAction } from "@frontend/app/(project-resource)/tbms/create/actions";
+import { createTbmAction } from "@/app/(project-resource)/tbms/create/actions";
 
-import { ActionState } from "@frontend/lib/actions/types";
+import { ActionState } from "@/lib/actions/types";
 
 import { toast } from "sonner";
 

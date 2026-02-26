@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { notoSansSC } from "@frontend/components/ui/font";
+import { notoSansSC } from "@/components/ui/font";
 import { Toaster } from "sonner";
-// import { MasterDataProvider } from "@frontend/providers/master-data-provider"
+// import { MasterDataProvider } from "@/providers/master-data-provider"
 import "./globals.css";
 
-import { runBootstrap } from "@frontend/lib/modules/bootstrap/service";
+import { runBootstrap } from "@/lib/modules/bootstrap/service";
 
 export const metadata: Metadata = {
   title: "Create Next App",

@@ -2,19 +2,19 @@
 
 import * as React from "react";
 
-import { NavMain } from "@frontend/components/nav-main";
-import { NavProjects } from "@frontend/components/nav-projects";
-import { NavUser } from "@frontend/components/nav-user";
-import { TeamSwitcher } from "@frontend/components/team-switcher";
+import { NavMain } from "@/components/nav-main";
+import { NavProjects } from "@/components/nav-projects";
+import { NavUser } from "@/components/nav-user";
+import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@frontend/components/ui/sidebar";
+} from "@/components/ui/sidebar";
 
-import { menuData } from "@frontend/lib/navigation/menu-data";
+import { menuData } from "@/lib/navigation/menu-data";
 
 // This is sample data.
 // const data = {

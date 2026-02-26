@@ -1,6 +1,6 @@
-import Form from "@frontend/components/tbms/create-form";
-import { getMasterOptions } from "@frontend/lib/services/master-data/master-option";
-import { getSubjectOptions } from "@frontend/lib/services/subject/subject-option";
+import Form from "@/components/tbms/create-form";
+import { getMasterOptions } from "@/lib/services/master-data/master-option";
+import { getSubjectOptions } from "@/lib/services/subject/subject-option";
 // import Breadcrumbs from "@/components/hrm/departments/breadcrumbs";
 // import {
 //   fetchDepartments,

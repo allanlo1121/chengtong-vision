@@ -12,8 +12,8 @@
 // import { columnConfigs } from "./columns-config"
 // import { columns } from "./columns"
 
-// import { useMasterDataOptions } from "@frontend/hooks/use-master-data-options"
-// import type { ProjectOverview } from "@frontend/types/projects/project-overview"
+// import { useMasterDataOptions } from "@/hooks/use-master-data-options"
+// import type { ProjectOverview } from "@/types/projects/project-overview"
 
 // export function useProjectTable(data: ProjectOverview[]) {
 //     // ✅ 列显隐（唯一来源）

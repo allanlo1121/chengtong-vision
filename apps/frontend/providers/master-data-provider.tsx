@@ -3,10 +3,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { MasterDataContext } from "./master-data-context";
-import { PRELOAD_MASTER_DOMAINS } from "@frontend/constants/master-data-preload";
-import { fetchMasterOptionsClient } from "@frontend/services/master-data/fetch.client";
-import type { MasterDomainCode } from "@frontend/constants/master-data-type";
-import type { MasterOption } from "@frontend/types/master";
+import { PRELOAD_MASTER_DOMAINS } from "@/constants/master-data-preload";
+import { fetchMasterOptionsClient } from "@/services/master-data/fetch.client";
+import type { MasterDomainCode } from "@/constants/master-data-type";
+import type { MasterOption } from "@/types/master";
 
 type MasterDataMap = Record<MasterDomainCode, MasterOption[]>;
 

@@ -2,13 +2,13 @@
 
 import { type ColumnDef } from "@tanstack/react-table";
 
-import { Checkbox } from "@frontend/components/ui/checkbox";
+import { Checkbox } from "@/components/ui/checkbox";
 
 import { tunnelStatuses, tunnelTypes, regionNames } from "../data/data";
-import { type TunnelOverview } from "@frontend/types/tunnels";
+import { type TunnelOverview } from "@/types/tunnels";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
-import { Badge } from "@frontend/components/ui/badge";
+import { Badge } from "@/components/ui/badge";
 
 export const columns: ColumnDef<TunnelOverview>[] = [
   {

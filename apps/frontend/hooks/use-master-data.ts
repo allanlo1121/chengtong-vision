@@ -1,6 +1,6 @@
 // frontend/hooks/use-master-data.ts
 import { useContext } from "react";
-import { MasterDataContext } from "@frontend/providers/master-data-context";
+import { MasterDataContext } from "@/providers/master-data-context";
 
 export function useMasterData() {
   const ctx = useContext(MasterDataContext);

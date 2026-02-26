@@ -1,7 +1,7 @@
 // lib/modules/bootstrap/service.ts
 "use server";
 
-import { createAdminClient } from "@frontend/lib/core/supabase/adminSupabase";
+import { createAdminClient } from "@/lib/core/supabase/adminSupabase";
 import { createAdminUser } from "./auth";
 
 const VERSION = "1.0.0";

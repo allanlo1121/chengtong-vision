@@ -2,7 +2,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useRef, useState, ReactNode } from "react";
-import type { RealtimeEvent } from "@frontend/types/realtime/realtime-events";
+import type { RealtimeEvent } from "@/types/realtime/realtime-events";
 import { EventEmitter } from "./EventEmitter";
 
 const emitter = new EventEmitter<RealtimeEvent>();

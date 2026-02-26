@@ -64,3 +64,35 @@ export interface OrganizationDetail {
   updatedAt?: string;
   updatedBy?: string;
 }
+
+export interface OrganizationListRow {
+  id: string;
+  name: string;
+  parent_name: string | null;
+  is_active: boolean;
+
+  org_type_name: string;
+  business_name: string | null;
+  region_name: string;
+  country_name: string;
+  admin_region_name: string | null;
+
+  created_at: string;
+}
+
+export interface OrganizationListItem {
+  id: string;
+  name: string;
+
+  parentName?: string;
+  isActive: boolean;
+
+  orgTypeName: string;
+  businessName?: string;
+  regionName: string;
+
+  countryName: string;
+  adminRegionName?: string;
+
+  createdAt: string;
+}

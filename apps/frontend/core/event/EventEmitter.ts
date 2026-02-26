@@ -1,4 +1,4 @@
-// @frontend/core/event/EventEmitter.ts
+// @/core/event/EventEmitter.ts
 type Listener<T> = (event: T) => void;
 
 export class EventEmitter<T> {

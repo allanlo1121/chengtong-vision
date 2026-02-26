@@ -1,14 +1,14 @@
 "use client";
 
 import { Column } from "@tanstack/react-table";
-import { cn } from "@frontend/lib/core/utils";
+import { cn } from "@/lib/core/utils";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@frontend/components/ui/select";
+} from "@/components/ui/select";
 
 export type SelectOption = {
   label: string;

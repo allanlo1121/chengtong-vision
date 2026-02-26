@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { type ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@frontend/components/ui/checkbox";
+import { Checkbox } from "@/components/ui/checkbox";
 import { equipmentStatuses, tbmTypes, mechSourceTypes } from "../data/data";
-import { type TbmRow } from "@frontend/types/tbms";
+import { type TbmRow } from "@/types/tbms";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
-import { Badge } from "@frontend/components/ui/badge";
+import { Badge } from "@/components/ui/badge";
 
 export const columns: ColumnDef<TbmRow>[] = [
   {

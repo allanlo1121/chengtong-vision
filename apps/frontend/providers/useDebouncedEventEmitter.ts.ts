@@ -1,6 +1,6 @@
 // /hooks/useDebouncedEventEmitter.ts
 import { useRef } from "react";
-import type { RealtimeEvent } from "@frontend/types/realtime/realtime-events";
+import type { RealtimeEvent } from "@/types/realtime/realtime-events";
 
 export function useDebouncedEventEmitter(
   emit: (event: Omit<RealtimeEvent, "at">) => void,

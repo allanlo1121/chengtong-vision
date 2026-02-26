@@ -13,3 +13,5 @@ export interface MasterRef {
   code: string;
   name: string;
 }
+
+export type ActionResult<T> = { success: true; data: T } | { success: false; error: string };

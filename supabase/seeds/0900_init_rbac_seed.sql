@@ -24,7 +24,8 @@ values
   ('project.read', '查看项目', 'project', 'read', true),
   ('project.write', '编辑项目', 'project', 'write', true),
 
-  ('system.full', '系统完全控制', 'system', 'full', true)
+  ('organization.read', '查看组织架构', 'organization', 'read', true),
+  ('organization.write', '编辑组织架构', 'organization', 'write', true  )
 on conflict (code) do nothing;
 
 
@@ -45,7 +46,7 @@ insert into rbac.role_permissions (role_id, permission_id)
 select r.id, p.id
 from rbac.roles r
 join rbac.permissions p 
-  on p.code in ('project.read', 'project.write')
+  on p.code in ('project.read', 'project.write',)
 where r.code = 'PROJECT_ADMIN'
 on conflict do nothing;
 
@@ -55,6 +56,6 @@ insert into rbac.role_permissions (role_id, permission_id)
 select r.id, p.id
 from rbac.roles r
 join rbac.permissions p 
-  on p.code in ('employee.read', 'project.read')
+  on p.code in ('employee.read', 'project.read', 'organization.read')
 where r.code = 'USER'
 on conflict do nothing;

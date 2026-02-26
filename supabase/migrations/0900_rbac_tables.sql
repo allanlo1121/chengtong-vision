@@ -30,7 +30,12 @@ create table rbac.permissions (
   is_disabled boolean default false,
 
   created_at timestamptz default now(),
-  updated_at timestamptz default now()
+  updated_at timestamptz default now(),
+  created_by uuid references auth.users(id),
+  updated_by uuid references auth.users(id),
+
+  constraint permissions_module_action_unique
+    unique (module, action)
 );
 
 create table rbac.role_permissions (
@@ -38,7 +43,9 @@ create table rbac.role_permissions (
   permission_id uuid references rbac.permissions(id) on delete cascade,
 
   created_at timestamptz default now(),
+  updated_at timestamptz default now(),
   created_by uuid references auth.users(id),
+  updated_by uuid references auth.users(id),
 
   primary key (role_id, permission_id)
 );
@@ -49,6 +56,8 @@ create table rbac.user_roles (
 
   assigned_at timestamptz default now(),
   assigned_by uuid references auth.users(id),
+  updated_at timestamptz default now(),
+  updated_by uuid references auth.users(id),
 
   primary key (user_id, role_id)
 );
