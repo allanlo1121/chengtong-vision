@@ -41,7 +41,6 @@ create table public.master_data (
 ) TABLESPACE pg_default;
 
 
-
 create index idx_master_data_definition
 on public.master_data(definition_id);
 
