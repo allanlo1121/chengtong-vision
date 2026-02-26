@@ -46,7 +46,7 @@ insert into rbac.role_permissions (role_id, permission_id)
 select r.id, p.id
 from rbac.roles r
 join rbac.permissions p 
-  on p.code in ('project.read', 'project.write',)
+  on p.code in ('project.read', 'project.write')
 where r.code = 'PROJECT_ADMIN'
 on conflict do nothing;
 
