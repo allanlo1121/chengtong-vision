@@ -78,7 +78,6 @@ $$;
 
 
 -- 移除默认权限
-revoke execute on function system.bootstrap(p_user_id uuid) from system;
 revoke execute on function system.bootstrap(p_user_id uuid) from anon;
 revoke execute on function system.bootstrap(p_user_id uuid) from authenticated;
 
