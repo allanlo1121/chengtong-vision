@@ -78,13 +78,13 @@ $$;
 
 
 -- 移除默认权限
-revoke execute on function system.bootstrap() from system;
-revoke execute on function system.bootstrap() from anon;
-revoke execute on function system.bootstrap() from authenticated;
+revoke execute on function system.bootstrap(p_user_id uuid) from system;
+revoke execute on function system.bootstrap(p_user_id uuid) from anon;
+revoke execute on function system.bootstrap(p_user_id uuid) from authenticated;
 
 -- 只给 service_role
-grant execute on function system.bootstrap() to service_role;
+grant execute on function system.bootstrap(p_user_id uuid) to service_role;
 
 
 -- 确保 owner 是 postgres
-alter function system.bootstrap() owner to postgres;
+alter function system.bootstrap(p_user_id uuid) owner to postgres;
