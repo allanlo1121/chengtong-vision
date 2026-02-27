@@ -31,8 +31,7 @@ where eoa.employee_id = auth.uid();
 create view public.v_user_favorite_projects as
 select
   p.id,
-  p.name,
-  p.short_name
+  p.name
 from user_favorite_projects uf
 join projects p on uf.project_id = p.id
 where uf.user_id = auth.uid()
