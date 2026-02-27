@@ -85,6 +85,12 @@ create unique index uniq_employee_current_org
 on hr.employee_org_history(employee_id)
 where end_at is null;
 
+create table public.employee_org_access (
+  employee_id uuid references public.employees(id),
+  org_id uuid references public.organizations(id),
+  primary key (employee_id, org_id)
+);
+
 -- HR business functions
 
 create or replace function hr.trg_employee_insert_init_history()

@@ -44,11 +44,7 @@ create index idx_organizations_parent
 on public.organizations(parent_id);
 create index idx_org_path on public.organizations using gist(path);
 
-create table public.employee_org_access (
-  employee_id uuid references public.employees(id),
-  org_id uuid references public.organizations(id),
-  primary key (employee_id, org_id)
-);
+
 
 -- =====================================================
 -- 组织树查询函数
