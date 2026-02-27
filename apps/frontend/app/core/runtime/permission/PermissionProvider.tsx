@@ -1,14 +1,11 @@
 // permission/PermissionProvider.tsx
+"use client";
 
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useMemo } from "react";
 import { useUser } from "../user/useUser";
+import type { PermissionState } from "./types";
 
-interface PermissionContextType {
-  can: (code: string) => boolean;
-  hasRole: (role: string) => boolean;
-}
-
-export const PermissionContext = createContext<PermissionContextType | null>(null);
+export const PermissionContext = createContext<PermissionState | undefined>(undefined);
 
 export function PermissionProvider({ children }: { children: React.ReactNode }) {
   const user = useUser();
@@ -17,16 +14,12 @@ export function PermissionProvider({ children }: { children: React.ReactNode }) 
 
   const roleSet = useMemo(() => new Set(user.roles), [user.roles]);
 
-  const value = {
-    can: (code: string) => permissionSet.has(code),
-    hasRole: (role: string) => roleSet.has(role),
+  const value: PermissionState = {
+    can: (code) => permissionSet.has(code),
+    canAny: (codes) => codes.some((c) => permissionSet.has(c)),
+    hasRole: (role) => roleSet.has(role),
+    isSuperAdmin: roleSet.has("SUPER_ADMIN"),
   };
 
   return <PermissionContext.Provider value={value}>{children}</PermissionContext.Provider>;
 }
-
-// export const usePermission = () => {
-//   const ctx = useContext(PermissionContext)
-//   if (!ctx) throw new Error("PermissionProvider missing")
-//   return ctx
-// }

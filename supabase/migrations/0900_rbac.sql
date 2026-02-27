@@ -152,4 +152,27 @@ before update on system.menus
 for each row
 execute function system.set_updated_at();
 
+create or replace function system.set_menu_level()
+returns trigger
+language plpgsql
+as $$
+begin
+  if new.parent_id is null then
+    new.level := 0;
+  else
+    select level + 1
+    into new.level
+    from system.menus
+    where id = new.parent_id;
+  end if;
+
+  return new;
+end;
+$$;
+
+create trigger trg_set_menu_level
+before insert or update on system.menus
+for each row
+execute function system.set_menu_level();
+
 
