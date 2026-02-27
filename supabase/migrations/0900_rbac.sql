@@ -117,16 +117,39 @@ grant execute on function rbac.has_permission(text) to authenticated;
 create table system.menus (
   id uuid primary key default gen_random_uuid(),
 
-  parent_id uuid references system.menus(id) on delete cascade,
+  parent_id uuid
+    references system.menus(id)
+    on delete cascade,
 
   label text not null,
+  name text not null unique,      -- 唯一标识（如 project.list）
+
   path text,
-  icon text,                -- lucide icon 名
+  icon text,
+
   sort_order int default 0,
-  group_name text,          -- System / Project
+  level int default 0,
 
-  permission_code text references rbac.permissions(code),
+  group_name text,                -- System / Project / TBM
 
+  permission_code text
+    references rbac.permissions(code),
+
+  is_visible boolean default true,
   is_disabled boolean default false,
-  created_at timestamptz default now()
+
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
 );
+
+create index idx_menus_parent on system.menus(parent_id);
+create index idx_menus_sort on system.menus(sort_order);
+create index idx_menus_group on system.menus(group_name);
+create index idx_menus_permission on system.menus(permission_code);
+
+create trigger trg_menus_updated
+before update on system.menus
+for each row
+execute function system.set_updated_at();
+
+

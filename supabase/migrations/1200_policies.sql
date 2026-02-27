@@ -133,3 +133,27 @@ create policy "audit_no_delete"
 on audit.logs
 for delete
 using (false);
+
+
+alter table system.menus enable row level security;
+
+create policy "menu_select_policy"
+on system.menus
+for select
+using (
+  is_visible = true
+  and (
+    permission_code is null
+    or system.has_permission(permission_code)
+  )
+);
+
+create policy "menu_admin_policy"
+on system.menus
+for all
+using (
+  system.is_super_admin()
+)
+with check (
+  system.is_super_admin()
+);
