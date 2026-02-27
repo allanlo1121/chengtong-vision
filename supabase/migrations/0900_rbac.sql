@@ -114,3 +114,19 @@ $$;
 -- 确保函数可执行
 grant execute on function rbac.has_permission(text) to authenticated;
 
+create table system.menus (
+  id uuid primary key default gen_random_uuid(),
+
+  parent_id uuid references system.menus(id) on delete cascade,
+
+  label text not null,
+  path text,
+  icon text,                -- lucide icon 名
+  sort_order int default 0,
+  group_name text,          -- System / Project
+
+  permission_code text references rbac.permissions(code),
+
+  is_disabled boolean default false,
+  created_at timestamptz default now()
+);

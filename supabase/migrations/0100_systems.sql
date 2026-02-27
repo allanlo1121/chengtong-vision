@@ -55,22 +55,7 @@ create table if not exists system.bootstrap_state (
   executed_at timestamptz
 );
 
-create table system.menus (
-  id uuid primary key default gen_random_uuid(),
 
-  parent_id uuid references system.menus(id) on delete cascade,
-
-  label text not null,
-  path text,
-  icon text,                -- lucide icon 名
-  sort_order int default 0,
-  group_name text,          -- System / Project
-
-  permission_code text references rbac.permissions(code),
-
-  is_disabled boolean default false,
-  created_at timestamptz default now()
-);
 
 
 -- ============================================
