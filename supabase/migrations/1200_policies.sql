@@ -144,7 +144,7 @@ using (
   is_visible = true
   and (
     permission_code is null
-    or system.has_permission(permission_code)
+    or rbac.has_permission(permission_code)
   )
 );
 
