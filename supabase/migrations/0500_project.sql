@@ -8,5 +8,5 @@ create table public.projects (
   created_at timestamptz default now(),
   updated_at timestamptz default now(),
   created_by uuid references auth.users(id) on delete set null,
-  updated_by uuid references auth.users(id) on delete set null,
+  updated_by uuid references auth.users(id) on delete set null
 );
