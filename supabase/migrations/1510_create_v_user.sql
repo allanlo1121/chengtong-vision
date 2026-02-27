@@ -1,0 +1,39 @@
+create view rbac.v_user_permissions as
+select
+  ur.user_id,
+  p.code as permission_code
+from rbac.user_roles ur
+join rbac.role_permissions rp on ur.role_id = rp.role_id
+join rbac.permissions p on rp.permission_id = p.id;
+
+
+create or replace view public.v_user_menu as
+select m.*
+from system.menus m
+where m.is_disabled = false
+  and (
+    m.permission_code is null
+    or rbac.has_permission(m.permission_code)
+  )
+order by m.group_name, m.sort_order;
+
+
+create view public.v_user_orgs as
+select
+  o.id,
+  o.name,
+  o.fullname
+from employee_org_access eoa
+join organizations o on eoa.org_id = o.id
+where eoa.employee_id = auth.uid();
+
+
+create view public.v_user_favorite_projects as
+select
+  p.id,
+  p.name,
+  p.short_name
+from user_favorite_projects uf
+join projects p on uf.project_id = p.id
+where uf.user_id = auth.uid()
+order by uf.sort_order;

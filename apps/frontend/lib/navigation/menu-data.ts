@@ -132,3 +132,15 @@ export const menuData = {
     },
   ],
 };
+
+import { createClient } from "@/lib/core/supabase/server";
+
+export async function getUserMenu() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.from("v_user_menu").select("*");
+
+  if (error) throw error;
+
+  return data;
+}

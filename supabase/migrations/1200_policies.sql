@@ -71,3 +71,65 @@ using (
   rbac.has_permission('employee.write')
 );
 
+alter table public.projects enable row level security;
+alter table public.projects force row level security;
+
+create policy "project_select_policy"
+on public.projects
+for select
+using (
+  system.is_super_admin()
+  OR
+  org_node_id in (
+    select system.allowed_org_ids()
+  )
+);
+
+create policy "project_insert_policy"
+on public.projects
+for insert
+with check (
+  system.is_super_admin()
+  OR
+  org_node_id in (
+    select system.allowed_org_ids()
+  )
+);
+
+
+create policy "project_update_policy"
+on public.projects
+for update
+using (
+  system.is_super_admin()
+  OR
+  org_node_id in (
+    select system.allowed_org_ids()
+  )
+)
+with check (
+  system.is_super_admin()
+  OR
+  org_node_id in (
+    select system.allowed_org_ids()
+  )
+);
+
+create policy "project_delete_policy"
+on public.projects
+for delete
+using (
+  system.is_super_admin()
+  OR
+  org_node_id in (
+    select system.allowed_org_ids()
+  )
+);
+
+
+alter table audit.logs enable row level security;
+
+create policy "audit_no_delete"
+on audit.logs
+for delete
+using (false);

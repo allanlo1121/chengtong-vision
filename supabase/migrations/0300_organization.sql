@@ -6,6 +6,8 @@ create table public.organizations (
   id uuid primary key default gen_random_uuid(),
 
   parent_id uuid references public.organizations(id) on delete restrict,
+  path ltree, -- 可选（建议开启 ltree 扩展）
+  level int not null default 0,
 
   code text not null unique,
   name text not null,
@@ -40,8 +42,13 @@ create table public.organizations (
 
 create index idx_organizations_parent
 on public.organizations(parent_id);
+create index idx_org_path on public.organizations using gist(path);
 
-
+create table public.employee_org_access (
+  employee_id uuid references public.employees(id),
+  org_id uuid references public.organizations(id),
+  primary key (employee_id, org_id)
+);
 
 -- =====================================================
 -- 组织树查询函数

@@ -65,6 +65,8 @@ create table if not exists rbac.user_roles (
   primary key (user_id, role_id)
 );
 
+
+
 -- =====================================================
 -- 3) INDEXES（生产必须）
 -- =====================================================

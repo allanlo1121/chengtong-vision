@@ -18,6 +18,7 @@ on conflict (code) do nothing;
 -- 2️⃣ 基础权限
 insert into rbac.permissions (code, name, module, action)
 values
+('dashboard.read', '查看仪表盘', 'dashboard', 'read'),
   ('employee.read', '查看员工', 'employee', 'read'),
   ('employee.write', '编辑员工', 'employee', 'write'),
 
