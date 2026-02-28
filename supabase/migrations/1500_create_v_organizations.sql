@@ -2,6 +2,8 @@ create or replace view public.v_organizations_detail as
 select
   o.*,
 
+  p.name as parent_org_name, 
+
   t.code as org_type_code,
   t.name as org_type_name,
   
@@ -15,6 +17,7 @@ select
   a.name as admin_region_name
 
 from public.organizations o
+left join organizations p on p.id = o.parent_id
 left join public.master_data t on t.id = o.org_type_id
 left join public.master_data b on b.id = o.business_id
 left join public.master_data r on r.id = o.region_id
@@ -27,7 +30,7 @@ create or replace view public.v_organizations_list as
 select
   o.id,
   o.name,
-  p.name as parent_name,
+  p.name as parent_org_name,
   o.is_active,
   o.created_at,
 

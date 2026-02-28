@@ -1,20 +1,26 @@
 // RuntimeProvider.tsx
 
 import { AuthProvider } from "./auth/AuthProvider";
-// import { MenuProvider } from "./menu/MenuProvider";
+import { MenuProvider } from "./menu/MenuProvider";
+import { MenuNode } from "./menu/types";
 import { OrgScopeProvider } from "./org/OrgScopeProvider";
 import { PermissionProvider } from "./permission/PermissionProvider";
+import { RuntimeUser } from "./user/types";
 import { UserProvider } from "./user/UserProvider";
 
-export function RuntimeProvider({ children }: { children: React.ReactNode }) {
+interface RuntimeProviderProps {
+  children: React.ReactNode;
+  runtimeUser: RuntimeUser;
+  menus: MenuNode[];
+}
+
+export function RuntimeProvider({ children, runtimeUser, menus }: RuntimeProviderProps) {
   return (
     <AuthProvider>
-      <UserProvider>
+      <UserProvider initialUser={runtimeUser}>
         <PermissionProvider>
           <OrgScopeProvider>
-            {/* <MenuProvider>*/}
-            {children}
-            {/* </MenuProvider> */}
+            <MenuProvider initialMenus={menus}>{children}</MenuProvider>
           </OrgScopeProvider>
         </PermissionProvider>
       </UserProvider>

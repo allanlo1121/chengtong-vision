@@ -12,8 +12,8 @@ interface PageStateProps<T> {
   error?: string | null;
   forbidden?: boolean;
   data?: T | null;
-  isEmpty?: (data: T) => boolean;
-  isFilteredEmpty?: (data: T) => boolean;
+  isEmpty?: boolean;
+  isFilteredEmpty?: boolean;
 
   emptyTitle?: string;
   emptyDescription?: string;
@@ -25,7 +25,7 @@ interface PageStateProps<T> {
 
   onRetry?: () => void;
 
-  children: (data: T) => ReactNode;
+  children: ReactNode;
 }
 
 export function PageState<T>({
@@ -63,15 +63,19 @@ export function PageState<T>({
   if (!data) return null;
 
   // 4️⃣ 无数据（初始化空）
-  if (isEmpty && isEmpty(data)) {
+  if (isEmpty) {
     return <EmptyState title={emptyTitle} description={emptyDescription} />;
   }
 
   // 5️⃣ 有数据但筛选无结果
-  if (isFilteredEmpty && isFilteredEmpty(data)) {
+  if (isFilteredEmpty) {
     return <EmptyState title={noResultTitle} description={noResultDescription} />;
   }
 
+  if (mode === "table") {
+    return <>{children}</>;
+  }
+
   // 6️⃣ 正常数据
-  return <>{children(data)}</>;
+  return <>{children}</>;
 }

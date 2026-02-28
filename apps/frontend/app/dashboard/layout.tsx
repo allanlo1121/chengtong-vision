@@ -1,0 +1,36 @@
+// app/(dashboard)/layout.tsx
+import { createClient } from "@/lib/core/supabase/server";
+import { Providers } from "@/app/providers";
+import { RuntimeUser } from "@/app/core/runtime/user/types";
+import { buildMenuTree } from "@/app/core/runtime/menu/buildMenuTree";
+
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const supabase = await createClient();
+
+  // 1️⃣ 查询 RuntimeUser
+  const { data: runtimeUser } = await supabase
+    .from("v_runtime_user")
+    .select("*")
+    .single<RuntimeUser>();
+
+  if (!runtimeUser) {
+    return <div>未绑定员工</div>;
+  }
+
+  // 2️⃣ 查询菜单（RLS 自动过滤）
+  const { data: menus } = await supabase
+    .schema("system")
+    .from("menus")
+    .select("*")
+    .order("sort_order", { ascending: true });
+
+  console.log("menus", menus);
+
+  const menuTree = buildMenuTree(menus ?? []);
+
+  return (
+    <Providers runtimeUser={runtimeUser} menus={menuTree}>
+      {children}
+    </Providers>
+  );
+}

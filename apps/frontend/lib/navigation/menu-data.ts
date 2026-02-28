@@ -3,7 +3,6 @@
 import {
   SquareGanttChart,
   Layers,
-  Activity,
   LineChart,
   Radar,
   Siren,
@@ -133,7 +132,7 @@ export const menuData = {
   ],
 };
 
-import { createClient } from "@/lib/core/supabase/server";
+import { createClient } from "@/lib/core/supabase/client";
 
 export async function getUserMenu() {
   const supabase = await createClient();

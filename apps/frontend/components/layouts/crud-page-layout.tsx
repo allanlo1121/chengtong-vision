@@ -56,7 +56,7 @@ export function CrudPageLayout({
       {toolbar && <div className="flex items-center justify-between">{toolbar}</div>}
 
       {/* Content */}
-      <div className="rounded-md border bg-background">{children}</div>
+      <div className="rounded-md border-0 bg-background">{children}</div>
     </div>
   );
 }

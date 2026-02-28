@@ -36,3 +36,38 @@ from user_favorite_projects uf
 join projects p on uf.project_id = p.id
 where uf.user_id = auth.uid()
 order by uf.sort_order;
+
+
+create or replace view public.v_runtime_user as
+select
+  u.id as user_id,
+  e.id as employee_id,
+  e.name,
+  e.org_node_id,
+  o.path::text as org_path,
+
+  (
+    select coalesce(array_agg(distinct r.code), '{}')
+    from rbac.user_roles ur
+    join rbac.roles r on r.id = ur.role_id
+    where ur.user_id = u.id
+  ) as roles,
+
+  (
+    select coalesce(array_agg(distinct p.code), '{}')
+    from rbac.user_roles ur
+    join rbac.role_permissions rp on rp.role_id = ur.role_id
+    join rbac.permissions p on p.id = rp.permission_id
+    where ur.user_id = u.id
+  ) as permissions
+
+from auth.users u
+join public.employees e on e.id = u.id
+join public.organizations o on o.id = e.org_node_id
+
+where u.id = auth.uid();   -- 🔥 关键
+
+
+create index idx_role_permissions_role on rbac.role_permissions(role_id);
+create index idx_permissions_id on rbac.permissions(id);
+create index idx_employees_id on public.employees(id);
