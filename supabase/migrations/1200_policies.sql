@@ -126,6 +126,9 @@ using (
   )
 );
 
+-- =====================================================
+-- 为 audit.logs 表启用 RLS
+-- =====================================================
 
 alter table audit.logs enable row level security;
 
@@ -134,6 +137,10 @@ on audit.logs
 for delete
 using (false);
 
+
+-- =====================================================
+-- 为 system.menus 表启用 RLS
+-- =====================================================
 
 alter table system.menus enable row level security;
 

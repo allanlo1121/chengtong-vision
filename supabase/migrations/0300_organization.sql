@@ -22,7 +22,9 @@ create table public.organizations (
 
   region_id uuid not null references public.master_data(id),
   country_code text not null default 'CN' references public.countries(code),
-  admin_region_code text references admin_regions(code),
+  province_code text references public.admin_regions(code),
+  city_code text references public.admin_regions(code),
+  district_code text references public.admin_regions(code),
   address text,
   latitude numeric(10,6),
   longitude numeric(10,6),
@@ -30,10 +32,10 @@ create table public.organizations (
   is_active boolean default true,
   created_at timestamptz not null default now(),
   updated_at timestamptz,
-  created_by uuid references auth.users(id) on delete set null,
-  updated_by uuid references auth.users(id) on delete set null,
+  created_by uuid references public.employees(id) on delete set null,
+  updated_by uuid references public.employees(id) on delete set null,
   deleted_at timestamptz,
-  deleted_by uuid references auth.users(id) on delete set null,
+  deleted_by uuid references public.employees(id) on delete set null,
 
   check (latitude between -90 and 90),
   check (longitude between -180 and 180)
@@ -66,7 +68,7 @@ with recursive org_tree as (
     o.parent_id,
     o.is_active,
     1 as level
-  from organizations o
+  from public.organizations o
   where o.parent_id is null
     and o.deleted_at is null
 
@@ -78,7 +80,7 @@ with recursive org_tree as (
     c.parent_id,
     c.is_active,
     p.level + 1
-  from organizations c
+  from public.organizations c
   join org_tree p on c.parent_id = p.id
   where c.deleted_at is null
 )

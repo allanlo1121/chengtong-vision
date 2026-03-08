@@ -80,29 +80,77 @@ begin
 end;
 $$ language plpgsql;
 
-
-
 -- ============================================
--- 2️ 可选：通用软删除函数（如果需要统一调用）
+-- 2 通用 updated_by 触发器函数
 -- ============================================
-
-create or replace function system.soft_delete_row()
-returns trigger as $$
+create or replace function system.set_updated_by()
+returns trigger
+language plpgsql
+security definer
+as $$
 begin
-  new.deleted = true;
-  new.updated_at = now();
+  new.updated_by := auth.uid();
+  new.updated_at := now();
   return new;
 end;
-$$ language plpgsql;
+$$;
 
 
 
 -- ============================================
--- 3️ 建议的标准审计字段规范（说明性注释）
+-- 3 可选：通用软删除函数（如果需要统一调用）
+-- ============================================
+
+create or replace function system.soft_delete(
+  p_table text,
+  p_ids uuid[]
+)
+returns integer
+language plpgsql
+security definer
+set search_path = public, system
+as $$
+declare
+  v_sql text;
+  v_count integer;
+begin
+
+  -- 安全校验：限制允许软删除的表（防止 SQL 注入）
+  if p_table not in (
+    'projects',
+    'organizations',
+    'employees',
+    'tbms'
+  ) then
+    raise exception 'Table % is not allowed for soft delete', p_table;
+  end if;
+
+  -- 动态执行 UPDATE（软删除）
+  v_sql := format(
+    'update %I
+     set deleted_at = now(),
+         deleted_by = auth.uid()
+     where id = any($1)
+       and deleted_at is null',
+    p_table
+  );
+
+  execute v_sql using p_ids;
+
+  get diagnostics v_count = row_count;
+
+  return v_count;
+end;
+$$;
+
+
+
+-- ============================================
+-- 4️ 建议的标准审计字段规范（说明性注释）
 -- ============================================
 
 comment on function system.set_updated_at()
 is 'Auto-maintain updated_at before update';
 
-comment on function system.soft_delete_row()
+comment on function system.soft_delete()
 is 'Optional soft delete trigger helper';

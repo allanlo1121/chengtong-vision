@@ -1,8 +1,8 @@
 "use client";
 
-import { RuntimeProvider } from "@/app/core/runtime/RuntimeProvider";
-import { RuntimeUser } from "@/app/core/runtime/user/types";
-import { MenuNode } from "./core/runtime/menu/types";
+import { RuntimeProvider } from "@/lib/runtime/RuntimeProvider";
+import { RuntimeUser } from "@/lib/runtime/user/types";
+import { MenuNode } from "@/lib/runtime/menu/types";
 
 export function Providers({
   children,

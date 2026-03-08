@@ -4,7 +4,7 @@ import { Toaster } from "sonner";
 // import { MasterDataProvider } from "@/providers/master-data-provider"
 import "./globals.css";
 
-import { runBootstrap } from "@/lib/modules/bootstrap/service";
+import { runBootstrap } from "@/lib/domain/bootstrap/service";
 
 export const metadata: Metadata = {
   title: "Create Next App",

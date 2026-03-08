@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/sidebar";
 
 import { menuData } from "@/lib/navigation/menu-data";
-import { useMenu } from "@/app/core/runtime/menu/useMenu";
+import { useMenu } from "@/lib/runtime/menu/useMenu";
 import { useMemo } from "react";
 import { mapMenuToNav } from "@/lib/navigation/adapter";
 

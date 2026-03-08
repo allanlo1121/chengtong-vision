@@ -31,3 +31,9 @@ for each row execute function system.set_updated_at();
 create trigger trg_organizations_updated
 before update on public.organizations
 for each row execute function system.set_updated_at();
+
+
+create trigger trg_set_updated_by
+before update on public.organizations
+for each row
+execute function system.set_updated_by();

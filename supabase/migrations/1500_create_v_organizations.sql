@@ -30,6 +30,7 @@ create or replace view public.v_organizations_list as
 select
   o.id,
   o.name,
+  o.parent_id,
   p.name as parent_org_name,
   o.is_active,
   o.created_at,

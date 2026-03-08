@@ -1,8 +1,8 @@
 // app/(dashboard)/layout.tsx
 import { createClient } from "@/lib/core/supabase/server";
 import { Providers } from "@/app/providers";
-import { RuntimeUser } from "@/app/core/runtime/user/types";
-import { buildMenuTree } from "@/app/core/runtime/menu/buildMenuTree";
+import { RuntimeUser } from "@/lib/runtime/user/types";
+import { buildMenuTree } from "@/lib/runtime/menu/buildMenuTree";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -23,8 +23,6 @@ export default async function DashboardLayout({ children }: { children: React.Re
     .from("menus")
     .select("*")
     .order("sort_order", { ascending: true });
-
-  console.log("menus", menus);
 
   const menuTree = buildMenuTree(menus ?? []);
 
