@@ -1,9 +1,12 @@
 import { OrganizationListItem } from "../types/organization.types";
-import { ActionResult, PageData, PaginatedResult } from "@/lib/shared/contracts";
+import { ActionResult, PageData, PaginatedResult } from "@/modules/shared/contracts";
 import { OrganizationListQueryType } from "../schemas/query.schema";
 
 import { organizationRepository } from "@/lib/infra/repositories";
-import { mapErrorToActionResult } from "@/lib/shared/application/action-error-handler";
+import { mapErrorToActionResult } from "@/modules/shared/application/action-error-handler";
+import { UpdateOrganizationInput } from "../schemas";
+import { getOrganizationRowById } from "../repositories/organization-client.repository";
+import { mapOrganizationRowToUpdateInput } from "../mapper/organization.mapper";
 
 // export async function listAllOrganizations(): Promise<ActionResult<OrganizationListItem[]>> {
 //   try {
@@ -53,6 +56,26 @@ export async function listOrganizations(
         page: query.page,
         pageSize: query.pageSize,
       },
+    };
+  } catch (error: unknown) {
+    return {
+      success: false,
+      error: (error as Error)?.message ?? "查询失败",
+    };
+  }
+}
+
+export async function getOrganizationById(
+  id: string
+): Promise<ActionResult<UpdateOrganizationInput>> {
+  try {
+    const row = await getOrganizationRowById(id);
+
+    if (!row) return { success: false, error: "Organization not found" };
+
+    return {
+      success: true,
+      data: mapOrganizationRowToUpdateInput(row),
     };
   } catch (error: unknown) {
     return {

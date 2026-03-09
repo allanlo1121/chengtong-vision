@@ -21,12 +21,18 @@ import { regionNames } from "../components/data/data";
 
 import { OrganizationListItem } from "@/modules/organization/types/organization.types";
 
-interface DataTableRowActionsProps<Tdata> {
-  row: Row<Tdata>;
+interface DataTableRowActionsProps<TData> {
+  row: Row<TData>;
+  onEdit?: (id: string) => void;
+  onDelete?: (id: string) => void;
 }
 
-export function DataTableRowActions<Tdata>({ row }: DataTableRowActionsProps<Tdata>) {
-  const org = row.original as OrganizationListItem;
+export function DataTableRowActions<TData>({
+  row,
+  onEdit,
+  onDelete,
+}: DataTableRowActionsProps<OrganizationListItem>) {
+  const org = row.original as unknown as OrganizationListItem;
 
   return (
     <DropdownMenu>
@@ -38,7 +44,7 @@ export function DataTableRowActions<Tdata>({ row }: DataTableRowActionsProps<Tda
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-[180px]">
-        <DropdownMenuItem>编辑项目</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => onEdit?.(org.id)}>编辑项目</DropdownMenuItem>
 
         <DropdownMenuSeparator />
 
@@ -61,7 +67,7 @@ export function DataTableRowActions<Tdata>({ row }: DataTableRowActionsProps<Tda
         <DropdownMenuItem
           variant="destructive"
           onClick={() => {
-            // TODO: delete handler
+            onDelete?.(org.id);
           }}
         >
           删除组织

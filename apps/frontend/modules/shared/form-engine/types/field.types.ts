@@ -1,27 +1,27 @@
 // form/types/field.types.ts
 
 import { FieldValues, Path, UseFormReturn } from "react-hook-form";
-import { fieldRegistry } from "../field-registry";
 import { OptionConfig } from "../../options/types";
 import { JSX } from "react";
 
-// export type FieldComponent = keyof typeof fieldRegistry
-
-export type ValueResolver<T extends FieldValues, R> = R | ((values: T) => R);
+export type ValueResolver<T extends FieldValues, R> =
+  | R
+  | ((values: T) => R)
+  | ((values: T) => Promise<R>);
 
 export interface FieldUI<T extends FieldValues = FieldValues> {
   label?: string;
   component: FieldComponent;
+  type?: string;
   section?: string;
   colSpan?: number;
   placeholder?: string;
   required?: ValueResolver<T, boolean>;
   disabled?: ValueResolver<T, boolean>;
-  readOnly?: boolean;
-  option?: ValueResolver<T, OptionConfig>;
   visible?: ValueResolver<T, boolean>;
+  option?: ValueResolver<T, OptionConfig>;
   dependsOn?: Path<T>[];
-  computedValue?: (values: T) => any;
+  computedValue?: (values: T) => any | Promise<any>;
 }
 
 export interface FieldDefinition<T extends FieldValues = FieldValues> {
@@ -37,13 +37,10 @@ export interface FieldRendererProps<T extends FieldValues = FieldValues> {
   required?: boolean;
 }
 
-export type OptionResolver<T extends FieldValues = FieldValues> =
-  | OptionConfig
-  | ((values: T) => OptionConfig)
-  | ((values: T) => Promise<OptionConfig>);
-
 export type FieldComponentType = <T extends FieldValues>(
   props: FieldRendererProps<T>
 ) => JSX.Element;
 
-export type FieldComponent = "input" | "select" | "treeSelect" | "cascader" | "switch";
+export const fieldComponents = ["input", "select", "treeSelect", "cascader", "switch"] as const;
+
+export type FieldComponent = (typeof fieldComponents)[number];

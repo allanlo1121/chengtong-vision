@@ -1,55 +1,41 @@
 "use client";
 
-import { startTransition } from "react";
-import { UseFormReturn } from "react-hook-form";
-import { ZodObject } from "zod";
+import { useRouter } from "next/navigation";
+import { SchemaForm } from "@/modules/shared/form-engine/schema-form";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { ZodType } from "zod";
 
-import { SchemaForm } from "@/modules/shared/form/schema-form";
-
-type CrudCreatePageProps = {
+type CrudCreatePageProps<T> = {
   title: string;
-  schema: ZodObject<any>;
-  form: UseFormReturn<any>;
+  description?: string;
+  schema: ZodType<T>;
   action: (formData: FormData) => Promise<any>;
 };
 
-export function CrudCreatePage({ title, schema, form, action }: CrudCreatePageProps) {
-  const handleSubmit = form.handleSubmit(async (values) => {
-    const formData = new FormData();
-
-    Object.entries(values).forEach(([key, value]) => {
-      formData.append(key, value as any);
-    });
-    console.log("handleSubmit", formData, values);
-    console.log("action", action);
-    for (const [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
-    await action(formData);
-  });
+export function CrudCreatePage<T>({ title, description, schema, action }: CrudCreatePageProps<T>) {
+  const router = useRouter();
 
   return (
-    <Card className="w-full">
+    <Card className="w-full max-w-4xl">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
+
+        {description && <CardDescription>{description}</CardDescription>}
       </CardHeader>
 
-      <form onSubmit={handleSubmit}>
-        <CardContent>
-          <SchemaForm form={form} schema={schema} />
-        </CardContent>
-
-        <CardFooter className="flex justify-end gap-2">
-          <Button type="button" variant="outline" onClick={() => form.reset()}>
-            重置
-          </Button>
-
-          <Button type="submit">保存</Button>
-        </CardFooter>
-      </form>
+      <CardContent>
+        <SchemaForm
+          schema={schema}
+          action={action}
+          onSuccess={() => {
+            router.push("/system/organizations");
+          }}
+          onCancel={() => {
+            router.back();
+          }}
+        />
+      </CardContent>
     </Card>
   );
 }

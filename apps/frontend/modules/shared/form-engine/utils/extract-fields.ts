@@ -1,6 +1,6 @@
 import { FieldValues, Path } from "react-hook-form";
-import { ZodObject, ZodRawShape } from "zod";
-import { FieldDefinition, FieldUI } from "../types/field.types";
+import { z, ZodObject, ZodRawShape } from "zod";
+import { FieldDefinition } from "../types/field.types";
 
 export function extractFields<T extends FieldValues>(
   schema: ZodObject<ZodRawShape>

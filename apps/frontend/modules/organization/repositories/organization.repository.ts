@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/core/supabase/server";
+import { createClient as createClienta } from "@/lib/core/supabase/client";
 
 import { mapOrganizationDetail, mapOrganizationList } from "../types/organization.mapper";
 import { OrganizationListQueryType } from "../schemas/query.schema";
@@ -9,6 +10,7 @@ import {
   OrganizationListRow,
   OrganizationTreeItem,
   OrganizationTreeRow,
+  OrganizationRow,
 } from "../types";
 import { PageData } from "@/modules/shared/contracts";
 
@@ -17,6 +19,8 @@ import {
   assertNoError,
   buildSoftDeletePayload,
 } from "@/lib/infra/repositories/base.repository";
+import { Update } from "next/dist/build/swc/types";
+import { Database } from "@/types/database";
 
 // export async function getOrganizationDetail(id: string): Promise<OrganizationDetail> {
 //   const supabase = await createClient();
@@ -187,4 +191,16 @@ export async function findOrganizationTreeRows(): Promise<OrganizationTreeRow[]>
   assertNoError(error);
 
   return data ?? [];
+}
+
+export async function getOrganizationRowById(id: string): Promise<OrganizationRow> {
+  const supabase = await createClienta();
+
+  const { data, error } = await supabase.from("organizations").select("*").eq("id", id).single();
+
+  assertNoError(error);
+
+  if (!data) throw new Error("Organization not found");
+
+  return data;
 }

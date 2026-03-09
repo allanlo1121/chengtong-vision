@@ -56,36 +56,45 @@ export const OrganizationFields = {
     colSpan: 2,
   }),
 
-  // parentId: idSchema.nullable().meta({
-  //   label: "上级组织",
-  //   component: "treeSelect",
-  //   option: { source: "organization_tree", colSpan: 1 }
-  // }),
+  parentId: idSchema.nullable().meta({
+    label: "上级组织",
+    component: "treeSelect",
+    section: "基本信息",
+    colSpan: 1,
+    option: { source: "organization_tree", parentId: null },
+  }),
 
   orgTypeId: idSchema.meta({
     label: "组织类型",
     component: "select",
     section: "基本信息",
-    option: { source: "master", code: "ORG_CATEGORY", colSpan: 1 },
+    colSpan: 1,
+    option: { source: "master", code: "ORG_CATEGORY" },
   }),
 
-  // businessId: idSchema.optional().meta({
-  //   label: "业务类型",
-  //   component: "select",
-  //   option: { source: "master", code: "BUSINESS", colSpan: 1 }
-  // }),
+  businessId: idSchema.optional().meta({
+    label: "业务类型",
+    component: "select",
+    section: "基本信息",
+    colSpan: 1,
+    option: { source: "master", code: "BUSINESS" },
+  }),
 
-  // regionId: idSchema.meta({
-  //   label: "区域",
-  //   component: "select",
-  //   option: { source: "master", code: "REGION", colSpan: 1 }
-  // }),
+  regionId: idSchema.meta({
+    label: "区域",
+    component: "select",
+    section: "地理信息",
+    colSpan: 1,
+    option: { source: "master", code: "REGION" },
+  }),
 
-  // countryCode: countryCodeSchema.default("CN").meta({
-  //   label: "国家代码",
-  //   component: "select",
-  //   option: { source: "countries", colSpan: 1 }
-  // }),
+  countryCode: countryCodeSchema.default("CN").meta({
+    label: "国家代码",
+    component: "select",
+    section: "地理信息",
+    colSpan: 1,
+    option: { source: "countries" },
+  }),
 
   provinceCode: z
     .string()
@@ -93,7 +102,8 @@ export const OrganizationFields = {
     .meta({
       label: "省",
       component: "select",
-      section: "基本信息",
+      section: "地理信息",
+      colSpan: 1,
       option: {
         source: "admin_regions",
         level: 1,
@@ -106,9 +116,10 @@ export const OrganizationFields = {
     .meta({
       label: "市",
       component: "select",
-      section: "基本信息",
+      section: "地理信息",
+      colSpan: 1,
       dependsOn: ["provinceCode"],
-      option: (v) => ({
+      option: (v: any) => ({
         source: "admin_regions",
         level: 2,
         parentCode: v.provinceCode,
@@ -121,47 +132,54 @@ export const OrganizationFields = {
     .meta({
       label: "区县",
       component: "select",
-      section: "基本信息",
+      section: "地理信息",
       dependsOn: ["cityCode"],
-      option: (v) => ({
+      option: (v: any) => ({
         source: "admin_regions",
         level: 3,
         parentCode: v.cityCode,
       }),
     }),
 
-  // address: z.string().max(200, { message: "地址最多200个字符" }).optional().meta({
-  //   label: "地址",
-  //   component: "input",
-  //   colSpan: 1
-  // }),
+  address: z.string().max(200, { message: "地址最多200个字符" }).optional().meta({
+    label: "地址",
+    component: "input",
+    section: "地理信息",
+    colSpan: 1,
+  }),
 
-  // latitude: latitudeSchema.optional().meta({
-  //   label: "纬度",
-  //   component: "input",
-  //    type: "number",
-  //   colSpan: 1
-  // }),
+  latitude: latitudeSchema.optional().meta({
+    label: "纬度",
+    component: "input",
+    section: "地理信息",
+    type: "number",
+    colSpan: 1,
+  }),
 
-  // longitude: longitudeSchema.optional().meta({
-  //   label: "经度",
-  //   component: "input",
-  //    type: "number",
-  //   colSpan: 1
-  // }),
+  longitude: longitudeSchema.optional().meta({
+    label: "经度",
+    component: "input",
+    section: "地理信息",
+    type: "number",
+    colSpan: 1,
+  }),
 
-  // isActive: z.boolean().default(false).meta({
-  //   label: "是否启用",
-  //   component: "switch",
-  //   colSpan: 1
-  // }),
+  isActive: z.boolean().default(false).meta({
+    label: "是否启用",
+    component: "switch",
+    section: "其他信息",
+    colSpan: 1,
+  }),
 };
 
-export const CreateOrganizationSchema = z.object({ ...OrganizationFields });
+export const OrganizationSchema = z.object(OrganizationFields);
+
+export const CreateOrganizationSchema = OrganizationSchema;
 
 export type CreateOrganizationInput = z.infer<typeof CreateOrganizationSchema>;
 
-export const updateSchema = z.object({
+export const UpdateOrganizationSchema = OrganizationSchema.extend({
   id: idSchema,
-  ...optionalFields(OrganizationFields),
 });
+
+export type UpdateOrganizationInput = z.infer<typeof UpdateOrganizationSchema>;

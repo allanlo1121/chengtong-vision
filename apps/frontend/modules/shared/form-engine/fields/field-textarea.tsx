@@ -3,6 +3,7 @@
 import { Controller, Control, FieldValues, Path } from "react-hook-form";
 import { Textarea } from "@/components/ui/textarea";
 import { Field, FieldContent, FieldLabel, FieldError } from "@/components/ui/field";
+import { FieldRendererProps } from "../types/field.types";
 
 type Props<T extends FieldValues> = {
   control: Control<T>;
@@ -14,35 +15,30 @@ type Props<T extends FieldValues> = {
   readonly?: boolean;
 };
 
-export function FormTextarea<T extends FieldValues>({
-  control,
+export function FieldTextarea<T extends FieldValues>({
   name,
-  label,
-  placeholder,
+  ui,
+  form,
+  disabled,
   required,
-  disabled = false,
-  readonly,
-  ...props
-}: Props<T>) {
+}: FieldRendererProps<T>) {
   return (
     <Controller
       name={name}
-      control={control}
+      control={form.control}
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid}>
           <FieldContent>
-            <FieldLabel>{label}</FieldLabel>
+            <FieldLabel>{ui.label}</FieldLabel>
 
             <Textarea
               {...field}
               id={field.name}
               value={field.value ?? ""}
-              placeholder={placeholder}
+              placeholder={ui.placeholder}
               aria-invalid={fieldState.invalid}
               required={required}
               disabled={disabled}
-              readOnly={readonly}
-              {...props}
             />
 
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

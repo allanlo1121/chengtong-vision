@@ -56,11 +56,12 @@ export async function searchProjects(search?: string) {
   return data ?? [];
 }
 
-export async function listOrganizations(): Promise<TreeNodeRow[]> {
+export async function listOrganizations(parentId?: string): Promise<TreeNodeRow[]> {
   const supabase = createClient();
-  const { data } = await supabase
-    .from("organizations")
-    .select("id, name,parent_id,sort_order")
-    .order("sort_order", { ascending: true });
+  let query = supabase.from("organizations").select("id, name,parent_id,sort_order");
+  if (parentId) {
+    query = query.eq("parent_id", parentId);
+  }
+  const { data } = await query.order("sort_order", { ascending: true });
   return data ?? [];
 }

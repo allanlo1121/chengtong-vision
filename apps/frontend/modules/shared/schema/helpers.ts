@@ -1,4 +1,13 @@
-import { ZodTypeAny } from "zod";
+import { z } from "zod";
 
-export const optionalFields = <T extends Record<string, ZodTypeAny>>(fields: T) =>
-  Object.fromEntries(Object.entries(fields).map(([key, schema]) => [key, schema.optional()]));
+export function optionalFields<T extends Record<string, z.ZodTypeAny>>(fields: T) {
+  const result: Record<string, z.ZodTypeAny> = {};
+
+  for (const key in fields) {
+    const field = fields[key];
+
+    result[key] = field.optional();
+  }
+
+  return result;
+}

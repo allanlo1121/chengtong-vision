@@ -1,6 +1,7 @@
-import { FieldDefinition } from "../field-component.types";
+import { FieldValues } from "react-hook-form";
+import { FieldDefinition } from "../types/field.types";
 
-export function groupFields(fields: FieldDefinition[]) {
+export function groupFields<T extends FieldValues>(fields: FieldDefinition<T>[]) {
   const map = new Map();
 
   for (const field of fields) {

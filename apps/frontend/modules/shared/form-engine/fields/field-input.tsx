@@ -28,12 +28,11 @@ export function FieldInput<T extends FieldValues>({
               {...field}
               id={field.name}
               value={field.value ?? ""}
-              // type={ui.type ?? "text"}
+              type={ui.type ?? "text"}
               placeholder={ui.placeholder}
               aria-invalid={fieldState.invalid}
               required={required}
               disabled={disabled}
-              readOnly={ui.readOnly}
             />
 
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

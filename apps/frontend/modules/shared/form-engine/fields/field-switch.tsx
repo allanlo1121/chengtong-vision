@@ -12,31 +12,27 @@ import {
 
 import { Switch } from "@/components/ui/switch";
 
-type SwitchProps<T extends FieldValues> = {
-  control: Control<T>;
-  name: Path<T>;
-  label: string;
-  description?: string;
-};
+import { FieldRendererProps } from "../types/field.types";
 
 export function FieldSwitch<T extends FieldValues>({
-  control,
   name,
-  label,
-  description,
-}: SwitchProps<T>) {
+  ui,
+  form,
+  disabled = false,
+  required = false,
+}: FieldRendererProps<T>) {
   return (
     <Controller
       name={name}
-      control={control}
+      control={form.control}
       render={({ field }) => (
         <Field orientation="responsive">
           <FieldContent>
-            <FieldLabel>{label}</FieldLabel>
-            {description && <FieldDescription>{description}</FieldDescription>}
+            <FieldLabel>{ui.label}</FieldLabel>
+            {/* {ui.description && <FieldDescription>{ui.description}</FieldDescription>} */}
           </FieldContent>
 
-          <Switch checked={field.value} onCheckedChange={field.onChange} />
+          <Switch checked={field.value} onCheckedChange={field.onChange} disabled={disabled} />
         </Field>
       )}
     />

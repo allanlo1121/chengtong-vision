@@ -1,5 +1,5 @@
 import { FieldValues } from "react-hook-form";
-import { fieldRegistry } from "./field-registry";
+import { fieldRegistry } from "./registry/field-registry";
 import { FieldRendererProps } from "./types/field.types";
 import { resolveCondition } from "./engines/condition-engine";
 import { resolveValue } from "./engines/value-resolver";
@@ -14,6 +14,8 @@ export function FieldRenderer<T extends FieldValues>({ name, ui, form }: FieldRe
   }
 
   const Component = fieldRegistry[ui.component];
+
+  console.log("Rendering field:", name, "Component:", ui.component, "Visible:", visible);
 
   if (!Component) {
     return null;

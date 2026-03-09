@@ -1,4 +1,5 @@
-import { CodeNameRef, IdNameRef, MasterRef } from "@/lib/shared/types";
+import { CodeNameRef, IdNameRef, MasterRef } from "@/modules/shared/types";
+import { Database } from "@/types/database";
 
 export interface OrganizationDetailRow {
   id: string;
@@ -97,3 +98,5 @@ export interface OrganizationListItem {
 
   createdAt: string;
 }
+
+export type OrganizationRow = Database["public"]["Tables"]["organizations"]["Row"];

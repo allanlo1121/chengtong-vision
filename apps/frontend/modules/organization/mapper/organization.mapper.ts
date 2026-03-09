@@ -1,3 +1,4 @@
+import { UpdateOrganizationInput } from "../schemas";
 import {
   OrganizationDetail,
   OrganizationDetailRow,
@@ -5,6 +6,7 @@ import {
   OrganizationListRow,
   OrganizationTreeItem,
   OrganizationTreeRow,
+  OrganizationRow,
 } from "../types";
 
 export function mapOrganizationDetail(row: OrganizationDetailRow): OrganizationDetail {
@@ -87,5 +89,37 @@ export function mapOrganizationTree(row: OrganizationTreeRow): OrganizationTreeI
     name: row.name,
     parentId: row.parent_id,
     sortOrder: row.sort_order,
+  };
+}
+
+export function mapOrganizationRowToUpdateInput(row: OrganizationRow): UpdateOrganizationInput {
+  return {
+    id: row.id,
+
+    name: row.name,
+    code: row.code,
+
+    fullName: row.fullname ?? undefined,
+
+    parentId: row.parent_id ?? null,
+
+    orgTypeId: row.org_type_id,
+
+    businessId: row.business_id ?? undefined,
+
+    regionId: row.region_id,
+
+    countryCode: row.country_code,
+
+    provinceCode: row.province_code ?? undefined,
+    cityCode: row.city_code ?? undefined,
+    districtCode: row.district_code ?? undefined,
+
+    address: row.address ?? undefined,
+
+    latitude: row.latitude ?? undefined,
+    longitude: row.longitude ?? undefined,
+
+    isActive: row.is_active ?? true,
   };
 }

@@ -1,12 +1,12 @@
 import { createClient } from "@/lib/core/supabase/server";
-import { CreateOrganizationInput } from "../schemas";
+import { UpdateOrganizationInput } from "../schemas";
 
-export async function insertOrganization(input: CreateOrganizationInput) {
+import { removeUndefined } from "@/modules/shared/utils/remove-undefined";
+
+export async function updateOrganization(input: UpdateOrganizationInput) {
   const supabase = await createClient();
 
-  console.log("insertOrganization", input);
-
-  const { error } = await supabase.from("organizations").insert({
+  const updateData = removeUndefined({
     parent_id: input.parentId ?? null,
     code: input.code,
     name: input.name,
@@ -28,6 +28,8 @@ export async function insertOrganization(input: CreateOrganizationInput) {
     longitude: input.longitude,
     is_active: input.isActive,
   });
+
+  const { error } = await supabase.from("organizations").update(updateData).eq("id", input.id);
 
   if (error) {
     throw new Error(error.message);

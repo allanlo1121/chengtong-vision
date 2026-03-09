@@ -1,8 +1,8 @@
 "use server";
 
 import { z } from "zod";
-import { createOrganizationService } from "../services/create-organization.service";
-import { CreateOrganizationSchema } from "../schemas";
+import { updateOrganizationService } from "../services/update-organization.service";
+import { UpdateOrganizationSchema } from "../schemas";
 import { ActionState } from "@/modules/shared/types/action-state";
 
 export type OrganizationFormState = ActionState<{
@@ -24,11 +24,12 @@ export type OrganizationFormState = ActionState<{
   isActive?: string[];
 }>;
 
-export async function createOrganizationAction(formData: FormData) {
+export async function updateOrganizationAction(formData: FormData) {
   console.log("SERVER ACTION RUNNING");
-  console.log("create organization formData", formData);
+  console.log("update organization formData", formData);
 
-  const parsed = CreateOrganizationSchema.safeParse({
+  const parsed = UpdateOrganizationSchema.safeParse({
+    id: formData.get("id"),
     name: formData.get("name"),
     code: formData.get("code"),
     fullName: formData.get("fullName"),
@@ -56,7 +57,7 @@ export async function createOrganizationAction(formData: FormData) {
       message: "表单校验失败",
     };
   }
-  const result = await createOrganizationService(parsed.data);
+  const result = await updateOrganizationService(parsed.data);
 
   return result;
 }

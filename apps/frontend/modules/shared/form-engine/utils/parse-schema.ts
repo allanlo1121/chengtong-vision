@@ -1,7 +1,8 @@
-import { ZodObject } from "zod";
-import { FieldMeta } from "../field-component.types";
+import { ZodObject, ZodAny, ZodString, ZodNumber, ZodBoolean, ZodEnum } from "zod";
 
-export function parseSchema(schema: ZodObject<any>): FieldMeta[] {
+import { FieldDefinition } from "../types/field.types";
+
+export function parseSchema(schema: ZodObject<any>): FieldDefinition[] {
   const shape = schema.shape;
 
   return Object.keys(shape).map((key) => {

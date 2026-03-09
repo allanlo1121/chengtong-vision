@@ -18,9 +18,16 @@ interface Props {
   value?: string;
   onChange: (v: string) => void;
   placeholder?: string;
+  disabled?: boolean;
 }
 
-export function TreeSelect({ treeNodes, value, onChange, placeholder = "请选择" }: Props) {
+export function TreeSelect({
+  treeNodes,
+  value,
+  onChange,
+  placeholder = "请选择",
+  disabled = false,
+}: Props) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [expanded, setExpanded] = useState<Set<string>>(new Set());

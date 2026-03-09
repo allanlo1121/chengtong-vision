@@ -1,11 +1,8 @@
-import { OrganizationListPage } from "@/modules/organization/pages/organization-list-page";
 import { ErrorBlock } from "@/components/common/error-block";
-import {
-  OrganizationListQuerySchema,
-  OrganizationListQueryType,
-} from "@/modules/organization/schemas/query.schema";
+import { OrganizationListQuerySchema } from "@/modules/organization/schemas/query.schema";
 import { listOrganizations, getOrganizationTree } from "@/modules/organization/services";
 import { OrganizationTree } from "@/modules/organization/pages/organization-tree";
+import { OrganizationListClient } from "@/modules/organization/pages/organization-list-client";
 
 export default async function Page({
   searchParams,
@@ -16,7 +13,7 @@ export default async function Page({
 
   const params = OrganizationListQuerySchema.parse(rawParams);
 
-  console.log("parsed params", params);
+  // console.log("parsed params", params);
 
   const data = await getOrganizationTree();
   if (!data.success) {
@@ -35,15 +32,7 @@ export default async function Page({
   return (
     <div className="flex h-full">
       <OrganizationTree tree={tree} />
-      <div className="flex-1 p-4">
-        <OrganizationListPage
-          data={items}
-          total={total}
-          page={page}
-          pageSize={pageSize}
-          search={params.search}
-        />
-      </div>
+      <OrganizationListClient data={items} total={total} page={page} pageSize={pageSize} />
     </div>
   );
 }
