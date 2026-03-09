@@ -6,19 +6,19 @@ import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import { Search as SearchIcon } from "lucide-react";
 
-interface SearchInputProps {
+interface SearchProps {
   placeholder?: string;
   paramKey?: string; // 默认 search
   resetPageKey?: string; // 默认 page
   debounce?: number;
 }
 
-export function SearchInput({
+export function Search({
   placeholder = "Search...",
   paramKey = "search",
   resetPageKey = "page",
   debounce = 400,
-}: SearchInputProps) {
+}: SearchProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();

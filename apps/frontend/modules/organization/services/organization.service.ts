@@ -5,7 +5,7 @@ import { OrganizationListQueryType } from "../schemas/query.schema";
 import { organizationRepository } from "@/lib/infra/repositories";
 import { mapErrorToActionResult } from "@/modules/shared/application/action-error-handler";
 import { UpdateOrganizationInput } from "../schemas";
-import { getOrganizationRowById } from "../repositories/organization-client.repository";
+import { getOrganizationRowById } from "../repositories/organization.repository";
 import { mapOrganizationRowToUpdateInput } from "../mapper/organization.mapper";
 
 // export async function listAllOrganizations(): Promise<ActionResult<OrganizationListItem[]>> {
@@ -69,6 +69,8 @@ export async function getOrganizationById(
   id: string
 ): Promise<ActionResult<UpdateOrganizationInput>> {
   try {
+    console.log("===getOrganizationById===");
+
     const row = await getOrganizationRowById(id);
 
     if (!row) return { success: false, error: "Organization not found" };

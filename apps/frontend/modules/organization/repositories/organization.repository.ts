@@ -19,8 +19,10 @@ import {
   assertNoError,
   buildSoftDeletePayload,
 } from "@/lib/infra/repositories/base.repository";
-import { Update } from "next/dist/build/swc/types";
+
 import { Database } from "@/types/database";
+
+const ITEMS_PER_PAGE = 10;
 
 // export async function getOrganizationDetail(id: string): Promise<OrganizationDetail> {
 //   const supabase = await createClient();
@@ -194,13 +196,31 @@ export async function findOrganizationTreeRows(): Promise<OrganizationTreeRow[]>
 }
 
 export async function getOrganizationRowById(id: string): Promise<OrganizationRow> {
-  const supabase = await createClienta();
+  const supabase = await createClient();
 
   const { data, error } = await supabase.from("organizations").select("*").eq("id", id).single();
 
   assertNoError(error);
 
   if (!data) throw new Error("Organization not found");
+  console.log("getOrganizationRowById", data);
 
   return data;
+}
+
+export async function getOrganizationPages(query: string): Promise<number> {
+  const supabase = await createClient();
+
+  let builder = supabase.from("v_organizations_list").select("id", { count: "exact" });
+
+  if (query) {
+    builder = builder.ilike("name", `%${query}%`);
+  }
+
+  const { count, error } = await builder;
+
+  assertNoError(error);
+
+  const pageSize = 10; // 与前端默认 pageSize 保持一致
+  return Math.ceil((count ?? 0) / pageSize);
 }

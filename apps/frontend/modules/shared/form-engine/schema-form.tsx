@@ -1,24 +1,24 @@
-//form-engine/auto-form.tsx
+// form-engine/schema-form.tsx
 "use client";
+
 import { useEffect, useMemo, useRef } from "react";
-import { useForm, useWatch, FieldValues, DefaultValues, SubmitHandler } from "react-hook-form";
+import { useForm, useWatch, FieldValues, DefaultValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
 import { FieldRenderer } from "./field-renderer";
-import {
-  buildDependencyGraph,
-  findChangedFields,
-  runDependencyEngine,
-} from "./engines/dependency-engine";
+import { buildDependencyGraph } from "./engines/dependency-engine";
+import { useDependencyEngine } from "./hooks/use-dependency-engine";
 import { groupFieldsBySection } from "./engines/section-engine";
-import { FieldDefinition } from "./types/field.types";
+
 import { extractFields } from "./utils/extract-fields";
-import { toast } from "sonner";
 import { ActionResult } from "../types";
 
+import { ZodSchema } from "zod";
+
 type SchemaFormProps<T extends FieldValues> = {
-  schema: any;
-  defaultValues?: DefaultValues<T>;
-  action?: (formData: FormData) => Promise<any>;
+  schema: ZodSchema<T>;
+  initialValues?: DefaultValues<T>;
+  action?: (data: T) => Promise<ActionResult<any>>;
   onSuccess?: (result: ActionResult<T>) => void;
   onError?: (result: ActionResult<T>) => void;
   onCancel?: () => void;
@@ -26,71 +26,69 @@ type SchemaFormProps<T extends FieldValues> = {
 
 export function SchemaForm<T extends FieldValues>({
   schema,
-  defaultValues,
+  initialValues,
   action,
   onSuccess,
   onError,
   onCancel,
 }: SchemaFormProps<T>) {
+  /** ------------------------------------------------
+   * 1 提取字段
+   * ------------------------------------------------ */
   const fields = useMemo(() => extractFields<T>(schema), [schema]);
 
-  console.log("fields", fields);
-  console.log("defaultValues", defaultValues);
-
+  /** ------------------------------------------------
+   * 2 初始化 form
+   * ------------------------------------------------ */
   const form = useForm<T>({
     resolver: zodResolver(schema),
-    defaultValues,
+    defaultValues: initialValues,
   });
 
-  console.log("SchemaForm", form);
+  /** ------------------------------------------------
+   * 3 initialValues 更新
+   * ------------------------------------------------ */
 
-  const values = useWatch({
-    control: form.control,
-  }) as T;
+  useEffect(() => {
+    if (initialValues) {
+      form.reset(initialValues);
+    }
+  }, [initialValues, form]);
+
+  /** ------------------------------------------------
+   * 7 依赖引擎
+   * ------------------------------------------------ */
 
   const graph = useMemo(() => buildDependencyGraph(fields), [fields]);
 
-  const prevRef = useRef<T>({ ...values });
+  useDependencyEngine(form, graph);
 
-  useEffect(() => {
-    const prev = prevRef.current;
-
-    const changed = findChangedFields(prev, values);
-
-    if (changed.length > 0) {
-      runDependencyEngine(graph, changed, form);
-    }
-
-    prevRef.current = { ...values };
-  }, [values, graph, form]);
+  /** ------------------------------------------------
+   * 8 提交
+   * ------------------------------------------------ */
 
   const onSubmit = async (data: T) => {
     if (!action) return;
 
-    const formData = new FormData();
-
-    for (const [key, value] of Object.entries(data as Record<string, unknown>)) {
-      if (value !== undefined && value !== null) {
-        formData.append(key, String(value));
-      }
-    }
-
-    const result = await action(formData);
-
-    if (!result) return;
+    const result = await action(data);
 
     if (!result.success) {
-      toast.error(result.message ?? "提交失败");
       onError?.(result);
-
       return;
     }
 
-    toast.success(result.message ?? "保存成功");
     onSuccess?.(result);
   };
 
-  const sections = groupFieldsBySection(fields);
+  /** ------------------------------------------------
+   * 9 section 分组
+   * ------------------------------------------------ */
+
+  const sections = useMemo(() => groupFieldsBySection(fields), [fields]);
+
+  /** ------------------------------------------------
+   * 10 render
+   * ------------------------------------------------ */
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -110,7 +108,7 @@ export function SchemaForm<T extends FieldValues>({
         </div>
       ))}
 
-      <div className="flex justify-end pt-4">
+      <div className="flex justify-end pt-4 gap-2">
         <button type="button" onClick={onCancel} className="px-4 py-2 rounded-md border">
           取消
         </button>

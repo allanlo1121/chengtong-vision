@@ -12,6 +12,7 @@ export function FieldInput<T extends FieldValues>({
   disabled,
   required,
 }: FieldRendererProps<T>) {
+  console.log("FieldInput", { name, ui, disabled, required });
   return (
     <Controller
       name={name}

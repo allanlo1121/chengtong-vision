@@ -28,6 +28,7 @@ export function FieldSelect<T extends FieldValues>({
   disabled = false,
   required = false,
 }: FieldRendererProps<T>) {
+  console.log("FieldSelect", { name, ui, disabled, required });
   // 只监听依赖字段
   const depValues = useWatch({
     control: form.control,

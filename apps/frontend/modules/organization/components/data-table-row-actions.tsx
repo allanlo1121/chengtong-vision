@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { Row } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 
@@ -29,10 +30,9 @@ interface DataTableRowActionsProps<TData> {
 
 export function DataTableRowActions<TData>({
   row,
-  onEdit,
-  onDelete,
 }: DataTableRowActionsProps<OrganizationListItem>) {
   const org = row.original as unknown as OrganizationListItem;
+  const router = useRouter();
 
   return (
     <DropdownMenu>
@@ -44,7 +44,9 @@ export function DataTableRowActions<TData>({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-[180px]">
-        <DropdownMenuItem onClick={() => onEdit?.(org.id)}>编辑项目</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => router.push(`/system/organizations/${org.id}/edit`)}>
+          编辑项目
+        </DropdownMenuItem>
 
         <DropdownMenuSeparator />
 
@@ -64,12 +66,7 @@ export function DataTableRowActions<TData>({
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem
-          variant="destructive"
-          onClick={() => {
-            onDelete?.(org.id);
-          }}
-        >
+        <DropdownMenuItem variant="destructive" onClick={() => {}}>
           删除组织
         </DropdownMenuItem>
       </DropdownMenuContent>

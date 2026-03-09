@@ -1,11 +1,10 @@
 import { FieldValues, Path } from "react-hook-form";
-import { z, ZodObject, ZodRawShape } from "zod";
+import { z, ZodObject, ZodRawShape, ZodSchema, ZodType } from "zod";
 import { FieldDefinition } from "../types/field.types";
 
-export function extractFields<T extends FieldValues>(
-  schema: ZodObject<ZodRawShape>
-): FieldDefinition<T>[] {
-  const shape = schema.shape;
+export function extractFields<T extends FieldValues>(schema: ZodSchema<T>): FieldDefinition<T>[] {
+  const shape = (schema as any).shape as ZodRawShape;
+
   const fields: FieldDefinition<T>[] = [];
 
   for (const key in shape) {

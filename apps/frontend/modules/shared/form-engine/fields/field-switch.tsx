@@ -21,6 +21,7 @@ export function FieldSwitch<T extends FieldValues>({
   disabled = false,
   required = false,
 }: FieldRendererProps<T>) {
+  console.log("FieldSwitch", { name, ui, disabled, required });
   return (
     <Controller
       name={name}

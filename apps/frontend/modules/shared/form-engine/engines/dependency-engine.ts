@@ -1,12 +1,26 @@
-import { FieldValues, UseFormReturn, Path, PathValue } from "react-hook-form";
+import { FieldValues, UseFormReturn, Path } from "react-hook-form";
 import { FieldDefinition } from "../types/field.types";
 
-export function buildDependencyGraph<T extends FieldValues>(fields: FieldDefinition<T>[]) {
-  const graph = new Map<Path<T>, Path<T>[]>();
+export type DependencyGraph<T extends FieldValues> = Map<Path<T>, Path<T>[]>;
+
+/**
+ * 从 schema fields 构建依赖图
+ *
+ * A → B
+ * B → C
+ *
+ * graph:
+ * A -> [B]
+ * B -> [C]
+ */
+export function buildDependencyGraph<T extends FieldValues>(
+  fields: FieldDefinition<T>[]
+): DependencyGraph<T> {
+  const graph: DependencyGraph<T> = new Map();
 
   for (const field of fields) {
-    const deps = field.ui.dependsOn;
-    if (!deps) continue;
+    const deps = field.ui?.dependsOn;
+    if (!deps || deps.length === 0) continue;
 
     for (const dep of deps) {
       if (!graph.has(dep)) {
@@ -20,20 +34,28 @@ export function buildDependencyGraph<T extends FieldValues>(fields: FieldDefinit
   return graph;
 }
 
-export function findChangedFields<T extends FieldValues>(prev: T, next: T): Path<T>[] {
-  const changed: Path<T>[] = [];
-
-  for (const key of Object.keys(next) as (keyof T)[]) {
-    if (prev[key] !== next[key]) {
-      changed.push(key as unknown as Path<T>);
-    }
-  }
-
-  return changed;
+/**
+ * 获取依赖源字段
+ *
+ * graph keys = source fields
+ */
+export function getDependencySources<T extends FieldValues>(graph: DependencyGraph<T>): Path<T>[] {
+  return Array.from(graph.keys());
 }
 
+/**
+ * 依赖引擎
+ *
+ * 当 source 改变时：
+ *
+ * A 改变
+ *   ↓
+ * B 清空
+ *   ↓
+ * C 清空
+ */
 export function runDependencyEngine<T extends FieldValues>(
-  graph: Map<Path<T>, Path<T>[]>,
+  graph: DependencyGraph<T>,
   changedFields: Path<T>[],
   form: UseFormReturn<T>
 ) {
@@ -51,9 +73,9 @@ export function runDependencyEngine<T extends FieldValues>(
 
       visited.add(child);
 
-      const current = form.getValues(child);
+      const value = form.getValues(child);
 
-      if (current !== undefined && current !== null && current !== "") {
+      if (value !== undefined && value !== null && value !== "") {
         form.setValue(child, undefined as any, {
           shouldDirty: true,
           shouldValidate: true,
