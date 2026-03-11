@@ -5,8 +5,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Field, FieldContent, FieldLabel, FieldError } from "@/components/ui/field";
 import { FieldRendererProps } from "../types/field.types";
 
-type Props<T extends FieldValues> = {
-  control: Control<T>;
+type Props<T extends FieldValues, C = any, O = T> = {
+  control: Control<T, C, O>;
   name: Path<T>;
   label: string;
   placeholder?: string;
@@ -15,13 +15,13 @@ type Props<T extends FieldValues> = {
   readonly?: boolean;
 };
 
-export function FieldTextarea<T extends FieldValues>({
+export function FieldTextarea<T extends FieldValues, C = any, O = T>({
   name,
   ui,
   form,
   disabled,
   required,
-}: FieldRendererProps<T>) {
+}: FieldRendererProps<T, C, O>) {
   return (
     <Controller
       name={name}

@@ -28,18 +28,20 @@ export default async function Page({
 
   const data = await getOrganizationTree();
   if (!data.success) {
-    return <ErrorBlock message={data.error} />;
+    return <ErrorBlock message={data.message} />;
   }
 
-  const tree = data.data;
+  const tree = data.data ?? [];
   const result = await listOrganizations(params);
 
   if (!result.success) {
-    return <ErrorBlock message={result.error} />;
+    return <ErrorBlock message={result.message} />;
   }
 
   console.log("organization listOrganizations", result);
-
+  if (!result.data) {
+    return <ErrorBlock message="未查询到数据" />;
+  }
   const { items, total, page, pageSize } = result.data;
 
   return (

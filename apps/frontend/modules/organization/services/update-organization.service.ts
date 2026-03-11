@@ -1,12 +1,7 @@
 import { insertOrganization } from "../repositories";
 import { updateOrganization } from "../repositories/organization-update.repository";
 import { UpdateOrganizationInput } from "../schemas";
-
-export type ServiceResult<T = unknown> = {
-  success: boolean;
-  message?: string;
-  data?: T;
-};
+import { ServiceResult } from "@/modules/shared/types";
 
 export async function updateOrganizationService(
   input: UpdateOrganizationInput

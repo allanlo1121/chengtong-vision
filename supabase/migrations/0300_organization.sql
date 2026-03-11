@@ -18,9 +18,7 @@ create table public.organizations (
 
   org_type_id uuid not null references public.master_data(id),
   business_id uuid  references public.master_data(id),
-
-
-  region_id uuid not null references public.master_data(id),
+  
   country_code text not null default 'CN' references public.countries(code),
   province_code text references public.admin_regions(code),
   city_code text references public.admin_regions(code),

@@ -10,20 +10,22 @@ import { OptionConfig, TreeOptionConfig } from "../../options/types";
 import { FieldRendererProps } from "../types/field.types";
 import { useFieldTreeOptions } from "../hooks/use-field-options";
 
-type FieldTreeNodeProps<T extends FieldValues> = {
-  control: Control<T>;
-  name: Path<T>;
-  label: string;
-  option: OptionConfig;
-};
+// type FieldTreeNodeProps<T extends FieldValues,
+//   C = any,
+//   O = T> = {
+//     control: Control<T, C, O>;
+//     name: Path<T>;
+//     label: string;
+//     option: OptionConfig;
+//   };
 
-export function FieldTreeSelect<T extends FieldValues>({
+export function FieldTreeSelect<T extends FieldValues, C = any, O = T>({
   name,
   ui,
   form,
   disabled = false,
   required = false,
-}: FieldRendererProps<T>) {
+}: FieldRendererProps<T, C, O>) {
   // 只监听依赖字段
   const depValues = useWatch({
     control: form.control,
@@ -40,7 +42,7 @@ export function FieldTreeSelect<T extends FieldValues>({
     ui.dependsOn
   );
 
-  console.log("FieldTreeSelect options:", options);
+  // console.log("FieldTreeSelect options:", options);
   const finalDisabled = disabled || disabledByDeps;
   return (
     <Controller

@@ -1,7 +1,7 @@
 import { FieldValues, UseFormReturn, Path } from "react-hook-form";
 import { FieldDefinition } from "../types/field.types";
-
-export type DependencyGraph<T extends FieldValues> = Map<Path<T>, Path<T>[]>;
+import { z, ZodObject } from "zod";
+import { DependencyGraph } from "../types/dependency-graph";
 
 /**
  * 从 schema fields 构建依赖图
@@ -31,6 +31,7 @@ export function buildDependencyGraph<T extends FieldValues>(
     }
   }
 
+  console.log("Built dependency graph", { graph: Array.from(graph.entries()) });
   return graph;
 }
 
@@ -39,7 +40,9 @@ export function buildDependencyGraph<T extends FieldValues>(
  *
  * graph keys = source fields
  */
-export function getDependencySources<T extends FieldValues>(graph: DependencyGraph<T>): Path<T>[] {
+export function getDependencySources<T extends z.input<ZodObject<any>>>(
+  graph: DependencyGraph<T>
+): Path<T>[] {
   return Array.from(graph.keys());
 }
 
@@ -54,7 +57,7 @@ export function getDependencySources<T extends FieldValues>(graph: DependencyGra
  *   ↓
  * C 清空
  */
-export function runDependencyEngine<T extends FieldValues>(
+export function runDependencyEngine<T extends z.input<ZodObject<any>>>(
   graph: DependencyGraph<T>,
   changedFields: Path<T>[],
   form: UseFormReturn<T>

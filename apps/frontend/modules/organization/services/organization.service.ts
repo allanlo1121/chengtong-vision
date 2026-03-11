@@ -8,33 +8,7 @@ import { UpdateOrganizationInput } from "../schemas";
 import { getOrganizationRowById } from "../repositories/organization.repository";
 import { mapOrganizationRowToUpdateInput } from "../mapper/organization.mapper";
 
-// export async function listAllOrganizations(): Promise<ActionResult<OrganizationListItem[]>> {
-//   try {
-//     const data = await organizationRepository.paginate({ page: 1, pageSize: 1000 });
-
-//     return { success: true, data };
-//   } catch (e: any) {
-//     return mapErrorToActionResult(e);
-//   }
-// }
-
-// export async function listOrganizations(
-//   query: OrganizationListQueryType
-// ): Promise<ActionResult<PaginatedResult<OrganizationListItem>>> {
-//   try {
-//     const data = await getOrganizationPage(query);
-//     return { success: true, data };
-//   } catch (e: any) {
-//     return mapErrorToActionResult(e);
-//   }
-// }
-
-// export async function listOrganizations(
-//   query: OrganizationListQueryType
-// ): Promise<ActionResult<PaginatedResult<OrganizationListItem>>> {
-//   console.log("org list query", query);
-//   return organizationRepository.paginate(query);
-// }
+import { ServiceResult } from "@/modules/shared/types";
 
 export async function batchDeleteOrganizations(ids: string[]): Promise<number> {
   if (!ids.length) {
@@ -46,7 +20,7 @@ export async function batchDeleteOrganizations(ids: string[]): Promise<number> {
 
 export async function listOrganizations(
   query: OrganizationListQueryType
-): Promise<ActionResult<PaginatedResult<OrganizationListItem>>> {
+): Promise<ServiceResult<PaginatedResult<OrganizationListItem>>> {
   try {
     const data = await organizationRepository.paginate(query);
     return {
@@ -60,20 +34,20 @@ export async function listOrganizations(
   } catch (error: unknown) {
     return {
       success: false,
-      error: (error as Error)?.message ?? "查询失败",
+      message: (error as Error)?.message ?? "查询失败",
     };
   }
 }
 
 export async function getOrganizationById(
   id: string
-): Promise<ActionResult<UpdateOrganizationInput>> {
+): Promise<ServiceResult<UpdateOrganizationInput>> {
   try {
     console.log("===getOrganizationById===");
 
     const row = await getOrganizationRowById(id);
 
-    if (!row) return { success: false, error: "Organization not found" };
+    if (!row) return { success: false, message: "未查询到组织" };
 
     return {
       success: true,
@@ -82,7 +56,7 @@ export async function getOrganizationById(
   } catch (error: unknown) {
     return {
       success: false,
-      error: (error as Error)?.message ?? "查询失败",
+      message: (error as Error)?.message ?? "查询失败",
     };
   }
 }

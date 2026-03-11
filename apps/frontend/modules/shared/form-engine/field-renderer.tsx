@@ -4,7 +4,11 @@ import { FieldRendererProps } from "./types/field.types";
 import { resolveCondition } from "./engines/condition-engine";
 import { resolveValue } from "./engines/value-resolver";
 
-export function FieldRenderer<T extends FieldValues>({ name, ui, form }: FieldRendererProps<T>) {
+export function FieldRenderer<T extends FieldValues, C = any, O = T>({
+  name,
+  ui,
+  form,
+}: FieldRendererProps<T, C, O>) {
   const dependsOn = ui.dependsOn ?? [];
 
   const watchValues = useWatch({
@@ -27,5 +31,7 @@ export function FieldRenderer<T extends FieldValues>({ name, ui, form }: FieldRe
   const disabled = resolveValue(ui.disabled, context);
   const required = resolveValue(ui.required, context);
 
-  return <Component<T> name={name} ui={ui} form={form} disabled={disabled} required={required} />;
+  return (
+    <Component<T, C, O> name={name} ui={ui} form={form} disabled={disabled} required={required} />
+  );
 }

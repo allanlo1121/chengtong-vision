@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { createOrganizationService } from "../services/create-organization.service";
-import { CreateOrganizationSchema } from "../schemas";
+import { CreateOrganizationInput, CreateOrganizationSchema } from "../schemas";
 import { ActionState } from "@/modules/shared/types/action-state";
 
 export type OrganizationFormState = ActionState<{
@@ -24,39 +24,28 @@ export type OrganizationFormState = ActionState<{
   isActive?: string[];
 }>;
 
-export async function createOrganizationAction(formData: FormData) {
+export async function createOrganizationAction(data: CreateOrganizationInput) {
   console.log("SERVER ACTION RUNNING");
-  console.log("create organization formData", formData);
+  console.log("create organization formData", data);
 
-  const parsed = CreateOrganizationSchema.safeParse({
-    name: formData.get("name"),
-    code: formData.get("code"),
-    fullName: formData.get("fullName"),
-    parentId: formData.get("parentId"),
-    description: formData.get("description"),
-    orgTypeId: formData.get("orgTypeId"),
-    businessId: formData.get("businessId"),
-    regionId: formData.get("regionId"),
-    countryCode: formData.get("countryCode"),
-    provinceCode: formData.get("provinceCode"),
-    cityCode: formData.get("cityCode"),
-    districtCode: formData.get("districtCode"),
-    address: formData.get("address"),
-    latitude: formData.get("latitude") ? Number(formData.get("latitude")) : undefined,
-    longitude: formData.get("longitude") ? Number(formData.get("longitude")) : undefined,
-    isActive: formData.get("isActive") === "true",
-  });
-
-  console.log("parsed", parsed);
+  const parsed = CreateOrganizationSchema.safeParse(data);
 
   if (!parsed.success) {
     return {
       success: false,
       errors: z.flattenError(parsed.error).fieldErrors,
-      message: "表单校验失败",
     };
   }
   const result = await createOrganizationService(parsed.data);
+
+  if (!result.success) {
+    return {
+      success: false,
+      errors: {
+        form: [result.message || "创建失败"],
+      },
+    };
+  }
 
   return result;
 }

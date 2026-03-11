@@ -14,14 +14,14 @@ import { Switch } from "@/components/ui/switch";
 
 import { FieldRendererProps } from "../types/field.types";
 
-export function FieldSwitch<T extends FieldValues>({
+export function FieldSwitch<T extends FieldValues, C = any, O = T>({
   name,
   ui,
   form,
   disabled = false,
   required = false,
-}: FieldRendererProps<T>) {
-  console.log("FieldSwitch", { name, ui, disabled, required });
+}: FieldRendererProps<T, C, O>) {
+  // console.log("FieldSwitch", { name, ui, disabled, required });
   return (
     <Controller
       name={name}
@@ -33,7 +33,11 @@ export function FieldSwitch<T extends FieldValues>({
             {/* {ui.description && <FieldDescription>{ui.description}</FieldDescription>} */}
           </FieldContent>
 
-          <Switch checked={field.value} onCheckedChange={field.onChange} disabled={disabled} />
+          <Switch
+            checked={field.value ?? true}
+            onCheckedChange={field.onChange}
+            disabled={disabled}
+          />
         </Field>
       )}
     />

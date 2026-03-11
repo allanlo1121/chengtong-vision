@@ -5,14 +5,14 @@ import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { FieldRendererProps } from "../types/field.types";
 
-export function FieldInput<T extends FieldValues>({
+export function FieldInput<T extends FieldValues, C = any, O = T>({
   name,
   ui,
   form,
   disabled,
   required,
-}: FieldRendererProps<T>) {
-  console.log("FieldInput", { name, ui, disabled, required });
+}: FieldRendererProps<T, C, O>) {
+  // console.log("FieldInput", { name, ui, disabled, required });
   return (
     <Controller
       name={name}

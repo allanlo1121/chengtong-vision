@@ -12,38 +12,87 @@ import { groupFieldsBySection } from "./engines/section-engine";
 
 import { extractFields } from "./utils/extract-fields";
 import { ActionResult } from "../types";
+import { DependencyGraph } from "./types/dependency-graph";
 
-import { ZodSchema } from "zod";
+import { z, ZodObject, ZodRawShape, ZodType, ZodSchema } from "zod";
+import { log } from "console";
+import { de } from "zod/v4/locales";
 
-type SchemaFormProps<T extends FieldValues> = {
-  schema: ZodSchema<T>;
-  initialValues?: DefaultValues<T>;
-  action?: (data: T) => Promise<ActionResult<any>>;
-  onSuccess?: (result: ActionResult<T>) => void;
-  onError?: (result: ActionResult<T>) => void;
+type SchemaFormProps<TSchema extends ZodObject<any>> = {
+  schema: TSchema;
+  initialValues?: DefaultValues<z.input<TSchema>>;
+  action?: (data: z.output<TSchema>) => Promise<ActionResult<any>>;
+  onSuccess?: (result: ActionResult<z.output<TSchema>>) => void;
+  onError?: (result: ActionResult<z.output<TSchema>>) => void;
   onCancel?: () => void;
 };
 
-export function SchemaForm<T extends FieldValues>({
+export function SchemaForm<TSchema extends ZodObject<any>>({
   schema,
   initialValues,
   action,
   onSuccess,
   onError,
   onCancel,
-}: SchemaFormProps<T>) {
+}: SchemaFormProps<TSchema>) {
+  // console.log("SchemaForm props", {
+  //   schema,
+  //   initialValues,
+  //   action,
+  //   onSuccess,
+  //   onError,
+  //   onCancel,
+  // });
   /** ------------------------------------------------
    * 1 提取字段
    * ------------------------------------------------ */
-  const fields = useMemo(() => extractFields<T>(schema), [schema]);
+  const fields = useMemo(() => extractFields<TSchema>(schema), [schema]);
+
+  type FormInput = z.input<TSchema>;
+  type FormOutput = z.output<TSchema>;
+
+  // console.log("Schema fields", fields);
 
   /** ------------------------------------------------
    * 2 初始化 form
    * ------------------------------------------------ */
-  const form = useForm<T>({
+
+  const schemaDefaults = useMemo(() => {
+    const shape = schema.shape;
+    const defaults: Record<string, undefined> = {};
+    for (const key in shape) {
+      const field: any = shape[key];
+      // console.log("Calculating schema default for field", { key, field });
+      const defaultValue = field._def.defaultValue;
+      if (defaultValue === undefined) {
+        // console.log(`No default value for field ${key}:`);
+        continue;
+      }
+      defaults[key] = defaultValue;
+    }
+
+    try {
+      return defaults;
+    } catch {
+      return {};
+    }
+  }, [schema]);
+
+  const defaultValues = useMemo(() => {
+    return {
+      ...schemaDefaults,
+      ...initialValues,
+    } as DefaultValues<FormInput>;
+  }, [schemaDefaults, initialValues]);
+
+  // console.log("SchemaForm defaultValues", defaultValues);
+
+  const form = useForm<FormInput, any, FormOutput>({
     resolver: zodResolver(schema),
-    defaultValues: initialValues,
+    defaultValues,
   });
+
+  // console.log("schemaForm form", form);
 
   /** ------------------------------------------------
    * 3 initialValues 更新
@@ -59,17 +108,17 @@ export function SchemaForm<T extends FieldValues>({
    * 7 依赖引擎
    * ------------------------------------------------ */
 
-  const graph = useMemo(() => buildDependencyGraph(fields), [fields]);
+  const graph: DependencyGraph<FormInput> = useMemo(() => buildDependencyGraph(fields), [fields]);
 
-  useDependencyEngine(form, graph);
+  useDependencyEngine<FormInput, any, FormOutput>(form, graph);
 
   /** ------------------------------------------------
    * 8 提交
    * ------------------------------------------------ */
 
-  const onSubmit = async (data: T) => {
+  const onSubmit = async (data: FormOutput) => {
+    // console.log("schema-form submit data",data);
     if (!action) return;
-
     const result = await action(data);
 
     if (!result.success) {
@@ -101,7 +150,7 @@ export function SchemaForm<T extends FieldValues>({
           <div className="grid grid-cols-2 gap-4">
             {sectionFields.map((field) => (
               <div key={field.name} className={`col-span-${field.ui.colSpan ?? 1}`}>
-                <FieldRenderer<T> name={field.name} ui={field.ui} form={form} />
+                <FieldRenderer name={field.name} ui={field.ui} form={form} />
               </div>
             ))}
           </div>

@@ -7,9 +7,9 @@ import { getOptions, getAsyncOptions, getTreeOptions } from "../../options/servi
 import { resolveValue } from "../engines/value-resolver";
 import useSWR from "swr";
 
-export function useFieldOptions<T extends FieldValues>(
+export function useFieldOptions<T extends FieldValues, C = any, O = T>(
   option: ValueResolver<T, OptionConfig> | undefined,
-  form: UseFormReturn<T>,
+  form: UseFormReturn<T, C, O>,
   dependsOn?: Path<T>[]
 ) {
   const deps = useWatch({
@@ -36,9 +36,9 @@ export function useFieldOptions<T extends FieldValues>(
   };
 }
 
-export function useFieldTreeOptions<T extends FieldValues>(
+export function useFieldTreeOptions<T extends FieldValues, C = any, O = T>(
   option: ValueResolver<T, TreeOptionConfig> | undefined,
-  form: UseFormReturn<T>,
+  form: UseFormReturn<T, C, O>,
   dependsOn?: Path<T>[]
 ) {
   const deps = useWatch({

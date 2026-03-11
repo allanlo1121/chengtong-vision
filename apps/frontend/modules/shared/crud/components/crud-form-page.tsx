@@ -4,27 +4,29 @@ import { useRouter } from "next/navigation";
 import { SchemaForm } from "@/modules/shared/form-engine/schema-form";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 
-import { ZodType } from "zod";
+import { z, ZodObject, ZodType } from "zod";
 import { DefaultValues } from "react-hook-form";
+import { useFormActionHandlers } from "@/modules/shared/crud/use-form-action-handlers";
 
-type CrudFormPageProps<T> = {
+type CrudFormPageProps<TSchema extends ZodObject<any>> = {
   title: string;
   description?: string;
-  schema: any;
-  initialValues?: any;
-  action?: (data: T) => Promise<any>;
+  schema: TSchema;
+  initialValues?: DefaultValues<z.input<TSchema>>;
+  action?: (data: z.output<TSchema>) => Promise<any>;
+  redirect?: string;
 };
 
-export function CrudFormPage<T>({
+export function CrudFormPage<TSchema extends ZodObject<any>>({
   title,
   description,
   schema,
   initialValues,
   action,
-}: CrudFormPageProps<T>) {
+  redirect,
+}: CrudFormPageProps<TSchema>) {
   const router = useRouter();
-
-  console.log("CrudFormPage", schema);
+  const { handleSuccess, handleError, handleCancel } = useFormActionHandlers(router);
 
   return (
     <Card className="w-full max-w-4xl">
@@ -37,13 +39,11 @@ export function CrudFormPage<T>({
       <CardContent>
         <SchemaForm
           schema={schema}
-          initialValues={initialValues as DefaultValues<T>}
-          onSuccess={() => {
-            router.push("/system/organizations");
-          }}
-          onCancel={() => {
-            router.back();
-          }}
+          initialValues={initialValues as DefaultValues<z.input<TSchema>>}
+          action={action}
+          onSuccess={(r) => handleSuccess(r, redirect)}
+          onError={handleError}
+          onCancel={handleCancel}
         />
       </CardContent>
     </Card>

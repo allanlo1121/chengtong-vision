@@ -2,8 +2,9 @@
 
 import { z } from "zod";
 import { updateOrganizationService } from "../services/update-organization.service";
-import { UpdateOrganizationSchema } from "../schemas";
+import { UpdateOrganizationInput, UpdateOrganizationSchema } from "../schemas";
 import { ActionState } from "@/modules/shared/types/action-state";
+import { ActionResult } from "@/modules/shared/contracts/action-result";
 
 export type OrganizationFormState = ActionState<{
   name?: string[];
@@ -24,40 +25,30 @@ export type OrganizationFormState = ActionState<{
   isActive?: string[];
 }>;
 
-export async function updateOrganizationAction(formData: FormData) {
+export async function updateOrganizationAction(
+  data: UpdateOrganizationInput
+): Promise<ActionResult<any>> {
   console.log("SERVER ACTION RUNNING");
-  console.log("update organization formData", formData);
+  console.log("update organization formData", data);
 
-  const parsed = UpdateOrganizationSchema.safeParse({
-    id: formData.get("id"),
-    name: formData.get("name"),
-    code: formData.get("code"),
-    fullName: formData.get("fullName"),
-    parentId: formData.get("parentId"),
-    description: formData.get("description"),
-    orgTypeId: formData.get("orgTypeId"),
-    businessId: formData.get("businessId"),
-    regionId: formData.get("regionId"),
-    countryCode: formData.get("countryCode"),
-    provinceCode: formData.get("provinceCode"),
-    cityCode: formData.get("cityCode"),
-    districtCode: formData.get("districtCode"),
-    address: formData.get("address"),
-    latitude: formData.get("latitude") ? Number(formData.get("latitude")) : undefined,
-    longitude: formData.get("longitude") ? Number(formData.get("longitude")) : undefined,
-    isActive: formData.get("isActive") === "true",
-  });
-
-  console.log("parsed", parsed);
+  const parsed = UpdateOrganizationSchema.safeParse(data);
 
   if (!parsed.success) {
     return {
       success: false,
       errors: z.flattenError(parsed.error).fieldErrors,
-      message: "表单校验失败",
     };
   }
   const result = await updateOrganizationService(parsed.data);
+
+  if (!result.success) {
+    return {
+      success: false,
+      errors: {
+        form: [result.message || "更新失败"],
+      },
+    };
+  }
 
   return result;
 }

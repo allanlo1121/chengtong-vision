@@ -23,6 +23,7 @@ export default function UpdateOrganization({
       schema={UpdateOrganizationSchema}
       initialValues={initialValues}
       action={updateOrganizationAction}
+      redirect="/system/organizations"
     />
   );
 }

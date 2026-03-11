@@ -9,20 +9,21 @@ select
   
   b.code as business_code,
   b.name as business_name,
-  
-  r.code as region_code,
-  r.name as region_name,
+
 
   c.name as country_name,
-  a.name as admin_region_name
+  ap.name as province_name,
+  ac.name as city_name,
+  ad.name as district_name
 
 from public.organizations o
 left join organizations p on p.id = o.parent_id
 left join public.master_data t on t.id = o.org_type_id
 left join public.master_data b on b.id = o.business_id
-left join public.master_data r on r.id = o.region_id
 left join public.countries c on c.code = o.country_code
-left join public.admin_regions a on a.code = o.admin_region_code
+left join public.admin_regions ap on ap.code = o.province_code
+left join public.admin_regions ac on ac.code = o.city_code
+left join public.admin_regions ad on ad.code = o.district_code
 where o.deleted_at is null;
 
 
@@ -37,15 +38,17 @@ select
 
   t.name as org_type_name,
   b.name as business_name,
-  r.name as region_name,
   c.name as country_name,
-  a.name as admin_region_name
+  ap.name as province_name,
+  ac.name as city_name,
+  ad.name as district_name
 
 from public.organizations o
 left join organizations p on p.id = o.parent_id
 left join public.master_data t on t.id = o.org_type_id
 left join public.master_data b on b.id = o.business_id
-left join public.master_data r on r.id = o.region_id
 left join public.countries c on c.code = o.country_code
-left join public.admin_regions a on a.code = o.admin_region_code
+left join public.admin_regions ap on ap.code = o.province_code
+left join public.admin_regions ac on ac.code = o.city_code
+left join public.admin_regions ad on ad.code = o.district_code
 where o.deleted_at is null;

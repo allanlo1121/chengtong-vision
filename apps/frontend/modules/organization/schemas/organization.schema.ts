@@ -4,10 +4,9 @@ import {
   idSchema,
   latitudeSchema,
   longitudeSchema,
-  optionalFields,
 } from "@/modules/shared/schema";
+
 import { z } from "zod";
-import { is } from "zod/v4/locales";
 
 /**
  * 基础字段规则
@@ -30,7 +29,9 @@ export const OrganizationFields = {
 
   code: z
     .string()
-    .regex(/^[A-Z0-9_]+$/, { message: "编码只能包含大写字母、数字和下划线" })
+    .regex(/^[A-Z0-9_-]+$/, {
+      message: "编码只能包含大写字母、数字、下划线和中划线",
+    })
     .optional()
     .meta({
       label: "编码",
@@ -72,21 +73,27 @@ export const OrganizationFields = {
     option: { source: "master", code: "ORG_CATEGORY" },
   }),
 
-  businessId: idSchema.optional().meta({
-    label: "业务类型",
-    component: "select",
-    section: "基本信息",
-    colSpan: 1,
-    option: { source: "master", code: "BUSINESS" },
-  }),
+  businessId: idSchema
+    .nullable()
+    .optional()
+    .meta({
+      label: "业务类型",
+      component: "select",
+      section: "基本信息",
+      colSpan: 1,
+      option: { source: "master", code: "BUSINESS" },
+    }),
 
-  regionId: idSchema.meta({
-    label: "区域",
-    component: "select",
-    section: "地理信息",
-    colSpan: 1,
-    option: { source: "master", code: "REGION" },
-  }),
+  regionId: idSchema
+    .nullable()
+    .optional()
+    .meta({
+      label: "区域",
+      component: "select",
+      section: "地理信息",
+      colSpan: 1,
+      option: { source: "master", code: "REGION" },
+    }),
 
   countryCode: countryCodeSchema.default("CN").meta({
     label: "国家代码",
@@ -96,50 +103,41 @@ export const OrganizationFields = {
     option: { source: "countries" },
   }),
 
-  provinceCode: z
-    .string()
-    .optional()
-    .meta({
-      label: "省",
-      component: "select",
-      section: "地理信息",
-      colSpan: 1,
-      option: {
-        source: "admin_regions",
-        level: 1,
-      },
-    }),
+  provinceCode: adminRegionCodeSchema.meta({
+    label: "省",
+    component: "select",
+    section: "地理信息",
+    colSpan: 1,
+    option: {
+      source: "admin_regions",
+      level: 1,
+    },
+  }),
 
-  cityCode: z
-    .string()
-    .optional()
-    .meta({
-      label: "市",
-      component: "select",
-      section: "地理信息",
-      colSpan: 1,
-      dependsOn: ["provinceCode"],
-      option: (v: any) => ({
-        source: "admin_regions",
-        level: 2,
-        parentCode: v.provinceCode,
-      }),
+  cityCode: adminRegionCodeSchema.meta({
+    label: "市",
+    component: "select",
+    section: "地理信息",
+    colSpan: 1,
+    dependsOn: ["provinceCode"],
+    option: (v: any) => ({
+      source: "admin_regions",
+      level: 2,
+      parentCode: v.provinceCode,
     }),
+  }),
 
-  districtCode: z
-    .string()
-    .optional()
-    .meta({
-      label: "区县",
-      component: "select",
-      section: "地理信息",
-      dependsOn: ["cityCode"],
-      option: (v: any) => ({
-        source: "admin_regions",
-        level: 3,
-        parentCode: v.cityCode,
-      }),
+  districtCode: adminRegionCodeSchema.meta({
+    label: "区县",
+    component: "select",
+    section: "地理信息",
+    dependsOn: ["cityCode"],
+    option: (v: any) => ({
+      source: "admin_regions",
+      level: 3,
+      parentCode: v.cityCode,
     }),
+  }),
 
   address: z.string().max(200, { message: "地址最多200个字符" }).optional().meta({
     label: "地址",
@@ -164,7 +162,7 @@ export const OrganizationFields = {
     colSpan: 1,
   }),
 
-  isActive: z.boolean().default(false).meta({
+  isActive: z.boolean().default(true).meta({
     label: "是否启用",
     component: "switch",
     section: "其他信息",

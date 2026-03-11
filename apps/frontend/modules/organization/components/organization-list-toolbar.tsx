@@ -14,7 +14,9 @@ export function OrganizationListToolbar() {
       <div className="flex gap-2">
         <Button onClick={() => router.push("/system/organizations/create")}>新建</Button>
 
-        <Button variant="secondary">导入</Button>
+        <Button onClick={() => router.push("/system/organizations/import")} variant="secondary">
+          导入
+        </Button>
       </div>
     </div>
   );

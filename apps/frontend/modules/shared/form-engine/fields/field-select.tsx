@@ -21,14 +21,14 @@ import {
 import { SelectOption } from "@/modules/shared/options/types";
 import { useFieldOptions } from "../hooks/use-field-options";
 
-export function FieldSelect<T extends FieldValues>({
+export function FieldSelect<T extends FieldValues, C = any, O = T>({
   name,
   ui,
   form,
   disabled = false,
   required = false,
-}: FieldRendererProps<T>) {
-  console.log("FieldSelect", { name, ui, disabled, required });
+}: FieldRendererProps<T, C, O>) {
+  // console.log("FieldSelect", { name, ui, disabled, required });
   // 只监听依赖字段
   const depValues = useWatch({
     control: form.control,
@@ -41,7 +41,7 @@ export function FieldSelect<T extends FieldValues>({
 
   const { options, loading } = useFieldOptions(ui.option, form, ui.dependsOn);
 
-  console.log("FieldSelect options:", options);
+  // console.log("FieldSelect options:", options);
   const finalDisabled = disabled || disabledByDeps;
 
   return (
