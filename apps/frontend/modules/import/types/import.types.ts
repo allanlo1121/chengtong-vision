@@ -29,9 +29,4 @@ export type ImportResult<T = any> = {
   errors?: any;
 };
 
-export type LookupConfig = {
-  source: LookupSource;
-  key: "code" | "name";
-};
-
 export type LookupMaps = Record<LookupSource, Map<string, string>>;

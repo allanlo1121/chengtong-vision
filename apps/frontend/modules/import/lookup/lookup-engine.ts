@@ -1,7 +1,10 @@
+import { TableName } from "@/modules/shared/types/common.types";
 import { loadLookupData, LookupSource } from "../services/lookup.service";
 import { LookupMaps, LookupType } from "../types";
 
-export async function loadLookups(lookups?: LookupType): Promise<Partial<LookupMaps>> {
+export async function loadLookups<T extends TableName>(
+  lookups: LookupType<T>
+): Promise<Partial<LookupMaps>> {
   const maps: Partial<LookupMaps> = {};
 
   if (!lookups) return maps;

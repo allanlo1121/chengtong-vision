@@ -7,14 +7,15 @@ import { persistImportRows } from "../engine/persist-import-rows";
 import JsonUploader from "./json-uploader";
 import JsonPreview from "./json-preview";
 import { ImportConfig, ImportResult } from "../types";
+import { TableName } from "@/modules/shared/types";
 
-export default function ImportPage<CreateOrganization>({ config }: { config: ImportConfig }) {
+export default function ImportPage<T extends TableName>({ config }: { config: ImportConfig<T> }) {
   const [rows, setRows] = useState<any[]>([]);
-  const [result, setResult] = useState<ImportResult<CreateOrganization>[]>([]);
+  const [result, setResult] = useState<ImportResult<T>[]>([]);
 
   async function handleData(data: any[]) {
     setRows(data);
-    const res = await prepareImportRows<CreateOrganization>(data, config);
+    const res = await prepareImportRows<T>(data, config);
     setResult(res);
   }
 
