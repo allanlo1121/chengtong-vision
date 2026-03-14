@@ -153,5 +153,5 @@ $$;
 comment on function system.set_updated_at()
 is 'Auto-maintain updated_at before update';
 
-comment on function system.soft_delete()
+comment on function system.soft_delete(p_table,p_ids)
 is 'Optional soft delete trigger helper';
