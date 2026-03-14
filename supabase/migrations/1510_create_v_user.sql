@@ -44,7 +44,7 @@ select
   e.id as employee_id,
   e.name,
   e.org_node_id,
-  o.path::text as org_path,
+  o.path as org_path,
 
   (
     select coalesce(array_agg(distinct r.code), '{}')

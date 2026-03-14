@@ -6,12 +6,13 @@ create table public.organizations (
   id uuid primary key default gen_random_uuid(),
 
   parent_id uuid references public.organizations(id) on delete restrict,
-  path ltree, -- 可选（建议开启 ltree 扩展）
-  level int not null default 0,
+  node_key text not null unique,
+  path ltree not null, -- 可选（建议开启 ltree 扩展）
+  level int generated always as (nlevel(path)) stored,
 
   code text not null unique,
   name text not null,
-  fullname text,
+  full_name text,
   description text,
 
   sort_order integer default 0,
@@ -19,7 +20,7 @@ create table public.organizations (
   org_type_id uuid not null references public.master_data(id),
   business_id uuid  references public.master_data(id),
   
-  country_code text not null default 'CN' references public.countries(code),
+  country_code text references public.countries(code),
   province_code text references public.admin_regions(code),
   city_code text references public.admin_regions(code),
   district_code text references public.admin_regions(code),
@@ -36,52 +37,244 @@ create table public.organizations (
   deleted_by uuid references public.employees(id) on delete set null,
 
   check (latitude between -90 and 90),
-  check (longitude between -180 and 180)
+  check (longitude between -180 and 180),
+  check (id <> parent_id)
 );
 
 
 create index idx_organizations_parent
 on public.organizations(parent_id);
+
 create index idx_org_path on public.organizations using gist(path);
 
 
 
--- =====================================================
--- 组织树查询函数
--- =====================================================
-create or replace function public.fn_organizations_tree()
+
+create function org_generate_node_key()
+returns trigger
+language plpgsql
+as $$
+begin
+  if new.node_key is null then
+    new.node_key =
+      substr(replace(gen_random_uuid()::text,'-',''),1,8);
+  end if;
+
+  return new;
+end
+$$;
+
+create trigger trg_org_node_key
+before insert on organizations
+for each row
+execute function org_generate_node_key();
+
+create function org_generate_path()
+returns trigger
+language plpgsql
+as $$
+declare
+  parent_path ltree;
+begin
+
+  if new.parent_id is null then
+     new.path = new.node_key::ltree;
+  else
+
+     select path
+     into parent_path
+     from organizations
+     where id = new.parent_id;
+
+     new.path = parent_path || text2ltree(new.node_key);
+
+  end if;
+
+  return new;
+
+end
+$$;
+
+create trigger trg_org_path
+before insert on organizations
+for each row
+execute function org_generate_path();
+
+
+create or replace function org_move_node(
+  p_id uuid,
+  p_new_parent uuid
+)
+returns void
+language plpgsql
+as $$
+declare
+  old_path ltree;
+  new_parent_path ltree;
+begin
+
+  -- 获取当前节点 path
+  select path
+  into old_path
+  from organizations
+  where id = p_id;
+
+  if old_path is null then
+    raise exception 'Organization not found: %', p_id;
+  end if;
+
+
+  -- 获取新父节点 path
+  select path
+  into new_parent_path
+  from organizations
+  where id = p_new_parent;
+
+  if new_parent_path is null then
+    raise exception 'Parent organization not found: %', p_new_parent;
+  end if;
+
+  --防止移到自己
+  if p_id = p_new_parent then
+    raise exception 'Cannot move node to itself';
+  end if;
+
+  -- 防止移动到自己的子树
+  if exists (
+    select 1
+    from organizations
+    where id = p_new_parent
+      and path <@ old_path
+  ) then
+    raise exception 'Cannot move node into its subtree';
+  end if;
+
+
+  -- 更新整个子树 path
+  update organizations
+  set path = new_parent_path || subpath(path, nlevel(old_path))
+  where path <@ old_path;
+
+
+  -- 更新 parent
+  update organizations
+  set parent_id = p_new_parent
+  where id = p_id;
+
+end
+$$;
+
+--查询子树函数
+create or replace function public.fn_organizations_subtree(
+  p_id uuid
+)
 returns table (
   id uuid,
   name text,
   parent_id uuid,
-  is_active boolean,
   level int
 )
 language sql
+stable
 as $$
-with recursive org_tree as (
-  select
-    o.id,
-    o.name,
-    o.parent_id,
-    o.is_active,
-    1 as level
-  from public.organizations o
-  where o.parent_id is null
-    and o.deleted_at is null
-
-  union all
-
-  select
-    c.id,
-    c.name,
-    c.parent_id,
-    c.is_active,
-    p.level + 1
-  from public.organizations c
-  join org_tree p on c.parent_id = p.id
-  where c.deleted_at is null
+select
+  id,
+  name,
+  parent_id,
+  nlevel(path) as level
+from public.organizations
+where path <@ (
+  select path
+  from public.organizations
+  where id = p_id
 )
-select * from org_tree
-order by level;
+and deleted_at is null
+order by path;
 $$;
+
+
+--  查询祖先函数
+create or replace function public.fn_organizations_ancestors(
+  p_id uuid
+)
+returns table (
+  id uuid,
+  name text,
+  level int
+)
+language sql
+stable
+as $$
+select
+  id,
+  name,
+  nlevel(path) as level
+from public.organizations
+where path @> (
+  select path
+  from public.organizations
+  where id = p_id
+)
+order by path;
+$$;
+
+--直接子节点函数
+create or replace function public.fn_organizations_children(
+  p_parent_id uuid
+)
+returns table (
+  id uuid,
+  name text,
+  parent_id uuid,
+  level int,
+  has_children boolean,
+  sort_order int
+)
+language sql
+stable
+as $$
+select
+  o.id,
+  o.name,
+  o.parent_id,
+  o.level,
+  exists (
+    select 1
+    from public.organizations c
+    where c.parent_id = o.id
+    and c.deleted_at is null
+  ) as has_children,
+  o.sort_order
+from public.organizations o
+where o.parent_id = p_parent_id
+and o.deleted_at is null
+order by o.sort_order, o.name;
+$$;
+
+--查询根节点
+create or replace function public.fn_organizations_roots()
+returns table (
+  id uuid,
+  name text,
+  level int,
+  has_children boolean
+)
+language sql
+stable
+as $$
+select
+  o.id,
+  o.name,
+  o.level,
+  exists (
+    select 1
+    from organizations c
+    where c.parent_id = o.id
+    and c.deleted_at is null
+  ) as has_children
+from organizations o
+where o.parent_id is null
+and o.deleted_at is null
+order by o.sort_order;
+$$;
+

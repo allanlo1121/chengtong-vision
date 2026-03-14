@@ -129,7 +129,8 @@ begin
   v_sql := format(
     'update %I
      set deleted_at = now(),
-         deleted_by = auth.uid()
+         deleted_by = auth.uid(),
+         updated_at = now()
      where id = any($1)
        and deleted_at is null',
     p_table

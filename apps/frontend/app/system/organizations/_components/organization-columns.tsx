@@ -1,14 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { type ColumnDef } from "@tanstack/react-table";
-
 import { Checkbox } from "@/components/ui/checkbox";
-
-import { regionNames } from "./data/data";
 import { type OrganizationListItem } from "@/modules/organization/types/organization.types";
-import { DataTableColumnHeader } from "@/components/ui/data-table/data-table-column-header";
+import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
-import { Badge } from "@/components/ui/badge";
 import { formatDateTime } from "@/lib/core/utils";
 
 export const organizationColumns: ColumnDef<OrganizationListItem>[] = [
@@ -38,27 +35,16 @@ export const organizationColumns: ColumnDef<OrganizationListItem>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => <DataTableColumnHeader column={column} title="组织简称" />,
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("name")}</div>,
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "regionName",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="所属片区" />,
     cell: ({ row }) => {
-      const region = regionNames.find((region) => region.value === row.getValue("regionName"));
-      if (!region) {
-        return null;
-      }
+      const org = row.original;
       return (
-        <div className="flex gap-2">
-          {region && <Badge variant="outline">{region.label}</Badge>}
-          {/* <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("regionName")}
-                    </span> */}
-        </div>
+        <Link href={`/system/organizations/${org.id}`} className="w-[80px]">
+          {org.name}
+        </Link>
       );
     },
+    enableSorting: false,
+    enableHiding: false,
   },
   {
     accessorKey: "orgTypeName",

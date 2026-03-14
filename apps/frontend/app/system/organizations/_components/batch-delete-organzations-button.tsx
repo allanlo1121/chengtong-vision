@@ -2,7 +2,7 @@
 
 import { ConfirmDialog } from "@/lib/crud/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
-import { batchDeleteOrganizationsAction } from "../actions/batch-delete.action";
+import { batchDeleteOrganizationsAction } from "../actions/batch-delete-organization.action";
 
 export function BatchDeleteOrganizationsButton({ ids }: { ids: string[] }) {
   return (

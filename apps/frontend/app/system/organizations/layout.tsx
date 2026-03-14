@@ -1,44 +1,24 @@
-import * as React from "react";
-import { AppSidebar } from "@/components/app-sidebar";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { ErrorBlock } from "@/components/common/error-block";
+import { getOrganizationTree } from "@/modules/organization/services";
+import { OrganizationTree } from "@/modules/organization/pages/organization-tree";
 
-export async function LayoutContent({ children }: { children: React.ReactNode }) {
+export default async function OrganizationsLayout({ children }: { children: React.ReactNode }) {
+  const data = await getOrganizationTree();
+  if (!data.success) {
+    return <ErrorBlock message={data.message} />;
+  }
+
+  const tree = data.data ?? [];
+
   return (
-    <SidebarProvider className="h-screen flex">
-      <AppSidebar />
-      <SidebarInset className="flex-1 flex flex-col">
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
-            <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">Building Your Application</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-          </div>
-        </header>
-        <main className="flex-1 overflow-hidden px-4 pt-4">{children}</main>
-      </SidebarInset>
-    </SidebarProvider>
-  );
-}
+    <div className="flex h-full">
+      {/* 左侧树 */}
+      <div className="w-64 border-r overflow-auto">
+        <OrganizationTree tree={tree} />
+      </div>
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  return <LayoutContent>{children}</LayoutContent>;
+      {/* 右侧页面 */}
+      <div className="flex-1 overflow-auto p-6">{children}</div>
+    </div>
+  );
 }

@@ -1,127 +1,52 @@
 import { createClient } from "@/lib/core/supabase/server";
-import { createClient as createClienta } from "@/lib/core/supabase/client";
 
-import { mapOrganizationDetail, mapOrganizationList } from "../types/organization.mapper";
+import { mapOrganizationList } from "../types/organization.mapper";
 import { OrganizationListQueryType } from "../schemas/query.schema";
-import {
-  OrganizationDetail,
-  OrganizationDetailRow,
-  OrganizationListItem,
-  OrganizationListRow,
-  OrganizationTreeItem,
-  OrganizationTreeRow,
-  OrganizationRow,
-} from "../types";
+// import {
+//   OrganizationDetail,
+//   OrganizationDetailRow,
+//   OrganizationListItem,
+//   OrganizationListRow,
+//   OrganizationTreeItem,
+//   OrganizationTreeRow,
+//   OrganizationRow,
+// } from "../types";
 import { PageData } from "@/modules/shared/contracts";
 
+import { applyPagination, assertNoError } from "@/lib/infra/repositories/base.repository";
+
 import {
-  applyPagination,
-  assertNoError,
-  buildSoftDeletePayload,
-} from "@/lib/infra/repositories/base.repository";
+  OrganizationDetailRow,
+  OrganizationListRow,
+  OrganizationTreeRow,
+} from "./organization.repository.types";
 
-import { Database } from "@/types/database";
+export async function findOrganizationDetailById(id: string): Promise<OrganizationDetailRow> {
+  const supabase = await createClient();
 
-const ITEMS_PER_PAGE = 10;
+  const { data, error } = await supabase
+    .from("v_organizations_detail")
+    .select("*")
+    .eq("id", id)
+    .single();
 
-// export async function getOrganizationDetail(id: string): Promise<OrganizationDetail> {
-//   const supabase = await createClient();
+  assertNoError(error);
+  if (!data) {
+    throw new Error("Organization not found");
+  }
 
-//   const { data, error } = await supabase
-//     .from("v_organizations_detail")
-//     .select("*")
-//     .eq("id", id)
-//     .single();
+  return data as OrganizationDetailRow;
+}
 
-//   if (error) {
-//     throw new AppError(ERROR_CODES.INTERNAL_ERROR, error.message);
-//   }
+export async function getAllOrganizationList(): Promise<OrganizationListRow[]> {
+  const supabase = await createClient();
 
-//   return mapOrganizationDetail(data as OrganizationDetailRow);
-// }
+  const { data, error } = await supabase.from("v_organizations_list").select("*");
 
-// export async function getAllOrganizationList(): Promise<OrganizationListItem[]> {
-//   const supabase = await createClient();
+  assertNoError(error);
 
-//   const { data, error } = await supabase.from("v_organizations_list").select("*");
-
-//   if (error) {
-//     throw new AppError(
-//       ERROR_CODES.INTERNAL_ERROR,
-//       "Failed to fetch organizations",
-//       error
-//     );
-//   }
-//   return (data as OrganizationListRow[]).map(mapOrganizationList);
-// }
-
-// export async function getOrganizationPage(
-//   query: OrganizationListQueryType
-// ): Promise<PaginatedResult<OrganizationListItem>> {
-//   const supabase = await createClient();
-
-//   let builder = supabase
-//     .from("v_organizations_list")
-//     .select("*", { count: "exact" });
-
-//   // 🔍 搜索
-//   if (query.search) {
-//     builder = builder.ilike("name", `%${query.search}%`);
-//   }
-
-//   // 🔗 业务字段
-//   if (query.parentId) {
-//     builder = builder.eq("parent_id", query.parentId);
-//   }
-
-//   // 🔃 排序
-//   if (query.sortBy) {
-//     builder = builder.order(query.sortBy, {
-//       ascending: query.sortDirection !== "desc",
-//     });
-//   }
-
-//   const from = (query.page - 1) * query.pageSize;
-//   const to = from + query.pageSize - 1;
-
-//   const { data, error, count } = await builder.range(from, to);
-
-//   if (error) {
-//     throw new AppError(
-//       ERROR_CODES.INTERNAL_ERROR,
-//       "Failed to fetch organizations",
-//       error
-//     );
-//   }
-
-//   return {
-//     items: (data as OrganizationListRow[]).map(mapOrganizationList),
-//     total: count ?? 0,
-//     page: query.page,
-//     pageSize: query.pageSize,
-//   };
-// }
-
-// export async function getOrganizationsByParentId(
-//   parentId: string
-// ): Promise<OrganizationListItem[]> {
-//   const supabase = await createClient();
-
-//   const { data, error } = await supabase
-//     .from("v_organizations_list")
-//     .select("*")
-//     .eq("parent_id", parentId);
-
-//   if (error) {
-//     throw new AppError(
-//       ERROR_CODES.INTERNAL_ERROR,
-//       "Failed to fetch organizations by parent ID",
-//       error
-//     );
-//   }
-
-//   return (data as OrganizationListRow[]).map(mapOrganizationList);
-// }
+  return data as OrganizationListRow[];
+}
 
 async function softDeleteMany(ids: string[]) {
   const supabase = await createClient();
@@ -135,10 +60,10 @@ async function softDeleteMany(ids: string[]) {
   return data ?? 0;
 }
 
-async function paginate(query: OrganizationListQueryType): Promise<PageData<OrganizationListItem>> {
+async function paginate(query: OrganizationListQueryType): Promise<PageData<OrganizationListRow>> {
   const supabase = await createClient();
 
-  console.log("org list query", query);
+  // console.log("org list query", query);
 
   const { from, to } = applyPagination(query.page, query.pageSize);
 
@@ -171,7 +96,7 @@ async function paginate(query: OrganizationListQueryType): Promise<PageData<Orga
   assertNoError(error);
 
   return {
-    items: (data as OrganizationListRow[]).map(mapOrganizationList),
+    items: data as OrganizationListRow[],
     total: count ?? 0,
   };
 }
@@ -203,7 +128,7 @@ export async function getOrganizationRowById(id: string): Promise<OrganizationRo
   assertNoError(error);
 
   if (!data) throw new Error("Organization not found");
-  console.log("getOrganizationRowById", data);
+  // console.log("getOrganizationRowById", data);
 
   return data;
 }

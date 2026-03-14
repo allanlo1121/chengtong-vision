@@ -1,10 +1,11 @@
-// app/(dashboard)/layout.tsx
+// app/system/layout.tsx
 import { createClient } from "@/lib/core/supabase/server";
 import { Providers } from "@/app/providers";
 import { RuntimeUser } from "@/lib/runtime/user/types";
 import { buildMenuTree } from "@/lib/runtime/menu/buildMenuTree";
+import { LayoutContent } from "@/components/layout/layout-content";
 
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function SystemLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
 
   // 1️⃣ 查询 RuntimeUser
@@ -28,7 +29,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <Providers runtimeUser={runtimeUser} menus={menuTree}>
-      {children}
+      <LayoutContent>{children}</LayoutContent>
     </Providers>
   );
 }

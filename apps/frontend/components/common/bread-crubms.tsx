@@ -24,18 +24,21 @@ export function Breadcrumbs({ breadcrumbs }: Props) {
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        {breadcrumbs.map((b, i) => (
-          <React.Fragment key={i}>
-            <Item>
-              {b.active ? (
-                <BreadcrumbPage>{b.label}</BreadcrumbPage>
-              ) : (
-                <BreadcrumbLink href={b.href!}>{b.label}</BreadcrumbLink>
-              )}
-            </Item>
-            {i < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
-          </React.Fragment>
-        ))}
+        {breadcrumbs.map((b, i) => {
+          const isLast = i === breadcrumbs.length - 1;
+          return (
+            <React.Fragment key={i}>
+              <Item>
+                {b.active || isLast || !b.href ? (
+                  <BreadcrumbPage>{b.label}</BreadcrumbPage>
+                ) : (
+                  <BreadcrumbLink href={b.href}>{b.label}</BreadcrumbLink>
+                )}
+              </Item>
+              {!isLast && <BreadcrumbSeparator />}
+            </React.Fragment>
+          );
+        })}{" "}
       </BreadcrumbList>
     </Breadcrumb>
   );

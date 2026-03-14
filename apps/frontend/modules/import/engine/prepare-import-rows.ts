@@ -1,21 +1,39 @@
-import { loadLookups } from "../lookup/lookup-engine";
-import { mapFields } from "../mapper/field-mapper";
-import { validateRows } from "../validator/zod-validator";
-import { ImportConfig, ImportResult } from "../types";
+import { loadLookups } from "../processors/lookup-engine";
+import { mapFields } from "../processors/field-mapper";
+import { validateRows } from "../processors/zod-validator";
+import { ImportConfig, ImportPreviewResult } from "../types";
+import { TableName } from "@/modules/shared/types";
+import { computeLevel } from "../utils/compute-level";
 
-export async function prepareImportRows<T>(
-  rows: any[],
-  config: ImportConfig
-): Promise<ImportResult<T>[]> {
-  // 1️⃣ 加载 lookup
-  const lookups = await loadLookups(config.lookups);
+export async function prepareImportRows<T extends TableName>(
+  rows: Record<string, any>[],
+  config: ImportConfig<T>
+): Promise<ImportPreviewResult<T>[]> {
+  // 1️⃣ 加载 lookup 数据
+  const lookupMaps = await loadLookups(config.lookups);
 
   // 2️⃣ 字段映射
 
-  const mappedRows = rows.map((row) => mapFields(row, config, lookups));
+  const mappedRows = rows.map((row) => mapFields(row, config.fields, config.lookups, lookupMaps));
+
+  // 计算层级
+  // 1️⃣ 获取 schema 中的层级字段（如果有）
 
   // 3️⃣ schema 校验
   const validated = validateRows(mappedRows, config.schema);
 
-  return validated;
+  const levelField = Object.entries(config.fields).find(([_, target]) => target === "path")?.[0];
+
+  if (!levelField) {
+    return validated;
+  }
+
+  return validated.map((item) => {
+    const path = item.row?.path;
+
+    return {
+      ...item,
+      level: path ? computeLevel(path) : undefined,
+    };
+  });
 }

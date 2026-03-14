@@ -1,8 +1,8 @@
 "use client";
 
+import { useRouter, useSearchParams } from "next/navigation";
 import { Table } from "@tanstack/react-table";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -17,6 +17,27 @@ interface DataTablePaginationProps<TData> {
 }
 
 export function DataTablePagination<TData>({ table }: DataTablePaginationProps<TData>) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const page = table.getState().pagination.pageIndex + 1;
+  const pageCount = table.getPageCount();
+
+  function updatePage(newPage: number) {
+    const params = new URLSearchParams(searchParams);
+
+    params.set("page", String(newPage));
+
+    router.push(`?${params.toString()}`);
+  }
+  function updatePageSize(size: number) {
+    const params = new URLSearchParams(searchParams);
+
+    params.set("pageSize", String(size));
+    params.set("page", "1");
+
+    router.push(`?${params.toString()}`);
+  }
   return (
     <div className="flex items-center justify-between px-2">
       <div className="text-muted-foreground flex-1 text-sm">
@@ -29,7 +50,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
           <Select
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => {
-              table.setPageSize(Number(value));
+              updatePageSize(Number(value));
             }}
           >
             <SelectTrigger className="h-8 w-[70px]">
@@ -44,7 +65,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
             </SelectContent>
           </Select>
         </div>
-        <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+        <div className="flex w-[120px] items-center justify-center text-sm font-medium">
           第 {table.getState().pagination.pageIndex + 1} 页，共 {table.getPageCount()} 页
         </div>
         <div className="flex items-center space-x-2">
@@ -52,7 +73,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
             variant="outline"
             size="icon"
             className="hidden size-8 lg:flex"
-            onClick={() => table.setPageIndex(0)}
+            onClick={() => updatePage(1)}
             disabled={!table.getCanPreviousPage()}
           >
             <span className="sr-only">到第一页</span>
@@ -62,7 +83,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
             variant="outline"
             size="icon"
             className="size-8"
-            onClick={() => table.previousPage()}
+            onClick={() => updatePage(page - 1)}
             disabled={!table.getCanPreviousPage()}
           >
             <span className="sr-only">到上一页</span>
@@ -72,7 +93,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
             variant="outline"
             size="icon"
             className="size-8"
-            onClick={() => table.nextPage()}
+            onClick={() => updatePage(page + 1)}
             disabled={!table.getCanNextPage()}
           >
             <span className="sr-only">到下一页</span>
@@ -82,7 +103,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
             variant="outline"
             size="icon"
             className="hidden size-8 lg:flex"
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            onClick={() => updatePage(pageCount)}
             disabled={!table.getCanNextPage()}
           >
             <span className="sr-only">到最后一页</span>

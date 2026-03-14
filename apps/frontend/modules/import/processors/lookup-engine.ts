@@ -3,7 +3,7 @@ import { loadLookupData, LookupSource } from "../services/lookup.service";
 import { LookupMaps, LookupType } from "../types";
 
 export async function loadLookups<T extends TableName>(
-  lookups: LookupType<T>
+  lookups?: LookupType<T>
 ): Promise<Partial<LookupMaps>> {
   const maps: Partial<LookupMaps> = {};
 

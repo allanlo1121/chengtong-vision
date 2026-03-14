@@ -18,9 +18,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { regionNames } from "../components/data/data";
-
 import { OrganizationListItem } from "@/modules/organization/types/organization.types";
+
+import { useCrudMutation } from "@/lib/crud/hooks/useCrudMutation";
+import { deleteOrganizationAction } from "@/modules/organization/actions/delete-organization.action";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -33,6 +34,19 @@ export function DataTableRowActions<TData>({
 }: DataTableRowActionsProps<OrganizationListItem>) {
   const org = row.original as unknown as OrganizationListItem;
   const router = useRouter();
+
+  const deleteMutation = useCrudMutation<string, number>({
+    action: deleteOrganizationAction,
+    successMessage: "删除成功",
+    onSuccess: () => router.refresh(),
+  });
+
+  const handleDelete = () => {
+    if (!confirm("确认删除该组织吗？")) return;
+
+    console.log("deleteMutation", deleteMutation);
+    deleteMutation.mutate(org.id);
+  };
 
   return (
     <DropdownMenu>
@@ -51,22 +65,16 @@ export function DataTableRowActions<TData>({
         <DropdownMenuSeparator />
 
         {/* ===== 所属片区切换 ===== */}
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger>所属片区</DropdownMenuSubTrigger>
-          <DropdownMenuSubContent>
-            <DropdownMenuRadioGroup value={org.regionName}>
-              {regionNames.map((region) => (
-                <DropdownMenuRadioItem key={region.value} value={region.value}>
-                  {region.label}
-                </DropdownMenuRadioItem>
-              ))}
-            </DropdownMenuRadioGroup>
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem variant="destructive" onClick={() => {}}>
+        <DropdownMenuItem
+          variant="destructive"
+          onSelect={(e) => {
+            e.preventDefault();
+            handleDelete();
+          }}
+        >
           删除组织
         </DropdownMenuItem>
       </DropdownMenuContent>

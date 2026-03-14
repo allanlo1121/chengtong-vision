@@ -1,8 +1,8 @@
 "use client";
 
 import { useCrudForm } from "@/modules/shared/hooks/use-crud-form";
-import { updateOrganizationAction } from "../actions/update-organization.action";
-import { UpdateOrganizationSchema } from "../schemas/organization.schema";
+import { updateOrganizationAction } from "@/modules/organization/actions/update-organization.action";
+import { UpdateOrganizationSchema } from "@/modules/organization/schemas/organization.schema";
 import { CrudFormPage } from "@/modules/shared/crud/components/crud-form-page";
 
 export default function UpdateOrganization({

@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { CreateOrganizationInput, OrganizationSchema } from "@/modules/organization/schemas";
 
 export interface IdNameRef {
@@ -26,5 +27,7 @@ export type ActionResult<T> = { success: true; data: T } | { success: false; err
 export const TableSchemaMap = {
   organizations: OrganizationSchema,
 } as const;
+
+export type RowType<T extends TableName> = z.infer<(typeof TableSchemaMap)[T]>;
 
 export type TableName = keyof typeof TableSchemaMap;

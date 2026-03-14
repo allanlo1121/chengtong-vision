@@ -1,2 +1,2 @@
-export * from "./batch-delete.action";
+export * from "./batch-delete-organization.action";
 // export * from "./list.action";

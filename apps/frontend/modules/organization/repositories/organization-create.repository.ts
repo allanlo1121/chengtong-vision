@@ -10,7 +10,7 @@ export async function insertOrganization(input: CreateOrganizationInput) {
     parent_id: input.parentId ?? null,
     code: input.code,
     name: input.name,
-    fullname: input.fullName,
+    full_name: input.fullName,
     description: input.description,
 
     org_type_id: input.orgTypeId,

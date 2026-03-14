@@ -13,3 +13,7 @@ export interface FailureResult {
 }
 
 export type ActionResult<T> = SuccessResult<T> | FailureResult;
+
+// import { ServiceResult } from "./service-result";
+
+// export type ActionResult<T> = ServiceResult<T>;

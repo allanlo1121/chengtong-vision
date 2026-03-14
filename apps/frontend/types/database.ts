@@ -525,14 +525,14 @@ export type Database = {
           business_id: string | null;
           city_code: string | null;
           code: string;
-          country_code: string;
+          country_code: string | null;
           created_at: string;
           created_by: string | null;
           deleted_at: string | null;
           deleted_by: string | null;
           description: string | null;
           district_code: string | null;
-          fullname: string | null;
+          full_name: string | null;
           id: string;
           is_active: boolean | null;
           latitude: number | null;
@@ -541,9 +541,9 @@ export type Database = {
           name: string;
           org_type_id: string;
           parent_id: string | null;
-          path: unknown;
+          path: string | null;
           province_code: string | null;
-          region_id: string;
+          region_id: string | null;
           sort_order: number | null;
           updated_at: string | null;
           updated_by: string | null;
@@ -554,14 +554,14 @@ export type Database = {
           business_id?: string | null;
           city_code?: string | null;
           code: string;
-          country_code?: string;
+          country_code?: string | null;
           created_at?: string;
           created_by?: string | null;
           deleted_at?: string | null;
           deleted_by?: string | null;
           description?: string | null;
           district_code?: string | null;
-          fullname?: string | null;
+          full_name?: string | null;
           id?: string;
           is_active?: boolean | null;
           latitude?: number | null;
@@ -570,9 +570,9 @@ export type Database = {
           name: string;
           org_type_id: string;
           parent_id?: string | null;
-          path?: unknown;
+          path?: string | null;
           province_code?: string | null;
-          region_id: string;
+          region_id?: string | null;
           sort_order?: number | null;
           updated_at?: string | null;
           updated_by?: string | null;
@@ -583,14 +583,14 @@ export type Database = {
           business_id?: string | null;
           city_code?: string | null;
           code?: string;
-          country_code?: string;
+          country_code?: string | null;
           created_at?: string;
           created_by?: string | null;
           deleted_at?: string | null;
           deleted_by?: string | null;
           description?: string | null;
           district_code?: string | null;
-          fullname?: string | null;
+          full_name?: string | null;
           id?: string;
           is_active?: boolean | null;
           latitude?: number | null;
@@ -599,9 +599,9 @@ export type Database = {
           name?: string;
           org_type_id?: string;
           parent_id?: string | null;
-          path?: unknown;
+          path?: string | null;
           province_code?: string | null;
-          region_id?: string;
+          region_id?: string | null;
           sort_order?: number | null;
           updated_at?: string | null;
           updated_by?: string | null;
@@ -910,166 +910,25 @@ export type Database = {
       v_organizations_detail: {
         Row: {
           address: string | null;
-          admin_region_code: string | null;
-          admin_region_name: string | null;
-          business_code: string | null;
-          business_id: string | null;
           business_name: string | null;
+          city_name: string | null;
           code: string | null;
-          country_code: string | null;
           country_name: string | null;
           created_at: string | null;
-          created_by: string | null;
-          deleted_at: string | null;
-          deleted_by: string | null;
           description: string | null;
-          fullname: string | null;
+          district_name: string | null;
+          full_name: string | null;
           id: string | null;
           is_active: boolean | null;
           latitude: number | null;
-          level: number | null;
           longitude: number | null;
           name: string | null;
-          org_type_code: string | null;
-          org_type_id: string | null;
           org_type_name: string | null;
-          parent_id: string | null;
-          path: unknown;
-          region_code: string | null;
-          region_id: string | null;
-          region_name: string | null;
-          sort_order: number | null;
+          parent_org_name: string | null;
+          province_name: string | null;
           updated_at: string | null;
-          updated_by: string | null;
         };
-        Relationships: [
-          {
-            foreignKeyName: "organizations_admin_region_code_fkey";
-            columns: ["admin_region_code"];
-            isOneToOne: false;
-            referencedRelation: "admin_regions";
-            referencedColumns: ["code"];
-          },
-          {
-            foreignKeyName: "organizations_business_id_fkey";
-            columns: ["business_id"];
-            isOneToOne: false;
-            referencedRelation: "master_data";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_business_id_fkey";
-            columns: ["business_id"];
-            isOneToOne: false;
-            referencedRelation: "v_master_data";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_business_id_fkey";
-            columns: ["business_id"];
-            isOneToOne: false;
-            referencedRelation: "v_master_options";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_country_code_fkey";
-            columns: ["country_code"];
-            isOneToOne: false;
-            referencedRelation: "countries";
-            referencedColumns: ["code"];
-          },
-          {
-            foreignKeyName: "organizations_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["user_id"];
-          },
-          {
-            foreignKeyName: "organizations_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["user_id"];
-          },
-          {
-            foreignKeyName: "organizations_org_type_id_fkey";
-            columns: ["org_type_id"];
-            isOneToOne: false;
-            referencedRelation: "master_data";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_org_type_id_fkey";
-            columns: ["org_type_id"];
-            isOneToOne: false;
-            referencedRelation: "v_master_data";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_org_type_id_fkey";
-            columns: ["org_type_id"];
-            isOneToOne: false;
-            referencedRelation: "v_master_options";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_parent_id_fkey";
-            columns: ["parent_id"];
-            isOneToOne: false;
-            referencedRelation: "organizations";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_parent_id_fkey";
-            columns: ["parent_id"];
-            isOneToOne: false;
-            referencedRelation: "v_organizations_detail";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_parent_id_fkey";
-            columns: ["parent_id"];
-            isOneToOne: false;
-            referencedRelation: "v_organizations_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_parent_id_fkey";
-            columns: ["parent_id"];
-            isOneToOne: false;
-            referencedRelation: "v_user_orgs";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_region_id_fkey";
-            columns: ["region_id"];
-            isOneToOne: false;
-            referencedRelation: "master_data";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_region_id_fkey";
-            columns: ["region_id"];
-            isOneToOne: false;
-            referencedRelation: "v_master_data";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_region_id_fkey";
-            columns: ["region_id"];
-            isOneToOne: false;
-            referencedRelation: "v_master_options";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_updated_by_fkey";
-            columns: ["updated_by"];
-            isOneToOne: false;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["user_id"];
-          },
-        ];
+        Relationships: [];
       };
       v_organizations_list: {
         Row: {
@@ -1250,6 +1109,10 @@ export type Database = {
           name: string;
           parent_id: string;
         }[];
+      };
+      soft_delete: {
+        Args: { p_ids: string[]; p_table: string };
+        Returns: number;
       };
       text2ltree: { Args: { "": string }; Returns: unknown };
     };

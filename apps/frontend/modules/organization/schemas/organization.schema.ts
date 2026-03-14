@@ -65,6 +65,8 @@ export const OrganizationFields = {
     option: { source: "organization_tree", parentId: null },
   }),
 
+  path: z.string().optional(),
+
   orgTypeId: idSchema.meta({
     label: "组织类型",
     component: "select",

@@ -1,14 +1,20 @@
-import { OrganizationListItem } from "../types/organization.types";
-import { ActionResult, PageData, PaginatedResult } from "@/modules/shared/contracts";
+import { ActionResult, PageData, PaginatedResult, Result } from "@/modules/shared/contracts";
 import { OrganizationListQueryType } from "../schemas/query.schema";
 
 import { organizationRepository } from "@/lib/infra/repositories";
 import { mapErrorToActionResult } from "@/modules/shared/application/action-error-handler";
 import { UpdateOrganizationInput } from "../schemas";
-import { getOrganizationRowById } from "../repositories/organization.repository";
-import { mapOrganizationRowToUpdateInput } from "../mapper/organization.mapper";
+import {
+  getOrganizationRowById,
+  findOrganizationDetailById,
+} from "../repositories/organization.repository";
+import {
+  mapOrganizationDetail,
+  mapOrganizationRowToUpdateInput,
+} from "../mapper/organization.mapper";
 
 import { ServiceResult } from "@/modules/shared/types";
+import { OrganizationListItem, OrganizationDetail } from "../types";
 
 export async function batchDeleteOrganizations(ids: string[]): Promise<number> {
   if (!ids.length) {
@@ -52,6 +58,26 @@ export async function getOrganizationById(
     return {
       success: true,
       data: mapOrganizationRowToUpdateInput(row),
+    };
+  } catch (error: unknown) {
+    return {
+      success: false,
+      message: (error as Error)?.message ?? "查询失败",
+    };
+  }
+}
+
+export async function getOrganizationDetailById(id: string): Promise<Result<OrganizationDetail>> {
+  try {
+    console.log("===getOrganizationDetailById===");
+
+    const row = await findOrganizationDetailById(id);
+
+    if (!row) return { success: false, message: "未查询到组织" };
+
+    return {
+      success: true,
+      data: mapOrganizationDetail(row),
     };
   } catch (error: unknown) {
     return {

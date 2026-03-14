@@ -1,9 +1,9 @@
 "use server";
 
-import { ActionResult } from "@/lib/shared/contracts";
+import { Result } from "@/modules/shared/contracts";
 import { batchDeleteOrganizations } from "@/lib/domain/organization";
 
-export async function batchDeleteOrganizationsAction(ids: string[]): Promise<ActionResult<number>> {
+export async function batchDeleteOrganizationsAction(ids: string[]): Promise<Result<number>> {
   try {
     const affected = await batchDeleteOrganizations(ids);
 
@@ -14,11 +14,12 @@ export async function batchDeleteOrganizationsAction(ids: string[]): Promise<Act
     return {
       success: true,
       data: affected,
+      message: `成功删除 ${affected} 个组织`,
     };
   } catch (error: unknown) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : "删除失败",
+      message: error instanceof Error ? error.message : "删除失败",
     };
   }
 }

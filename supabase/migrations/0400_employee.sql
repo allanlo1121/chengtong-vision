@@ -10,8 +10,8 @@ create table public.employees (
                         references auth.users(id) on delete cascade,
 
     -- 员工基础标识
-    code                varchar(100) unique not null,   -- 工号 / 登录账号
-    name                varchar(100) not null,          -- 姓名
+    code                text unique not null,   -- 工号 / 登录账号
+    name                text not null,          -- 姓名
 
     -- 基础属性（主数据）
     gender_id           uuid references master_data(id),
@@ -23,11 +23,11 @@ create table public.employees (
     org_node_id uuid references organizations(id) on delete set null,
 
     -- 个人信息
-    idcard              varchar(18),
+    idcard              text,
     birthday            date,
-    phone               varchar(50),
-    email               varchar(100),
-    major               varchar(100),
+    phone               text,
+    email               text,
+    major               text,
     work_start_date     date,
 
 
@@ -56,9 +56,7 @@ create index idx_employees_active on public.employees(is_active);
 create index idx_employees_job on public.employees(job_title_id);
 
 
-
-
-create table hr.employee_org_history (
+create table hr.employee_assignments (
     id                  uuid primary key default gen_random_uuid(),
 
     employee_id         uuid not null
@@ -82,7 +80,7 @@ create table hr.employee_org_history (
 );
 
 create unique index uniq_employee_current_org
-on hr.employee_org_history(employee_id)
+on hr.employee_assignments(employee_id)
 where end_at is null;
 
 create table public.employee_org_access (
@@ -97,7 +95,7 @@ create or replace function hr.trg_employee_insert_init_history()
 returns trigger as $$
 begin
 
-    insert into hr.employee_org_history (
+    insert into hr.employee_assignments (
         employee_id,
         org_node_id,
         job_title_id,
@@ -128,13 +126,13 @@ begin
        or (new.job_title_id is distinct from old.job_title_id) then
 
         -- 关闭旧记录
-        update hr.employee_org_history
+        update hr.employee_assignments
         set end_at = now()
         where employee_id = old.id
           and end_at is null;
 
         -- 插入新记录
-        insert into hr.employee_org_history (
+        insert into hr.employee_assignments (
             employee_id,
             org_node_id,
             job_title_id,

@@ -1,5 +1,5 @@
 import { Breadcrumbs } from "@/components/common/bread-crubms";
-import CreateOrganization from "@/modules/organization/forms/create-organization";
+import CreateOrganization from "../_forms/create-organization";
 
 export default function Page() {
   return (

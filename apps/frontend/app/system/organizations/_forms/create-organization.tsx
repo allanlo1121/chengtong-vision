@@ -1,8 +1,8 @@
 "use client";
 
 import { useCrudForm } from "@/modules/shared/hooks/use-crud-form";
-import { createOrganizationAction } from "../actions/create-organization.action";
-import { CreateOrganizationSchema } from "../schemas/organization.schema";
+import { createOrganizationAction } from "@/modules/organization/actions/create-organization.action";
+import { CreateOrganizationSchema } from "@/modules/organization/schemas/organization.schema";
 import { CrudFormPage } from "@/modules/shared/crud/components/crud-form-page";
 
 export default function CreateOrganization({
