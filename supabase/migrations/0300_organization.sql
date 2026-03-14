@@ -31,10 +31,10 @@ create table public.organizations (
   is_active boolean default true,
   created_at timestamptz not null default now(),
   updated_at timestamptz,
-  created_by uuid references public.employees(id) on delete set null,
-  updated_by uuid references public.employees(id) on delete set null,
+  created_by uuid references auth.uid(id) on delete set null,
+  updated_by uuid references auth.uid(id) on delete set null,
   deleted_at timestamptz,
-  deleted_by uuid references public.employees(id) on delete set null,
+  deleted_by uuid references auth.uid(id) on delete set null,
 
   check (latitude between -90 and 90),
   check (longitude between -180 and 180),
