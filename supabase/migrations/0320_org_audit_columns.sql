@@ -6,7 +6,7 @@ stable
 as $$
   select id
   from public.employees
-  where auth_user_id = auth.uid()
+  where id = auth.users(id)
   limit 1
 $$;
 
