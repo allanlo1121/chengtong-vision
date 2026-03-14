@@ -38,15 +38,6 @@ create table public.employees (
     -- 入职/生效
     effect_at           timestamptz,
 
-    -- 审计字段
-    created_at          timestamptz default now(),
-    updated_at          timestamptz,
-    created_by          uuid references auth.users(id) on delete set null,
-    updated_by          uuid references auth.users(id) on delete set null,
-    deleted_at          timestamptz,
-    deleted_by          uuid references auth.users(id) on delete set null,
-
-
     -- 预留
     remark              text
 );
@@ -71,7 +62,7 @@ create table hr.employee_assignments (
     end_at              timestamptz,
 
     change_reason       text,
-    changed_by          uuid references auth.users(id) on delete set null,
+    changed_by          uuid references public.employees(id)  on delete set null,
 
     created_at          timestamptz default now(),
 
@@ -146,7 +137,7 @@ begin
             new.job_title_id,
             now(),
             '组织或岗位变更',
-            auth.uid()
+            public.employees(id) 
         );
 
     end if;
