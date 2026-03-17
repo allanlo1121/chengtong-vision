@@ -11,7 +11,7 @@ security definer
 as $$
 declare
   v_role_id uuid;
-  v_sys_org_id uuid;
+  v_group_org_id uuid;
 begin
 
   if auth.role() <> 'service_role' then
@@ -37,12 +37,12 @@ begin
   where code = 'SUPER_ADMIN';
 
   -- 创建 employee
-  select id into v_sys_org_id
+  select id into v_group_org_id
   from public.organizations
-  where code = 'SYS';
+  where code = '0-001-003';
 
-  if v_sys_org_id is null then
-    raise exception 'SYS organization not found';
+  if v_group_org_id is null then
+    raise exception 'Group organization not found';
   end if;
 
   insert into public.employees (
@@ -56,7 +56,7 @@ begin
     p_user_id,
     '系统管理员',
     'admin',
-    v_sys_org_id,
+    v_group_org_id,
     true
   )
   on conflict (id) do nothing;

@@ -26,6 +26,8 @@ export const organizationImportConfig: ImportConfig<"organizations"> = {
     orgTypeId: "masterDatas",
     businessId: "masterDatas",
   },
+
+  externalIdField: "org_id",
 };
 
 // export const organizationImportConfig: ImportConfig<"organizations"> = {

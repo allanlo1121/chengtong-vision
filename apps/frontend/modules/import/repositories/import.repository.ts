@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/core/supabase/client";
-import { ImportError, ImportPersistResult, LookupItem } from "../types";
+import { ImportError, ImportPersistResult, LookupItem, UpsertResult } from "../types";
 import { SchemaRowType, TableName } from "@/modules/shared/types";
 
 import { camelToSnake, snakeToCamel } from "@/modules/shared/utils/case-converter";
@@ -172,63 +172,63 @@ function chunkArray<T>(arr: T[], size: number): T[][] {
   return result;
 }
 
-export async function upsertRowsByCode<T extends TableName>(
-  table: T,
-  data: SchemaRowType<T>[]
-): Promise<ImportPersistResult<{ id: string; code: string }>> {
-  const supabase = await createClient();
+// export async function upsertRowsByCode<T extends TableName>(
+//   table: T,
+//   data: SchemaRowType<T>[]
+// ): Promise<ImportPersistResult<{ id: string; code: string }>> {
+//   const supabase = createClient();
 
-  const rows = camelToSnake(data);
+//   const rows = camelToSnake(data);
 
-  const codes = rows.map((r: any) => r.code).filter(Boolean);
+//   const codes = rows.map((r: any) => r.code).filter(Boolean);
 
-  let inserted = 0;
-  let updated = 0;
+//   let inserted = 0;
+//   let updated = 0;
 
-  // 1 查询已有 code
-  if (codes.length > 0) {
-    const batches = chunkArray(codes, 100);
+//   // 1 查询已有 code
+//   if (codes.length > 0) {
+//     const batches = chunkArray(codes, 100);
 
-    for (const batch of batches) {
-      const { data: existing, error } = await supabase.from(table).select("code").in("code", batch);
+//     for (const batch of batches) {
+//       const { data: existing, error } = await supabase.from(table).select("code").in("code", batch);
 
-      assertNoError(error);
+//       assertNoError(error);
 
-      const existingCodes = new Set((existing ?? []).map((r: any) => r.code));
+//       const existingCodes = new Set((existing ?? []).map((r: any) => r.code));
 
-      for (const row of rows) {
-        if (existingCodes.has(row.code)) {
-          updated++;
-        } else {
-          inserted++;
-        }
-      }
-    }
-  } else {
-    inserted = rows.length;
-  }
+//       for (const row of rows) {
+//         if (existingCodes.has(row.code)) {
+//           updated++;
+//         } else {
+//           inserted++;
+//         }
+//       }
+//     }
+//   } else {
+//     inserted = rows.length;
+//   }
 
-  // 2 upsert
-  const { data: result, error } = await supabase
-    .from(table)
-    .upsert(rows, {
-      onConflict: "code",
-    })
-    .select();
+//   // 2 upsert
+//   const { data: result, error } = await supabase
+//     .from(table)
+//     .upsert(rows, {
+//       onConflict: "code",
+//     })
+//     .select();
 
-  assertNoError(error);
+//   assertNoError(error);
 
-  const records = snakeToCamel(result ?? []) as { id: string; code: string }[];
+//   const records = snakeToCamel(result ?? []) as { id: string; code: string }[];
 
-  return {
-    inserted,
-    updated,
-    skipped: 0,
-    errors: [] as ImportError[],
-    items: records,
-    total: records.length,
-  };
-}
+//   return {
+//     inserted,
+//     updated,
+//     skipped: 0,
+//     errors: [] as ImportError[],
+//     items: records,
+//     total: records.length,
+//   };
+// }
 
 export async function listParentOrganizations(): Promise<LookupItem[]> {
   const supabase = createClient();
@@ -265,6 +265,40 @@ export async function insertOrganizationExternalMap(rows: any[]) {
   const { error } = await supabase.from("organization_external_map").upsert(rows, {
     onConflict: "external_id",
   });
+
+  if (error) throw error;
+}
+
+export async function upsertRowByCode<T extends TableName>(
+  table: T,
+  row: SchemaRowType<T>
+): Promise<UpsertResult> {
+  const supabase = createClient();
+
+  const dbRow = camelToSnake(row);
+
+  const { data, error } = await supabase
+    .from(table)
+    .upsert(dbRow, {
+      onConflict: "code",
+    })
+    .select("id, code")
+    .single();
+
+  if (error) throw error;
+
+  return data;
+}
+
+export async function insertExternalMap(row: {
+  entity_type: string;
+  entity_id: string;
+  external_id: string;
+  external_source: string;
+}) {
+  const supabase = createClient();
+
+  const { error } = await supabase.from("external_map").insert(camelToSnake(row));
 
   if (error) throw error;
 }

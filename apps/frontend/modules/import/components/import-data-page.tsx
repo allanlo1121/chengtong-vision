@@ -2,91 +2,93 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { computeLevelFromImportRow } from "../engine/compute-level";
-import { prepareLevelPreview } from "../engine/prepare-preview";
-import { importLevel } from "../engine/import-level";
 import { TableName } from "@/modules/shared/types";
+import { ImportRowMap } from "../types/improt-row-map.types";
 
 import JsonUploader from "./json-uploader";
 import JsonPreview from "./json-preview";
 
 import { Button } from "@/components/ui/button";
-import { ImportConfig } from "@/modules/import/types";
+import { ImportRow, ImportConfig, ImportErrorRow } from "@/modules/import/types";
+import { handleImportData } from "../engine/handle-import-data";
+import { importEntitiesAction } from "../actions/import.action";
+import { importValidatorData } from "../engine/import-validator-data";
 
 export default function ImportPage<T extends TableName>({ config }: { config: ImportConfig<T> }) {
   const router = useRouter();
 
-  const [raws, setRaws] = useState<any[]>([]);
-  const [levels, setLevels] = useState<number[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const [previewRows, setPreviewRows] = useState<any[]>([]);
+  const [raws, setRaws] = useState<Record<keyof ImportRowMap[T], any>[]>([]);
+  const [validRows, setValidRows] = useState<ImportRow<T>[]>([]);
+  const [failedRows, setFailedRows] = useState<ImportErrorRow<T>[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const currentLevel = levels[currentIndex];
-
-  async function handleData(data: any[]) {
+  async function handleData(data: Record<keyof ImportRowMap[T], any>[]) {
     setRaws(data);
 
-    const rowsWithLevel = data.map((row) => ({
-      row,
-      level: computeLevelFromImportRow(row),
-    }));
+    const res = await handleImportData(data, config);
 
-    const levels = [...new Set(rowsWithLevel.map((r) => r.level))].sort((a, b) => a - b);
-
-    setLevels(levels);
-    setCurrentIndex(0);
-
-    const preview = await prepareLevelPreview(data, levels[0], config);
-
-    setPreviewRows(preview);
+    setValidRows(res.validRows); // 可插入
+    setFailedRows(res.failedRows); // 不可插入（你需要新增这个 state）
   }
 
   async function handleImport() {
+    console.log("===handleImport===");
+    console.log("validRows", validRows);
+    console.log("failedRows", failedRows);
+    console.log("raws", raws);
     setLoading(true);
     try {
-      const result = await importLevel(config.entity, raws, previewRows);
+      //插入验证数据
+      const result = await importEntitiesAction<T>(config, validRows);
 
-      alert(`
-新增: ${result.inserted}
-更新: ${result.updated}
-跳过: ${result.skipped}
-`);
+      //   alert(`
+      // 新增: ${result.inserted}
+      // 更新: ${result.updated}
+      // 跳过: ${result.skipped}
+      // `);
     } catch (err: any) {
       alert(err.message);
     }
     setLoading(false);
+    //设置新原始数据
+    const failedRaws = failedRows.map((f) => f.raw);
+    handleData(failedRaws);
   }
 
-  async function handleNext() {
-    const nextIndex = currentIndex + 1;
-    if (nextIndex >= levels.length) {
-      alert("全部导入完成");
-      return;
-    }
-    setCurrentIndex(nextIndex);
-    const preview = await prepareLevelPreview(raws, levels[nextIndex], config);
-    setPreviewRows(preview);
-  }
+  // async function handleNext() {
+  // const nextIndex = currentIndex + 1;
+  // if (nextIndex >= levels.length) {
+  //   alert("全部导入完成");
+  //   return;
+  // }
+  // setCurrentIndex(nextIndex);
+  // const preview = await prepareLevelPreview(raws, levels[nextIndex], config);
+  // setPreviewRows(preview);
+  // }
 
   return (
     <div className="space-y-6">
       <JsonUploader onData={handleData} />
 
-      {previewRows.length > 0 && (
+      {validRows.length > 0 && (
         <>
-          <div className="text-lg font-semibold">导入预览 (第 {currentLevel} 层)</div>
-          <JsonPreview rows={previewRows} />
+          <div className="text-lg font-semibold">待导入数据</div>
+          <JsonPreview rows={validRows} />
+        </>
+      )}
+      {failedRows.length > 0 && (
+        <>
+          <div className="text-lg font-semibold">验证未通过数据</div>
+          <JsonPreview rows={failedRows} />
         </>
       )}
 
-      {previewRows.length > 0 && (
+      {validRows.length > 0 && (
         <div className="flex gap-3">
           <Button onClick={handleImport} disabled={loading}>
-            {loading ? "导入中..." : "导入当前层"}
+            {loading ? "导入中..." : "导入当前数据"}
           </Button>
-          <Button onClick={handleNext}>下一层</Button>
+          {/* <Button onClick={handleNext}>下一层</Button> */}
           <Button onClick={() => router.push(`/system/${config.entity}`)}>返回</Button>
         </div>
       )}

@@ -36,11 +36,11 @@ export function mapFields<T extends TableName>(
   if (extraFields) {
     const mapped = result as Partial<SchemaRowType<T>>;
 
-    console.log("===mapFields extraFields===");
-    console.log("row", row);
-    console.log("mapped", mapped);
-    console.log("lookups", lookups);
-    console.log("maps", maps);
+    // console.log("===mapFields extraFields===");
+    // console.log("row", row);
+    // console.log("mapped", mapped);
+    // console.log("lookups", lookups);
+    // console.log("maps", maps);
 
     for (const target of Object.keys(extraFields) as (keyof SchemaRowType<T>)[]) {
       const resolver = extraFields[target];
@@ -48,12 +48,12 @@ export function mapFields<T extends TableName>(
       if (!resolver) continue;
 
       const lookupSource = lookups?.[target];
-      console.log("lookupSource ", lookupSource);
+      // console.log("lookupSource ", lookupSource);
 
       const lookupMap = lookupSource ? maps?.[lookupSource] : undefined;
 
-      console.log("lookupSource ", lookupSource);
-      console.log("lookupMap ", lookupMap);
+      // console.log("lookupSource ", lookupSource);
+      // console.log("lookupMap ", lookupMap);
 
       mapped[target] = resolver(row, mapped, lookupMap);
     }

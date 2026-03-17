@@ -57,7 +57,7 @@ export const OrganizationFields = {
     colSpan: 2,
   }),
 
-  parentId: idSchema.nullable().meta({
+  parentId: idSchema.meta({
     label: "上级组织",
     component: "treeSelect",
     section: "基本信息",
