@@ -176,15 +176,6 @@ on public.projects
 for each row
 execute function audit.log_changes();
 
-
-create trigger trg_audit_organizations
-after insert or update or delete
-on public.organizations
-for each row
-execute function audit.log_changes();
-
-
-
 create or replace function public.audit_fields_trigger()
 returns trigger
 language plpgsql

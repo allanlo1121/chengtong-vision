@@ -22,7 +22,7 @@ create view public.v_user_orgs as
 select
   o.id,
   o.name,
-  o.fullname
+  o.full_name
 from employee_org_access eoa
 join organizations o on eoa.org_id = o.id
 where eoa.employee_id = auth.uid();
@@ -66,8 +66,3 @@ join public.employees e on e.id = u.id
 join public.organizations o on o.id = e.org_node_id
 
 where u.id = auth.uid();   -- 🔥 关键
-
-
-create index idx_role_permissions_role on rbac.role_permissions(role_id);
-create index idx_permissions_id on rbac.permissions(id);
-create index idx_employees_id on public.employees(id);
