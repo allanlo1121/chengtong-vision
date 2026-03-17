@@ -1,17 +1,20 @@
+import { TreeIndex } from "@/modules/shared/tree/tree.types";
 import { TreeNode } from "./types";
 
-export function findPath<T>(tree: TreeNode<T>[], id: string): TreeNode<T>[] | null {
-  for (const node of tree) {
-    if ((node as any).id === id) {
-      return [node];
-    }
+export function findPath<T>(index: TreeIndex<T>, id: string) {
+  const path: any[] = [];
 
-    const path = findPath(node.children, id);
+  let current: string | null = id;
 
-    if (path) {
-      return [node, ...path];
-    }
+  while (current) {
+    const node = index.nodeMap.get(current);
+
+    if (!node) break;
+
+    path.unshift(node);
+
+    current = index.parentMap.get(current) ?? null;
   }
 
-  return null;
+  return path;
 }

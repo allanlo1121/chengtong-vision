@@ -64,13 +64,14 @@ left join public.admin_regions ad on ad.code = o.district_code
 where o.deleted_at is null;
 
 
-create view v_organizations_tree as
+create or replace view v_organizations_tree as
 select
   id,
   name,
   parent_id,
-  is_active,
-  nlevel(path) as level
+  is_active,  
+  nlevel(path) as level,
+  sort_order
 from organizations
 where deleted_at is null
 order by path, sort_order;

@@ -28,6 +28,6 @@ export const TableSchemaMap = {
   organizations: OrganizationSchema,
 } as const;
 
-export type RowType<T extends TableName> = z.infer<(typeof TableSchemaMap)[T]>;
+export type SchemaRowType<T extends TableName> = z.infer<(typeof TableSchemaMap)[T]>;
 
 export type TableName = keyof typeof TableSchemaMap;

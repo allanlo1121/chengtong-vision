@@ -16,6 +16,7 @@ import { PageData } from "@/modules/shared/contracts";
 import { applyPagination, assertNoError } from "@/lib/infra/repositories/base.repository";
 
 import {
+  OrganizationRow,
   OrganizationDetailRow,
   OrganizationListRow,
   OrganizationTreeRow,
@@ -80,10 +81,6 @@ async function paginate(query: OrganizationListQueryType): Promise<PageData<Orga
     dbQuery = dbQuery.eq("parent_id", query.parentId);
   }
 
-  if (query.regionId) {
-    dbQuery = dbQuery.eq("region_id", query.regionId);
-  }
-
   // 排序逻辑（只排序一次）
   const sortField = query.sortBy ?? "created_at";
 
@@ -106,20 +103,6 @@ export const organizationRepository = {
   softDeleteMany,
 };
 
-export async function findOrganizationTreeRows(): Promise<OrganizationTreeRow[]> {
-  const supabase = await createClient();
-
-  const { data, error } = await supabase
-    .from("organizations")
-    .select("id,parent_id,name,sort_order")
-    .eq("is_active", true)
-    .order("sort_order");
-
-  assertNoError(error);
-
-  return data ?? [];
-}
-
 export async function getOrganizationRowById(id: string): Promise<OrganizationRow> {
   const supabase = await createClient();
 
@@ -133,19 +116,19 @@ export async function getOrganizationRowById(id: string): Promise<OrganizationRo
   return data;
 }
 
-export async function getOrganizationPages(query: string): Promise<number> {
-  const supabase = await createClient();
+// export async function getOrganizationPages(query: string): Promise<number> {
+//   const supabase = await createClient();
 
-  let builder = supabase.from("v_organizations_list").select("id", { count: "exact" });
+//   let builder = supabase.from("v_organizations_list").select("id", { count: "exact" });
 
-  if (query) {
-    builder = builder.ilike("name", `%${query}%`);
-  }
+//   if (query) {
+//     builder = builder.ilike("name", `%${query}%`);
+//   }
 
-  const { count, error } = await builder;
+//   const { count, error } = await builder;
 
-  assertNoError(error);
+//   assertNoError(error);
 
-  const pageSize = 10; // 与前端默认 pageSize 保持一致
-  return Math.ceil((count ?? 0) / pageSize);
-}
+//   const pageSize = 10; // 与前端默认 pageSize 保持一致
+//   return Math.ceil((count ?? 0) / pageSize);
+// }

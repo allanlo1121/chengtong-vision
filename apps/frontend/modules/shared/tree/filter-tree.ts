@@ -1,4 +1,4 @@
-import { TreeNode } from "./types";
+import { TreeNode } from "./tree.types";
 
 export function filterTree<T>(
   nodes: TreeNode<T>[],
@@ -9,7 +9,7 @@ export function filterTree<T>(
   for (const node of nodes) {
     const children = filterTree(node.children, predicate);
 
-    if (predicate(node) || children.length) {
+    if (predicate(node) || children.length > 0) {
       result.push({
         ...node,
         children,

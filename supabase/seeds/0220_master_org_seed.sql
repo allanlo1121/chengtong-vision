@@ -148,3 +148,34 @@ ON true
 WHERE md.code = 'REGION'
 ON CONFLICT (definition_id, code) DO NOTHING;
 
+
+-- ==========================================
+-- 业务板块 ORG_CATEGORY
+-- ==========================================
+
+INSERT INTO public.master_definitions (name, code)
+VALUES ('业务板块', 'ORG_CATEGORY')
+ON CONFLICT (code) DO NOTHING;
+
+INSERT INTO public.master_data (definition_id, code, name)
+SELECT md.id, v.code, v.name
+FROM public.master_definitions md
+JOIN (
+    VALUES 
+    ('10250001', '生产型'),
+    ('10250002', '综合生产'),
+    ('10250003', '专业生产'),
+    ('10250004', '设计勘探'),
+    ('10250005', '地产开发'),
+    ('10250006', '物资贸易'),
+    ('10250007', '典当'),
+    ('10250008', '文化传媒'),
+    ('10250009', '餐饮娱乐'),
+    ('10250010', '其他多元')
+) AS v(code, name)
+ON true
+WHERE md.code = 'ORG_CATEGORY'
+ON CONFLICT (definition_id, code) DO NOTHING;
+
+
+

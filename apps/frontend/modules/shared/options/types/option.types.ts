@@ -30,17 +30,10 @@ export type AsyncOptionConfig =
   | { source: "projects" }
   | { source: "organizations" };
 
-export type TreeNodeRow = {
-  id: string;
-  name: string;
-  parent_id: string | null;
-  sort_order?: number;
-};
-
 export type TreeOption = {
   value: string;
   label: string;
-  children: TreeOption[];
+  children?: TreeOption[];
 };
 
 export type TreeOptionConfig = { source: "organization_tree"; parentId?: string };

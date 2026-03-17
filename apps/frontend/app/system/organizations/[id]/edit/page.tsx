@@ -1,7 +1,7 @@
 import { Breadcrumbs } from "@/components/common/bread-crubms";
 import { getOrganizationById } from "@/modules/organization/services/organization.service";
 import { notFound } from "next/navigation";
-import UpdateOrganization from "../../_forms/update-organization";
+import UpdateOrganization from "@/modules/organization/ui/forms/update-organization";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   console.log("===organization page ===");

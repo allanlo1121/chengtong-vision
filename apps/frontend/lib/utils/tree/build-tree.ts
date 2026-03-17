@@ -1,44 +1,41 @@
-import { TreeNode } from "./types";
+import { TreeFlatNode, TreeNode, TreeIndex } from "./types";
 
-export function buildTree<T extends { id: string; parentId: string | null; sortOrder?: number }>(
-  items: T[]
-): TreeNode<T>[] {
-  const map = new Map<string, TreeNode<T>>();
-  const roots: TreeNode<T>[] = [];
+export function buildTreeWithIndex<T extends TreeFlatNode>(rows: T[]): TreeIndex<T> {
+  const nodeMap = new Map<string, TreeNode<T>>();
+  const parentMap = new Map<string, string | null>();
 
-  // 初始化 node
-  for (const item of items) {
-    map.set(item.id, { ...item, children: [] });
+  for (const r of rows) {
+    nodeMap.set(r.id, {
+      id: r.id,
+      name: r.name,
+      data: r,
+      children: [],
+    });
+
+    parentMap.set(r.id, r.parentId);
   }
 
-  // 构建树
-  for (const item of items) {
-    const node = map.get(item.id)!;
+  const tree: TreeNode<T>[] = [];
 
-    if (item.parentId !== null) {
-      const parent = map.get(item.parentId);
+  for (const r of rows) {
+    const node = nodeMap.get(r.id)!;
+
+    if (r.parentId) {
+      const parent = nodeMap.get(r.parentId);
 
       if (parent) {
         parent.children.push(node);
-        continue;
+      } else {
+        tree.push(node);
       }
+    } else {
+      tree.push(node);
     }
-
-    roots.push(node);
   }
 
-  // 递归排序
-  const sortTree = (nodes: TreeNode<T>[]) => {
-    nodes.sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
-
-    for (const node of nodes) {
-      if (node.children.length > 0) {
-        sortTree(node.children);
-      }
-    }
+  return {
+    tree,
+    nodeMap,
+    parentMap,
   };
-
-  sortTree(roots);
-
-  return roots;
 }

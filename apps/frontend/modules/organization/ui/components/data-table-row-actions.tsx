@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { OrganizationListItem } from "@/modules/organization/types/organization.types";
+import { OrganizationListItem } from "@/modules/organization/services";
 
 import { useCrudMutation } from "@/lib/crud/hooks/useCrudMutation";
 import { deleteOrganizationAction } from "@/modules/organization/actions/delete-organization.action";

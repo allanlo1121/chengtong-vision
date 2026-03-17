@@ -65,8 +65,6 @@ export const OrganizationFields = {
     option: { source: "organization_tree", parentId: null },
   }),
 
-  path: z.string().optional(),
-
   orgTypeId: idSchema.meta({
     label: "组织类型",
     component: "select",
@@ -84,17 +82,6 @@ export const OrganizationFields = {
       section: "基本信息",
       colSpan: 1,
       option: { source: "master", code: "BUSINESS" },
-    }),
-
-  regionId: idSchema
-    .nullable()
-    .optional()
-    .meta({
-      label: "区域",
-      component: "select",
-      section: "地理信息",
-      colSpan: 1,
-      option: { source: "master", code: "REGION" },
     }),
 
   countryCode: countryCodeSchema.default("CN").meta({
@@ -168,6 +155,14 @@ export const OrganizationFields = {
     label: "是否启用",
     component: "switch",
     section: "其他信息",
+    colSpan: 1,
+  }),
+
+  sortOrder: z.coerce.number().default(0).meta({
+    label: "排序",
+    component: "input",
+    section: "其他信息",
+    type: "number",
     colSpan: 1,
   }),
 };

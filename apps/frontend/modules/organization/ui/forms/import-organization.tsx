@@ -1,7 +1,7 @@
 "use client";
 
 import ImportDataPage from "@/modules/import/components/import-data-page";
-import { organizationImportConfig } from "@/modules/organization/mapper/import-organization.mapper";
+import { organizationImportConfig } from "./import-organizaiton.config";
 
 export default function ImportOrganizationPage() {
   return (

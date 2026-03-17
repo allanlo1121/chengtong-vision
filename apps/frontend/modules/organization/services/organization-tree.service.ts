@@ -1,22 +1,16 @@
-import { buildTree, TreeNode } from "@/lib/utils/tree";
-import { mapOrganizationTree } from "../mapper/organization.mapper";
-import { findOrganizationTreeRows } from "../repositories/organization.repository";
-import { OrganizationTreeItem, OrganizationTreeNode } from "../types";
-import { ServiceResult } from "@/modules/shared/types";
+import { mapOrganizationTree, OrganizationTreeFlatNode } from "./mapper";
+import { getOrganizationTreeRows } from "../repositories/organization-tree.repository";
+import { Result } from "@/modules/shared/contracts";
 
-export async function getOrganizationTree(): Promise<
-  ServiceResult<TreeNode<OrganizationTreeItem>[]>
-> {
+export async function getOrganizationTree(): Promise<Result<OrganizationTreeFlatNode[]>> {
   try {
-    const rows = await findOrganizationTreeRows();
+    const rows = await getOrganizationTreeRows();
 
     const items = rows.map(mapOrganizationTree);
 
-    const tree = buildTree(items);
-
     return {
       success: true,
-      data: tree ?? [],
+      data: items ?? [],
     };
   } catch (error: unknown) {
     return {

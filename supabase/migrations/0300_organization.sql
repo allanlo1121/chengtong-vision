@@ -42,6 +42,18 @@ on public.organizations(parent_id);
 create index idx_org_path on public.organizations using gist(path);
 
 
+create table organization_external_map (
+
+  organization_id uuid primary key
+    references organizations(id) on delete cascade,
+
+  external_id text not null unique,
+
+  created_at timestamptz default now()
+
+);
+
+
 
 
 

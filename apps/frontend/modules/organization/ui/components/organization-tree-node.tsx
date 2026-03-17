@@ -1,44 +1,37 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { ChevronRight, ChevronDown, Building2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { TreeNode } from "@/lib/utils/tree";
 
-import type { OrganizationTreeItem } from "../types";
+import type { OrganizationTreeItem } from "../../services";
 
 interface Props {
-  node: TreeNode<OrganizationTreeItem>;
+  node: TreeNode;
   level?: number;
   selectedId?: string | null;
-  expandedIds?: Set<string>;
-  onSelect?: (id: string) => void;
+  expandedIds: Set<string>;
 }
 
-export function OrganizationTreeNode({
-  node,
-  level = 0,
-  selectedId,
-  expandedIds,
-  onSelect,
-}: Props) {
-  const [expanded, setExpanded] = useState(expandedIds?.has(node.id) ?? level === 0); // 根节点默认展开
+export function OrganizationTreeNode({ node, level = 0, selectedId, expandedIds }: Props) {
+  // console.log("organization-tree node",node)
+
   const router = useRouter();
   const searchParams = useSearchParams();
+
   const hasChildren = node.children.length > 0;
 
-  //Tree 自动滚动到选中节点
-  const nodeRef = useRef<HTMLDivElement>(null);
+  const expanded = expandedIds.has(node.id);
+
+  const [open, setOpen] = useState(expanded);
 
   const toggle = () => {
-    if (hasChildren) {
-      setExpanded(!expanded);
-    }
+    setOpen(!open);
   };
 
   const handleSelect = () => {
-    onSelect?.(node.id);
     const params = new URLSearchParams(searchParams.toString());
 
     params.set("parentId", node.id);
@@ -47,23 +40,15 @@ export function OrganizationTreeNode({
     router.replace(`/system/organizations?${params.toString()}`);
   };
 
-  useEffect(() => {
-    if (selectedId === node.id && nodeRef.current) {
-      nodeRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  }, [selectedId, node.id]);
-
   return (
-    <div ref={nodeRef}>
-      {/* 当前节点 */}
+    <div>
       <div
         className={`flex items-center gap-2 py-1 px-2 cursor-pointer hover:bg-muted rounded ${
-          Boolean(selectedId) && selectedId === node.id ? "bg-muted" : ""
+          selectedId === node.id ? "bg-muted" : ""
         }`}
-        style={{ paddingLeft: level * 20 }}
+        style={{ paddingLeft: level * 18 }}
         onClick={handleSelect}
       >
-        {/* 展开按钮 */}
         {hasChildren ? (
           <span
             onClick={(e) => {
@@ -71,7 +56,7 @@ export function OrganizationTreeNode({
               toggle();
             }}
           >
-            {expanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+            {open ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
           </span>
         ) : (
           <span className="w-4" />
@@ -82,8 +67,7 @@ export function OrganizationTreeNode({
         <span className="text-sm">{node.name}</span>
       </div>
 
-      {/* 子节点 */}
-      {expanded &&
+      {open &&
         node.children.map((child) => (
           <OrganizationTreeNode
             key={child.id}
@@ -91,7 +75,6 @@ export function OrganizationTreeNode({
             level={level + 1}
             selectedId={selectedId}
             expandedIds={expandedIds}
-            onSelect={onSelect}
           />
         ))}
     </div>

@@ -13,7 +13,7 @@ insert into system.menus (
   name,label,path,icon,sort_order,parent_id,permission_code
 )
 select
-  'organizations','组织系统','/system/orgs','Building2',0,id,'organization.read'
+  'organizations','组织系统','/system/organizations','Building2',0,id,'organization.read'
 from system.menus
 where name = 'system';
 

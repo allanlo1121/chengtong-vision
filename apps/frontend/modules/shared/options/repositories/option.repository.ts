@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/core/supabase/client";
-import { TreeNode } from "@/lib/utils/tree";
-import { TreeNodeRow } from "../types";
+
+import { OrganizationTreeRow } from "@/modules/organization/repositories";
 
 export async function findMasterOptions(definitionCode: string) {
   const supabase = createClient();
@@ -56,12 +56,12 @@ export async function searchProjects(search?: string) {
   return data ?? [];
 }
 
-export async function listOrganizations(parentId?: string): Promise<TreeNodeRow[]> {
+export async function listOrganizations(parentId?: string): Promise<OrganizationTreeRow[]> {
   const supabase = createClient();
-  let query = supabase.from("organizations").select("id, name,parent_id,sort_order");
+  let query = supabase.from("v_organizations_tree").select("*");
   if (parentId) {
     query = query.eq("parent_id", parentId);
   }
-  const { data } = await query.order("sort_order", { ascending: true });
+  const { data } = await query;
   return data ?? [];
 }

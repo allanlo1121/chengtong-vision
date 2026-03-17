@@ -1,17 +1,5 @@
-import { TreeNode } from "./types";
+import { TreeIndex } from "@/modules/shared/tree/tree.types";
 
-export function findNode<T>(tree: TreeNode<T>[], id: string): TreeNode<T> | null {
-  for (const node of tree) {
-    if ((node as any).id === id) {
-      return node;
-    }
-
-    const found = findNode(node.children, id);
-
-    if (found) {
-      return found;
-    }
-  }
-
-  return null;
+export function findNode<T>(index: TreeIndex<T>, id: string) {
+  return index.nodeMap.get(id);
 }

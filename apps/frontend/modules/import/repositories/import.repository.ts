@@ -1,12 +1,15 @@
 import { createClient } from "@/lib/core/supabase/client";
 import { ImportError, ImportPersistResult, LookupItem } from "../types";
-import { RowType, TableName } from "@/modules/shared/types";
+import { SchemaRowType, TableName } from "@/modules/shared/types";
 
 import { camelToSnake, snakeToCamel } from "@/modules/shared/utils/case-converter";
 import { assertNoError } from "@/lib/infra/repositories/base.repository";
 
+const BATCH_SIZE = 1000;
+
 export async function findMasterOptions(definitionCode: string) {
   const supabase = createClient();
+
   const { data } = await supabase
     .from("v_master_options")
     .select("id, code, name")
@@ -17,8 +20,26 @@ export async function findMasterOptions(definitionCode: string) {
 
 export async function listMasterDatasets(): Promise<LookupItem[]> {
   const supabase = createClient();
-  const { data } = await supabase.from("master_data").select("id,code");
-  const result = data?.map((r) => ({
+  let from = 0;
+  let all: any[] = [];
+
+  while (true) {
+    const { data, error } = await supabase
+      .from("master_data")
+      .select("id,code")
+      .range(from, from + BATCH_SIZE - 1);
+
+    assertNoError(error);
+
+    if (!data || data.length === 0) break;
+
+    all = all.concat(data);
+
+    if (data.length < BATCH_SIZE) break;
+
+    from += BATCH_SIZE;
+  }
+  const result = all.map((r) => ({
     id: r.id,
     key: r.code,
   }));
@@ -27,9 +48,26 @@ export async function listMasterDatasets(): Promise<LookupItem[]> {
 
 export async function listCountries(): Promise<LookupItem[]> {
   const supabase = createClient();
-  const { data } = await supabase.from("countries").select("code, name");
+  let from = 0;
+  let all: any[] = [];
 
-  const result = data?.map((r) => ({
+  while (true) {
+    const { data, error } = await supabase
+      .from("countries")
+      .select("code, name")
+      .range(from, from + BATCH_SIZE - 1);
+
+    assertNoError(error);
+
+    if (!data || data.length === 0) break;
+
+    all = all.concat(data);
+
+    if (data.length < BATCH_SIZE) break;
+
+    from += BATCH_SIZE;
+  }
+  const result = all.map((r) => ({
     id: r.code,
     key: r.name,
   }));
@@ -39,11 +77,27 @@ export async function listCountries(): Promise<LookupItem[]> {
 export async function listAdminRegions(): Promise<LookupItem[]> {
   const supabase = createClient();
 
-  let query = supabase.from("admin_regions").select("code,name,parent_code,level");
+  let from = 0;
+  let all: any[] = [];
 
-  const { data } = await query.order("code");
+  while (true) {
+    const { data, error } = await supabase
+      .from("admin_regions")
+      .select("code,name,parent_code,level")
+      .range(from, from + BATCH_SIZE - 1);
 
-  const result = data?.map((r) => ({
+    assertNoError(error);
+
+    if (!data || data.length === 0) break;
+
+    all = all.concat(data);
+
+    if (data.length < BATCH_SIZE) break;
+
+    from += BATCH_SIZE;
+  }
+
+  const result = all.map((r) => ({
     id: r.code,
     key: r.name,
   }));
@@ -80,13 +134,32 @@ export async function searchProjects(search?: string): Promise<LookupItem[]> {
 
 export async function listOrganizations(): Promise<LookupItem[]> {
   const supabase = createClient();
-  let query = supabase.from("organizations").select("id,code,full_name ");
-  const { data } = await query.order("sort_order", { ascending: true });
-  const result = data?.map((r) => ({
+  const pageSize = 1000;
+  let from = 0;
+  let all: any[] = [];
+
+  while (true) {
+    const { data, error } = await supabase
+      .from("organizations")
+      .select("id, code")
+      .order("sort_order", { ascending: true })
+      .range(from, from + pageSize - 1);
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) break;
+
+    all = all.concat(data);
+
+    if (data.length < pageSize) break;
+
+    from += pageSize;
+  }
+
+  return all.map((r) => ({
     id: r.id,
-    key: r.full_name,
+    key: r.code,
   }));
-  return result ?? [];
 }
 
 function chunkArray<T>(arr: T[], size: number): T[][] {
@@ -101,8 +174,8 @@ function chunkArray<T>(arr: T[], size: number): T[][] {
 
 export async function upsertRowsByCode<T extends TableName>(
   table: T,
-  data: RowType<T>[]
-): Promise<ImportPersistResult<RowType<T>>> {
+  data: SchemaRowType<T>[]
+): Promise<ImportPersistResult<{ id: string; code: string }>> {
   const supabase = await createClient();
 
   const rows = camelToSnake(data);
@@ -145,7 +218,7 @@ export async function upsertRowsByCode<T extends TableName>(
 
   assertNoError(error);
 
-  const records = snakeToCamel(result ?? []) as RowType<T>[];
+  const records = snakeToCamel(result ?? []) as { id: string; code: string }[];
 
   return {
     inserted,
@@ -155,4 +228,43 @@ export async function upsertRowsByCode<T extends TableName>(
     items: records,
     total: records.length,
   };
+}
+
+export async function listParentOrganizations(): Promise<LookupItem[]> {
+  const supabase = createClient();
+  const pageSize = 1000;
+  let from = 0;
+  let all: any[] = [];
+
+  while (true) {
+    const { data, error } = await supabase
+      .from("organization_external_map")
+      .select("organization_id, external_id")
+      .range(from, from + pageSize - 1);
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) break;
+
+    all = all.concat(data);
+
+    if (data.length < pageSize) break;
+
+    from += pageSize;
+  }
+
+  return all.map((r) => ({
+    id: r.organization_id,
+    key: r.external_id,
+  }));
+}
+
+export async function insertOrganizationExternalMap(rows: any[]) {
+  const supabase = createClient();
+
+  const { error } = await supabase.from("organization_external_map").upsert(rows, {
+    onConflict: "external_id",
+  });
+
+  if (error) throw error;
 }

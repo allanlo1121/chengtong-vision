@@ -3,7 +3,6 @@ import { z } from "zod";
 
 export const OrganizationListQuerySchema = BaseListQuerySchema.extend({
   parentId: z.uuid().optional(),
-  regionId: z.uuid().optional(),
 });
 
 export type OrganizationListQueryType = z.infer<typeof OrganizationListQuerySchema>;

@@ -1,13 +1,9 @@
+import { ImportConfig } from "@/modules/import/types";
+import { OrganizationSchema } from "../schemas";
 import { UpdateOrganizationInput } from "../schemas";
-import {
-  OrganizationDetail,
-  OrganizationDetailRow,
-  OrganizationListItem,
-  OrganizationListRow,
-  OrganizationTreeItem,
-  OrganizationTreeRow,
-  OrganizationRow,
-} from "../types";
+import { OrganizationDetail, OrganizationDetailRow } from "../types";
+import { Camelize } from "@/modules/shared/utils/case-converter";
+import { OrganizationListRow, OrganizationRow, OrganizationTreeRow } from "../repositories";
 
 export function mapOrganizationDetail(row: OrganizationDetailRow): OrganizationDetail {
   return {
@@ -36,32 +32,46 @@ export function mapOrganizationDetail(row: OrganizationDetailRow): OrganizationD
   };
 }
 
+export type OrganizationListItem = Camelize<OrganizationListRow>;
+
 export function mapOrganizationList(rows: OrganizationListRow): OrganizationListItem {
   return {
     id: rows.id,
     name: rows.name,
     parentId: rows.parent_id,
-    parentName: rows.parent_name ?? undefined,
+    parentOrgName: rows.parent_org_name,
     isActive: rows.is_active,
+    level: rows.level,
 
     orgTypeName: rows.org_type_name,
-    businessName: rows.business_name ?? undefined,
-    regionName: rows.region_name,
+    businessName: rows.business_name,
     countryName: rows.country_name,
-    adminRegionName: rows.admin_region_name ?? undefined,
+    provinceName: rows.province_name,
+    cityName: rows.city_name,
+    districtName: rows.district_name,
 
+    sortOrder: rows.sort_order,
     createdAt: rows.created_at,
   };
 }
 
-export function mapOrganizationTree(row: OrganizationTreeRow): OrganizationTreeItem {
+export type OrganizationTreeItem = Camelize<OrganizationTreeRow>;
+
+export type OrganizationTreeFlatNode = {
+  id: string;
+  name: string;
+  parentId: string | null;
+};
+
+export function mapOrganizationTree(row: OrganizationTreeRow): OrganizationTreeFlatNode {
   return {
     id: row.id,
     name: row.name,
     parentId: row.parent_id,
-    sortOrder: row.sort_order,
   };
 }
+
+export type OrganizationItem = Camelize<OrganizationRow>;
 
 export function mapOrganizationRowToUpdateInput(row: OrganizationRow): UpdateOrganizationInput {
   return {
@@ -78,8 +88,6 @@ export function mapOrganizationRowToUpdateInput(row: OrganizationRow): UpdateOrg
 
     businessId: row.business_id ?? undefined,
 
-    regionId: row.region_id,
-
     countryCode: row.country_code,
 
     provinceCode: row.province_code ?? undefined,
@@ -92,5 +100,6 @@ export function mapOrganizationRowToUpdateInput(row: OrganizationRow): UpdateOrg
     longitude: row.longitude ?? undefined,
 
     isActive: row.is_active ?? true,
+    sortOrder: row.sort_order ?? 0,
   };
 }

@@ -3,6 +3,7 @@ import {
   listCountries,
   listMasterDatasets,
   listAdminRegions,
+  listParentOrganizations,
 } from "../repositories/import.repository";
 import { LookupItem } from "../types";
 
@@ -11,6 +12,7 @@ export const LOOKUP_SERVICES = {
   countries: listCountries,
   adminRegions: listAdminRegions,
   organizations: listOrganizations,
+  parentOrganizations: listParentOrganizations,
 } as const;
 
 export type LookupSource = keyof typeof LOOKUP_SERVICES;

@@ -1,6 +1,6 @@
-import { TreeNode } from "./types";
+import { TreeNode } from "./tree.types";
 
-export function flattenTree<T>(nodes: TreeNode<T>[]) {
+export function flattenTree<T>(nodes: TreeNode<T>[]): TreeNode<T>[] {
   const result: TreeNode<T>[] = [];
 
   function walk(list: TreeNode<T>[]) {

@@ -1,128 +1,95 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { Button } from "@/components/ui/button";
-import { prepareImportRows } from "../engine/prepare-import-rows";
-import { persistImportRows } from "../engine/persist-import-rows";
-import JsonUploader from "./json-uploader";
-import JsonPreview from "./json-preview";
-import { ImportConfig, ImportPreviewResult } from "../types";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { computeLevelFromImportRow } from "../engine/compute-level";
+import { prepareLevelPreview } from "../engine/prepare-preview";
+import { importLevel } from "../engine/import-level";
 import { TableName } from "@/modules/shared/types";
 
+import JsonUploader from "./json-uploader";
+import JsonPreview from "./json-preview";
+
+import { Button } from "@/components/ui/button";
+import { ImportConfig } from "@/modules/import/types";
+
 export default function ImportPage<T extends TableName>({ config }: { config: ImportConfig<T> }) {
-  const [rows, setRows] = useState<any[]>([]);
-  const [result, setResult] = useState<ImportPreviewResult<T>[]>([]);
-  const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
+  const router = useRouter();
+
+  const [raws, setRaws] = useState<any[]>([]);
+  const [levels, setLevels] = useState<number[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const [previewRows, setPreviewRows] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // 计算所有层级
-  const levels = useMemo(() => {
-    const list = result.map((r) => r.level).filter((v): v is number => typeof v === "number");
-    return Array.from(new Set(list)).sort((a, b) => a - b);
-  }, [result]);
-
-  // 每层统计
-  const levelStats = useMemo(() => {
-    const stats: Record<number, number> = {};
-    result.forEach((r) => {
-      if (r.level !== undefined) {
-        stats[r.level] = (stats[r.level] ?? 0) + 1;
-      }
-    });
-    return stats;
-  }, [result]);
+  const currentLevel = levels[currentIndex];
 
   async function handleData(data: any[]) {
-    setRows(data);
-    const res = await prepareImportRows<T>(data, config);
-    setResult(res);
+    setRaws(data);
+
+    const rowsWithLevel = data.map((row) => ({
+      row,
+      level: computeLevelFromImportRow(row),
+    }));
+
+    const levels = [...new Set(rowsWithLevel.map((r) => r.level))].sort((a, b) => a - b);
+
+    setLevels(levels);
+    setCurrentIndex(0);
+
+    const preview = await prepareLevelPreview(data, levels[0], config);
+
+    setPreviewRows(preview);
   }
 
   async function handleImport() {
-    if (!result?.length) return;
-    let importRows = result;
-    if (selectedLevel !== null) {
-      importRows = result.filter((r) => r.level === selectedLevel);
-    }
-
-    // 只导入成功行
-    importRows = importRows.filter((r) => r.success);
-    if (!importRows.length) {
-      alert("没有可导入的数据");
-      return;
-    }
-
     setLoading(true);
-    const res = await persistImportRows<T>(
-      config.entity,
-      importRows.map((r) => r.row)
-    );
+    try {
+      const result = await importLevel(config.entity, raws, previewRows);
+
+      alert(`
+新增: ${result.inserted}
+更新: ${result.updated}
+跳过: ${result.skipped}
+`);
+    } catch (err: any) {
+      alert(err.message);
+    }
     setLoading(false);
-    if (!res.success) {
-      alert(res.message ?? "导入失败");
+  }
+
+  async function handleNext() {
+    const nextIndex = currentIndex + 1;
+    if (nextIndex >= levels.length) {
+      alert("全部导入完成");
       return;
     }
-
-    const { inserted, updated, skipped, errors } = res.data;
-
-    let message = `
-导入完成
-
-新增: ${inserted}
-更新: ${updated}
-跳过: ${skipped}
-`;
-
-    if (errors?.length) {
-      message += `\n\n错误 ${errors.length} 条`;
-    }
-    alert(message);
+    setCurrentIndex(nextIndex);
+    const preview = await prepareLevelPreview(raws, levels[nextIndex], config);
+    setPreviewRows(preview);
   }
 
   return (
     <div className="space-y-6">
-      {/* 上传 */}
       <JsonUploader onData={handleData} />
 
-      {/* 原始数据 */}
-      {rows.length > 0 && (
+      {previewRows.length > 0 && (
         <>
-          <div className="text-lg font-semibold">原始数据</div>
-          <JsonPreview rows={rows} />
+          <div className="text-lg font-semibold">导入预览 (第 {currentLevel} 层)</div>
+          <JsonPreview rows={previewRows} />
         </>
       )}
 
-      {/* 预览数据 */}
-      {result.length > 0 && (
-        <>
-          <div className="text-lg font-semibold">导入预览</div>
-          <JsonPreview rows={result} />
-        </>
-      )}
-
-      {/* 导入按钮 */}
-      <div className="flex flex-row">
-        {/* 层级选择 */}
-        <div className="flex items-center gap-4">
-          <label className="font-medium">选择导入层级</label>
-
-          <select
-            className="border rounded px-2 py-1"
-            value={selectedLevel ?? ""}
-            onChange={(e) => setSelectedLevel(e.target.value ? Number(e.target.value) : null)}
-          >
-            <option value="">全部层级</option>
-            {levels.map((level) => (
-              <option key={level} value={level}>
-                第{level}层 ({levelStats[level] ?? 0})
-              </option>
-            ))}
-          </select>
+      {previewRows.length > 0 && (
+        <div className="flex gap-3">
+          <Button onClick={handleImport} disabled={loading}>
+            {loading ? "导入中..." : "导入当前层"}
+          </Button>
+          <Button onClick={handleNext}>下一层</Button>
+          <Button onClick={() => router.push(`/system/${config.entity}`)}>返回</Button>
         </div>
-        <Button onClick={handleImport} disabled={!result.length || loading}>
-          {loading ? "导入中..." : "导入数据"}
-        </Button>
-      </div>
+      )}
     </div>
   );
 }

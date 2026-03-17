@@ -1,7 +1,7 @@
 export interface TreeFlatNode {
   id: string;
-  parentId: string | null;
   name: string;
+  parentId: string | null;
 }
 
 export interface TreeNode<T = any> {
@@ -17,6 +17,10 @@ export interface TreeIndex<T = any> {
   parentMap: Map<string, string | null>;
 }
 
-export type TreeOptionNode<T> = T & {
-  children: TreeOptionNode<T>[];
+export type TreeOption = {
+  value: string;
+  label: string;
+  children: TreeOption[];
 };
+
+export type TreeOptionConfig = { source: "organization_tree"; parentId?: string };

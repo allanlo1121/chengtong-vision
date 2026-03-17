@@ -15,7 +15,9 @@ import {
   TreeOption,
   TreeOptionConfig,
 } from "../types";
-import { buildTree } from "../utils/build-tree";
+import { buildTreeOption } from "@/lib/utils/tree";
+import { getOrganizationTreeRows } from "@/modules/organization/repositories/organization-tree.repository";
+import { mapOrganizationTree } from "@/modules/organization/services/mapper";
 
 export async function getOptions(config: OptionConfig): Promise<SelectOption[]> {
   if (config.source === "master") {
@@ -54,9 +56,16 @@ export async function getAsyncOptions(
 }
 
 export async function getTreeOptions(config: TreeOptionConfig): Promise<TreeOption[]> {
+  console.log("getTreeOptions", config);
+
   if (config.source === "organization_tree") {
     const rows = await listOrganizations(config.parentId);
-    return buildTree(rows);
+
+    return buildTreeOption(rows, {
+      idKey: "id",
+      parentKey: "parent_id",
+      labelKey: "name",
+    });
   }
   return [];
 }

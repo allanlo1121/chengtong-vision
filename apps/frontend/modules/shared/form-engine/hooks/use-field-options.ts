@@ -52,11 +52,13 @@ export function useFieldTreeOptions<T extends FieldValues, C = any, O = T>(
   const config = resolveValue(option, values);
 
   const key = config && depsReady ? ["tree-options", config.source, config.parentId] : null;
-
+  console.log("SWR key", key);
   const { data, error, isLoading, mutate } = useSWR(key, () => getTreeOptions(config!), {
     revalidateOnFocus: false,
     dedupingInterval: 60000,
   });
+
+  console.log("useFieldTreeOption", data);
 
   return {
     options: data ?? [],

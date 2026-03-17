@@ -42,7 +42,7 @@ export function FieldTreeSelect<T extends FieldValues, C = any, O = T>({
     ui.dependsOn
   );
 
-  // console.log("FieldTreeSelect options:", options);
+  console.log("FieldTreeSelect options:", options);
   const finalDisabled = disabled || disabledByDeps;
   return (
     <Controller

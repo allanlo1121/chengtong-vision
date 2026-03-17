@@ -6,35 +6,42 @@ import { useSearchParams } from "next/navigation";
 import { OrganizationTreeNode } from "../components/organization-tree-node";
 import { OrganizationTreeSearch } from "../components/organization-tree-search";
 
-import { findPath, filterTree, TreeNode } from "@/lib/utils/tree";
-import { OrganizationTreeItem } from "../types";
+import { createTreeEngine, filterTree } from "@/lib/utils/tree";
+
+import type { OrganizationTreeFlatNode } from "../../services";
 
 interface Props {
-  tree: TreeNode<OrganizationTreeItem>[];
+  nodes: OrganizationTreeFlatNode[];
 }
 
-export function OrganizationTree({ tree }: Props) {
-  const searchParams = useSearchParams();
+export function OrganizationTree({ nodes }: Props) {
+  // console.log("organization-tree",nodes)
 
-  const [keyword, setKeyword] = useState("");
+  const searchParams = useSearchParams();
 
   const parentId = searchParams.get("parentId");
 
+  const [keyword, setKeyword] = useState("");
+
+  /** TreeEngine */
+  const treeEngine = useMemo(() => {
+    return createTreeEngine(nodes);
+  }, [nodes]);
+
+  /** tree */
+  const tree = treeEngine.tree;
+
+  /** 搜索 */
   const filteredTree = useMemo(() => {
     if (!keyword) return tree;
 
     return filterTree(tree, (node) => node.name.toLowerCase().includes(keyword.toLowerCase()));
   }, [tree, keyword]);
 
+  /** 自动展开 */
   const expandedIds = useMemo(() => {
-    if (!parentId) return new Set<string>();
-
-    const path = findPath(tree, parentId);
-
-    if (!path) return new Set<string>();
-
-    return new Set<string>(path.map((n) => n.id));
-  }, [tree, parentId]);
+    return treeEngine.getExpandedIds(parentId);
+  }, [treeEngine, parentId]);
 
   return (
     <div className="h-full flex flex-col">
