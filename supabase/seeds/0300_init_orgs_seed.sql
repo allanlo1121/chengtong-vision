@@ -6,8 +6,8 @@ with org_type as (
   limit 1
 ),
 
--- 2️⃣ 插入 organizations 并返回 id
-inserted_org as (
+-- 2️⃣ 插入 organizations root
+
   insert into public.organizations (
     code,
     name,
@@ -15,7 +15,8 @@ inserted_org as (
     parent_id,
     org_type_id,
     business_id,
-    country_code
+    country_code,
+    external_id
   )
   select
     '0-001-003',
@@ -24,22 +25,11 @@ inserted_org as (
     null,
     org_type.id,
     null,
-    'CN'
+    'CN',
+    '20181127101355650-A278-632689E5E'
   from org_type
-  on conflict (code) do update
-    set name = excluded.name  -- 防止 nothing 时拿不到 id
-  returning id, code
-)
+  on conflict (code) do nothing;
 
--- 3️⃣ 插入 external map
-insert into public.organization_external_map (
-  organization_id,
-  external_id  
-)
-select
-  id,
-  '20181127101355650-A278-632689E5E'
-from inserted_org;
 
 
 -- 虚拟机构
@@ -57,40 +47,26 @@ org_type as (
   limit 1
 ),
 
-inserted_org2 as (
-  insert into public.organizations (
-    code,
-    name,
-    full_name,
-    parent_id,
-    org_type_id,
-    business_id,
-    country_code
-  )
-  select
-    '0-001-003-006',
-    '子(分)公司',
-    '中铁二局集团子(分)公司',
-    r.id,
-    t.id,
-    null,
-    'CN'
-  from root_org r
-  join org_type t on true
-  on conflict (code) do update
-    set name = excluded.name
-  returning id
-)
 
-insert into public.organization_external_map (
-  organization_id,
+insert into public.organizations (
+  code,
+  name,
+  full_name,
+  parent_id,
+  org_type_id,
+  business_id,
+  country_code,
   external_id
 )
 select
-  id,
+  '0-001-003-006',
+  '子(分)公司',
+  '中铁二局集团子(分)公司',
+  r.id,
+  t.id,
+  null,
+  'CN',
   '20181127101433134-3D54-B309C4374'
-from inserted_org2
-on conflict (external_id) do update
-  set organization_id = excluded.organization_id;
-
-
+from root_org r
+cross join org_type t
+on conflict (code) do nothing;

@@ -1,5 +1,5 @@
-import { RemoveNull } from "@/lib/utils/nullable";
-import { Database } from "@/types/database";
+import { RemoveNull } from "@/lib/utils/remove-nullable";
+import { Database } from "@/lib/core/types/database";
 
 export type OrganizationDetailRow = Database["public"]["Views"]["v_organizations_detail"]["Row"];
 

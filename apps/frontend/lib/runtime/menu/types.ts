@@ -21,11 +21,11 @@ export interface MenuRow {
   label: string;
   path: string | null;
   icon: string | null;
-  sort_order: number;
+  sort_order: number | null;
   group_name: string | null;
   permission_code: string | null;
-  is_visible: boolean;
-  is_disabled: boolean;
+  is_visible: boolean | null;
+  is_disabled: boolean | null;
 }
 
 export interface MenuNode extends MenuRow {

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { type ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
-import { type OrganizationListItem } from "@/modules/organization/services";
+import { type OrganizationListItem } from "@/modules/organization/types";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { formatDateTime } from "@/lib/core/utils";

@@ -15,7 +15,6 @@ export async function insertOrganization(input: CreateOrganizationInput) {
 
     org_type_id: input.orgTypeId,
     business_id: input.businessId,
-    region_id: input.regionId,
 
     country_code: input.countryCode,
     province_code: input.provinceCode,

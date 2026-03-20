@@ -30,6 +30,9 @@ create table public.organizations (
 
   is_active boolean default true,
 
+  external_id text,
+  external_version int,
+
   check (latitude between -90 and 90),
   check (longitude between -180 and 180),
   check (id <> parent_id)
@@ -41,18 +44,14 @@ on public.organizations(parent_id);
 
 create index idx_org_path on public.organizations using gist(path);
 
+-- 关键：部分唯一索引（只约束非空）
+create unique index if not exists uniq_org_external_id
+on organizations (external_id)
+where external_id is not null;
 
-create table organization_external_map (
-
-  organization_id uuid primary key
-    references organizations(id) on delete cascade,
-
-  external_id text not null unique,
-
-  created_at timestamptz default now()
-
-);
-
+create unique index one_root_org
+on public.organizations ((parent_id is null))
+where parent_id is null;
 
 
 

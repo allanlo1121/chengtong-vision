@@ -2,6 +2,7 @@ import { LookupSource } from "../services/lookup.service";
 import { SchemaRowType, TableName, TableSchemaMap } from "../../shared/types";
 import { ZodSchemaError } from "@/lib/zod/types";
 import { ImportRowMap } from "./improt-row-map.types";
+import { Entity } from "@/lib/core/types/entity.types";
 
 export type LookupItem = {
   id: string;
@@ -19,6 +20,25 @@ export type ExtraFieldResolver<T extends TableName> = (
   mapped: Partial<SchemaRowType<T>>,
   lookupMap?: Map<string, string>
 ) => any | Promise<any>;
+
+// export type VersionStrategy =
+//   | "incremental" // 新 > 旧 才更新
+//   | "always"      // 总是更新
+//   | "never";      // 永不更新
+
+// export type VersionConfig<T extends TableName> = {
+//   /** 原始数据字段（raw） */
+//   field: string;
+
+//   /** 存入 entity 的字段（必须是表字段） */
+//   target: keyof Entity<T>;
+
+//   /** 数据来源（多系统支持） */
+//   source?: string;
+
+//   /** 策略 */
+//   strategy?: VersionStrategy;
+// };
 
 export type ImportConfig<T extends TableName> = {
   entity: T;
@@ -84,4 +104,4 @@ export type ImportValidateResult<T extends TableName> = {
 export type UpsertResult = {
   id: string;
   code: string;
-};
+} | null;

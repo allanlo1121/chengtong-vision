@@ -1,100 +1,90 @@
-// import { TableName, TableSchemaMap, SchemaRowType } from "@/modules/shared/types";
-// import { insertExternalMap, insertOrganizationExternalMap, upsertRowByCode } from "../repositories/import.repository";
-// import { Result } from "@/modules/shared/contracts";
-// import { ImportConfig, ImportPersistResult, ImportRow,  UpsertResult } from "../types";
-// import { ImportRowMap } from "../types/improt-row-map.types";
+import { TableName, TableSchemaMap, SchemaRowType } from "@/modules/shared/types";
 
-// export async function importRowsService<T extends TableName>(
-//   config: ImportConfig<T>,
-//   rows: ImportRow<T>[]
+import { ImportConfig, ImportPersistResult, ImportRow, UpsertResult } from "../types";
+import { ImportRowMap } from "../types/improt-row-map.types";
 
-// ): Promise<Result<ImportPersistResult<UpsertResult>>> {
+import { upsertRowByCode, ExternalMapRepository, ImportRecordRepository } from "../repositories";
 
-//   console.log("Importing data to table service:", config.entity, rows);
+export async function importRowsService<T extends TableName>(
+  config: ImportConfig<T>,
+  rows: ImportRow<T>[]
+): Promise<any> {
+  console.log("Importing data to table service:", config.entity, rows);
 
-// const result: ImportPersistResult<UpsertResult> = {
-//   errors: [],
-//   items: [],
-//   total: rows.length,
-// };
+  let successCount = 0;
+  let failedCount = 0;
+  const errors: any[] = [];
 
-// for (const row of rows) {
-//   const { raw,data } = row;
+  // ✅ 2️⃣ 循环处理
+  for (const row of rows) {
+    const { raw, data } = row;
 
-//   if (!data.code) {
-//     throw new Error("每行数据必须包含 code 字段");
-//   }
-//   try {        // 简单校验 code 格式，例如必须为大写字母和数字
-//     // 1️⃣ 主表
-//     const result = await upsertRowByCode(config.entity, data);
+    try {
+      console.log("Processing row:", raw, data);
 
-//     if (!result) {
-//       throw new Error(`Upsert 失败，code: ${data.code}`);
-//     }
+      if (!data.code) {
+        throw new Error("每行数据必须包含 code 字段");
+      }
 
-//     const externalId = raw[config.externalIdField || "org_code"];
+      // 🔹 主表 upsert
+      const result = await upsertRowByCode<T>(config.entity, data);
 
-//     if (externalId) {
-//       // 2️⃣ 外部 ID 映射表
-//       await insertExternalMap({
-//         entity_type: config.entity,
-//         entity_id: result.id,
-//         external_id: externalId,
-//         external_source: config.externalSource ?? "import"
-//       });
-//     }
+      if (!result) {
+        throw new Error(`Upsert 失败，code: ${data.code}`);
+      }
 
-//       // 3️⃣ import_record
-//   await insertImportRecord({
-//     batch_id,
-//     entity_type: config.entity,
-//     entity_id: result.id,
-//     external_id: externalId,
-//     status: "success",
-//     import_json: raw,
-//     mapped_json: data,
-//   });
+      // 🔹 externalId
+      const externalIdRaw = raw[config.externalIdField || "org_code"];
 
-// } catch (err: any) {
+      const externalId = externalIdRaw != null ? String(externalIdRaw) : undefined;
 
-//   await insertImportRecord({
-//     batch_id,
-//     entity_type: config.entity,
-//     status: "failed",
-//     import_json: raw,
-//     error_json: [{ message: err.message }],
-//   });
-// }
+      // 🔹 外部映射
+      if (externalId) {
+        await ExternalMapRepository.InsertOne({
+          entityType: config.entity,
+          entityId: result.id,
+          externalId,
+          externalSource: config.externalSource ?? "import",
+        });
+      }
 
-// return {
-//   success: result.errors.length === 0,
-//   data: {
-//     errors: result.errors,
-//     items: result.items,
-//     total: result.total,
-//   },
+      // 🔹 成功记录
+      await ImportRecordRepository.InsertOne({
+        entityType: config.entity,
+        entityId: result.id,
+        externalId,
+        status: "success",
+        importJson: raw,
+        mappedJson: data,
+      });
 
-// }
+      successCount++;
+    } catch (err: any) {
+      failedCount++;
 
-// const result = await upsertRowsByCode(config.entity, rows);
+      errors.push({
+        raw,
+        message: err.message,
+      });
 
-// const rawMap = new Map(raws.map((r) => [r.org_code, r.org_id]));
+      // 🔹 失败记录
+      await ImportRecordRepository.InsertOne({
+        entityType: config.entity,
+        status: "failed",
+        importJson: raw,
+        errorJson: [{ message: err.message }],
+      });
+    }
+  }
 
-// const mappingRows = result.items
-//   .map((r) => ({
-//     organization_id: r.id,
-//     external_id: rawMap.get(r.code),
-//   }))
-//   .filter((r) => r.external_id);
-
-// if (mappingRows.length > 0) {
-//   await insertOrganizationExternalMap(mappingRows);
-// }
-
-//   return {
-//     success: true,
-//     data: result,
-//   };
-// }
-
-// }
+  // ✅ 4️⃣ 返回结果
+  return {
+    success: failedCount === 0,
+    data: {
+      total: rows.length,
+      successCount,
+      failedCount,
+      errors,
+    },
+  };
+}

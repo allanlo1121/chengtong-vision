@@ -13,6 +13,7 @@ import { ImportRow, ImportConfig, ImportErrorRow } from "@/modules/import/types"
 import { handleImportData } from "../engine/handle-import-data";
 import { importEntitiesAction } from "../actions/import.action";
 import { importValidatorData } from "../engine/import-validator-data";
+import { ImportResultDialog } from "./import-result-dialog";
 
 export default function ImportPage<T extends TableName>({ config }: { config: ImportConfig<T> }) {
   const router = useRouter();
@@ -21,6 +22,8 @@ export default function ImportPage<T extends TableName>({ config }: { config: Im
   const [validRows, setValidRows] = useState<ImportRow<T>[]>([]);
   const [failedRows, setFailedRows] = useState<ImportErrorRow<T>[]>([]);
   const [loading, setLoading] = useState(false);
+  const [importResult, setImportResult] = useState<any>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   async function handleData(data: Record<keyof ImportRowMap[T], any>[]) {
     setRaws(data);
@@ -41,6 +44,19 @@ export default function ImportPage<T extends TableName>({ config }: { config: Im
       //插入验证数据
       const result = await importEntitiesAction<T>(config, validRows);
 
+      console.log("result", result);
+
+      if (!result.success) {
+        alert(result.message ?? "导入失败");
+        return;
+      }
+
+      // 👇 保存结果用于弹窗
+      setImportResult(result.data);
+
+      // 👇 打开弹窗
+      setDialogOpen(true);
+
       //   alert(`
       // 新增: ${result.inserted}
       // 更新: ${result.updated}
@@ -53,6 +69,19 @@ export default function ImportPage<T extends TableName>({ config }: { config: Im
     //设置新原始数据
     const failedRaws = failedRows.map((f) => f.raw);
     handleData(failedRaws);
+  }
+
+  function handleContinue() {
+    const failedRaws = failedRows.map((f) => f.raw);
+
+    // 重新加载失败数据
+    handleData(failedRaws);
+
+    setDialogOpen(false);
+  }
+
+  function handleBack() {
+    router.push("/system/organization");
   }
 
   // async function handleNext() {
@@ -82,6 +111,14 @@ export default function ImportPage<T extends TableName>({ config }: { config: Im
           <JsonPreview rows={failedRows} />
         </>
       )}
+      <ImportResultDialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        onContinue={handleContinue}
+        onBack={handleBack}
+        result={importResult}
+        failedRowsCount={failedRows.length}
+      />
 
       {validRows.length > 0 && (
         <div className="flex gap-3">

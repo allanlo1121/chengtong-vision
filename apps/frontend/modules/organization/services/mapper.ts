@@ -3,7 +3,10 @@ import { OrganizationSchema } from "../schemas";
 import { UpdateOrganizationInput } from "../schemas";
 import { OrganizationDetail, OrganizationDetailRow } from "../types";
 import { Camelize } from "@/modules/shared/utils/case-converter";
-import { OrganizationListRow, OrganizationRow, OrganizationTreeRow } from "../repositories";
+import { OrganizationTreeRow } from "../repositories";
+import { Database } from "@/lib/core/types/database";
+
+import { OrganizationListRow, OrganizationListItem } from "../types";
 
 export function mapOrganizationDetail(row: OrganizationDetailRow): OrganizationDetail {
   return {
@@ -32,8 +35,6 @@ export function mapOrganizationDetail(row: OrganizationDetailRow): OrganizationD
   };
 }
 
-export type OrganizationListItem = Camelize<OrganizationListRow>;
-
 export function mapOrganizationList(rows: OrganizationListRow): OrganizationListItem {
   return {
     id: rows.id,
@@ -41,7 +42,6 @@ export function mapOrganizationList(rows: OrganizationListRow): OrganizationList
     parentId: rows.parent_id,
     parentOrgName: rows.parent_org_name,
     isActive: rows.is_active,
-    level: rows.level,
 
     orgTypeName: rows.org_type_name,
     businessName: rows.business_name,
@@ -71,35 +71,35 @@ export function mapOrganizationTree(row: OrganizationTreeRow): OrganizationTreeF
   };
 }
 
-export type OrganizationItem = Camelize<OrganizationRow>;
+// export type OrganizationItem = Camelize<OrganizationRow>;
 
-export function mapOrganizationRowToUpdateInput(row: OrganizationRow): UpdateOrganizationInput {
-  return {
-    id: row.id,
+// export function mapOrganizationRowToUpdateInput(row: OrganizationRow): UpdateOrganizationInput {
+//   return {
+//     id: row.id,
 
-    name: row.name,
-    code: row.code,
+//     name: row.name,
+//     code: row.code,
 
-    fullName: row.full_name ?? undefined,
+//     fullName: row.full_name ?? undefined,
 
-    parentId: row.parent_id,
+//     parentId: row.parent_id,
 
-    orgTypeId: row.org_type_id,
+//     orgTypeId: row.org_type_id,
 
-    businessId: row.business_id ?? undefined,
+//     businessId: row.business_id ?? undefined,
 
-    countryCode: row.country_code,
+//     countryCode: row.country_code,
 
-    provinceCode: row.province_code ?? undefined,
-    cityCode: row.city_code ?? undefined,
-    districtCode: row.district_code ?? undefined,
+//     provinceCode: row.province_code ?? undefined,
+//     cityCode: row.city_code ?? undefined,
+//     districtCode: row.district_code ?? undefined,
 
-    address: row.address ?? undefined,
+//     address: row.address ?? undefined,
 
-    latitude: row.latitude ?? undefined,
-    longitude: row.longitude ?? undefined,
+//     latitude: row.latitude ?? undefined,
+//     longitude: row.longitude ?? undefined,
 
-    isActive: row.is_active ?? true,
-    sortOrder: row.sort_order ?? 0,
-  };
-}
+//     isActive: row.is_active ?? true,
+//     sortOrder: row.sort_order ?? 0,
+//   };
+// }

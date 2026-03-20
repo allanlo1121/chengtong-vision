@@ -63,15 +63,24 @@ left join public.admin_regions ac on ac.code = o.city_code
 left join public.admin_regions ad on ad.code = o.district_code
 where o.deleted_at is null;
 
-
 create or replace view v_organizations_tree as
 select
-  id,
-  name,
-  parent_id,
-  is_active,  
-  nlevel(path) as level,
-  sort_order
-from organizations
-where deleted_at is null
-order by path, sort_order;
+  o.id,
+  o.name,
+  o.parent_id,
+  o.is_active,
+  o.sort_order,
+
+  -- ✅ 保留 level（辅助字段）
+  nlevel(o.path) as level,
+
+  -- ⭐ 强烈建议加这个
+  exists (
+    select 1
+    from organizations c
+    where c.parent_id = o.id
+      and c.deleted_at is null
+  ) as has_children
+
+from organizations o
+where o.deleted_at is null;

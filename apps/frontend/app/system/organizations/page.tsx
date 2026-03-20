@@ -6,7 +6,7 @@ import { Metadata } from "next";
 import { OrganizationListToolbar } from "@/modules/organization/ui/components/organization-list-toolbar";
 import { Suspense } from "react";
 import { DataTable } from "@/components/data-table/data-table";
-import { OrganizationListItem } from "@/modules/organization/services";
+import { OrganizationListItem } from "@/modules/organization/types";
 import { organizationColumns } from "@/modules/organization/ui/components/organization-columns";
 
 export const metadata: Metadata = {
@@ -22,7 +22,7 @@ export default async function Page({
 
   const params = OrganizationListQuerySchema.parse(rawParams);
 
-  // console.log("parsed params", params);
+  console.log("parsed params", params);
 
   const result = await listOrganizations(params);
 

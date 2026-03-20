@@ -1,10 +1,13 @@
-import { mapOrganizationTree, OrganizationTreeFlatNode } from "./mapper";
+import { mapOrganizationTree } from "../mappers";
 import { getOrganizationTreeRows } from "../repositories/organization-tree.repository";
 import { Result } from "@/modules/shared/contracts";
+import { OrganizationTreeNode } from "../types";
 
-export async function getOrganizationTree(): Promise<Result<OrganizationTreeFlatNode[]>> {
+export async function getOrganizationTree(
+  parentId: string | null = null
+): Promise<Result<OrganizationTreeNode[]>> {
   try {
-    const rows = await getOrganizationTreeRows();
+    const rows = await getOrganizationTreeRows(parentId);
 
     const items = rows.map(mapOrganizationTree);
 

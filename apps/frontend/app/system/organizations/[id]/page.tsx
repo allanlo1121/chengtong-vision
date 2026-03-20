@@ -14,10 +14,10 @@ export default async function OrganizationDetailPage({
   const res = await getOrganizationDetailById(id);
 
   if (!res.success) {
-    return <div>{res.message ?? "加载失败"}</div>;
+    return <div>{"加载失败"}</div>;
   }
 
-  const org = res.data;
+  const org = res.data ?? {};
   console.log("OrganizationDetailPage data", org);
 
   return (

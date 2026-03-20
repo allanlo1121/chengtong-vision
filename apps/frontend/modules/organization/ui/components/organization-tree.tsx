@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 import { OrganizationTreeNode } from "../components/organization-tree-node";
-import { OrganizationTreeSearch } from "../components/organization-tree-search";
+import { OrganizationTreeSearch } from "./organization-tree-search";
 
 import { createTreeEngine, filterTree } from "@/lib/utils/tree";
 

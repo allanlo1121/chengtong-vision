@@ -1,5 +1,5 @@
 import { Breadcrumbs } from "@/components/common/bread-crubms";
-import { getOrganizationById } from "@/modules/organization/services/organization.service";
+import { getOrganizationById } from "@/modules/organization/services";
 import { notFound } from "next/navigation";
 import UpdateOrganization from "@/modules/organization/ui/forms/update-organization";
 

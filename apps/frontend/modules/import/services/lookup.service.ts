@@ -4,7 +4,7 @@ import {
   listMasterDatasets,
   listAdminRegions,
   listParentOrganizations,
-} from "../repositories/import.repository";
+} from "../repositories/lookup.repository";
 import { LookupItem } from "../types";
 
 export const LOOKUP_SERVICES = {

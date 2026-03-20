@@ -1,1 +1,1 @@
-export { organizationRepository } from "../../../modules/organization/repositories/organization.repository";
+export * from "./create.repository";

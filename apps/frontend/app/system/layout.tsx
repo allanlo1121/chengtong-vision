@@ -1,5 +1,5 @@
 // app/system/layout.tsx
-import { createClient } from "@/lib/core/supabase/server";
+import { createClient } from "@/lib/infra/supabase/server";
 import { Providers } from "@/app/providers";
 import { RuntimeUser } from "@/lib/runtime/user/types";
 import { buildMenuTree } from "@/lib/runtime/menu/buildMenuTree";

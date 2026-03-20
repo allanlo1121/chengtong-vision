@@ -15,12 +15,7 @@ import { PageData } from "@/modules/shared/contracts";
 
 import { applyPagination, assertNoError } from "@/lib/infra/repositories/base.repository";
 
-import {
-  OrganizationRow,
-  OrganizationDetailRow,
-  OrganizationListRow,
-  OrganizationTreeRow,
-} from "./organization.repository.types";
+import { OrganizationDetailRow, OrganizationListRow, OrganizationTreeRow } from "../types";
 
 export async function findOrganizationDetailById(id: string): Promise<OrganizationDetailRow> {
   const supabase = await createClient();
@@ -103,18 +98,18 @@ export const organizationRepository = {
   softDeleteMany,
 };
 
-export async function getOrganizationRowById(id: string): Promise<OrganizationRow> {
-  const supabase = await createClient();
+// export async function getOrganizationRowById(id: string): Promise<OrganizationRow> {
+//   const supabase = await createClient();
 
-  const { data, error } = await supabase.from("organizations").select("*").eq("id", id).single();
+//   const { data, error } = await supabase.from("organizations").select("*").eq("id", id).single();
 
-  assertNoError(error);
+//   assertNoError(error);
 
-  if (!data) throw new Error("Organization not found");
-  // console.log("getOrganizationRowById", data);
+//   if (!data) throw new Error("Organization not found");
+//   // console.log("getOrganizationRowById", data);
 
-  return data;
-}
+//   return data;
+// }
 
 // export async function getOrganizationPages(query: string): Promise<number> {
 //   const supabase = await createClient();
