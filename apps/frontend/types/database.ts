@@ -379,6 +379,116 @@ export type Database = {
           },
         ]
       }
+      external_maps: {
+        Row: {
+          created_at: string | null
+          entity_id: string
+          entity_type: string
+          external_id: string
+          external_source: string
+          id: string
+        }
+        Insert: {
+          created_at?: string | null
+          entity_id: string
+          entity_type: string
+          external_id: string
+          external_source?: string
+          id?: string
+        }
+        Update: {
+          created_at?: string | null
+          entity_id?: string
+          entity_type?: string
+          external_id?: string
+          external_source?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      import_batches: {
+        Row: {
+          created_at: string | null
+          entity_type: string
+          failed: number | null
+          id: string
+          status: string | null
+          success: number | null
+          total: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          entity_type: string
+          failed?: number | null
+          id?: string
+          status?: string | null
+          success?: number | null
+          total?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          entity_type?: string
+          failed?: number | null
+          id?: string
+          status?: string | null
+          success?: number | null
+          total?: number | null
+        }
+        Relationships: []
+      }
+      import_records: {
+        Row: {
+          batch_id: string | null
+          created_at: string | null
+          entity_id: string | null
+          entity_type: string
+          error_json: Json | null
+          external_id: string | null
+          external_source: string | null
+          id: string
+          import_json: Json | null
+          mapped_json: Json | null
+          round: number | null
+          status: string
+        }
+        Insert: {
+          batch_id?: string | null
+          created_at?: string | null
+          entity_id?: string | null
+          entity_type: string
+          error_json?: Json | null
+          external_id?: string | null
+          external_source?: string | null
+          id?: string
+          import_json?: Json | null
+          mapped_json?: Json | null
+          round?: number | null
+          status: string
+        }
+        Update: {
+          batch_id?: string | null
+          created_at?: string | null
+          entity_id?: string | null
+          entity_type?: string
+          error_json?: Json | null
+          external_id?: string | null
+          external_source?: string | null
+          id?: string
+          import_json?: Json | null
+          mapped_json?: Json | null
+          round?: number | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "import_records_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "import_batches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       master_data: {
         Row: {
           code: string
@@ -521,6 +631,60 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_runtime_user"
             referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      organization_external_map: {
+        Row: {
+          created_at: string | null
+          external_id: string
+          organization_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          external_id: string
+          organization_id: string
+        }
+        Update: {
+          created_at?: string | null
+          external_id?: string
+          organization_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_external_map_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: true
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organization_external_map_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: true
+            referencedRelation: "v_organizations_detail"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organization_external_map_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: true
+            referencedRelation: "v_organizations_list"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organization_external_map_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: true
+            referencedRelation: "v_organizations_tree"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organization_external_map_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: true
+            referencedRelation: "v_user_orgs"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1004,25 +1168,31 @@ export type Database = {
       }
       v_organizations_tree: {
         Row: {
+          has_children: boolean | null
           id: string | null
           is_active: boolean | null
           level: number | null
           name: string | null
           parent_id: string | null
+          sort_order: number | null
         }
         Insert: {
+          has_children?: never
           id?: string | null
           is_active?: boolean | null
           level?: never
           name?: string | null
           parent_id?: string | null
+          sort_order?: number | null
         }
         Update: {
+          has_children?: never
           id?: string | null
           is_active?: boolean | null
           level?: never
           name?: string | null
           parent_id?: string | null
+          sort_order?: number | null
         }
         Relationships: [
           {

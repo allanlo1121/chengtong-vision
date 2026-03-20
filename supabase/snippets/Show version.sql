@@ -130,3 +130,154 @@ create table organization_external_map (
   created_at timestamptz default now()
 
 );
+
+
+
+create or replace function system.bootstrap(p_user_id uuid)
+returns void
+language plpgsql
+security definer
+as $$
+declare
+  v_role_id uuid;
+  v_group_org_id uuid;
+begin
+
+  if auth.role() <> 'service_role' then
+    raise exception 'permission denied';
+  end if;
+
+  if exists (
+    select 1
+    from system.bootstrap_state
+    where version = '1.0.0'
+      and completed = true
+  ) then
+    return;
+  end if;
+
+  -- 创建角色
+  insert into rbac.roles (code, name)
+  values ('SUPER_ADMIN', '超级管理员')
+  on conflict (code) do nothing;
+
+  select id into v_role_id
+  from rbac.roles
+  where code = 'SUPER_ADMIN';
+
+  -- 创建 employee
+  select id into v_group_org_id
+  from public.organizations
+  where code = '0-001-003';
+
+  if v_group_org_id is null then
+    raise exception 'Group organization not found';
+  end if;
+
+  insert into public.employees (
+    id,
+    name,
+    code,
+    org_node_id,
+    is_active
+  )
+  values (
+    p_user_id,
+    '系统管理员',
+    'admin',
+    v_group_org_id,
+    true
+  )
+  on conflict (id) do nothing;
+
+  -- 绑定角色
+  insert into rbac.user_roles (user_id, role_id)
+  values (p_user_id, v_role_id)
+  on conflict do nothing;
+
+  -- 标记完成
+  insert into system.bootstrap_state (version, completed, executed_at)
+  values ('1.0.0', true, now())
+  on conflict (version)
+  do update set completed = true,
+                executed_at = now();
+
+end;
+$$;
+
+
+create table public.import_batches (
+  id uuid primary key default gen_random_uuid(),
+
+  entity_type text not null,
+
+  total int default 0,
+  success int default 0,
+  failed int default 0,
+
+  status text default 'running', -- running / done / failed
+
+  created_at timestamptz default now()
+);
+
+
+create table public.import_records (
+  id uuid primary key default gen_random_uuid(),
+
+  batch_id uuid references public.import_batches(id),
+
+  entity_type text not null,
+  entity_id uuid,
+
+  external_id text,
+  external_source text default 'import',
+
+  status text not null, -- success / failed
+
+  import_json jsonb,
+  mapped_json jsonb,
+  error_json jsonb,
+
+  round int,
+
+  created_at timestamptz default now()
+);
+
+drop view v_organizations_tree cascade;
+create or replace view v_organizations_tree as
+select
+  o.id,
+  o.name,
+  o.parent_id,
+  o.is_active,
+  o.sort_order,
+
+  -- ✅ 保留 level（辅助字段）
+  nlevel(o.path) as level,
+
+  -- ⭐ 强烈建议加这个
+  exists (
+    select 1
+    from organizations c
+    where c.parent_id = o.id
+      and c.deleted_at is null
+  ) as has_children
+
+from organizations o
+where o.deleted_at is null;
+
+
+create table public.external_maps (
+  id uuid primary key default gen_random_uuid(),
+
+  entity_type text not null,   -- organizations / projects / tbm
+  entity_id uuid not null,     -- 真实表 id
+
+  external_id text not null,
+  external_source text not null default 'default',
+
+  created_at timestamptz default now()
+);
+
+create unique index uniq_external_map
+on public.external_maps (entity_type, external_source, external_id);

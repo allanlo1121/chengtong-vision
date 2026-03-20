@@ -1,13 +1,10 @@
--- 1️⃣ 获取 org_type
+-- 1️⃣ 获取 org_type 并插入集团公司
 with org_type as (
   select id
   from public.master_data
   where name = '集团公司'
   limit 1
-),
-
--- 2️⃣ 插入 organizations root
-
+)
   insert into public.organizations (
     code,
     name,
@@ -45,9 +42,7 @@ org_type as (
   from public.master_data
   where name = '分组（虚拟组织）'
   limit 1
-),
-
-
+)
 insert into public.organizations (
   code,
   name,
