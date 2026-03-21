@@ -281,3 +281,167 @@ create table public.external_maps (
 
 create unique index uniq_external_map
 on public.external_maps (entity_type, external_source, external_id);
+
+
+
+create or replace function public.sync_entity_with_record(
+  p_table text,
+  p_rows jsonb
+)
+returns jsonb
+language plpgsql
+as $$
+declare
+  v_row jsonb;
+  v_raw jsonb;
+  v_data jsonb;
+
+  v_external_id text;
+  v_inserted int := 0;
+  v_updated int := 0;
+  v_skipped int := 0;
+  v_failed int := 0;
+
+  v_sql text;
+  v_inserted_flag boolean;
+  v_affected int;
+  v_set_clause text;
+begin
+
+  -- 🔥 动态生成 update 字段（关键修复）
+  select string_agg(
+    format('%I = excluded.%I', column_name, column_name),
+    ', '
+  )
+  into v_set_clause
+  from information_schema.columns
+  where table_name = p_table
+    and column_name not in ('id', 'created_at');
+
+  -- 🔁 逐行处理
+  for v_row in select * from jsonb_array_elements(p_rows)
+  loop
+    begin
+      v_raw := v_row->'raw';
+      v_data := v_row->'data';
+
+      v_external_id := v_data->>'external_id';
+
+      if v_external_id is null then
+        raise exception 'external_id 不能为空';
+      end if;
+
+      -- 🔥 动态 SQL（已修复）
+      v_sql := format($f$
+        insert into %1$I
+        select (jsonb_populate_record(null::%1$I, $1)).*
+
+        on conflict (external_id)
+        do update
+        set %2$s
+
+        where
+          %1$I.external_version is null
+          or excluded.external_version > %1$I.external_version
+
+        returning xmax = 0 as inserted_flag
+      $f$, p_table, v_set_clause);
+
+      -- 🔹 执行
+      execute v_sql
+      using v_data
+      into v_inserted_flag;
+
+      GET DIAGNOSTICS v_affected = ROW_COUNT;
+
+      -- 🔹 判断状态（关键修复）
+      if v_affected = 0 then
+        -- 👉 被 WHERE 拦住 = skipped
+        v_skipped := v_skipped + 1;
+
+        insert into import_records (
+          entity_type,
+          external_id,
+          status,
+          import_json,
+          mapped_json
+        )
+        values (
+          p_table,
+          v_external_id,
+          'skipped',
+          v_raw,
+          v_data
+        );
+
+      elsif v_inserted_flag then
+        v_inserted := v_inserted + 1;
+
+        insert into import_records (
+          entity_type,
+          external_id,
+          status,
+          import_json,
+          mapped_json
+        )
+        values (
+          p_table,
+          v_external_id,
+          'inserted',
+          v_raw,
+          v_data
+        );
+
+      else
+        v_updated := v_updated + 1;
+
+        insert into import_records (
+          entity_type,
+          external_id,
+          status,
+          import_json,
+          mapped_json
+        )
+        values (
+          p_table,
+          v_external_id,
+          'updated',
+          v_raw,
+          v_data
+        );
+      end if;
+
+    exception when others then
+      v_failed := v_failed + 1;
+
+      insert into import_records (
+        entity_type,
+        external_id,
+        status,
+        import_json,
+        error_json
+      )
+      values (
+        p_table,
+        v_external_id,
+        'failed',
+        v_raw,
+        jsonb_build_array(
+          jsonb_build_object(
+            'message', SQLERRM
+          )
+        )
+      );
+    end;
+  end loop;
+
+  return jsonb_build_object(
+    'inserted', v_inserted,
+    'updated', v_updated,
+    'failed', v_failed,
+    'skipped', v_skipped,
+    'total', v_inserted + v_updated + v_failed + v_skipped
+  );
+
+end;
+$$;

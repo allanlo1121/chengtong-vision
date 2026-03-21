@@ -155,6 +155,13 @@ export type Database = {
             foreignKeyName: "employee_org_access_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
+            referencedRelation: "v_tree_nodes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employee_org_access_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
             referencedRelation: "v_user_orgs"
             referencedColumns: ["id"]
           },
@@ -346,6 +353,13 @@ export type Database = {
             foreignKeyName: "employees_org_node_id_fkey"
             columns: ["org_node_id"]
             isOneToOne: false
+            referencedRelation: "v_tree_nodes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employees_org_node_id_fkey"
+            columns: ["org_node_id"]
+            isOneToOne: false
             referencedRelation: "v_user_orgs"
             referencedColumns: ["id"]
           },
@@ -379,66 +393,8 @@ export type Database = {
           },
         ]
       }
-      external_maps: {
-        Row: {
-          created_at: string | null
-          entity_id: string
-          entity_type: string
-          external_id: string
-          external_source: string
-          id: string
-        }
-        Insert: {
-          created_at?: string | null
-          entity_id: string
-          entity_type: string
-          external_id: string
-          external_source?: string
-          id?: string
-        }
-        Update: {
-          created_at?: string | null
-          entity_id?: string
-          entity_type?: string
-          external_id?: string
-          external_source?: string
-          id?: string
-        }
-        Relationships: []
-      }
-      import_batches: {
-        Row: {
-          created_at: string | null
-          entity_type: string
-          failed: number | null
-          id: string
-          status: string | null
-          success: number | null
-          total: number | null
-        }
-        Insert: {
-          created_at?: string | null
-          entity_type: string
-          failed?: number | null
-          id?: string
-          status?: string | null
-          success?: number | null
-          total?: number | null
-        }
-        Update: {
-          created_at?: string | null
-          entity_type?: string
-          failed?: number | null
-          id?: string
-          status?: string | null
-          success?: number | null
-          total?: number | null
-        }
-        Relationships: []
-      }
       import_records: {
         Row: {
-          batch_id: string | null
           created_at: string | null
           entity_id: string | null
           entity_type: string
@@ -452,7 +408,6 @@ export type Database = {
           status: string
         }
         Insert: {
-          batch_id?: string | null
           created_at?: string | null
           entity_id?: string | null
           entity_type: string
@@ -466,7 +421,6 @@ export type Database = {
           status: string
         }
         Update: {
-          batch_id?: string | null
           created_at?: string | null
           entity_id?: string | null
           entity_type?: string
@@ -479,15 +433,7 @@ export type Database = {
           round?: number | null
           status?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "import_records_batch_id_fkey"
-            columns: ["batch_id"]
-            isOneToOne: false
-            referencedRelation: "import_batches"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       master_data: {
         Row: {
@@ -634,60 +580,6 @@ export type Database = {
           },
         ]
       }
-      organization_external_map: {
-        Row: {
-          created_at: string | null
-          external_id: string
-          organization_id: string
-        }
-        Insert: {
-          created_at?: string | null
-          external_id: string
-          organization_id: string
-        }
-        Update: {
-          created_at?: string | null
-          external_id?: string
-          organization_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "organization_external_map_organization_id_fkey"
-            columns: ["organization_id"]
-            isOneToOne: true
-            referencedRelation: "organizations"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "organization_external_map_organization_id_fkey"
-            columns: ["organization_id"]
-            isOneToOne: true
-            referencedRelation: "v_organizations_detail"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "organization_external_map_organization_id_fkey"
-            columns: ["organization_id"]
-            isOneToOne: true
-            referencedRelation: "v_organizations_list"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "organization_external_map_organization_id_fkey"
-            columns: ["organization_id"]
-            isOneToOne: true
-            referencedRelation: "v_organizations_tree"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "organization_external_map_organization_id_fkey"
-            columns: ["organization_id"]
-            isOneToOne: true
-            referencedRelation: "v_user_orgs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       organizations: {
         Row: {
           address: string | null
@@ -701,6 +593,8 @@ export type Database = {
           deleted_by: string | null
           description: string | null
           district_code: string | null
+          external_id: string | null
+          external_version: number | null
           full_name: string | null
           id: string
           is_active: boolean | null
@@ -729,6 +623,8 @@ export type Database = {
           deleted_by?: string | null
           description?: string | null
           district_code?: string | null
+          external_id?: string | null
+          external_version?: number | null
           full_name?: string | null
           id?: string
           is_active?: boolean | null
@@ -757,6 +653,8 @@ export type Database = {
           deleted_by?: string | null
           description?: string | null
           district_code?: string | null
+          external_id?: string | null
+          external_version?: number | null
           full_name?: string | null
           id?: string
           is_active?: boolean | null
@@ -877,6 +775,13 @@ export type Database = {
             columns: ["parent_id"]
             isOneToOne: false
             referencedRelation: "v_organizations_tree"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organizations_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "v_tree_nodes"
             referencedColumns: ["id"]
           },
           {
@@ -1007,6 +912,13 @@ export type Database = {
             foreignKeyName: "projects_org_node_id_fkey"
             columns: ["org_node_id"]
             isOneToOne: false
+            referencedRelation: "v_tree_nodes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "projects_org_node_id_fkey"
+            columns: ["org_node_id"]
+            isOneToOne: false
             referencedRelation: "v_user_orgs"
             referencedColumns: ["id"]
           },
@@ -1125,6 +1037,7 @@ export type Database = {
           org_type_name: string | null
           parent_id: string | null
           parent_org_name: string | null
+          path: unknown
           province_name: string | null
           sort_order: number | null
         }
@@ -1155,6 +1068,13 @@ export type Database = {
             columns: ["parent_id"]
             isOneToOne: false
             referencedRelation: "v_organizations_tree"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organizations_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "v_tree_nodes"
             referencedColumns: ["id"]
           },
           {
@@ -1227,6 +1147,13 @@ export type Database = {
             foreignKeyName: "organizations_parent_id_fkey"
             columns: ["parent_id"]
             isOneToOne: false
+            referencedRelation: "v_tree_nodes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organizations_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
             referencedRelation: "v_user_orgs"
             referencedColumns: ["id"]
           },
@@ -1281,6 +1208,89 @@ export type Database = {
           {
             foreignKeyName: "employees_org_node_id_fkey"
             columns: ["org_node_id"]
+            isOneToOne: false
+            referencedRelation: "v_tree_nodes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employees_org_node_id_fkey"
+            columns: ["org_node_id"]
+            isOneToOne: false
+            referencedRelation: "v_user_orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_tree_nodes: {
+        Row: {
+          entity: string | null
+          has_children: boolean | null
+          id: string | null
+          level: number | null
+          name: string | null
+          parent_id: string | null
+          path: unknown
+          sort_order: number | null
+        }
+        Insert: {
+          entity?: never
+          has_children?: never
+          id?: string | null
+          level?: never
+          name?: string | null
+          parent_id?: string | null
+          path?: unknown
+          sort_order?: number | null
+        }
+        Update: {
+          entity?: never
+          has_children?: never
+          id?: string | null
+          level?: never
+          name?: string | null
+          parent_id?: string | null
+          path?: unknown
+          sort_order?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organizations_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organizations_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "v_organizations_detail"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organizations_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "v_organizations_list"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organizations_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "v_organizations_tree"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organizations_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "v_tree_nodes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organizations_parent_id_fkey"
+            columns: ["parent_id"]
             isOneToOne: false
             referencedRelation: "v_user_orgs"
             referencedColumns: ["id"]
@@ -1405,7 +1415,98 @@ export type Database = {
         Args: { p_id: string; p_new_parent: string }
         Returns: undefined
       }
+      sync_entity_auto: {
+        Args: {
+          p_external_id_col?: string
+          p_rows: Json
+          p_table: string
+          p_version_col?: string
+        }
+        Returns: Json
+      }
+      sync_entity_by_external: {
+        Args: {
+          p_external_id_col?: string
+          p_rows: Json
+          p_table: string
+          p_version_col?: string
+        }
+        Returns: Json
+      }
+      sync_entity_with_record: {
+        Args: { p_rows: Json; p_table: string }
+        Returns: Json
+      }
       text2ltree: { Args: { "": string }; Returns: unknown }
+      tree_context_nodes: {
+        Args: { p_entity: string; p_node_id: string }
+        Returns: {
+          entity: string | null
+          has_children: boolean | null
+          id: string | null
+          level: number | null
+          name: string | null
+          parent_id: string | null
+          path: unknown
+          sort_order: number | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "v_tree_nodes"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      tree_context_with_children: {
+        Args: { p_node_id: string }
+        Returns: {
+          has_children: boolean | null
+          id: string | null
+          is_active: boolean | null
+          level: number | null
+          name: string | null
+          parent_id: string | null
+          sort_order: number | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "v_organizations_tree"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      tree_query_organizations: {
+        Args: {
+          p_include_children?: boolean
+          p_limit?: number
+          p_offset?: number
+          p_parent_id?: string
+          p_search?: string
+        }
+        Returns: {
+          business_name: string | null
+          city_name: string | null
+          country_name: string | null
+          created_at: string | null
+          district_name: string | null
+          id: string | null
+          is_active: boolean | null
+          level: number | null
+          name: string | null
+          org_type_name: string | null
+          parent_id: string | null
+          parent_org_name: string | null
+          path: unknown
+          province_name: string | null
+          sort_order: number | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "v_organizations_list"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
     }
     Enums: {
       [_ in never]: never
