@@ -46,7 +46,6 @@ export type ImportConfig<T extends TableName> = {
   fields: fieldType<T>;
   lookups?: LookupType<T>;
   extraFields?: Partial<Record<keyof SchemaRowType<T>, ExtraFieldResolver<T>>>;
-  externalIdField: keyof ImportRowMap[T];
   externalSource?: string; // 可选
 };
 
@@ -105,3 +104,11 @@ export type UpsertResult = {
   id: string;
   code: string;
 } | null;
+
+export type SyncImportResult = {
+  total: number;
+  inserted: number;
+  updated: number;
+  failed: number;
+  skipped: number;
+};

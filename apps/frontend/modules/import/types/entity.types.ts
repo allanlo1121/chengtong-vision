@@ -24,15 +24,3 @@ export type ImportRecordUpdate = Omit<
   Database["public"]["Tables"]["import_records"]["Update"],
   SystemFields
 >;
-
-export type ExternalMapRow = Database["public"]["Tables"]["external_maps"]["Row"];
-
-export type ExternalMapInsert = Omit<
-  Database["public"]["Tables"]["external_maps"]["Insert"],
-  SystemFields
->;
-
-export type ExternalMapUpdate = Omit<
-  Database["public"]["Tables"]["external_maps"]["Update"],
-  SystemFields
->;

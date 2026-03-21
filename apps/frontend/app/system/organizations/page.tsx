@@ -1,13 +1,16 @@
 import { PageHeader } from "@/components/layout/page-header";
 import { ErrorBlock } from "@/components/common/error-block";
-import { OrganizationListQuerySchema } from "@/modules/organization/schemas/query.schema";
+import { OrganizationQuery } from "@/modules/organization/queries";
 import { listOrganizations } from "@/modules/organization/services";
+import { getTreeNodes } from "@/lib/core/tree/tree.service";
 import { Metadata } from "next";
 import { OrganizationListToolbar } from "@/modules/organization/ui/components/organization-list-toolbar";
 import { Suspense } from "react";
 import { DataTable } from "@/components/data-table/data-table";
 import { OrganizationListItem } from "@/modules/organization/types";
 import { organizationColumns } from "@/modules/organization/ui/components/organization-columns";
+import { OrganizationTreePanel } from "@/modules/organization/ui/organization-tree-panel";
+import { OrganizationTreeToolbar } from "@/modules/organization/ui/components/organization-tree-toolbar";
 
 export const metadata: Metadata = {
   title: "组织管理",
@@ -20,41 +23,55 @@ export default async function Page({
 }) {
   const rawParams = await searchParams;
 
-  const params = OrganizationListQuerySchema.parse(rawParams);
+  const params = OrganizationQuery.parse(rawParams);
 
   console.log("parsed params", params);
 
   const result = await listOrganizations(params);
+  const tree = await getTreeNodes(params.parentId, "organization");
+
+  if (!tree.success) {
+    return <ErrorBlock message={tree.message} />;
+  }
+
+  const nodes = tree.data ?? [];
 
   if (!result.success) {
     return <ErrorBlock message={result.message} />;
   }
 
-  // console.log("organization listOrganizations", result);
+  console.log("organization listOrganizations", result);
+  console.log("organization treeOrganizations", nodes);
   if (!result.data) {
     return <ErrorBlock message="未查询到数据" />;
   }
   const { items, total, page, pageSize } = result.data;
 
   return (
-    <div className="flex flex-col w-full h-full">
-      <PageHeader title="组织管理" />
+    <div className="flex w-full h-full">
+      <div className="w-64 border-r">
+        <OrganizationTreeToolbar />
+        <OrganizationTreePanel data={nodes} selectedId={params.parentId} />
+      </div>
+      <div className="flex-1 flex flex-col">
+        <PageHeader title="组织管理" />
 
-      <OrganizationListToolbar />
+        <OrganizationListToolbar />
 
-      {/* 表格 */}
+        {/* 表格 */}
 
-      <Suspense key={params.search ?? "" + params.page}>
-        <DataTable<OrganizationListItem, any>
-          columns={organizationColumns}
-          data={items}
-          total={total}
-          page={page}
-          pageSize={pageSize}
-          manualPagination
-          enableRowSelection
-        />
-      </Suspense>
+        <Suspense key={params.search ?? "" + params.page}>
+          <DataTable<OrganizationListItem, any>
+            columns={organizationColumns}
+            data={items}
+            total={total}
+            page={page}
+            pageSize={pageSize}
+            manualPagination
+            enableRowSelection
+          />
+        </Suspense>
+      </div>
     </div>
   );
 }

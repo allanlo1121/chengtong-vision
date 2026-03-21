@@ -180,9 +180,8 @@ export async function listParentOrganizations(): Promise<LookupItem[]> {
 
   while (true) {
     const { data, error } = await supabase
-      .from("external_maps")
-      .select("entity_id, external_id")
-      .eq("entity_type", "organizations")
+      .from("organizations")
+      .select("id, external_id")
       .range(from, from + pageSize - 1);
 
     if (error) throw error;
@@ -197,7 +196,7 @@ export async function listParentOrganizations(): Promise<LookupItem[]> {
   }
 
   return all.map((r) => ({
-    id: r.entity_id,
+    id: r.id,
     key: r.external_id,
   }));
 }

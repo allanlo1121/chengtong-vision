@@ -165,6 +165,22 @@ export const OrganizationFields = {
     type: "number",
     colSpan: 1,
   }),
+
+  externalId: z.string().optional().meta({
+    label: "外部ID",
+    component: "input",
+    section: "系统字段",
+    colSpan: 1,
+    disabled: true,
+  }),
+
+  externalVersion: z.coerce.number().optional().meta({
+    label: "外部版本",
+    component: "input",
+    section: "系统字段",
+    colSpan: 1,
+    disabled: true,
+  }),
 };
 
 export const OrganizationSchema = z.object(OrganizationFields);

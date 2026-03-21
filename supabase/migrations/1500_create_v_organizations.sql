@@ -42,6 +42,7 @@ select
   o.parent_id,
   p.name as parent_org_name,
   o.is_active,
+  o.path,
   nlevel(o.path) as level,
   o.sort_order,
   o.created_at,
@@ -63,24 +64,23 @@ left join public.admin_regions ac on ac.code = o.city_code
 left join public.admin_regions ad on ad.code = o.district_code
 where o.deleted_at is null;
 
-create or replace view v_organizations_tree as
+create or replace view v_tree_nodes as
 select
   o.id,
-  o.name,
   o.parent_id,
-  o.is_active,
-  o.sort_order,
+  o.name,
 
-  -- ✅ 保留 level（辅助字段）
+  o.path,
   nlevel(o.path) as level,
 
-  -- ⭐ 强烈建议加这个
+  o.sort_order,
+
   exists (
     select 1
     from organizations c
     where c.parent_id = o.id
-      and c.deleted_at is null
-  ) as has_children
+  ) as has_children,
 
-from organizations o
-where o.deleted_at is null;
+  'organization' as entity
+
+from organizations o;

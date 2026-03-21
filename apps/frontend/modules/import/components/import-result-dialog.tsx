@@ -10,6 +10,7 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
+import { SyncImportResult } from "../types";
 
 type Props = {
   open: boolean;
@@ -17,11 +18,7 @@ type Props = {
   onContinue: () => void;
   onBack: () => void;
 
-  result: {
-    total: number;
-    successCount: number;
-    failedCount: number;
-  } | null;
+  result: SyncImportResult | null;
 
   failedRowsCount: number;
 };
@@ -43,13 +40,13 @@ export function ImportResultDialog({
           <AlertDialogTitle>导入结果</AlertDialogTitle>
 
           <AlertDialogDescription className="space-y-2">
-            <div>总数据：{result.total}</div>
-            <div className="text-green-600">成功：{result.successCount}</div>
-            <div className="text-red-600">失败：{result.failedCount}</div>
-
-            <div className="border-t pt-2 text-sm text-muted-foreground">
+            <span className="block ">总数据：{result.total}</span>
+            <span className="block text-green-600">成功：{result.inserted}</span>
+            <span className="block text-red-600">失败：{result.failed}</span>
+            <span className="block text-red-600">跳过：{result.skipped}</span>
+            <span className="block border-t pt-2 text-sm text-muted-foreground">
               未导入（前端校验失败）：{failedRowsCount}
-            </div>
+            </span>
           </AlertDialogDescription>
         </AlertDialogHeader>
 

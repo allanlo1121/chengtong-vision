@@ -1,90 +1,55 @@
-import { TableName, TableSchemaMap, SchemaRowType } from "@/modules/shared/types";
+import { TableName } from "@/modules/shared/types";
+import { Result } from "@/modules/shared/contracts";
+import { ImportConfig, ImportRow, SyncImportResult } from "../types";
 
-import { ImportConfig, ImportPersistResult, ImportRow, UpsertResult } from "../types";
-import { ImportRowMap } from "../types/improt-row-map.types";
-
-import { upsertRowByCode, ExternalMapRepository, ImportRecordRepository } from "../repositories";
+import { syncEntityWithRecord } from "../repositories";
 
 export async function importRowsService<T extends TableName>(
   config: ImportConfig<T>,
   rows: ImportRow<T>[]
-): Promise<any> {
+): Promise<Result<SyncImportResult>> {
   console.log("Importing data to table service:", config.entity, rows);
 
-  let successCount = 0;
-  let failedCount = 0;
-  const errors: any[] = [];
-
-  // ✅ 2️⃣ 循环处理
-  for (const row of rows) {
-    const { raw, data } = row;
-
-    try {
-      console.log("Processing row:", raw, data);
-
-      if (!data.code) {
-        throw new Error("每行数据必须包含 code 字段");
-      }
-
-      // 🔹 主表 upsert
-      const result = await upsertRowByCode<T>(config.entity, data);
-
-      if (!result) {
-        throw new Error(`Upsert 失败，code: ${data.code}`);
-      }
-
-      // 🔹 externalId
-      const externalIdRaw = raw[config.externalIdField || "org_code"];
-
-      const externalId = externalIdRaw != null ? String(externalIdRaw) : undefined;
-
-      // 🔹 外部映射
-      if (externalId) {
-        await ExternalMapRepository.InsertOne({
-          entityType: config.entity,
-          entityId: result.id,
-          externalId,
-          externalSource: config.externalSource ?? "import",
-        });
-      }
-
-      // 🔹 成功记录
-      await ImportRecordRepository.InsertOne({
-        entityType: config.entity,
-        entityId: result.id,
-        externalId,
-        status: "success",
-        importJson: raw,
-        mappedJson: data,
-      });
-
-      successCount++;
-    } catch (err: any) {
-      failedCount++;
-
-      errors.push({
-        raw,
-        message: err.message,
-      });
-
-      // 🔹 失败记录
-      await ImportRecordRepository.InsertOne({
-        entityType: config.entity,
-        status: "failed",
-        importJson: raw,
-        errorJson: [{ message: err.message }],
-      });
+  try {
+    // ❗ 1️⃣ 空数据保护
+    if (!rows?.length) {
+      return {
+        success: true,
+        data: {
+          total: 0,
+          inserted: 0,
+          updated: 0,
+          failed: 0,
+          skipped: 0,
+        },
+        message: "没有数据需要导入",
+      };
     }
-  }
 
-  // ✅ 4️⃣ 返回结果
-  return {
-    success: failedCount === 0,
-    data: {
-      total: rows.length,
-      successCount,
-      failedCount,
-      errors,
-    },
-  };
+    // ❗ 2️⃣ 调用 RPC（核心）
+    const result = await syncEntityWithRecord<T>(config.entity, rows);
+
+    // ❗ 3️⃣ 统一 total
+    const total = result.total ?? result.inserted + result.updated + result.failed + result.skipped;
+
+    // ❗ 4️⃣ 返回统一结构（给前端）
+    return {
+      success: true,
+      data: {
+        total,
+        inserted: result.inserted ?? 0,
+        updated: result.updated ?? 0,
+        failed: result.failed ?? 0,
+        skipped: result.skipped ?? 0,
+      },
+    };
+  } catch (err: any) {
+    console.error("❌ importRowsService error:", err);
+
+    // ❗ 5️⃣ 统一错误返回（不要 throw）
+    return {
+      success: false,
+      message: err?.message ?? "导入失败",
+    };
+  }
 }

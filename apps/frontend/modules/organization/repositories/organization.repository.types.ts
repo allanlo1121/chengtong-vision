@@ -3,12 +3,6 @@ import { Database } from "@/lib/core/types/database";
 
 export type OrganizationDetailRow = Database["public"]["Views"]["v_organizations_detail"]["Row"];
 
-export type RawOrganizationTreeRow = Database["public"]["Views"]["v_organizations_tree"]["Row"];
-
-export type OrganizationTreeRow = RemoveNull<RawOrganizationTreeRow> & {
-  parent_id: string | null;
-};
-
 export type RawOrganizationListRow = Database["public"]["Views"]["v_organizations_list"]["Row"];
 
 export type OrganizationListRow = RemoveNull<RawOrganizationListRow> & {

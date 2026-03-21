@@ -1,23 +1,4 @@
-create function org_generate_node_key()
-returns trigger
-language plpgsql
-as $$
-begin
-  if new.node_key is null then
-    new.node_key =
-      substr(replace(gen_random_uuid()::text,'-',''),1,8);
-  end if;
-
-  return new;
-end
-$$;
-
-create trigger trg_org_node_key
-before insert on organizations
-for each row
-execute function org_generate_node_key();
-
-create function org_generate_path()
+create function org_before_insert()
 returns trigger
 language plpgsql
 as $$
@@ -25,28 +6,38 @@ declare
   parent_path ltree;
 begin
 
+  if new.node_key is null then
+    new.node_key :=
+      substr(replace(gen_random_uuid()::text,'-',''),1,8);
+  end if;
+
   if new.parent_id is null then
-     new.path = new.node_key::ltree;
+    new.path = text2ltree(new.node_key);
   else
+    select path into parent_path
+    from organizations
+    where id = new.parent_id;
 
-     select path
-     into parent_path
-     from organizations
-     where id = new.parent_id;
+    if parent_path is null then
+      raise exception 'Parent path not found for id=%', new.parent_id;
+    end if;
 
-     new.path = parent_path || text2ltree(new.node_key);
-
+    new.path = parent_path || text2ltree(new.node_key);
   end if;
 
   return new;
 
-end
+end;
 $$;
 
-create trigger trg_org_path
+create trigger trg_org_before_insert
 before insert on organizations
 for each row
-execute function org_generate_path();
+execute function org_before_insert();
+
+
+create unique index if not exists idx_org_node_key
+on organizations(node_key);
 
 
 create or replace function org_move_node(
@@ -224,4 +215,100 @@ from organizations o
 where o.parent_id is null
 and o.deleted_at is null
 order by o.sort_order;
+$$;
+
+
+create or replace function public.tree_query_organizations(
+  p_parent_id uuid default null,
+  p_include_children boolean default false,
+  p_search text default null,
+  p_limit int default 20,
+  p_offset int default 0
+)
+returns setof v_organizations_list
+language plpgsql
+as $$
+declare
+  v_parent_path ltree;
+begin
+
+  -- ✅ 获取 parent path（仍然需要）
+  if p_parent_id is not null then
+    select path into v_parent_path
+    from organizations
+    where id = p_parent_id;
+  end if;
+
+  return query
+  select o.*
+  from v_organizations_list o
+  where
+    (
+      p_parent_id is null
+
+      or (
+
+        -- 🌳 子树（ltree 核心）
+        p_include_children = true
+        and o.path <@ v_parent_path
+
+      )
+
+      or (
+
+        -- 🌿 当前 + 直接子
+        p_include_children = false
+        and (
+          o.id = p_parent_id
+          or o.parent_id = p_parent_id
+        )
+
+      )
+    )
+    and (
+      p_search is null
+      or o.name ilike '%' || p_search || '%'
+    )
+  order by o.created_at desc
+  limit p_limit
+  offset p_offset;
+
+end;
+$$;
+
+
+create or replace function public.tree_context_nodes(
+  p_node_id uuid,
+  p_entity text
+)
+returns setof v_tree_nodes
+language plpgsql
+as $$
+declare
+  v_path ltree;
+begin
+
+  -- 1️⃣ 拿 path
+  select path into v_path
+  from v_tree_nodes
+  where id = p_node_id
+    and entity = p_entity;
+
+  -- 2️⃣ 查询
+  return query
+  select distinct o.*
+  from v_tree_nodes o
+  where
+    o.entity = p_entity
+    and (
+      -- ancestors + self
+      o.path @> v_path
+
+      or
+
+      -- children（一层）
+      o.parent_id = p_node_id
+    );
+
+end;
 $$;

@@ -56,19 +56,11 @@ export default function ImportPage<T extends TableName>({ config }: { config: Im
 
       // 👇 打开弹窗
       setDialogOpen(true);
-
-      //   alert(`
-      // 新增: ${result.inserted}
-      // 更新: ${result.updated}
-      // 跳过: ${result.skipped}
-      // `);
     } catch (err: any) {
       alert(err.message);
     }
     setLoading(false);
     //设置新原始数据
-    const failedRaws = failedRows.map((f) => f.raw);
-    handleData(failedRaws);
   }
 
   function handleContinue() {
@@ -81,7 +73,7 @@ export default function ImportPage<T extends TableName>({ config }: { config: Im
   }
 
   function handleBack() {
-    router.push("/system/organization");
+    router.push("/system/organizations");
   }
 
   // async function handleNext() {
@@ -120,15 +112,13 @@ export default function ImportPage<T extends TableName>({ config }: { config: Im
         failedRowsCount={failedRows.length}
       />
 
-      {validRows.length > 0 && (
-        <div className="flex gap-3">
-          <Button onClick={handleImport} disabled={loading}>
-            {loading ? "导入中..." : "导入当前数据"}
-          </Button>
-          {/* <Button onClick={handleNext}>下一层</Button> */}
-          <Button onClick={() => router.push(`/system/${config.entity}`)}>返回</Button>
-        </div>
-      )}
+      <div className="flex gap-3">
+        <Button onClick={handleImport} disabled={loading}>
+          {loading ? "导入中..." : "导入当前数据"}
+        </Button>
+        {/* <Button onClick={handleNext}>下一层</Button> */}
+        <Button onClick={() => router.push(`/system/${config.entity}`)}>返回</Button>
+      </div>
     </div>
   );
 }

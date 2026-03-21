@@ -19,3 +19,17 @@ export type OrganizationListItem = {
   sortOrder: number;
   isActive: boolean;
 };
+
+export type TreeNode = {
+  id: string;
+  parentId: string | null;
+  name: string;
+
+  path: string; // ltree
+  level: number;
+  sortOrder: number;
+
+  hasChildren: boolean;
+
+  entity: "organization" | "project" | "tbm";
+};

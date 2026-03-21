@@ -19,6 +19,9 @@ export const organizationImportConfig: ImportConfig<"organizations"> = {
     org_city: "cityCode",
     org_county: "districtCode",
     org_number: "sortOrder",
+
+    org_id: "externalId",
+    ctcemti_bltjzz_serial_version: "externalVersion",
   },
 
   lookups: {
@@ -26,8 +29,6 @@ export const organizationImportConfig: ImportConfig<"organizations"> = {
     orgTypeId: "masterDatas",
     businessId: "masterDatas",
   },
-
-  externalIdField: "org_id",
 };
 
 // export const organizationImportConfig: ImportConfig<"organizations"> = {
