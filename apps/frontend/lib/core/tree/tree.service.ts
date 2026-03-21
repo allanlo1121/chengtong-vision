@@ -2,6 +2,7 @@ import { mapTreeNode } from "./map-tree-node";
 import { getTreeRows } from "./tree.repository";
 import { Result } from "@/modules/shared/contracts";
 import { TreeEntity, TreeNode } from "./types";
+import { buildTreeFromRows } from "./build-tree-from-rows";
 
 export async function getTreeNodes(
   parentId: string | null = null,
@@ -10,7 +11,9 @@ export async function getTreeNodes(
   try {
     const rows = await getTreeRows(parentId, entity);
 
-    const items = rows.map(mapTreeNode);
+    const items = buildTreeFromRows(rows, mapTreeNode);
+
+    console.log("getTreeNodes", JSON.stringify(items, null, 2));
 
     return {
       success: true,

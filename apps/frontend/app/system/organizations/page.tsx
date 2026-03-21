@@ -25,7 +25,7 @@ export default async function Page({
 
   const params = OrganizationQuery.parse(rawParams);
 
-  console.log("parsed params", params);
+  console.log("organizations page  params", params);
 
   const result = await listOrganizations(params);
   const tree = await getTreeNodes(params.parentId, "organization");

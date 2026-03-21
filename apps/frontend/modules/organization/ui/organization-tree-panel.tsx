@@ -12,10 +12,9 @@ interface Props {
 }
 
 export function OrganizationTreePanel({ data, selectedId }: Props) {
-  // ✅ flat → tree（核心）
-  const tree = useMemo(() => {
-    return buildTreeFromFlat(data);
-  }, [data]);
+
+
+  const [tree, SetTree] = useState(data)
   const [currentId, setCurrentId] = useState(selectedId);
 
   const router = useRouter();

@@ -1,6 +1,9 @@
 import { TreeNode, TreeEntity, TreeNodeRow } from "./types";
 
-export function buildTreeFromFlat(rows: TreeNode[]): TreeNode[] {
+export function buildTreeFromFlat(
+  rows: TreeNode[],
+  sortKey: keyof TreeNode = "sortOrder"
+): TreeNode[] {
   const map = new Map<string, TreeNode>();
   const roots: TreeNode[] = [];
 
@@ -22,6 +25,30 @@ export function buildTreeFromFlat(rows: TreeNode[]): TreeNode[] {
       roots.push(node);
     }
   });
+  // ✅ 3️⃣ 递归排序（核心）
+  function sortTree(nodes: TreeNode[]) {
+    nodes.sort((a, b) => {
+      const va = (a[sortKey] ?? 0) as number;
+      const vb = (b[sortKey] ?? 0) as number;
+      // 👉 debug
+      if (isNaN(va) || isNaN(vb)) {
+        console.warn("排序字段异常", a, b);
+      }
+
+      return va - vb;
+    });
+
+    nodes.forEach((n) => {
+      if (n.children?.length) {
+        sortTree(n.children);
+      }
+    });
+  }
+
+  sortTree(roots);
+
+  console.log("buildTreeFromFlat",JSON.stringify(roots, null, 2));
+
 
   return roots;
 }
