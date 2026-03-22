@@ -23,7 +23,7 @@ add column deleted_by uuid
 references employees(id) on delete set null;
 
 
-create trigger trg_employees_updated_by
+create trigger trg_employees_audit_updated
 before update on employees
 for each row
-execute function system.set_updated_by();
+execute function system.set_audit_on_updated();

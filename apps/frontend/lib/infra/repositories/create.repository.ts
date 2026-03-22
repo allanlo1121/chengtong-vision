@@ -20,7 +20,7 @@ export function createRepository<T extends TableName>(table: T): Repository<T> {
       const dbData = toDbInsert<T>(table, data);
 
       const { data: result, error } = await supabase
-        .from(tableOf(table))
+        .from(table)
         .insert([dbData])
         .select("*")
         .single();

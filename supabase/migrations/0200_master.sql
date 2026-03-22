@@ -49,7 +49,8 @@ on public.master_data(deleted_at);
 
 
 create table public.countries (
-  code text primary key,  -- ISO alpha-2
+  id uuid primary key default gen_random_uuid(),
+  code text not null unique,  -- ISO alpha-2
 
   name text not null,
   english_name text,
@@ -67,7 +68,8 @@ create table public.countries (
 
 
 create table public.admin_regions (
-  code text primary key,  -- 国家统计局编码
+  id uuid primary key default gen_random_uuid(),
+  code text not null unique,  -- 国家统计局编码
 
   name text not null,
   short_name text,

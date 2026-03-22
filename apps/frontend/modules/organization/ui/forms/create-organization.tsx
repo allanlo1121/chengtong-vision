@@ -1,23 +1,25 @@
 "use client";
 
-import { useCrudForm } from "@/modules/shared/hooks/use-crud-form";
 import { createOrganizationAction } from "@/modules/organization/actions/create-organization.action";
 import { CreateOrganizationSchema } from "@/modules/organization/schemas/organization.schema";
 import { CrudFormPage } from "@/modules/shared/crud/components/crud-form-page";
 
-export default function CreateOrganization({
-  title,
-  description,
-}: {
+type Props = {
   title: string;
-  description?: string;
-}) {
+  description: string;
+  parentId?: string;
+};
+
+export default function CreateOrganization({ title, description, parentId }: Props) {
   return (
     <CrudFormPage
       title={title}
       description={description}
       schema={CreateOrganizationSchema}
       action={createOrganizationAction}
+      initialValues={{
+        parentId,
+      }}
       redirect="/system/organizations"
     />
   );

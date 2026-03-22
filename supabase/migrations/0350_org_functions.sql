@@ -1,43 +1,4 @@
-create function org_before_insert()
-returns trigger
-language plpgsql
-as $$
-declare
-  parent_path ltree;
-begin
 
-  if new.node_key is null then
-    new.node_key :=
-      substr(replace(gen_random_uuid()::text,'-',''),1,8);
-  end if;
-
-  if new.parent_id is null then
-    new.path = text2ltree(new.node_key);
-  else
-    select path into parent_path
-    from organizations
-    where id = new.parent_id;
-
-    if parent_path is null then
-      raise exception 'Parent path not found for id=%', new.parent_id;
-    end if;
-
-    new.path = parent_path || text2ltree(new.node_key);
-  end if;
-
-  return new;
-
-end;
-$$;
-
-create trigger trg_org_before_insert
-before insert on organizations
-for each row
-execute function org_before_insert();
-
-
-create unique index if not exists idx_org_node_key
-on organizations(node_key);
 
 
 create or replace function org_move_node(

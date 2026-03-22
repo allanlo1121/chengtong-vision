@@ -1,6 +1,6 @@
 import { PageHeader } from "@/components/layout/page-header";
 import { ErrorBlock } from "@/components/common/error-block";
-import { OrganizationQuery } from "@/modules/organization/queries";
+import { organizationQuery } from "@/modules/organization/queries";
 import { listOrganizations } from "@/modules/organization/services";
 import { getTreeNodes } from "@/lib/core/tree/tree.service";
 import { Metadata } from "next";
@@ -23,9 +23,9 @@ export default async function Page({
 }) {
   const rawParams = await searchParams;
 
-  const params = OrganizationQuery.parse(rawParams);
+  const params = organizationQuery.parse(rawParams);
 
-  console.log("organizations page  params", params);
+  // console.log("organizations page  params", params);
 
   const result = await listOrganizations(params);
   const tree = await getTreeNodes(params.parentId, "organization");
@@ -40,8 +40,8 @@ export default async function Page({
     return <ErrorBlock message={result.message} />;
   }
 
-  console.log("organization listOrganizations", result);
-  console.log("organization treeOrganizations", nodes);
+  // console.log("organization listOrganizations", result);
+  // console.log("organization treeOrganizations", nodes);
   if (!result.data) {
     return <ErrorBlock message="未查询到数据" />;
   }

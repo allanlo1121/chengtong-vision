@@ -18,8 +18,6 @@ export const mapperRegistry = {
       address: input.address ?? null,
       latitude: input.latitude ?? null,
       longitude: input.longitude ?? null,
-      node_key: input.nodeKey ?? null,
-      path: input.path ?? null,
       is_active: input.isActive ?? true,
       sort_order: input.sortOrder ?? 0,
     }),

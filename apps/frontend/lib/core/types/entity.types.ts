@@ -1,25 +1,39 @@
 import { Database } from "./database";
 import { Camelize } from "@/lib/utils/case-converter";
-import { mapperRegistry } from "../mapper/mapper-registry";
 
 export type TableName = keyof Database["public"]["Tables"];
 
-// export type TableName = keyof typeof mapperRegistry;
+export type BaseSystemFields =
+  | "id"
+  | "created_at"
+  | "created_by"
+  | "updated_at"
+  | "updated_by"
+  | "deleted_at"
+  | "deleted_by";
 
-export type SystemFields = "created_at" | "created_by" | "updated_at" | "updated_by";
+type AutoFieldsMap = {
+  organizations: "path" | "node_key" | "level";
+  projects: never;
+  employees: never;
+  // 以后扩展
+};
+
+export type AutoFields<T extends TableName> =
+  | BaseSystemFields
+  | (T extends keyof AutoFieldsMap ? AutoFieldsMap[T] : never);
 
 export type TableRow<T extends TableName> = Database["public"]["Tables"][T]["Row"];
 
 export type TableInsert<T extends TableName> = Omit<
   Database["public"]["Tables"][T]["Insert"],
-  SystemFields
+  AutoFields<T>
 >;
 
 export type TableUpdate<T extends TableName> = Omit<
   Database["public"]["Tables"][T]["Update"],
-  SystemFields
+  AutoFields<T>
 >;
-
 // ======================
 // 业务层（camel）
 // ======================

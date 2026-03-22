@@ -52,17 +52,19 @@ create table if not exists rbac.roles (
 
 -- 角色-权限
 create table if not exists rbac.role_permissions (
+  id uuid primary key default gen_random_uuid(),
   role_id uuid references rbac.roles(id) on delete cascade,
   permission_id uuid references rbac.permissions(id) on delete cascade,
-  primary key (role_id, permission_id)
+  unique (role_id, permission_id)
 );
 
 -- 用户-角色（假设 employees.id 对应 auth.uid()）
 create table if not exists rbac.user_roles (
+  id uuid primary key default gen_random_uuid(),
   user_id uuid not null references public.employees(id) on delete cascade,
   role_id uuid not null references rbac.roles(id) on delete cascade,
   assigned_at timestamptz default now(),
-  primary key (user_id, role_id)
+  unique (user_id, role_id)
 );
 
 

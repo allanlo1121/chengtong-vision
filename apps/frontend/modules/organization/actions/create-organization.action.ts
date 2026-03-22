@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { createOrganizationService } from "../services/create-organization.service";
+import { createOrganization } from "../services";
 import { CreateOrganizationInput, CreateOrganizationSchema } from "../schemas";
 import { ActionState } from "@/modules/shared/types/action-state";
 
@@ -36,7 +36,7 @@ export async function createOrganizationAction(data: CreateOrganizationInput) {
       errors: z.flattenError(parsed.error).fieldErrors,
     };
   }
-  const result = await createOrganizationService(parsed.data);
+  const result = await createOrganization(parsed.data);
 
   if (!result.success) {
     return {

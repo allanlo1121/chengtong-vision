@@ -1,7 +1,6 @@
 import {
   Entity,
   InsertEntity,
-  MapperTable,
   TableInsert,
   TableName,
   TableRow,
@@ -9,16 +8,12 @@ import {
   UpdateEntity,
 } from "../types/entity.types";
 
-// export type TableMapper<T extends TableName> = {
-//     toDbInsert?: (data: InsertEntity<T>) => TableInsert<T>;
-//     toDbUpdate?: (data: UpdateEntity<T>) => TableUpdate<T>;
-//     fromDb?: (row: TableRow<T>) => Entity<T>;
-// };
-
-export type TableMapper<T extends MapperTable> = {
+export type TableMapper<T extends TableName> = {
   conflict?: string;
 
-  toInsert: (input: Entity<T>) => TableInsert<T>;
+  toInsert: (input: InsertEntity<T>) => TableInsert<T>;
 
-  toUpdate?: (input: Partial<InsertEntity<T>>) => TableInsert<T>;
+  toUpdate?: (input: UpdateEntity<T>) => TableUpdate<T>;
+
+  fromDb: (row: TableRow<T>) => Entity<T>;
 };

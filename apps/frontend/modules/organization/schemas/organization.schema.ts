@@ -32,7 +32,6 @@ export const OrganizationFields = {
     .regex(/^[A-Z0-9_-]+$/, {
       message: "编码只能包含大写字母、数字、下划线和中划线",
     })
-    .optional()
     .meta({
       label: "编码",
       component: "input",

@@ -1,34 +1,36 @@
-import { createClient } from "@/lib/core/supabase/server";
+import { createClient } from "@/lib/infra/supabase/server";
 import { CreateOrganizationInput } from "../schemas";
+import { fromDbEntity } from "@/lib/core/mapper/from-db";
+import { toDbInsert } from "@/lib/core/mapper/to-db";
+import { assertNoError } from "@/lib/infra/repositories/base.repository";
+import { Database } from "@/lib/core/types/database";
+import { Entity } from "@/lib/core/types/entity.types";
 
-export async function insertOrganization(input: CreateOrganizationInput) {
+export async function insertOrganization(
+  input: CreateOrganizationInput
+): Promise<Entity<"organizations"> | null> {
   const supabase = await createClient();
 
   console.log("insertOrganization", input);
 
-  const { error } = await supabase.from("organizations").insert({
-    parent_id: input.parentId ?? null,
-    code: input.code,
-    name: input.name,
-    full_name: input.fullName,
-    description: input.description,
+  const dbData = toDbInsert(
+    "organizations",
+    input
+  ) as unknown as Database["public"]["Tables"]["organizations"]["Insert"];
 
-    org_type_id: input.orgTypeId,
-    business_id: input.businessId,
+  console.log("dbData", dbData);
 
-    country_code: input.countryCode,
-    province_code: input.provinceCode,
-    city_code: input.cityCode,
-    district_code: input.districtCode,
+  const { data: result, error } = await supabase
+    .from("organizations")
+    .insert(dbData)
+    .select("*")
+    .single();
 
-    address: input.address,
+  assertNoError(error);
 
-    latitude: input.latitude,
-    longitude: input.longitude,
-    is_active: input.isActive,
-  });
-
-  if (error) {
-    throw new Error(error.message);
+  if (!result) {
+    throw new Error(`Insert failed: no data returned for table "organizations"`);
   }
+
+  return fromDbEntity("organizations", result);
 }

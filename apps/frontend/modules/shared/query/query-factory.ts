@@ -43,7 +43,7 @@ export function createListQuerySchema<
     return result.data;
   }
 
-  function buildUrl(patch: Partial<QueryType>, base?: Partial<QueryType>) {
+  function buildUrl(path: string, patch: Partial<QueryType>, base?: Partial<QueryType>) {
     const params = new URLSearchParams();
 
     const merged = { ...(base ?? {}), ...patch };
@@ -54,7 +54,7 @@ export function createListQuerySchema<
       }
     });
 
-    return `?${params.toString()}`;
+    return params.toString() ? `${path}?${params.toString()}` : path;
   }
 
   return {

@@ -2,9 +2,9 @@ import {
   findAdminRegions,
   findMasterOptions,
   listCountries,
-  listOrganizations,
   searchEmployees,
   searchProjects,
+  getAllTreeRows,
 } from "../repositories/option.repository";
 import { mapCodeOption, mapMasterOption } from "../mappers/option.mapper";
 
@@ -16,8 +16,6 @@ import {
   TreeOptionConfig,
 } from "../types";
 import { buildTreeOption } from "@/lib/utils/tree";
-import { getOrganizationTreeRows } from "@/modules/organization/repositories/organization-tree.repository";
-import { mapOrganizationTree } from "@/modules/organization/services/mapper";
 
 export async function getOptions(config: OptionConfig): Promise<SelectOption[]> {
   if (config.source === "master") {
@@ -59,7 +57,7 @@ export async function getTreeOptions(config: TreeOptionConfig): Promise<TreeOpti
   console.log("getTreeOptions", config);
 
   if (config.source === "organization_tree") {
-    const rows = await listOrganizations(config.parentId);
+    const rows = await getAllTreeRows("organization");
 
     return buildTreeOption(rows, {
       idKey: "id",

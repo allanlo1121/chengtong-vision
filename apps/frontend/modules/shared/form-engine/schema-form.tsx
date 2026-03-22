@@ -35,14 +35,14 @@ export function SchemaForm<TSchema extends ZodObject<any>>({
   onError,
   onCancel,
 }: SchemaFormProps<TSchema>) {
-  // console.log("SchemaForm props", {
-  //   schema,
-  //   initialValues,
-  //   action,
-  //   onSuccess,
-  //   onError,
-  //   onCancel,
-  // });
+  console.log("SchemaForm props", {
+    schema,
+    initialValues,
+    action,
+    onSuccess,
+    onError,
+    onCancel,
+  });
   /** ------------------------------------------------
    * 1 提取字段
    * ------------------------------------------------ */

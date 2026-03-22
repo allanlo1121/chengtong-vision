@@ -13,8 +13,8 @@ export function toDbInsert<T extends TableName>(table: T, data: InsertEntity<T>)
   const mapper = getMapper(table);
 
   // ✅ 优先走强类型 mapper
-  if (mapper?.table?.toDbInsert) {
-    return mapper.table.toDbInsert(data);
+  if (mapper?.table?.toInsert) {
+    return mapper.table.toInsert(data);
   }
 
   // ✅ fallback 通用转换
@@ -24,8 +24,8 @@ export function toDbInsert<T extends TableName>(table: T, data: InsertEntity<T>)
 export function toDbUpdate<T extends TableName>(table: T, data: UpdateEntity<T>): TableUpdate<T> {
   const mapper = getMapper(table);
 
-  if (mapper?.table?.toDbUpdate) {
-    return mapper.table.toDbUpdate(data);
+  if (mapper?.table?.toUpdate) {
+    return mapper.table.toUpdate(data);
   }
 
   return toDb(data, mapper?.base) as unknown as TableUpdate<T>;

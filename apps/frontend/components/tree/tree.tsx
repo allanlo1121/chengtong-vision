@@ -3,8 +3,8 @@
 import { TreeProps } from "./types";
 import { TreeNodeItem } from "./tree-node";
 
-export function Tree({ data, selectedId, loadingIds, onSelect, onExpand }: TreeProps) {
-  console.log("Tree", data);
+export function Tree({ data, selectedId, expandedIds, loadingIds, onSelect, onExpand }: TreeProps) {
+  // console.log("Tree", data);
 
   return (
     <div className="space-y-1">
@@ -13,6 +13,7 @@ export function Tree({ data, selectedId, loadingIds, onSelect, onExpand }: TreeP
           key={node.id}
           node={node}
           selectedId={selectedId}
+          expandedIds={expandedIds}
           loadingIds={loadingIds}
           onSelect={onSelect}
           onExpand={onExpand}

@@ -4,7 +4,7 @@ export interface TreeProps {
   data: TreeNode[];
 
   selectedId?: string;
-
+  expandedIds?: Set<string>;
   loadingIds?: Set<string>;
 
   onSelect?: (node: TreeNode) => void;

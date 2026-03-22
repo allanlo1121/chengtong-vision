@@ -7,14 +7,23 @@ interface Props {
   node: TreeNode;
   selectedId?: string;
   loadingIds?: Set<string>;
+  expandedIds?: Set<string>;
 
   onSelect?: (node: TreeNode) => void;
   onExpand?: (node: TreeNode) => void;
 }
 
-export function TreeNodeItem({ node, selectedId, loadingIds, onSelect, onExpand }: Props) {
+export function TreeNodeItem({
+  node,
+  selectedId,
+  loadingIds,
+  expandedIds,
+  onSelect,
+  onExpand,
+}: Props) {
   const isSelected = node.id === selectedId;
   const isLoading = loadingIds?.has(node.id);
+  const isExpanded = expandedIds?.has(node.id);
 
   return (
     <div>
@@ -35,7 +44,7 @@ export function TreeNodeItem({ node, selectedId, loadingIds, onSelect, onExpand 
           >
             {isLoading ? (
               <span className="text-xs">...</span>
-            ) : node.children?.length ? (
+            ) : isExpanded ? (
               <ChevronDown size={14} />
             ) : (
               <ChevronRight size={14} />
@@ -50,7 +59,7 @@ export function TreeNodeItem({ node, selectedId, loadingIds, onSelect, onExpand 
       </div>
 
       {/* 🔽 children */}
-      {node.children && node.children.length > 0 && (
+      {isExpanded && node.children && node.children.length > 0 && (
         <div className="ml-4">
           {node.children.map((child) => (
             <TreeNodeItem
@@ -58,6 +67,7 @@ export function TreeNodeItem({ node, selectedId, loadingIds, onSelect, onExpand 
               node={child}
               selectedId={selectedId}
               loadingIds={loadingIds}
+              expandedIds={expandedIds}
               onSelect={onSelect}
               onExpand={onExpand}
             />

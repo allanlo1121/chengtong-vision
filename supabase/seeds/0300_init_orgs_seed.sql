@@ -11,8 +11,7 @@ with org_type as (
     full_name,
     parent_id,
     org_type_id,
-    business_id,
-    country_code,
+    business_id,    
     external_id
   )
   select
@@ -22,7 +21,6 @@ with org_type as (
     null,
     org_type.id,
     null,
-    'CN',
     '20181127101355650-A278-632689E5E'
   from org_type
   on conflict (code) do nothing;
@@ -50,7 +48,6 @@ insert into public.organizations (
   parent_id,
   org_type_id,
   business_id,
-  country_code,
   external_id
 )
 select
@@ -60,7 +57,6 @@ select
   r.id,
   t.id,
   null,
-  'CN',
   '20181127101433134-3D54-B309C4374'
 from root_org r
 cross join org_type t
