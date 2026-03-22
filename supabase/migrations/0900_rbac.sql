@@ -140,8 +140,15 @@ create table system.menus (
   is_visible boolean default true,
   is_disabled boolean default false,
 
-  created_at timestamptz default now(),
-  updated_at timestamptz default now()
+  created_at timestamptz not null default now(),
+  updated_at timestamptz,
+  deleted_at timestamptz,
+
+  created_by uuid default system.current_user_id()
+    references public.employees(id),
+
+  updated_by uuid references public.employees(id),
+  deleted_by uuid references public.employees(id)
 );
 
 create index idx_menus_parent on system.menus(parent_id);
@@ -152,7 +159,7 @@ create index idx_menus_permission on system.menus(permission_code);
 create trigger trg_menus_updated
 before update on system.menus
 for each row
-execute function system.set_updated_at();
+execute function system.set_audit_on_update();
 
 create or replace function system.set_menu_level()
 returns trigger

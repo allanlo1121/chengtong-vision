@@ -1,4 +1,4 @@
-create or replace function tree_before_insert()
+create or replace function public.org_before_insert()
 returns trigger
 language plpgsql
 as $$
@@ -21,9 +21,14 @@ begin
   if new.parent_id is null then
     new.path := text2ltree(new.node_key);
   else
-    select path into parent_path
-    from pg_catalog.pg_class c -- ⚠️ 这里只是占位，实际要动态表
-    where id = new.parent_id;
+    select o.path
+    into parent_path
+    from public.organizations o
+    where o.id = new.parent_id;
+
+    if parent_path is null then
+      raise exception 'Parent path not found for id %', new.parent_id;
+    end if;
 
     new.path := parent_path || text2ltree(new.node_key);
   end if;
@@ -36,7 +41,7 @@ $$;
 create trigger trg_org_before_insert
 before insert on organizations
 for each row
-execute function org_before_insert();
+execute function public.org_before_insert();
 
 
 -- ltree 核心索引

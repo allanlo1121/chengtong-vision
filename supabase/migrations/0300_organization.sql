@@ -39,10 +39,6 @@ create table public.organizations (
 );
 
 
-create index idx_organizations_parent
-on public.organizations(parent_id);
-
-create index idx_org_path on public.organizations using gist(path);
 
 -- 关键：部分唯一索引（只约束非空）
 create unique index if not exists uniq_org_external_id

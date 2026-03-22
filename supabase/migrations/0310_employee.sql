@@ -75,8 +75,9 @@ on hr.employee_assignments(employee_id)
 where end_at is null;
 
 create table public.employee_org_access (
+  id uuid primary key default gen_random_uuid(),
   employee_id uuid references public.employees(id),
   org_id uuid references public.organizations(id),
-  primary key (employee_id, org_id)
+  unique(employee_id, org_id)
 );
 

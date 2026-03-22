@@ -11,7 +11,7 @@ add column deleted_at timestamptz;
 
 alter table employees
 add column created_by uuid
-default system.current_employee_id()
+default system.current_user_id()
 references employees(id) on delete set null;
 
 alter table employees
@@ -26,4 +26,4 @@ references employees(id) on delete set null;
 create trigger trg_employees_audit_updated
 before update on employees
 for each row
-execute function system.set_audit_on_updated();
+execute function system.set_audit_on_update();

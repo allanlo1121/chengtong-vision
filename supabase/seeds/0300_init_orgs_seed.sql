@@ -2,7 +2,7 @@
 with org_type as (
   select id
   from public.master_data
-  where name = '集团公司'
+  where code= '10230001'
   limit 1
 )
   insert into public.organizations (
@@ -38,7 +38,7 @@ root_org as (
 org_type as (
   select id
   from public.master_data
-  where name = '分组（虚拟组织）'
+  where code = '10230009'
   limit 1
 )
 insert into public.organizations (
