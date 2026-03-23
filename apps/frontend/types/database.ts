@@ -598,6 +598,7 @@ export type Database = {
           longitude: number | null
           name: string
           node_key: string
+          org_category_id: string | null
           org_type_id: string
           parent_id: string | null
           path: unknown
@@ -628,6 +629,7 @@ export type Database = {
           longitude?: number | null
           name: string
           node_key: string
+          org_category_id?: string | null
           org_type_id: string
           parent_id?: string | null
           path: unknown
@@ -658,6 +660,7 @@ export type Database = {
           longitude?: number | null
           name?: string
           node_key?: string
+          org_category_id?: string | null
           org_type_id?: string
           parent_id?: string | null
           path?: unknown
@@ -729,6 +732,20 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "admin_regions"
             referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "organizations_org_category_id_fkey"
+            columns: ["org_category_id"]
+            isOneToOne: false
+            referencedRelation: "master_data"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organizations_org_category_id_fkey"
+            columns: ["org_category_id"]
+            isOneToOne: false
+            referencedRelation: "v_master_options"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "organizations_org_type_id_fkey"
@@ -1060,6 +1077,7 @@ export type Database = {
           latitude: number | null
           longitude: number | null
           name: string | null
+          org_category_name: string | null
           org_type_name: string | null
           parent_org_name: string | null
           province_name: string | null
@@ -1078,6 +1096,7 @@ export type Database = {
           is_active: boolean | null
           level: number | null
           name: string | null
+          org_category_name: string | null
           org_type_name: string | null
           parent_id: string | null
           parent_org_name: string | null
@@ -1479,6 +1498,7 @@ export type Database = {
           is_active: boolean | null
           level: number | null
           name: string | null
+          org_category_name: string | null
           org_type_name: string | null
           parent_id: string | null
           parent_org_name: string | null
