@@ -55,3 +55,26 @@ where not exists (
   where p.node_key = subpath(o.path, nlevel(o.path)-1, 1)::text
 )
 and o.parent_id is not null;
+
+drop view v_tree_nodes cascade;
+create or replace view v_tree_nodes as
+select
+  o.id,
+  o.parent_id,
+  o.name,
+
+  o.path,
+  nlevel(o.path) as level,
+
+  o.sort_order,
+
+  exists (
+    select 1
+    from organizations c
+    where c.parent_id = o.id
+  ) as has_children,
+
+  'organization' as entity
+
+from organizations o
+where o.deleted_at is  null;

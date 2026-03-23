@@ -12,7 +12,7 @@ select
   c.name as org_category_name,
   b.name as business_name,
 
-  c.name as country_name,
+  ct.name as country_name,
   ap.name as province_name,
   ac.name as city_name,
   ad.name as district_name,
@@ -30,7 +30,7 @@ left join organizations p on p.id = o.parent_id
 left join public.master_data t on t.id = o.org_type_id
 left join public.master_data c on c.id = o.org_category_id
 left join public.master_data b on b.id = o.business_id
-left join public.countries c on c.code = o.country_code
+left join public.countries ct on ct.code = o.country_code
 left join public.admin_regions ap on ap.code = o.province_code
 left join public.admin_regions ac on ac.code = o.city_code
 left join public.admin_regions ad on ad.code = o.district_code
@@ -52,7 +52,7 @@ select
   t.name as org_type_name,
   c.name as org_category_name,
   b.name as business_name,
-  c.name as country_name,
+  ct.name as country_name,
   ap.name as province_name,
   ac.name as city_name,
   ad.name as district_name
@@ -62,7 +62,7 @@ left join organizations p on p.id = o.parent_id
 left join public.master_data t on t.id = o.org_type_id
 left join public.master_data c on c.id = o.org_category_id
 left join public.master_data b on b.id = o.business_id
-left join public.countries c on c.code = o.country_code
+left join public.countries ct on ct.code = o.country_code
 left join public.admin_regions ap on ap.code = o.province_code
 left join public.admin_regions ac on ac.code = o.city_code
 left join public.admin_regions ad on ad.code = o.district_code
