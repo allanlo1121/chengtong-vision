@@ -7,7 +7,7 @@ export async function getTreeRows(
   parentId?: string | null,
   entity: TreeEntity = "organization"
 ): Promise<TreeNodeRow[]> {
-  console.log(`Fetching tree rows for parentId: ${parentId}, entity: ${entity}`);
+  // console.log(`Fetching tree rows for parentId: ${parentId}, entity: ${entity}`);
 
   // 🌳 root
   if (!parentId) {

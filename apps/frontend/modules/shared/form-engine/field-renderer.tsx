@@ -9,7 +9,7 @@ export function FieldRenderer<T extends FieldValues, C = any, O = T>({
   ui,
   form,
 }: FieldRendererProps<T, C, O>) {
-  console.log("FieldRenderer,ui", ui);
+  // console.log("FieldRenderer,ui", ui);
 
   const dependsOn = ui.dependsOn ?? [];
 

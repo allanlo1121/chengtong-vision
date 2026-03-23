@@ -37,6 +37,8 @@ interface DataTableProps<TData, TValue> {
   page?: number;
   pageSize?: number;
 
+  sorting?: SortingState;
+  onSortingChange?: (sorting: SortingState) => void;
   manualPagination?: boolean;
   onPaginationChange?: (page: number, pageSize: number) => void;
 
@@ -53,6 +55,8 @@ export function DataTable<TData, TValue>({
   pageSize = 20,
   manualPagination = false,
   onPaginationChange,
+  sorting,
+  onSortingChange,
   toolbar: Toolbar,
   enableRowSelection = false,
   onRowSelectionChange,
@@ -60,7 +64,9 @@ export function DataTable<TData, TValue>({
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [internalSorting, setInternalSorting] = React.useState<SortingState>([]);
+
+  const sortingState = sorting ?? internalSorting;
 
   const pagination: PaginationState = {
     pageIndex: page - 1,
@@ -74,7 +80,7 @@ export function DataTable<TData, TValue>({
     columns,
 
     state: {
-      sorting,
+      sorting: sortingState,
       columnVisibility,
       rowSelection,
       columnFilters,
@@ -105,7 +111,12 @@ export function DataTable<TData, TValue>({
       onPaginationChange(newPagination.pageIndex + 1, newPagination.pageSize);
     },
 
-    onSortingChange: setSorting,
+    onSortingChange: (updater) => {
+      const newSorting = typeof updater === "function" ? updater(sortingState) : updater;
+
+      setInternalSorting(newSorting);
+      onSortingChange?.(newSorting);
+    },
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
 
@@ -140,18 +151,15 @@ export function DataTable<TData, TValue>({
 
           <TableBody>
             {data.length ? (
-              data.map((row, index) => {
-                const rowModel = table.getRowModel().rows[index];
-                return (
-                  <TableRow key={rowModel?.id ?? index}>
-                    {rowModel?.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                );
-              })
+              table.getRowModel().rows.map((rowModel) => (
+                <TableRow key={rowModel.id}>
+                  {rowModel.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">

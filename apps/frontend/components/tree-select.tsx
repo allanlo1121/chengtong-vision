@@ -28,7 +28,7 @@ export function TreeSelect({
   placeholder = "请选择",
   disabled = false,
 }: Props) {
-  console.log("tree-select", treeNodes);
+  // console.log("tree-select", treeNodes);
 
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");

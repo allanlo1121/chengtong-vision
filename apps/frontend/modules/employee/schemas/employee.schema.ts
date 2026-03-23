@@ -14,10 +14,10 @@ import { z } from "zod";
 export const OrganizationFields = {
   name: z
     .string()
-    .min(2, { message: "组织名称至少2个字符" })
-    .max(50, { message: "组织名称最多50个字符" })
+    .min(2, { message: "员工姓名至少2个字符" })
+    .max(10, { message: "员工姓名最多10个字符" })
     .meta({
-      label: "组织名称",
+      label: "员工姓名",
       component: "input",
       section: "基本信息",
       type: "text",
@@ -29,8 +29,8 @@ export const OrganizationFields = {
 
   code: z
     .string()
-    .regex(/^[A-Z0-9_-]+$/, {
-      message: "编码只能包含大写字母、数字、下划线和中划线",
+    .regex(/^[a-zA-Z0-9_-]+$/, {
+      message: "编码只能包含字母、数字、下划线和中划线",
     })
     .meta({
       label: "编码",
@@ -38,49 +38,24 @@ export const OrganizationFields = {
       type: "text",
       section: "基本信息",
       colSpan: 1,
-      description: "唯一标识，建议使用大写字母、数字和下划线",
+      description: "唯一标识，建议使用字母、数字和下划线",
     }),
 
-  fullName: z.string().max(100, { message: "组织全称最多100个字符" }).optional().meta({
-    label: "组织全称",
-    component: "input",
-    type: "text",
-    section: "基本信息",
-    colSpan: 2,
-  }),
-
-  description: z.string().max(200, { message: "描述最多200个字符" }).optional().nullable().meta({
-    label: "描述",
-    component: "textarea",
-    section: "基本信息",
-    colSpan: 2,
-  }),
-
-  parentId: idSchema.meta({
-    label: "上级组织",
+  orgNodeId: idSchema.meta({
+    label: "所属组织节点",
     component: "treeSelect",
     section: "基本信息",
     colSpan: 1,
     option: { source: "organization_tree", parentId: null },
   }),
 
-  orgTypeId: idSchema.meta({
-    label: "组织类型",
+  empTypeId: idSchema.meta({
+    label: "员工类型",
     component: "select",
     section: "基本信息",
     colSpan: 1,
-    option: { source: "master", code: "ORG_TYPE" },
+    option: { source: "master", code: "EMP_CATEGORY" },
   }),
-  orgCategoryId: idSchema
-    .nullable()
-    .optional()
-    .meta({
-      label: "机构类型",
-      component: "select",
-      section: "基本信息",
-      colSpan: 1,
-      option: { source: "master", code: "ORG_CATEGORY" },
-    }),
 
   businessId: idSchema
     .nullable()

@@ -1,21 +1,9 @@
 import { createClient } from "@/lib/infra/supabase/server";
 
-import { mapOrganizationList } from "../types/organization.mapper";
 import { OrganizationQueryType } from "../queries";
-// import {
-//   OrganizationDetail,
-//   OrganizationDetailRow,
-//   OrganizationListItem,
-//   OrganizationListRow,
-//   OrganizationTreeItem,
-//   OrganizationTreeRow,
-//   OrganizationRow,
-// } from "../types";
 import { PageData } from "@/modules/shared/contracts";
-
-import { applyPagination, assertNoError } from "@/lib/infra/repositories/base.repository";
-
-import { OrganizationDetailRow, OrganizationListRow, OrganizationTreeRow } from "../types";
+import { assertNoError } from "@/lib/infra/repositories/base.repository";
+import { OrganizationListRow } from "../types";
 import { rpc } from "@/lib/core/rpc";
 
 export async function listOrganizationsRepository(

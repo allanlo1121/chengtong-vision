@@ -9,6 +9,7 @@ select
   p.name as parent_org_name,
 
   t.name as org_type_name,
+  c.name as org_category_name,
   b.name as business_name,
 
   c.name as country_name,
@@ -27,6 +28,7 @@ select
 from public.organizations o
 left join organizations p on p.id = o.parent_id
 left join public.master_data t on t.id = o.org_type_id
+left join public.master_data c on c.id = o.org_category_id
 left join public.master_data b on b.id = o.business_id
 left join public.countries c on c.code = o.country_code
 left join public.admin_regions ap on ap.code = o.province_code
@@ -48,6 +50,7 @@ select
   o.created_at,
 
   t.name as org_type_name,
+  c.name as org_category_name,
   b.name as business_name,
   c.name as country_name,
   ap.name as province_name,
@@ -57,6 +60,7 @@ select
 from public.organizations o
 left join organizations p on p.id = o.parent_id
 left join public.master_data t on t.id = o.org_type_id
+left join public.master_data c on c.id = o.org_category_id
 left join public.master_data b on b.id = o.business_id
 left join public.countries c on c.code = o.country_code
 left join public.admin_regions ap on ap.code = o.province_code
@@ -83,4 +87,5 @@ select
 
   'organization' as entity
 
-from organizations o;
+from organizations o
+where o.deleted_at is null;

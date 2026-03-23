@@ -22,7 +22,7 @@ export function FieldTreeSelect<T extends FieldValues>({
   option,
   ...props
 }: FieldTreeNodeProps<T>) {
-  console.log("FieldTreeSelect-option", option);
+  // console.log("FieldTreeSelect-option", option);
 
   const [tree, setTree] = useState<TreeNode[]>([]);
 

@@ -35,14 +35,14 @@ export function SchemaForm<TSchema extends ZodObject<any>>({
   onError,
   onCancel,
 }: SchemaFormProps<TSchema>) {
-  console.log("SchemaForm props", {
-    schema,
-    initialValues,
-    action,
-    onSuccess,
-    onError,
-    onCancel,
-  });
+  // console.log("SchemaForm props", {
+  //   schema,
+  //   initialValues,
+  //   action,
+  //   onSuccess,
+  //   onError,
+  //   onCancel,
+  // });
   /** ------------------------------------------------
    * 1 提取字段
    * ------------------------------------------------ */
@@ -92,7 +92,7 @@ export function SchemaForm<TSchema extends ZodObject<any>>({
     defaultValues,
   });
 
-  // console.log("schemaForm form", form);
+  //  console.log("schemaForm form", form);
 
   /** ------------------------------------------------
    * 3 initialValues 更新
@@ -117,7 +117,7 @@ export function SchemaForm<TSchema extends ZodObject<any>>({
    * ------------------------------------------------ */
 
   const onSubmit = async (data: FormOutput) => {
-    // console.log("schema-form submit data",data);
+    console.log("schema-form submit data", data);
     if (!action) return;
     const result = await action(data);
 
@@ -140,7 +140,12 @@ export function SchemaForm<TSchema extends ZodObject<any>>({
    * ------------------------------------------------ */
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+    <form
+      onSubmit={form.handleSubmit(onSubmit, (errors) => {
+        console.log("❌ form errors", errors);
+      })}
+      className="space-y-6"
+    >
       {Array.from(sections.entries()).map(([section, sectionFields]) => (
         <div key={section} className="space-y-4">
           {section !== "default" && (

@@ -1,18 +1,15 @@
 "use server";
 
 import { Result } from "@/modules/shared/contracts";
-import { deleteOrganizations } from "../repositories/organization-delete.repository";
+import { deleteOrganization } from "../services";
 
 export async function deleteOrganizationAction(id: string): Promise<Result<number>> {
   console.log("===deleteOrganizationAction===", id);
 
   try {
-    const count = await deleteOrganizations([id]);
+    const result = await deleteOrganization(id);
 
-    return {
-      success: true,
-      data: count,
-    };
+    return result;
   } catch (error) {
     return {
       success: false,

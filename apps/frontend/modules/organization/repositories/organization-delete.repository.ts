@@ -1,5 +1,5 @@
-import { softDelete } from "@/modules/system/repositories/system.repository";
+import { deleteEntity } from "@/lib/core/crud/delete";
 
-export async function deleteOrganizations(ids: string[]): Promise<number> {
-  return softDelete("organizations", ids);
+export async function deleteOrganizations(ids: string): Promise<number> {
+  return deleteEntity("organizations", ids);
 }

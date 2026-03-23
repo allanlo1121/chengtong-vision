@@ -1,16 +1,14 @@
-// import { insertOrganization } from "../repositories";
-import { insertOne } from "@/lib/core/crud/insert";
-import { CreateOrganizationInput } from "../schemas";
-import { createRepository } from "@/lib/infra/repositories";
-import { ServiceResult } from "@/modules/shared/types";
 import { Entity, TableRow } from "@/lib/core/types/entity.types";
 import { Result } from "@/modules/shared/contracts/service-result";
+import { update } from "@/lib/core/crud/update";
+import { UpdateOrganizationInput } from "../schemas";
 
-export async function createOrganization(
-  input: CreateOrganizationInput
+export async function updateOrganization(
+  id: string,
+  input: UpdateOrganizationInput
 ): Promise<Result<Entity<"organizations">>> {
   try {
-    const result = await insertOne("organizations", input);
+    const result = await update("organizations", id, input);
     return {
       success: true,
       data: result,

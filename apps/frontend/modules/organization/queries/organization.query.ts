@@ -2,7 +2,7 @@ import { z } from "zod";
 import { createListQuerySchema } from "@/modules/shared/query/query-factory";
 
 export const organizationQuery = createListQuerySchema({
-  sortFields: ["name", "createdAt"] as const,
+  sortFields: ["name", "sortOrder", "createdAt"] as const,
 
   extra: {
     parentId: z.string().optional(),

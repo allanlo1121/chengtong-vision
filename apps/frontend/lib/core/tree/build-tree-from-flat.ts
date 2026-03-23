@@ -47,8 +47,7 @@ export function buildTreeFromFlat(
 
   sortTree(roots);
 
-  console.log("buildTreeFromFlat",JSON.stringify(roots, null, 2));
-
+  //   console.log("buildTreeFromFlat",JSON.stringify(roots, null, 2));
 
   return roots;
 }

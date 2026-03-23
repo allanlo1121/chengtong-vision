@@ -35,16 +35,16 @@ export default function ImportPage<T extends TableName>({ config }: { config: Im
   }
 
   async function handleImport() {
-    console.log("===handleImport===");
-    console.log("validRows", validRows);
-    console.log("failedRows", failedRows);
-    console.log("raws", raws);
+    // console.log("===handleImport===");
+    // console.log("validRows", validRows);
+    // console.log("failedRows", failedRows);
+    // console.log("raws", raws);
     setLoading(true);
     try {
       //插入验证数据
       const result = await importEntitiesAction<T>(config, validRows);
 
-      console.log("result", result);
+      // console.log("result", result);
 
       if (!result.success) {
         alert(result.message ?? "导入失败");

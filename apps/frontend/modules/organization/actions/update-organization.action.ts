@@ -1,10 +1,10 @@
 "use server";
 
 import { z } from "zod";
-import { updateOrganizationService } from "../services/update-organization.service";
 import { UpdateOrganizationInput, UpdateOrganizationSchema } from "../schemas";
 import { ActionState } from "@/modules/shared/types/action-state";
 import { ActionResult } from "@/modules/shared/contracts/action-result";
+import { updateOrganization } from "../services/update-organizations.service";
 
 export type OrganizationFormState = ActionState<{
   name?: string[];
@@ -39,7 +39,8 @@ export async function updateOrganizationAction(
       errors: z.flattenError(parsed.error).fieldErrors,
     };
   }
-  const result = await updateOrganizationService(parsed.data);
+  const { id } = parsed.data;
+  const result = await updateOrganization(id, parsed.data);
 
   if (!result.success) {
     return {

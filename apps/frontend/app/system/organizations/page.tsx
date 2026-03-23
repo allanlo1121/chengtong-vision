@@ -11,6 +11,7 @@ import { OrganizationListItem } from "@/modules/organization/types";
 import { organizationColumns } from "@/modules/organization/ui/components/organization-columns";
 import { OrganizationTreePanel } from "@/modules/organization/ui/organization-tree-panel";
 import { OrganizationTreeToolbar } from "@/modules/organization/ui/components/organization-tree-toolbar";
+import { OrganizationTableClient } from "@/modules/organization/ui/pages/organization-table-client";
 
 export const metadata: Metadata = {
   title: "组织管理",
@@ -23,7 +24,12 @@ export default async function Page({
 }) {
   const rawParams = await searchParams;
 
-  const params = organizationQuery.parse(rawParams);
+  const raw = organizationQuery.parse(rawParams);
+
+  const params = {
+    ...raw,
+    sortBy: raw.sortBy ?? "sortOrder",
+  };
 
   // console.log("organizations page  params", params);
 
@@ -46,6 +52,7 @@ export default async function Page({
     return <ErrorBlock message="未查询到数据" />;
   }
   const { items, total, page, pageSize } = result.data;
+  const { sortBy, sortDirection } = params;
 
   return (
     <div className="flex w-full h-full">
@@ -61,14 +68,13 @@ export default async function Page({
         {/* 表格 */}
 
         <Suspense key={params.search ?? "" + params.page}>
-          <DataTable<OrganizationListItem, any>
-            columns={organizationColumns}
-            data={items}
+          <OrganizationTableClient
+            items={items}
             total={total}
             page={page}
             pageSize={pageSize}
-            manualPagination
-            enableRowSelection
+            sortBy={sortBy}
+            sortDirection={sortDirection}
           />
         </Suspense>
       </div>

@@ -39,7 +39,7 @@ export async function getAsyncOptions(
   config: AsyncOptionConfig,
   search?: string
 ): Promise<SelectOption[]> {
-  console.log("getAsyncOptions config:", config, "search:", search);
+  // console.log("getAsyncOptions config:", config, "search:", search);
 
   if (config.source === "employees") {
     const rows = await searchEmployees(search);
@@ -54,7 +54,7 @@ export async function getAsyncOptions(
 }
 
 export async function getTreeOptions(config: TreeOptionConfig): Promise<TreeOption[]> {
-  console.log("getTreeOptions", config);
+  // console.log("getTreeOptions", config);
 
   if (config.source === "organization_tree") {
     const rows = await getAllTreeRows("organization");

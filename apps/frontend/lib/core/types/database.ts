@@ -8,6 +8,7 @@ export type Database = {
           code: string;
           created_at: string;
           full_name: string | null;
+          id: string;
           is_disabled: boolean;
           level: number;
           name: string;
@@ -21,6 +22,7 @@ export type Database = {
           code: string;
           created_at?: string;
           full_name?: string | null;
+          id?: string;
           is_disabled?: boolean;
           level: number;
           name: string;
@@ -34,6 +36,7 @@ export type Database = {
           code?: string;
           created_at?: string;
           full_name?: string | null;
+          id?: string;
           is_disabled?: boolean;
           level?: number;
           name?: string;
@@ -59,6 +62,7 @@ export type Database = {
           code: string;
           created_at: string;
           english_name: string | null;
+          id: string;
           is_disabled: boolean;
           name: string;
           numeric_code: string | null;
@@ -70,6 +74,7 @@ export type Database = {
           code: string;
           created_at?: string;
           english_name?: string | null;
+          id?: string;
           is_disabled?: boolean;
           name: string;
           numeric_code?: string | null;
@@ -81,6 +86,7 @@ export type Database = {
           code?: string;
           created_at?: string;
           english_name?: string | null;
+          id?: string;
           is_disabled?: boolean;
           name?: string;
           numeric_code?: string | null;
@@ -91,16 +97,19 @@ export type Database = {
       };
       employee_org_access: {
         Row: {
-          employee_id: string;
-          org_id: string;
+          employee_id: string | null;
+          id: string;
+          org_id: string | null;
         };
         Insert: {
-          employee_id: string;
-          org_id: string;
+          employee_id?: string | null;
+          id?: string;
+          org_id?: string | null;
         };
         Update: {
-          employee_id?: string;
-          org_id?: string;
+          employee_id?: string | null;
+          id?: string;
+          org_id?: string | null;
         };
         Relationships: [
           {
@@ -136,13 +145,6 @@ export type Database = {
             columns: ["org_id"];
             isOneToOne: false;
             referencedRelation: "v_organizations_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employee_org_access_org_id_fkey";
-            columns: ["org_id"];
-            isOneToOne: false;
-            referencedRelation: "v_organizations_tree";
             referencedColumns: ["id"];
           },
           {
@@ -334,13 +336,6 @@ export type Database = {
             columns: ["org_node_id"];
             isOneToOne: false;
             referencedRelation: "v_organizations_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employees_org_node_id_fkey";
-            columns: ["org_node_id"];
-            isOneToOne: false;
-            referencedRelation: "v_organizations_tree";
             referencedColumns: ["id"];
           },
           {
@@ -768,13 +763,6 @@ export type Database = {
             foreignKeyName: "organizations_parent_id_fkey";
             columns: ["parent_id"];
             isOneToOne: false;
-            referencedRelation: "v_organizations_tree";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_parent_id_fkey";
-            columns: ["parent_id"];
-            isOneToOne: false;
             referencedRelation: "v_tree_nodes";
             referencedColumns: ["id"];
           },
@@ -899,13 +887,6 @@ export type Database = {
             foreignKeyName: "projects_org_node_id_fkey";
             columns: ["org_node_id"];
             isOneToOne: false;
-            referencedRelation: "v_organizations_tree";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "projects_org_node_id_fkey";
-            columns: ["org_node_id"];
-            isOneToOne: false;
             referencedRelation: "v_tree_nodes";
             referencedColumns: ["id"];
           },
@@ -934,21 +915,70 @@ export type Database = {
       };
       user_favorite_projects: {
         Row: {
+          created_at: string;
+          created_by: string | null;
+          deleted_at: string | null;
+          deleted_by: string | null;
+          id: string;
           project_id: string;
-          sort_order: number | null;
+          sort_order: number;
+          updated_at: string | null;
+          updated_by: string | null;
           user_id: string;
         };
         Insert: {
+          created_at?: string;
+          created_by?: string | null;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
+          id?: string;
           project_id: string;
-          sort_order?: number | null;
+          sort_order?: number;
+          updated_at?: string | null;
+          updated_by?: string | null;
           user_id: string;
         };
         Update: {
+          created_at?: string;
+          created_by?: string | null;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
+          id?: string;
           project_id?: string;
-          sort_order?: number | null;
+          sort_order?: number;
+          updated_at?: string | null;
+          updated_by?: string | null;
           user_id?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: "user_favorite_projects_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "employees";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "user_favorite_projects_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_runtime_user";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "user_favorite_projects_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "employees";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "user_favorite_projects_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_runtime_user";
+            referencedColumns: ["employee_id"];
+          },
           {
             foreignKeyName: "user_favorite_projects_project_id_fkey";
             columns: ["project_id"];
@@ -962,6 +992,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_user_favorite_projects";
             referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "user_favorite_projects_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "employees";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "user_favorite_projects_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_runtime_user";
+            referencedColumns: ["employee_id"];
           },
           {
             foreignKeyName: "user_favorite_projects_user_id_fkey";
@@ -1061,86 +1105,6 @@ export type Database = {
             foreignKeyName: "organizations_parent_id_fkey";
             columns: ["parent_id"];
             isOneToOne: false;
-            referencedRelation: "v_organizations_tree";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_parent_id_fkey";
-            columns: ["parent_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tree_nodes";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_parent_id_fkey";
-            columns: ["parent_id"];
-            isOneToOne: false;
-            referencedRelation: "v_user_orgs";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      v_organizations_tree: {
-        Row: {
-          has_children: boolean | null;
-          id: string | null;
-          is_active: boolean | null;
-          level: number | null;
-          name: string | null;
-          parent_id: string | null;
-          sort_order: number | null;
-        };
-        Insert: {
-          has_children?: never;
-          id?: string | null;
-          is_active?: boolean | null;
-          level?: never;
-          name?: string | null;
-          parent_id?: string | null;
-          sort_order?: number | null;
-        };
-        Update: {
-          has_children?: never;
-          id?: string | null;
-          is_active?: boolean | null;
-          level?: never;
-          name?: string | null;
-          parent_id?: string | null;
-          sort_order?: number | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "organizations_parent_id_fkey";
-            columns: ["parent_id"];
-            isOneToOne: false;
-            referencedRelation: "organizations";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_parent_id_fkey";
-            columns: ["parent_id"];
-            isOneToOne: false;
-            referencedRelation: "v_organizations_detail";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_parent_id_fkey";
-            columns: ["parent_id"];
-            isOneToOne: false;
-            referencedRelation: "v_organizations_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_parent_id_fkey";
-            columns: ["parent_id"];
-            isOneToOne: false;
-            referencedRelation: "v_organizations_tree";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_parent_id_fkey";
-            columns: ["parent_id"];
-            isOneToOne: false;
             referencedRelation: "v_tree_nodes";
             referencedColumns: ["id"];
           },
@@ -1190,13 +1154,6 @@ export type Database = {
             columns: ["org_node_id"];
             isOneToOne: false;
             referencedRelation: "v_organizations_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employees_org_node_id_fkey";
-            columns: ["org_node_id"];
-            isOneToOne: false;
-            referencedRelation: "v_organizations_tree";
             referencedColumns: ["id"];
           },
           {
@@ -1272,13 +1229,6 @@ export type Database = {
             foreignKeyName: "organizations_parent_id_fkey";
             columns: ["parent_id"];
             isOneToOne: false;
-            referencedRelation: "v_organizations_tree";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_parent_id_fkey";
-            columns: ["parent_id"];
-            isOneToOne: false;
             referencedRelation: "v_tree_nodes";
             referencedColumns: ["id"];
           },
@@ -1301,6 +1251,9 @@ export type Database = {
       v_user_menu: {
         Row: {
           created_at: string | null;
+          created_by: string | null;
+          deleted_at: string | null;
+          deleted_by: string | null;
           group_name: string | null;
           icon: string | null;
           id: string | null;
@@ -1314,9 +1267,13 @@ export type Database = {
           permission_code: string | null;
           sort_order: number | null;
           updated_at: string | null;
+          updated_by: string | null;
         };
         Insert: {
           created_at?: string | null;
+          created_by?: string | null;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
           group_name?: string | null;
           icon?: string | null;
           id?: string | null;
@@ -1330,9 +1287,13 @@ export type Database = {
           permission_code?: string | null;
           sort_order?: number | null;
           updated_at?: string | null;
+          updated_by?: string | null;
         };
         Update: {
           created_at?: string | null;
+          created_by?: string | null;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
           group_name?: string | null;
           icon?: string | null;
           id?: string | null;
@@ -1346,14 +1307,57 @@ export type Database = {
           permission_code?: string | null;
           sort_order?: number | null;
           updated_at?: string | null;
+          updated_by?: string | null;
         };
         Relationships: [
+          {
+            foreignKeyName: "menus_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "employees";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "menus_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_runtime_user";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "menus_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "employees";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "menus_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_runtime_user";
+            referencedColumns: ["employee_id"];
+          },
           {
             foreignKeyName: "menus_parent_id_fkey";
             columns: ["parent_id"];
             isOneToOne: false;
             referencedRelation: "v_user_menu";
             referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "menus_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "employees";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "menus_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_runtime_user";
+            referencedColumns: ["employee_id"];
           },
         ];
       };
@@ -1451,24 +1455,6 @@ export type Database = {
           isSetofReturn: true;
         };
       };
-      tree_context_with_children: {
-        Args: { p_node_id: string };
-        Returns: {
-          has_children: boolean | null;
-          id: string | null;
-          is_active: boolean | null;
-          level: number | null;
-          name: string | null;
-          parent_id: string | null;
-          sort_order: number | null;
-        }[];
-        SetofOptions: {
-          from: "*";
-          to: "v_organizations_tree";
-          isOneToOne: false;
-          isSetofReturn: true;
-        };
-      };
       tree_query_organizations: {
         Args: {
           p_include_children?: boolean;
@@ -1549,16 +1535,19 @@ export type Database = {
       };
       role_permissions: {
         Row: {
-          permission_id: string;
-          role_id: string;
+          id: string;
+          permission_id: string | null;
+          role_id: string | null;
         };
         Insert: {
-          permission_id: string;
-          role_id: string;
+          id?: string;
+          permission_id?: string | null;
+          role_id?: string | null;
         };
         Update: {
-          permission_id?: string;
-          role_id?: string;
+          id?: string;
+          permission_id?: string | null;
+          role_id?: string | null;
         };
         Relationships: [
           {
@@ -1610,16 +1599,19 @@ export type Database = {
       user_roles: {
         Row: {
           assigned_at: string | null;
+          id: string;
           role_id: string;
           user_id: string;
         };
         Insert: {
           assigned_at?: string | null;
+          id?: string;
           role_id: string;
           user_id: string;
         };
         Update: {
           assigned_at?: string | null;
+          id?: string;
           role_id?: string;
           user_id?: string;
         };
@@ -1660,16 +1652,19 @@ export type Database = {
         Row: {
           completed: boolean;
           executed_at: string | null;
+          id: string;
           version: string;
         };
         Insert: {
           completed?: boolean;
           executed_at?: string | null;
+          id?: string;
           version: string;
         };
         Update: {
           completed?: boolean;
           executed_at?: string | null;
+          id?: string;
           version?: string;
         };
         Relationships: [];
@@ -1706,7 +1701,10 @@ export type Database = {
       };
       menus: {
         Row: {
-          created_at: string | null;
+          created_at: string;
+          created_by: string | null;
+          deleted_at: string | null;
+          deleted_by: string | null;
           group_name: string | null;
           icon: string | null;
           id: string;
@@ -1720,9 +1718,13 @@ export type Database = {
           permission_code: string | null;
           sort_order: number | null;
           updated_at: string | null;
+          updated_by: string | null;
         };
         Insert: {
-          created_at?: string | null;
+          created_at?: string;
+          created_by?: string | null;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
           group_name?: string | null;
           icon?: string | null;
           id?: string;
@@ -1736,9 +1738,13 @@ export type Database = {
           permission_code?: string | null;
           sort_order?: number | null;
           updated_at?: string | null;
+          updated_by?: string | null;
         };
         Update: {
-          created_at?: string | null;
+          created_at?: string;
+          created_by?: string | null;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
           group_name?: string | null;
           icon?: string | null;
           id?: string;
@@ -1752,6 +1758,7 @@ export type Database = {
           permission_code?: string | null;
           sort_order?: number | null;
           updated_at?: string | null;
+          updated_by?: string | null;
         };
         Relationships: [
           {
@@ -1765,18 +1772,21 @@ export type Database = {
       };
       settings: {
         Row: {
+          id: string;
           key: string;
           updated_at: string | null;
           updated_by: string | null;
           value: Json;
         };
         Insert: {
+          id?: string;
           key: string;
           updated_at?: string | null;
           updated_by?: string | null;
           value: Json;
         };
         Update: {
+          id?: string;
           key?: string;
           updated_at?: string | null;
           updated_by?: string | null;
@@ -1809,8 +1819,8 @@ export type Database = {
     Functions: {
       allowed_org_ids: { Args: never; Returns: string[] };
       bootstrap: { Args: { p_user_id: string }; Returns: undefined };
-      current_employee_id: { Args: never; Returns: string };
       current_org_id: { Args: never; Returns: string };
+      current_user_id: { Args: never; Returns: string };
       is_super_admin: { Args: never; Returns: boolean };
       soft_delete: {
         Args: { p_ids: string[]; p_table: string };

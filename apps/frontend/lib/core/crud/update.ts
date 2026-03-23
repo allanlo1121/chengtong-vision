@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "../types/entity.types";
 
-import { toDbInsert, toDbUpdate } from "@/lib/core/mapper/to-db";
+import { toDbUpdate } from "@/lib/core/mapper/to-db";
 import { fromDb } from "../mapper/base-mapper";
 import { getMapper } from "../mapper/registry";
 import { assertNoError } from "@/lib/infra/repositories/base.repository";
@@ -27,14 +27,18 @@ export async function update<T extends TableName>(
   const { data: result, error } = await supabase
     .from(tableOf(table))
     .update(dbData)
-    .select("*")
-    .single();
+    .eq("id", id)
+    .select("*");
 
   assertNoError(error);
 
   if (!result) {
-    throw new Error(`Update failed: no data returned for table "${table}"`);
+    throw new Error(`[${table}] update failed, id=${id} not found`);
   }
 
-  return fromDbEntity(table, result);
+  if (Array.isArray(result) && result.length > 1) {
+    throw new Error(`[${table}] update returned multiple rows`);
+  }
+
+  return fromDbEntity(table, result[0] as TableRow<T>);
 }

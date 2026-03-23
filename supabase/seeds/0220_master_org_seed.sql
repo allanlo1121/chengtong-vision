@@ -3,7 +3,7 @@
 -- ==========================================
 
 INSERT INTO public.master_definitions (name, code)
-VALUES ('组织类别', 'ORG_CATEGORY')
+VALUES ('组织类别', 'ORG_TYPE')
 ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO public.master_data (definition_id, code, name)
@@ -31,7 +31,7 @@ JOIN (
     ('10230018', '工程指挥部')
 ) AS v(code, name)
 ON true
-WHERE md.code = 'ORG_CATEGORY'
+WHERE md.code = 'ORG_TYPE'
 ON CONFLICT (definition_id, code) DO NOTHING;
 
 

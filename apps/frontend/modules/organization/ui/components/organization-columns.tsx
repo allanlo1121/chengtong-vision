@@ -91,7 +91,13 @@ export const organizationColumns: ColumnDef<OrganizationListItem>[] = [
     enableSorting: false,
     enableHiding: true,
   },
-
+  {
+    accessorKey: "sortOrder",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="排序" />,
+    cell: ({ row }) => <div className="w-[80px]">{row.getValue("sortOrder")}</div>,
+    enableSorting: true,
+    enableHiding: true,
+  },
   {
     id: "actions",
     cell: ({ row }) => <DataTableRowActions row={row} />,
