@@ -1,35 +1,18 @@
 import { TableName } from "../types/entity.types";
+import { createMapper } from "./mapper-factory";
 import { TableMapper } from "./table-mapper";
 
 export const mapperRegistry = {
-  organizations: {
+  organizations: createMapper({
     conflict: "code",
-    toInsert: (input) => ({
-      code: input.code!,
-      name: input.name,
-      full_name: input.fullName ?? null,
-      parent_id: input.parentId ?? null,
-      org_type_id: input.orgTypeId,
-      business_id: input.businessId,
-      country_code: input.countryCode ?? "CN",
-      province_code: input.provinceCode ?? null,
-      city_code: input.cityCode ?? null,
-      district_code: input.districtCode ?? null,
-      address: input.address ?? null,
-      latitude: input.latitude ?? null,
-      longitude: input.longitude ?? null,
-      is_active: input.isActive ?? true,
-      sort_order: input.sortOrder ?? 0,
-    }),
-  },
+  }),
 
-  countries: {
+  countries: createMapper({
     conflict: "code",
-    toInsert: (input) => ({
-      code: input.code!,
-      name: input.name,
-    }),
-  },
+  }),
+  // import_batches: createMapper(),
 } as const satisfies {
   [K in TableName]?: TableMapper<K>;
 };
+
+export type MapperTable = keyof typeof mapperRegistry;

@@ -19,6 +19,37 @@ export async function upsertRowByCode<T extends TableName>(
 
   const dbRow = camelToSnake(row);
 
+  const { code } = dbRow as any;
+
+  if (!code) {
+    throw new Error(`Row must have a 'code' field for upsert by code`);
+  }
+
+  // 查看是否存在
+  const { data: existing, error: selectError } = await supabase
+    .from(table)
+    .select("id")
+    .eq("code", code)
+    .single();
+
+  assertNoError(selectError);
+
+  if (existing) {
+    // 已存在，执行更新
+    const { data, error } = await supabase
+      .from(table)
+      .update(dbRow)
+      .eq("code", code)
+      .select("id, code")
+      .single();
+
+    assertNoError(error);
+
+    return data as UpsertResult;
+  }
+
+  // 不存在，执行插入
+
   const { data, error } = await supabase
     .from(table)
     .upsert(dbRow, {
@@ -56,15 +87,21 @@ export async function syncEntityWithRecord<T extends TableName>(
 ): Promise<SyncImportResult> {
   const supabase = await createClient();
 
+  console.log("syncEntityWithRecord called with table:", table, "rows:", p_rows);
+
   const payload = p_rows.map((r) => ({
     raw: r.raw,
     data: camelToSnake(r.data),
   }));
 
+  console.log("Payload for RPC:", payload);
+
   const { data, error } = await supabase.rpc("sync_entity_with_record", {
     p_table: table,
     p_rows: payload,
   });
+
+  console.log("RPC result:", { data, error });
 
   assertNoError(error);
 

@@ -6,6 +6,7 @@ import {
   TableRow,
   TableUpdate,
   UpdateEntity,
+  UpsertEntity,
 } from "../types/entity.types";
 
 export type TableMapper<T extends TableName> = {
@@ -14,6 +15,8 @@ export type TableMapper<T extends TableName> = {
   toInsert: (input: InsertEntity<T>) => TableInsert<T>;
 
   toUpdate?: (input: UpdateEntity<T>) => TableUpdate<T>;
+
+  toUpsert?: (input: UpsertEntity<T>) => TableInsert<T>;
 
   fromDb: (row: TableRow<T>) => Entity<T>;
 };

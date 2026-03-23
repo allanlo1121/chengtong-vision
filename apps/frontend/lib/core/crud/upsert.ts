@@ -1,20 +1,19 @@
 import { createClient } from "@/lib/infra/supabase/server";
 import {
-  MapperTable,
   Entity,
   InsertEntity,
   TableName,
   tableOf,
   UpsertResult,
+  UpsertEntity,
 } from "../types/entity.types";
+import { toDb } from "../mapper/base-mapper";
 
-import { toDbInsert, toDbUpdate } from "@/lib/core/mapper/to-db";
-import { getMapper } from "../mapper/registry";
-import { mapperRegistry } from "../mapper/mapper-registry";
+import { mapperRegistry, type MapperTable } from "../mapper/mapper-registry";
 
 export async function upsertOne<T extends MapperTable>(
   table: T,
-  data: InsertEntity<T>
+  data: UpsertEntity<T>
 ): Promise<UpsertResult<T>> {
   const supabase = await createClient();
 
@@ -24,7 +23,7 @@ export async function upsertOne<T extends MapperTable>(
     throw new Error(`No mapper for table: ${table}`);
   }
 
-  const dbData = mapper.toInsert(data);
+  const dbData = toDb(data);
 
   const { data: result, error } = await supabase
     .from(tableOf(table))

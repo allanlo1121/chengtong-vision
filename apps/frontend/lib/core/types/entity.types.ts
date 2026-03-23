@@ -44,6 +44,10 @@ export type InsertEntity<T extends TableName> = Camelize<TableInsert<T>>;
 
 export type UpdateEntity<T extends TableName> = Partial<Camelize<TableUpdate<T>>>;
 
+export type UpsertEntity<T extends TableName> = InsertEntity<T> & {
+  id?: string;
+};
+
 export function tableOf<T extends TableName>(table: T) {
   return table as keyof Database["public"]["Tables"];
 }
