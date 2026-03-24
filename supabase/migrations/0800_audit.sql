@@ -45,11 +45,11 @@ create table audit.logs (
   changed_fields text[],
 
   -- 组织范围
-  org_node_id uuid,
+  organization_id uuid,
 
   -- 操作人
   operated_by uuid
-    references public.employees(id),
+    references hr.persons(id),
 
   -- 请求追踪
   request_id uuid,
@@ -84,7 +84,7 @@ begin
 
   if (tg_op = 'INSERT') then
 
-    v_org := (to_jsonb(new)->>'org_node_id')::uuid;
+    v_org := (to_jsonb(new)->>'organization_id')::uuid;
 
     insert into audit.logs (
       table_name,
@@ -92,7 +92,7 @@ begin
       action,
       new_data,
       operated_by,
-      org_node_id
+      organization_id
     )
     values (
       tg_table_name,
@@ -114,8 +114,8 @@ begin
     where to_jsonb(new)->key is distinct from to_jsonb(old)->key;
 
     v_org := coalesce(
-      (to_jsonb(new)->>'org_node_id')::uuid,
-      (to_jsonb(old)->>'org_node_id')::uuid
+      (to_jsonb(new)->>'organization_id')::uuid,
+      (to_jsonb(old)->>'organization_id')::uuid
     );
 
     insert into audit.logs (
@@ -126,7 +126,7 @@ begin
       new_data,
       changed_fields,
       operated_by,
-      org_node_id
+      organization_id
     )
     values (
       tg_table_name,
@@ -144,7 +144,7 @@ begin
 
   if (tg_op = 'DELETE') then
 
-    v_org := (to_jsonb(old)->>'org_node_id')::uuid;
+    v_org := (to_jsonb(old)->>'organization_id')::uuid;
 
     insert into audit.logs (
       table_name,
@@ -152,7 +152,7 @@ begin
       action,
       old_data,
       operated_by,
-      org_node_id
+      organization_id
     )
     values (
       tg_table_name,

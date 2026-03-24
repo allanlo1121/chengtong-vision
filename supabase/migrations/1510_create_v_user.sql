@@ -18,16 +18,6 @@ where m.is_disabled = false
 order by m.group_name, m.sort_order;
 
 
-create view public.v_user_orgs as
-select
-  o.id,
-  o.name,
-  o.full_name
-from employee_org_access eoa
-join organizations o on eoa.org_id = o.id
-where eoa.employee_id = auth.uid();
-
-
 create view public.v_user_favorite_projects as
 select
   p.id,

@@ -11,7 +11,7 @@ create table hr.employees (
     person_id          uuid not null unique
                         references hr.persons(id) on delete cascade,
     -- 组织关系
-    org_node_id uuid references organizations(id) on delete set null,
+    organization_id uuid references organizations(id) on delete set null,
     status_id uuid references master_data(id) on delete set null,
     employee_type_id uuid references master_data(id) on delete set null,
     job_title_id uuid references master_data(id) on delete set null,
@@ -24,8 +24,7 @@ create table hr.employees (
     remark              text
 );
 
-create index idx_employees_org_node on hr.employees(org_node_id);
-create index idx_employees_active on hr.employees(is_active);
+create index idx_employees_organization on hr.employees(organization_id);
 create index idx_employees_job on hr.employees(job_title_id);
 
 

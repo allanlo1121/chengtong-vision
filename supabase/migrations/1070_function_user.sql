@@ -4,9 +4,11 @@ language sql
 stable
 security definer
 as $$
-  select org_node_id
-  from public.employees
-  where id = auth.uid();
+  select e.organization_id
+  from hr.persons p
+  join hr.employees e on e.person_id = p.id
+  where p.auth_id = auth.uid()
+  limit 1;
 $$;
 
 create or replace function system.is_super_admin()
