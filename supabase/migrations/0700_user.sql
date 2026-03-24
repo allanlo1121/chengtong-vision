@@ -2,7 +2,7 @@ create table public.user_favorite_projects (
   id uuid primary key default gen_random_uuid(),
 
   user_id uuid not null
-    references public.employees(id) on delete cascade,
+    references hr.persons(id) on delete cascade,
 
   project_id uuid not null
     references public.projects(id) on delete cascade,
@@ -14,10 +14,10 @@ create table public.user_favorite_projects (
   deleted_at timestamptz,
 
   created_by uuid default system.current_user_id()
-    references public.employees(id),
+    references hr.persons(id),
 
-  updated_by uuid references public.employees(id),
-  deleted_by uuid references public.employees(id)
+  updated_by uuid references hr.persons(id),
+  deleted_by uuid references hr.persons(id)
 );
 
 create unique index uq_user_project_active

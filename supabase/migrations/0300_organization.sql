@@ -49,7 +49,3 @@ where external_id is not null;
 create unique index one_root_org
 on public.organizations ((parent_id is null))
 where parent_id is null;
-
-
-
-

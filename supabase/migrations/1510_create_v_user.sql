@@ -41,9 +41,11 @@ order by uf.sort_order;
 create or replace view public.v_runtime_user as
 select
   u.id as user_id,
+  p.id as person_id,
   e.id as employee_id,
-  e.name,
-  e.org_node_id,
+
+  p.name,
+  e.organization_id,
   o.path as org_path,
 
   (
@@ -54,15 +56,15 @@ select
   ) as roles,
 
   (
-    select coalesce(array_agg(distinct p.code), '{}')
+    select coalesce(array_agg(distinct perm.code), '{}')
     from rbac.user_roles ur
     join rbac.role_permissions rp on rp.role_id = ur.role_id
-    join rbac.permissions p on p.id = rp.permission_id
+    join rbac.permissions perm on perm.id = rp.permission_id
     where ur.user_id = u.id
   ) as permissions
 
 from auth.users u
-join public.employees e on e.id = u.id
-join public.organizations o on o.id = e.org_node_id
-
-where u.id = auth.uid();   -- 🔥 关键
+join hr.persons p on p.auth_id = u.id
+join hr.employees e on e.person_id = p.id
+join public.organizations o on o.id = e.organization_id
+where u.id = auth.uid();

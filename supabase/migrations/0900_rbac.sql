@@ -61,7 +61,7 @@ create table if not exists rbac.role_permissions (
 -- 用户-角色（假设 employees.id 对应 auth.uid()）
 create table if not exists rbac.user_roles (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references public.employees(id) on delete cascade,
+  user_id uuid not null references hr.persons(id) on delete cascade,
   role_id uuid not null references rbac.roles(id) on delete cascade,
   assigned_at timestamptz default now(),
   unique (user_id, role_id)
@@ -145,10 +145,10 @@ create table system.menus (
   deleted_at timestamptz,
 
   created_by uuid default system.current_user_id()
-    references public.employees(id),
+    references hr.persons(id),
 
-  updated_by uuid references public.employees(id),
-  deleted_by uuid references public.employees(id)
+  updated_by uuid references hr.persons(id),
+  deleted_by uuid references hr.persons(id)
 );
 
 create index idx_menus_parent on system.menus(parent_id);

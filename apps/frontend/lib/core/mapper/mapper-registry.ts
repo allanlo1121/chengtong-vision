@@ -10,7 +10,7 @@ export const mapperRegistry = {
   countries: createMapper({
     conflict: "code",
   }),
-  // import_batches: createMapper(),
+  import_batches: createMapper(),
 } as const satisfies {
   [K in TableName]?: TableMapper<K>;
 };

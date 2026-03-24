@@ -2,11 +2,11 @@ import { loadLookups } from "../processors/lookup-engine";
 import { mapFields } from "../processors/field-mapper";
 import { validateRow } from "../processors/zod-validator";
 import { ImportConfig, ImportPreviewResult } from "../types";
-import { SchemaRowType, TableName } from "@/modules/shared/types";
+import { TableSchemaName } from "@/modules/shared/types";
 import { ImportRowMap } from "../types/improt-row-map.types";
 import { ImportValidateResult } from "../types";
 
-export async function handleImportData<T extends TableName>(
+export async function handleImportData<T extends TableSchemaName>(
   raws: Record<keyof ImportRowMap[T], any>[],
   config: ImportConfig<T>
 ): Promise<ImportValidateResult<T>> {
@@ -39,6 +39,10 @@ export async function handleImportData<T extends TableName>(
         valid.push({
           raw,
           data: parsed.row,
+          meta: {
+            externalVersion: config.getExternalVersion?.(raw) ?? 0,
+            externalSource: config.externalSource,
+          },
         });
       } else {
         failed.push({
@@ -55,8 +59,8 @@ export async function handleImportData<T extends TableName>(
     }
   }
 
-  // console.log("valid",valid);
-  // console.log("failed",failed);
+  console.log("valid", valid);
+  console.log("failed", failed);
 
   return { validRows: valid, failedRows: failed };
 }

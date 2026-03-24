@@ -1,8 +1,8 @@
-import { TableName } from "@/lib/core/types/entity.types";
+import { TableSchemaName } from "@/modules/shared/types/common.types";
 import { repository } from "../repositories";
 import { ImportRow } from "../types";
 
-export async function processChunk<T extends TableName>(
+export async function processChunk<T extends TableSchemaName>(
   table: T,
   rows: ImportRow<T>[],
   batchId: string

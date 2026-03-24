@@ -382,47 +382,88 @@ export type Database = {
           },
         ];
       };
-      import_records: {
+      import_batches: {
         Row: {
-          created_at: string | null;
-          entity_id: string | null;
-          entity_type: string;
-          error_json: Json | null;
-          external_id: string | null;
-          external_source: string | null;
+          failed_count: number | null;
+          finished_at: string | null;
           id: string;
-          import_json: Json | null;
-          mapped_json: Json | null;
-          round: number | null;
+          inserted_count: number | null;
+          skipped_count: number | null;
+          started_at: string | null;
           status: string;
+          table_name: string;
+          total_count: number;
+          updated_count: number | null;
         };
         Insert: {
-          created_at?: string | null;
-          entity_id?: string | null;
-          entity_type: string;
-          error_json?: Json | null;
-          external_id?: string | null;
-          external_source?: string | null;
+          failed_count?: number | null;
+          finished_at?: string | null;
           id?: string;
-          import_json?: Json | null;
-          mapped_json?: Json | null;
-          round?: number | null;
-          status: string;
+          inserted_count?: number | null;
+          skipped_count?: number | null;
+          started_at?: string | null;
+          status?: string;
+          table_name: string;
+          total_count: number;
+          updated_count?: number | null;
         };
         Update: {
-          created_at?: string | null;
-          entity_id?: string | null;
-          entity_type?: string;
-          error_json?: Json | null;
-          external_id?: string | null;
-          external_source?: string | null;
+          failed_count?: number | null;
+          finished_at?: string | null;
           id?: string;
-          import_json?: Json | null;
-          mapped_json?: Json | null;
-          round?: number | null;
+          inserted_count?: number | null;
+          skipped_count?: number | null;
+          started_at?: string | null;
           status?: string;
+          table_name?: string;
+          total_count?: number;
+          updated_count?: number | null;
         };
         Relationships: [];
+      };
+      import_records: {
+        Row: {
+          batch_id: string | null;
+          created_at: string | null;
+          data: Json | null;
+          external_version: number | null;
+          id: string;
+          message: string | null;
+          raw: Json | null;
+          status: string | null;
+          table_name: string | null;
+        };
+        Insert: {
+          batch_id?: string | null;
+          created_at?: string | null;
+          data?: Json | null;
+          external_version?: number | null;
+          id?: string;
+          message?: string | null;
+          raw?: Json | null;
+          status?: string | null;
+          table_name?: string | null;
+        };
+        Update: {
+          batch_id?: string | null;
+          created_at?: string | null;
+          data?: Json | null;
+          external_version?: number | null;
+          id?: string;
+          message?: string | null;
+          raw?: Json | null;
+          status?: string | null;
+          table_name?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "import_records_batch_id_fkey";
+            columns: ["batch_id"];
+            isOneToOne: false;
+            referencedRelation: "import_batches";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       master_data: {
         Row: {
@@ -1448,10 +1489,6 @@ export type Database = {
           p_table: string;
           p_version_col?: string;
         };
-        Returns: Json;
-      };
-      sync_entity_with_record: {
-        Args: { p_rows: Json; p_table: string };
         Returns: Json;
       };
       text2ltree: { Args: { "": string }; Returns: unknown };

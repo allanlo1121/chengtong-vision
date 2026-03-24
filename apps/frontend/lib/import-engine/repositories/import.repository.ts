@@ -33,8 +33,10 @@ async function getVersionsByCodes<T extends TableName>(
   return map;
 }
 async function upsertMany<T extends TableName>(table: T, rows: any[]) {
+  console.log(`Upserting ${rows[0]} rows into table ${table}`);
+  const dbRows = rows.map((r) => camelToSnake(r));
   const supabase = await createClient();
-  const { error } = await supabase.from(table).upsert(rows, {
+  const { error } = await supabase.from(table).upsert(dbRows, {
     onConflict: "code",
   });
 

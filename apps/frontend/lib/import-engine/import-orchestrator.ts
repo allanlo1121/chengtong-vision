@@ -1,18 +1,25 @@
-import { TableName } from "@/modules/shared/types/common.types";
-import { importRowsService } from "../services/import.service";
-import { importBatchRepo } from "../repositories";
+"use server";
+
+import { TableSchemaName } from "@/modules/shared/types/common.types";
+
+import { importBatchRepo } from "./repositories";
 import { Result } from "@/modules/shared/contracts";
-import { ImportConfig, ImportPersistResult, ImportRow, SyncImportResult } from "../types";
+import { ImportRow, SyncImportResult } from "./types";
 import { chunkArray } from "@/lib/utils/chunk-array";
 import { processChunk } from "./processors/chunk-processor";
 
-export async function runImport<T extends TableName>(table: T, rows: ImportRow<T>[]) {
+export async function runImport<T extends TableSchemaName>(
+  table: T,
+  rows: ImportRow<T>[]
+): Promise<Result<SyncImportResult>> {
+  console.log("Starting runImport with table:", table);
+  console.log(" rows to import:", rows);
   const batch = await importBatchRepo.create({
     tableName: table,
     totalCount: rows.length,
   });
 
-  const chunks = chunkArray(rows, 500);
+  const chunks = chunkArray(rows, 50);
 
   let summary = {
     inserted: 0,
@@ -32,5 +39,5 @@ export async function runImport<T extends TableName>(table: T, rows: ImportRow<T
 
   await importBatchRepo.finish(batch.id, summary);
 
-  return summary;
+  return { success: true, data: summary };
 }

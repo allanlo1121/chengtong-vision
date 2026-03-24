@@ -8,11 +8,11 @@ create table public.projects (
 
 -- 软删除
 deleted_at timestamptz,
-deleted_by uuid references public.employees(id),
+deleted_by uuid references hr.persons(id),
 
 -- 审计字段
   created_at timestamptz default now(),
   updated_at timestamptz default now(),
-  created_by uuid references public.employees(id) on delete set null,
-  updated_by uuid references public.employees(id) on delete set null
+  created_by uuid references hr.persons(id) on delete set null,
+  updated_by uuid references hr.persons(id) on delete set null
 );

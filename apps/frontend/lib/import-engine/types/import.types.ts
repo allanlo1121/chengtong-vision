@@ -1,5 +1,5 @@
 import { LookupSource } from "../services/lookup.service";
-import { SchemaRowType, TableName, TableSchemaMap } from "../../shared/types";
+import { SchemaRowType, TableSchemaName, TableSchemaMap } from "@/modules/shared/types";
 import { ZodSchemaError } from "@/lib/zod/types";
 import { ImportRowMap } from "./improt-row-map.types";
 import { Entity } from "@/lib/core/types/entity.types";
@@ -9,38 +9,21 @@ export type LookupItem = {
   key: string;
 };
 
-export type LookupType<T extends TableName> = Partial<Record<keyof SchemaRowType<T>, LookupSource>>;
+export type LookupType<T extends TableSchemaName> = Partial<
+  Record<keyof SchemaRowType<T>, LookupSource>
+>;
 
-export type fieldType<T extends TableName> = Partial<
+export type fieldType<T extends TableSchemaName> = Partial<
   Record<keyof ImportRowMap[T], keyof SchemaRowType<T>>
 >;
 
-export type ExtraFieldResolver<T extends TableName> = (
+export type ExtraFieldResolver<T extends TableSchemaName> = (
   row: Record<keyof ImportRowMap[T], any>,
   mapped: Partial<SchemaRowType<T>>,
   lookupMap?: Map<string, string>
 ) => any | Promise<any>;
 
-// export type VersionStrategy =
-//   | "incremental" // 新 > 旧 才更新
-//   | "always"      // 总是更新
-//   | "never";      // 永不更新
-
-// export type VersionConfig<T extends TableName> = {
-//   /** 原始数据字段（raw） */
-//   field: string;
-
-//   /** 存入 entity 的字段（必须是表字段） */
-//   target: keyof Entity<T>;
-
-//   /** 数据来源（多系统支持） */
-//   source?: string;
-
-//   /** 策略 */
-//   strategy?: VersionStrategy;
-// };
-
-export type ImportConfig<T extends TableName> = {
+export type ImportConfig<T extends TableSchemaName> = {
   entity: T;
   schema: (typeof TableSchemaMap)[T];
   fields: fieldType<T>;
@@ -50,14 +33,14 @@ export type ImportConfig<T extends TableName> = {
   getExternalVersion?: (row: unknown) => number;
 };
 
-export type ImportRowResult<T extends TableName> = {
+export type ImportRowResult<T extends TableSchemaName> = {
   row: ImportRowMap[T];
   success: boolean;
   level?: number;
   errors?: ZodSchemaError[];
 };
 
-export type ImportPreviewResult<T extends TableName> = {
+export type ImportPreviewResult<T extends TableSchemaName> = {
   raw: Record<keyof ImportRowMap[T], any>;
   row: SchemaRowType<T>;
   success: boolean;
@@ -86,7 +69,7 @@ export type ImportError = {
   message: string;
 };
 
-export type ImportRow<T extends TableName> = {
+export type ImportRow<T extends TableSchemaName> = {
   raw: ImportRowMap[T];
   data: SchemaRowType<T>;
   meta: {
@@ -95,12 +78,12 @@ export type ImportRow<T extends TableName> = {
   };
 };
 
-export type ImportErrorRow<T extends TableName> = {
+export type ImportErrorRow<T extends TableSchemaName> = {
   raw: ImportRowMap[T];
   errors: ZodSchemaError[];
 };
 
-export type ImportValidateResult<T extends TableName> = {
+export type ImportValidateResult<T extends TableSchemaName> = {
   validRows: ImportRow<T>[];
   failedRows: ImportErrorRow<T>[];
 };
@@ -111,7 +94,6 @@ export type UpsertResult = {
 } | null;
 
 export type SyncImportResult = {
-  total: number;
   inserted: number;
   updated: number;
   failed: number;

@@ -22,11 +22,11 @@ ON CONFLICT (definition_id, code) DO NOTHING;
 
 
 -- ==========================================
--- 人员类型 PERSON_TYPE
+-- 人员类型 EMPLOYEE_TYPE
 -- ==========================================
 
 INSERT INTO public.master_definitions (name, code)
-VALUES ('人员类型', 'PERSON_TYPE')
+VALUES ('人员类型', 'EMPLOYEE_TYPE')
 ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO public.master_data (definition_id, code, name)
@@ -42,7 +42,34 @@ JOIN (
     ('10170006', '外部人员')
 ) AS v(code, name)
 ON true
-WHERE md.code = 'PERSON_TYPE'
+WHERE md.code = 'EMPLOYEE_TYPE'
+ON CONFLICT (definition_id, code) DO NOTHING;
+
+-- ==========================================
+-- 任职状态 EMPLOYEE_STATUS
+-- ==========================================
+
+INSERT INTO public.master_definitions (name, code)
+VALUES ('任职状态', 'EMPLOYEE_STATUS')
+ON CONFLICT (code) DO NOTHING;
+
+INSERT INTO public.master_data (definition_id, code, name)
+SELECT md.id, v.code, v.name
+FROM public.master_definitions md
+JOIN (
+    VALUES 
+    ('10310001', '在职'),
+    ('10310002', '离职'),
+    ('10310003', '试用期'),
+    ('10310004', '停职'),
+    ('10310005', '待岗'),
+    ('10310006', '退休'),
+    ('10310007', '离岗休息'),
+    ('10310008', '助勤'),
+    ('10310009', '其他')
+) AS v(code, name)
+ON true
+WHERE md.code = 'EMPLOYEE_STATUS'
 ON CONFLICT (definition_id, code) DO NOTHING;
 
 -- ==========================================
@@ -71,6 +98,34 @@ JOIN (
 ) AS v(code, name)
 ON true
 WHERE md.code = 'EDU_LEVEL'
+ON CONFLICT (definition_id, code) DO NOTHING;
+
+-- ==========================================
+-- 专业 MAJOR
+-- ==========================================
+
+INSERT INTO public.master_definitions (name, code)
+VALUES ('专业', 'MAJOR')
+ON CONFLICT (code) DO NOTHING;
+
+INSERT INTO public.master_data (definition_id, code, name)
+SELECT md.id, v.code, v.name
+FROM public.master_definitions md
+JOIN (
+    VALUES 
+    ('10320001', '计算机科学'),
+    ('10320002', '电子工程'),
+    ('10320003', '机械工程及其自动化'),
+    ('10320004', '土木工程'),
+    ('10320005', '建筑学'),
+    ('10320006', '经济学'),
+    ('10320007', '管理学'),
+    ('10320008', '法律'),
+    ('10320009', '医学'),
+    ('10320010', '未知')
+) AS v(code, name)
+ON true
+WHERE md.code = 'MAJOR'
 ON CONFLICT (definition_id, code) DO NOTHING;
 
 -- ==========================================
@@ -206,6 +261,9 @@ JOIN (
 ON true
 WHERE md.code = 'JOB_TITLE'
 ON CONFLICT (definition_id, code) DO NOTHING;
+
+
+
 
 
 

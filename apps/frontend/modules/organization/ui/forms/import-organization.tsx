@@ -1,6 +1,6 @@
 "use client";
 
-import ImportDataPage from "@/modules/import/components/import-data-page";
+import ImportDataPage from "@/components/import/import-data-page";
 import { organizationImportConfig } from "./import-organizaiton.config";
 
 export default function ImportOrganizationPage() {

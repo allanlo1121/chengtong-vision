@@ -49,25 +49,60 @@ export const OrganizationFields = {
     option: { source: "organization_tree", parentId: null },
   }),
 
-  empTypeId: idSchema.meta({
+  employeeTypeId: idSchema.meta({
     label: "员工类型",
     component: "select",
     section: "基本信息",
     colSpan: 1,
-    option: { source: "master", code: "EMP_CATEGORY" },
+    option: { source: "master", code: "EMPLOYEE_TYPE" },
   }),
 
-  businessId: idSchema
+  genderId: idSchema.meta({
+    label: "性别",
+    component: "select",
+    section: "基本信息",
+    colSpan: 1,
+    option: { source: "master", code: "GENDER" },
+  }),
+
+  eduLevelId: idSchema
     .nullable()
     .optional()
     .meta({
-      label: "业务类型",
+      label: "文化程度",
       component: "select",
       section: "基本信息",
       colSpan: 1,
-      option: { source: "master", code: "BUSINESS" },
+      option: { source: "master", code: "EDU_LEVEL" },
     }),
 
+  jobTitleId: idSchema
+    .nullable()
+    .optional()
+    .meta({
+      label: "岗位",
+      component: "select",
+      section: "基本信息",
+      colSpan: 1,
+      option: { source: "master", code: "JOB_TITLE" },
+    }),
+
+  professional_title_id: idSchema
+    .nullable()
+    .optional()
+    .meta({
+      label: "职称",
+      component: "select",
+      section: "基本信息",
+      colSpan: 1,
+      option: { source: "master", code: "PROFESSIONAL_TITLE" },
+    }),
+  employeeMajor: z.string().max(50, { message: "专业最多50个字符" }).optional().nullable().meta({
+    label: "专业",
+    component: "input",
+    section: "基本信息",
+    colSpan: 1,
+  }),
   countryCode: countryCodeSchema.default("CN").meta({
     label: "国家代码",
     component: "select",

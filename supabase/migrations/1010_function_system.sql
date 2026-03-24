@@ -36,7 +36,7 @@ begin
   from rbac.roles
   where code = 'SUPER_ADMIN';
 
-  -- 创建 employee
+  -- 创建 person
   select id into v_group_org_id
   from public.organizations
   where code = '0-001-003';
@@ -45,18 +45,16 @@ begin
     raise exception 'Group organization not found';
   end if;
 
-  insert into public.employees (
+  insert into hr.persons (
     id,
     name,
     code,
-    org_node_id,
     is_active
   )
   values (
     p_user_id,
     '系统管理员',
     'admin',
-    v_group_org_id,
     true
   )
   on conflict (id) do nothing;

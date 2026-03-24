@@ -1,13 +1,7 @@
 // types/dto.types.ts
 
 import { Camelize } from "@/lib/utils/case-converter";
-import {
-  ExternalMapInsert,
-  ExternalMapRow,
-  ImportBatch,
-  ImportRecordInsert,
-  ImportRecordRow,
-} from "./entity.types";
+import { ImportBatch, ImportRecordInsert, ImportRecordRow } from "./entity.types";
 
 export type CreateImportBatch = {
   entityType: string;
@@ -23,7 +17,3 @@ export type UpdateImportBatch = {
 export type ImportRecordInput = Camelize<ImportRecordInsert>;
 
 export type ImportRecordEntity = Camelize<ImportRecordRow>;
-
-export type ExternalMapInput = Camelize<ExternalMapInsert>;
-
-export type ExternalMapEntity = Camelize<ExternalMapRow>;

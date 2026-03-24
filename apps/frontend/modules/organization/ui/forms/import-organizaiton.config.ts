@@ -1,4 +1,4 @@
-import { ImportConfig } from "@/modules/import/types";
+import { ImportConfig } from "@/lib/import-engine/types";
 import { OrganizationSchema } from "../../schemas";
 
 export const organizationImportConfig: ImportConfig<"organizations"> = {
@@ -28,5 +28,9 @@ export const organizationImportConfig: ImportConfig<"organizations"> = {
     parentId: "parentOrganizations",
     orgTypeId: "masterDatas",
     orgCategoryId: "masterDatas",
+  },
+  getExternalVersion: (row) => {
+    const versionStr = row["ctcemti_bltjzz_serial_version"];
+    return versionStr ? Number(versionStr) : 0;
   },
 };

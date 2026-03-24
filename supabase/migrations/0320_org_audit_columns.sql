@@ -13,15 +13,15 @@ add column deleted_at timestamptz;
 alter table organizations
 add column created_by uuid
 default system.current_user_id()
-references employees(id) on delete set null;
+references hr.persons(id) on delete set null;
 
 alter table organizations
 add column updated_by uuid
-references employees(id) on delete set null;
+references hr.persons(id) on delete set null;
 
 alter table organizations
 add column deleted_by uuid
-references employees(id) on delete set null;
+references hr.persons(id) on delete set null;
 
 
 create trigger trg_organizations_audit_updated

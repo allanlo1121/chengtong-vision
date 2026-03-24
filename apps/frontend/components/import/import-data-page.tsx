@@ -2,20 +2,25 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { TableName } from "@/modules/shared/types";
-import { ImportRowMap } from "../types/improt-row-map.types";
+import { TableSchemaName } from "@/modules/shared/types";
+import { ImportRowMap } from "@/lib/import-engine/types/improt-row-map.types";
 
 import JsonUploader from "./json-uploader";
 import JsonPreview from "./json-preview";
 
 import { Button } from "@/components/ui/button";
-import { ImportRow, ImportConfig, ImportErrorRow } from "@/modules/import/types";
-import { handleImportData } from "../engine/handle-import-data";
-import { importEntitiesAction } from "../actions/import.action";
-import { importValidatorData } from "../engine/import-validator-data";
+import { ImportRow, ImportConfig, ImportErrorRow } from "@/lib/import-engine/types";
+import { handleImportData } from "@/lib/import-engine/engine/handle-import-data";
+import { importEntitiesAction } from "@/lib/import-engine/actions/import.action";
+import { importValidatorData } from "@/lib/import-engine/engine/import-validator-data";
 import { ImportResultDialog } from "./import-result-dialog";
+import { runImport } from "@/lib/import-engine/import-orchestrator";
 
-export default function ImportPage<T extends TableName>({ config }: { config: ImportConfig<T> }) {
+export default function ImportPage<T extends TableSchemaName>({
+  config,
+}: {
+  config: ImportConfig<T>;
+}) {
   const router = useRouter();
 
   const [raws, setRaws] = useState<Record<keyof ImportRowMap[T], any>[]>([]);
@@ -42,7 +47,7 @@ export default function ImportPage<T extends TableName>({ config }: { config: Im
     setLoading(true);
     try {
       //插入验证数据
-      const result = await importEntitiesAction<T>(config, validRows);
+      const result = await runImport<T>(config.entity, validRows);
 
       // console.log("result", result);
 

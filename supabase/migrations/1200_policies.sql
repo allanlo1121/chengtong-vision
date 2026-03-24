@@ -39,33 +39,33 @@ using (
 -- =====================================================
 -- 为 employees 表启用 RLS
 -- =====================================================
-alter table public.employees enable row level security;
-alter table public.employees force row level security;
+alter table hr.employees enable row level security;
+alter table hr.employees force row level security;
 
 
 create policy "employee read policy"
-on public.employees
+on hr.employees
 for select
 using (
   rbac.has_permission('employee.read')
 );
 
 create policy "employee write policy"
-on public.employees
+on hr.employees
 for insert
 with check (
   rbac.has_permission('employee.write')
 );
 
 create policy "employee update policy"
-on public.employees
+on hr.employees
 for update
 using (
   rbac.has_permission('employee.write')
 );
 
 create policy "employee delete policy"
-on public.employees
+on hr.employees
 for delete
 using (
   rbac.has_permission('employee.write')
