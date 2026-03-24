@@ -11,13 +11,14 @@ security definer
 as $$
 declare
   v_role_id uuid;
-  v_group_org_id uuid;
+  v_person_id uuid;
 begin
 
   if auth.role() <> 'service_role' then
     raise exception 'permission denied';
   end if;
 
+  -- 已初始化直接返回
   if exists (
     select 1
     from system.bootstrap_state
@@ -27,7 +28,9 @@ begin
     return;
   end if;
 
-  -- 创建角色
+  -- =========================
+  -- 1️⃣ 创建角色
+  -- =========================
   insert into rbac.roles (code, name)
   values ('SUPER_ADMIN', '超级管理员')
   on conflict (code) do nothing;
@@ -36,35 +39,35 @@ begin
   from rbac.roles
   where code = 'SUPER_ADMIN';
 
-  -- 创建 person
-  select id into v_group_org_id
-  from public.organizations
-  where code = '0-001-003';
-
-  if v_group_org_id is null then
-    raise exception 'Group organization not found';
-  end if;
-
+  -- =========================
+  -- 2️⃣ 创建 person（关键修复）
+  -- =========================
   insert into hr.persons (
     id,
+    auth_id,
     name,
     code,
     is_active
   )
   values (
-    p_user_id,
+    gen_random_uuid(),   -- ⭐ 不再用 auth.id
+    p_user_id,           -- ⭐ 绑定 auth
     '系统管理员',
     'admin',
     true
   )
-  on conflict (id) do nothing;
+  returning id into v_person_id;
 
-  -- 绑定角色
+  -- =========================
+  -- 3️⃣ 绑定角色（person 级）
+  -- =========================
   insert into rbac.user_roles (user_id, role_id)
-  values (p_user_id, v_role_id)
+  values (v_person_id, v_role_id)
   on conflict do nothing;
 
-  -- 标记完成
+  -- =========================
+  -- 4️⃣ 标记完成
+  -- =========================
   insert into system.bootstrap_state (version, completed, executed_at)
   values ('1.0.0', true, now())
   on conflict (version)

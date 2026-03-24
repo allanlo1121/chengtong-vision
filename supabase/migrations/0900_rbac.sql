@@ -38,7 +38,22 @@ create table if not exists rbac.permissions (
   updated_at timestamptz default now(),
   constraint permissions_module_action_unique unique (module, action)
 );
+create table rbac.post_permissions (
+  id uuid primary key default gen_random_uuid(),
 
+  post_id uuid not null,
+  permission_id uuid not null,
+
+  unique (post_id, permission_id)
+);
+create table rbac.person_permissions (
+  id uuid primary key default gen_random_uuid(),
+
+  person_id uuid not null references hr.persons(id) on delete cascade,
+  permission_id uuid not null references rbac.permissions(id) on delete cascade,
+
+  unique (person_id, permission_id)
+);
 -- 角色
 create table if not exists rbac.roles (
   id uuid primary key default gen_random_uuid(),
@@ -102,14 +117,46 @@ stable
 security definer
 set search_path = public, rbac
 as $$
+  with current_person as (
+    select id
+    from hr.persons
+    where auth_id = auth.uid()
+  ),
+
+  role_perms as (
+    select p.code
+    from current_person cp
+    join rbac.user_roles ur on ur.user_id = cp.id
+    join rbac.role_permissions rp on rp.role_id = ur.role_id
+    join rbac.permissions p on p.id = rp.permission_id
+  ),
+
+  post_perms as (
+    select p.code
+    from current_person cp
+    join hr.employees e on e.person_id = cp.id
+    join hr.employee_posts ep on ep.employee_id = e.id
+    join rbac.post_permissions pp on pp.post_id = ep.post_id
+    join rbac.permissions p on p.id = pp.permission_id
+  ),
+
+  direct_perms as (
+    select p.code
+    from current_person cp
+    join rbac.person_permissions dp on dp.person_id = cp.id
+    join rbac.permissions p on p.id = dp.permission_id
+  )
+
   select exists (
     select 1
-    from rbac.user_roles ur
-    join rbac.role_permissions rp on ur.role_id = rp.role_id
-    join rbac.permissions p on rp.permission_id = p.id
-    where ur.user_id = auth.uid()
-      and p.code = p_code
-      and p.is_disabled = false
+    from (
+      select code from role_perms
+      union
+      select code from post_perms
+      union
+      select code from direct_perms
+    ) all_perms
+    where code = p_code
   );
 $$;
 
