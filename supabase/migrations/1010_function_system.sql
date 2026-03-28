@@ -39,22 +39,26 @@ begin
   from rbac.roles
   where code = 'SUPER_ADMIN';
 
-  -- =========================
-  -- 2️⃣ 创建 person（关键修复）
-  -- =========================
+  -- 创建 person
+  select id into v_group_org_id
+  from public.organizations
+  where code = '0-001-003';
+
+  if v_group_org_id is null then
+    raise exception 'Group organization not found';
+  end if;
+
   insert into hr.persons (
     id,
     auth_id,
     name,
-    code,
-    is_active
+    code
   )
   values (
     gen_random_uuid(),   -- ⭐ 不再用 auth.id
     p_user_id,           -- ⭐ 绑定 auth
     '系统管理员',
-    'admin',
-    true
+    'admin'
   )
   returning id into v_person_id;
 

@@ -95,293 +95,6 @@ export type Database = {
         };
         Relationships: [];
       };
-      employee_org_access: {
-        Row: {
-          employee_id: string | null;
-          id: string;
-          org_id: string | null;
-        };
-        Insert: {
-          employee_id?: string | null;
-          id?: string;
-          org_id?: string | null;
-        };
-        Update: {
-          employee_id?: string | null;
-          id?: string;
-          org_id?: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "employee_org_access_employee_id_fkey";
-            columns: ["employee_id"];
-            isOneToOne: false;
-            referencedRelation: "employees";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employee_org_access_employee_id_fkey";
-            columns: ["employee_id"];
-            isOneToOne: false;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
-          },
-          {
-            foreignKeyName: "employee_org_access_org_id_fkey";
-            columns: ["org_id"];
-            isOneToOne: false;
-            referencedRelation: "organizations";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employee_org_access_org_id_fkey";
-            columns: ["org_id"];
-            isOneToOne: false;
-            referencedRelation: "v_organizations_detail";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employee_org_access_org_id_fkey";
-            columns: ["org_id"];
-            isOneToOne: false;
-            referencedRelation: "v_organizations_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employee_org_access_org_id_fkey";
-            columns: ["org_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tree_nodes";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employee_org_access_org_id_fkey";
-            columns: ["org_id"];
-            isOneToOne: false;
-            referencedRelation: "v_user_orgs";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      employees: {
-        Row: {
-          birthday: string | null;
-          code: string;
-          created_at: string | null;
-          created_by: string | null;
-          deleted_at: string | null;
-          deleted_by: string | null;
-          edu_level_id: string | null;
-          effect_at: string | null;
-          email: string | null;
-          gender_id: string | null;
-          id: string;
-          idcard: string | null;
-          is_active: boolean | null;
-          job_title_id: string | null;
-          major: string | null;
-          name: string;
-          org_node_id: string | null;
-          phone: string | null;
-          remark: string | null;
-          type_id: string | null;
-          updated_at: string | null;
-          updated_by: string | null;
-          work_start_date: string | null;
-        };
-        Insert: {
-          birthday?: string | null;
-          code: string;
-          created_at?: string | null;
-          created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
-          edu_level_id?: string | null;
-          effect_at?: string | null;
-          email?: string | null;
-          gender_id?: string | null;
-          id: string;
-          idcard?: string | null;
-          is_active?: boolean | null;
-          job_title_id?: string | null;
-          major?: string | null;
-          name: string;
-          org_node_id?: string | null;
-          phone?: string | null;
-          remark?: string | null;
-          type_id?: string | null;
-          updated_at?: string | null;
-          updated_by?: string | null;
-          work_start_date?: string | null;
-        };
-        Update: {
-          birthday?: string | null;
-          code?: string;
-          created_at?: string | null;
-          created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
-          edu_level_id?: string | null;
-          effect_at?: string | null;
-          email?: string | null;
-          gender_id?: string | null;
-          id?: string;
-          idcard?: string | null;
-          is_active?: boolean | null;
-          job_title_id?: string | null;
-          major?: string | null;
-          name?: string;
-          org_node_id?: string | null;
-          phone?: string | null;
-          remark?: string | null;
-          type_id?: string | null;
-          updated_at?: string | null;
-          updated_by?: string | null;
-          work_start_date?: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "employees_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "employees";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employees_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
-          },
-          {
-            foreignKeyName: "employees_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "employees";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employees_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
-          },
-          {
-            foreignKeyName: "employees_edu_level_id_fkey";
-            columns: ["edu_level_id"];
-            isOneToOne: false;
-            referencedRelation: "master_data";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employees_edu_level_id_fkey";
-            columns: ["edu_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_master_options";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employees_gender_id_fkey";
-            columns: ["gender_id"];
-            isOneToOne: false;
-            referencedRelation: "master_data";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employees_gender_id_fkey";
-            columns: ["gender_id"];
-            isOneToOne: false;
-            referencedRelation: "v_master_options";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employees_id_fkey";
-            columns: ["id"];
-            isOneToOne: true;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["user_id"];
-          },
-          {
-            foreignKeyName: "employees_job_title_id_fkey";
-            columns: ["job_title_id"];
-            isOneToOne: false;
-            referencedRelation: "master_data";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employees_job_title_id_fkey";
-            columns: ["job_title_id"];
-            isOneToOne: false;
-            referencedRelation: "v_master_options";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employees_org_node_id_fkey";
-            columns: ["org_node_id"];
-            isOneToOne: false;
-            referencedRelation: "organizations";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employees_org_node_id_fkey";
-            columns: ["org_node_id"];
-            isOneToOne: false;
-            referencedRelation: "v_organizations_detail";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employees_org_node_id_fkey";
-            columns: ["org_node_id"];
-            isOneToOne: false;
-            referencedRelation: "v_organizations_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employees_org_node_id_fkey";
-            columns: ["org_node_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tree_nodes";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employees_org_node_id_fkey";
-            columns: ["org_node_id"];
-            isOneToOne: false;
-            referencedRelation: "v_user_orgs";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employees_type_id_fkey";
-            columns: ["type_id"];
-            isOneToOne: false;
-            referencedRelation: "master_data";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employees_type_id_fkey";
-            columns: ["type_id"];
-            isOneToOne: false;
-            referencedRelation: "v_master_options";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employees_updated_by_fkey";
-            columns: ["updated_by"];
-            isOneToOne: false;
-            referencedRelation: "employees";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employees_updated_by_fkey";
-            columns: ["updated_by"];
-            isOneToOne: false;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
-          },
-        ];
-      };
       import_batches: {
         Row: {
           failed_count: number | null;
@@ -737,29 +450,15 @@ export type Database = {
             foreignKeyName: "organizations_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
-            referencedRelation: "employees";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
-          },
-          {
-            foreignKeyName: "organizations_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "employees";
-            referencedColumns: ["id"];
+            referencedColumns: ["person_id"];
           },
           {
             foreignKeyName: "organizations_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
+            referencedColumns: ["person_id"];
           },
           {
             foreignKeyName: "organizations_district_code_fkey";
@@ -825,13 +524,6 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "organizations_parent_id_fkey";
-            columns: ["parent_id"];
-            isOneToOne: false;
-            referencedRelation: "v_user_orgs";
-            referencedColumns: ["id"];
-          },
-          {
             foreignKeyName: "organizations_province_code_fkey";
             columns: ["province_code"];
             isOneToOne: false;
@@ -842,15 +534,8 @@ export type Database = {
             foreignKeyName: "organizations_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
-            referencedRelation: "employees";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_updated_by_fkey";
-            columns: ["updated_by"];
-            isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
+            referencedColumns: ["person_id"];
           },
         ];
       };
@@ -896,29 +581,15 @@ export type Database = {
             foreignKeyName: "projects_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
-            referencedRelation: "employees";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "projects_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
-          },
-          {
-            foreignKeyName: "projects_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "employees";
-            referencedColumns: ["id"];
+            referencedColumns: ["person_id"];
           },
           {
             foreignKeyName: "projects_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
+            referencedColumns: ["person_id"];
           },
           {
             foreignKeyName: "projects_org_node_id_fkey";
@@ -949,25 +620,11 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "projects_org_node_id_fkey";
-            columns: ["org_node_id"];
-            isOneToOne: false;
-            referencedRelation: "v_user_orgs";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "projects_updated_by_fkey";
-            columns: ["updated_by"];
-            isOneToOne: false;
-            referencedRelation: "employees";
-            referencedColumns: ["id"];
-          },
-          {
             foreignKeyName: "projects_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
+            referencedColumns: ["person_id"];
           },
         ];
       };
@@ -1013,29 +670,15 @@ export type Database = {
             foreignKeyName: "user_favorite_projects_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
-            referencedRelation: "employees";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "user_favorite_projects_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
-          },
-          {
-            foreignKeyName: "user_favorite_projects_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "employees";
-            referencedColumns: ["id"];
+            referencedColumns: ["person_id"];
           },
           {
             foreignKeyName: "user_favorite_projects_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
+            referencedColumns: ["person_id"];
           },
           {
             foreignKeyName: "user_favorite_projects_project_id_fkey";
@@ -1055,29 +698,15 @@ export type Database = {
             foreignKeyName: "user_favorite_projects_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
-            referencedRelation: "employees";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "user_favorite_projects_updated_by_fkey";
-            columns: ["updated_by"];
-            isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
-          },
-          {
-            foreignKeyName: "user_favorite_projects_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "employees";
-            referencedColumns: ["id"];
+            referencedColumns: ["person_id"];
           },
           {
             foreignKeyName: "user_favorite_projects_user_id_fkey";
             columns: ["user_id"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
+            referencedColumns: ["person_id"];
           },
         ];
       };
@@ -1168,66 +797,46 @@ export type Database = {
             referencedRelation: "v_tree_nodes";
             referencedColumns: ["id"];
           },
-          {
-            foreignKeyName: "organizations_parent_id_fkey";
-            columns: ["parent_id"];
-            isOneToOne: false;
-            referencedRelation: "v_user_orgs";
-            referencedColumns: ["id"];
-          },
         ];
       };
       v_runtime_user: {
         Row: {
           employee_id: string | null;
           name: string | null;
-          org_node_id: string | null;
           org_path: unknown;
+          organization_id: string | null;
           permissions: string[] | null;
+          person_id: string | null;
           roles: string[] | null;
           user_id: string | null;
         };
         Relationships: [
           {
-            foreignKeyName: "employees_id_fkey";
-            columns: ["employee_id"];
-            isOneToOne: true;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["user_id"];
-          },
-          {
-            foreignKeyName: "employees_org_node_id_fkey";
-            columns: ["org_node_id"];
+            foreignKeyName: "employees_organization_id_fkey";
+            columns: ["organization_id"];
             isOneToOne: false;
             referencedRelation: "organizations";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "employees_org_node_id_fkey";
-            columns: ["org_node_id"];
+            foreignKeyName: "employees_organization_id_fkey";
+            columns: ["organization_id"];
             isOneToOne: false;
             referencedRelation: "v_organizations_detail";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "employees_org_node_id_fkey";
-            columns: ["org_node_id"];
+            foreignKeyName: "employees_organization_id_fkey";
+            columns: ["organization_id"];
             isOneToOne: false;
             referencedRelation: "v_organizations_list";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "employees_org_node_id_fkey";
-            columns: ["org_node_id"];
+            foreignKeyName: "employees_organization_id_fkey";
+            columns: ["organization_id"];
             isOneToOne: false;
             referencedRelation: "v_tree_nodes";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employees_org_node_id_fkey";
-            columns: ["org_node_id"];
-            isOneToOne: false;
-            referencedRelation: "v_user_orgs";
             referencedColumns: ["id"];
           },
         ];
@@ -1290,13 +899,6 @@ export type Database = {
             columns: ["parent_id"];
             isOneToOne: false;
             referencedRelation: "v_tree_nodes";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_parent_id_fkey";
-            columns: ["parent_id"];
-            isOneToOne: false;
-            referencedRelation: "v_user_orgs";
             referencedColumns: ["id"];
           },
         ];
@@ -1374,29 +976,15 @@ export type Database = {
             foreignKeyName: "menus_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
-            referencedRelation: "employees";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "menus_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
-          },
-          {
-            foreignKeyName: "menus_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "employees";
-            referencedColumns: ["id"];
+            referencedColumns: ["person_id"];
           },
           {
             foreignKeyName: "menus_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
+            referencedColumns: ["person_id"];
           },
           {
             foreignKeyName: "menus_parent_id_fkey";
@@ -1409,25 +997,10 @@ export type Database = {
             foreignKeyName: "menus_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
-            referencedRelation: "employees";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "menus_updated_by_fkey";
-            columns: ["updated_by"];
-            isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
+            referencedColumns: ["person_id"];
           },
         ];
-      };
-      v_user_orgs: {
-        Row: {
-          full_name: string | null;
-          id: string | null;
-          name: string | null;
-        };
-        Relationships: [];
       };
     };
     Functions: {
@@ -1472,24 +1045,6 @@ export type Database = {
       org_move_node: {
         Args: { p_id: string; p_new_parent: string };
         Returns: undefined;
-      };
-      sync_entity_auto: {
-        Args: {
-          p_external_id_col?: string;
-          p_rows: Json;
-          p_table: string;
-          p_version_col?: string;
-        };
-        Returns: Json;
-      };
-      sync_entity_by_external: {
-        Args: {
-          p_external_id_col?: string;
-          p_rows: Json;
-          p_table: string;
-          p_version_col?: string;
-        };
-        Returns: Json;
       };
       text2ltree: { Args: { "": string }; Returns: unknown };
       tree_context_nodes: {
@@ -1587,6 +1142,50 @@ export type Database = {
           module?: string;
           name?: string;
           updated_at?: string | null;
+        };
+        Relationships: [];
+      };
+      person_permissions: {
+        Row: {
+          id: string;
+          permission_id: string;
+          person_id: string;
+        };
+        Insert: {
+          id?: string;
+          permission_id: string;
+          person_id: string;
+        };
+        Update: {
+          id?: string;
+          permission_id?: string;
+          person_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "person_permissions_permission_id_fkey";
+            columns: ["permission_id"];
+            isOneToOne: false;
+            referencedRelation: "permissions";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      post_permissions: {
+        Row: {
+          id: string;
+          permission_id: string;
+          post_id: string;
+        };
+        Insert: {
+          id?: string;
+          permission_id: string;
+          post_id: string;
+        };
+        Update: {
+          id?: string;
+          permission_id?: string;
+          post_id?: string;
         };
         Relationships: [];
       };

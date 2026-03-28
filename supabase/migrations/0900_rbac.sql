@@ -73,7 +73,7 @@ create table if not exists rbac.role_permissions (
   unique (role_id, permission_id)
 );
 
--- 用户-角色（假设 employees.id 对应 auth.uid()）
+-- 用户-角色（persons.id 对应 auth.uid()）
 create table if not exists rbac.user_roles (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references hr.persons(id) on delete cascade,
