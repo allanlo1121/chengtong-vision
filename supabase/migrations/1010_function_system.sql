@@ -39,15 +39,7 @@ begin
   from rbac.roles
   where code = 'SUPER_ADMIN';
 
-  -- 创建 person
-  select id into v_group_org_id
-  from public.organizations
-  where code = '0-001-003';
-
-  if v_group_org_id is null then
-    raise exception 'Group organization not found';
-  end if;
-
+  -- 创建 person，并绑定 auth
   insert into hr.persons (
     id,
     auth_id,

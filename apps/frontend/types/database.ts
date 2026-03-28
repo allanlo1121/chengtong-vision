@@ -1151,6 +1151,50 @@ export type Database = {
         }
         Relationships: []
       }
+      person_permissions: {
+        Row: {
+          id: string
+          permission_id: string
+          person_id: string
+        }
+        Insert: {
+          id?: string
+          permission_id: string
+          person_id: string
+        }
+        Update: {
+          id?: string
+          permission_id?: string
+          person_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "person_permissions_permission_id_fkey"
+            columns: ["permission_id"]
+            isOneToOne: false
+            referencedRelation: "permissions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      post_permissions: {
+        Row: {
+          id: string
+          permission_id: string
+          post_id: string
+        }
+        Insert: {
+          id?: string
+          permission_id: string
+          post_id: string
+        }
+        Update: {
+          id?: string
+          permission_id?: string
+          post_id?: string
+        }
+        Relationships: []
+      }
       role_permissions: {
         Row: {
           id: string
