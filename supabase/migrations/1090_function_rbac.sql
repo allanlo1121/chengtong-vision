@@ -11,16 +11,16 @@ as $$
   where ur.user_id = auth.uid()
 $$;
 
--- create or replace function auth.jwt_custom_claims()
--- returns jsonb
--- language sql
--- stable
--- security definer
--- as $$
---   select jsonb_build_object(
---     'permissions',
---     rbac.jwt_permissions()
---   );
--- $$;
+create or replace function auth.jwt_custom_claims()
+returns jsonb
+language sql
+stable
+security definer
+as $$
+  select jsonb_build_object(
+    'permissions',
+    rbac.jwt_permissions()
+  );
+$$;
 
 

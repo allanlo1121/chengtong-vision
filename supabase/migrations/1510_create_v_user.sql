@@ -42,7 +42,7 @@ select
     select coalesce(array_agg(distinct r.code), '{}')
     from rbac.user_roles ur
     join rbac.roles r on r.id = ur.role_id
-    where ur.user_id = u.id
+    where ur.user_id = p.id
   ) as roles,
 
   (
@@ -50,11 +50,11 @@ select
     from rbac.user_roles ur
     join rbac.role_permissions rp on rp.role_id = ur.role_id
     join rbac.permissions perm on perm.id = rp.permission_id
-    where ur.user_id = u.id
+    where ur.user_id = p.id
   ) as permissions
 
 from auth.users u
 join hr.persons p on p.auth_id = u.id
-join hr.employees e on e.person_id = p.id
-join public.organizations o on o.id = e.organization_id
+left join hr.employees e on e.person_id = p.id
+left join public.organizations o on o.id = e.organization_id
 where u.id = auth.uid();

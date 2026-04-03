@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/core/supabase/server";
+import { createClient } from "@/lib/infra/supabase/server";
 import {
   ImportError,
   ImportPersistResult,
@@ -33,9 +33,19 @@ async function getVersionsByCodes<T extends TableName>(
   return map;
 }
 async function upsertMany<T extends TableName>(table: T, rows: any[]) {
-  console.log(`Upserting ${rows[0]} rows into table ${table}`);
+  console.log(`Upserting ${rows.length} rows into table ${table}`);
   const dbRows = rows.map((r) => camelToSnake(r));
   const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  console.log("🔍 supabase user:", user);
+  // const { data } = await supabase.rpc("debug_auth");
+  // console.log("🔍 DB auth context:", data);
+  const { data } = await supabase.schema("system").rpc("current_user_id");
+  console.log("🔍 DB current_user_id:", data);
+  console.log("dbRows", dbRows[0]);
   const { error } = await supabase.from(table).upsert(dbRows, {
     onConflict: "code",
   });

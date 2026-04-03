@@ -31,5 +31,4 @@ create table public.import_records (
   status text, -- inserted / updated / skipped / error
   message text,
 
-  created_at timestamptz default now()
 );

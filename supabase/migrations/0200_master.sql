@@ -7,14 +7,7 @@ create table public.master_definitions (
   code text not null unique,
   name text not null,
   description text,
-  is_disabled boolean not null default false,
-  
-  created_at timestamptz not null default now(),
-  updated_at timestamptz,
-  created_by uuid references auth.users(id) on delete set null,
-  updated_by uuid references auth.users(id) on delete set null,
-  deleted_at timestamptz,
-  deleted_by uuid references auth.users(id) on delete set null
+  is_disabled boolean not null default false 
 
 ) TABLESPACE pg_default;
 
@@ -28,12 +21,6 @@ create table public.master_data (
   description text null,
 
   is_disabled boolean not null default false,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz,
-  created_by uuid references auth.users(id) on delete set null,
-  updated_by uuid references auth.users(id) on delete set null,
-  deleted_at timestamptz,
-  deleted_by uuid references auth.users(id) on delete set null,
 
   constraint uq_master_data_def_code 
       unique (definition_id, code)
@@ -43,9 +30,6 @@ create table public.master_data (
 
 create index idx_master_data_definition
 on public.master_data(definition_id);
-
-create index idx_master_data_deleted
-on public.master_data(deleted_at);
 
 
 create table public.countries (
@@ -58,12 +42,9 @@ create table public.countries (
   numeric_code text unique,
 
   sort_order integer not null default 0,
-  is_disabled boolean not null default false,
+  is_disabled boolean not null default false
 
-  created_at timestamptz not null default now(),
-  updated_at timestamptz
 );
-
 
 
 
@@ -81,24 +62,6 @@ create table public.admin_regions (
   pinyin_code text,
 
   sort_order integer not null default 0,
-  is_disabled boolean not null default false,
-
-  created_at timestamptz not null default now(),
-  updated_at timestamptz
+  is_disabled boolean not null default false
 );
 
-create view public.v_master_options as
-select
-  d.id,
-  d.code,
-  d.name,
-  d.description,
-  d.is_disabled,
-  def.id as definition_id,
-  def.code as definition_code,
-  def.name as definition_name
-from public.master_data d
-join public.master_definitions def
-  on d.definition_id = def.id
-where d.is_disabled = false
-  and d.deleted_at is null;

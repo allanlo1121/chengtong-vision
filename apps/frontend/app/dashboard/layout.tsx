@@ -17,6 +17,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
     return <div>未绑定员工</div>;
   }
 
+  console.log("runtimeUser", runtimeUser);
+
   // 2️⃣ 查询菜单（RLS 自动过滤）
   const { data: menus } = await supabase
     .schema("system")
