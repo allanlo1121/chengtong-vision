@@ -1,5 +1,5 @@
-create schema if not exists hr;
 
+create schema if not exists hr;
 
 create table hr.persons (
   id uuid primary key default gen_random_uuid(),
@@ -14,9 +14,4 @@ create table hr.persons (
   id_card text,
   phone text,
   email text
-
 );
-
-
-
-
