@@ -12,7 +12,10 @@ export type Database = {
       admin_regions: {
         Row: {
           code: string
-          created_at: string
+          created_at: string | null
+          created_by: string | null
+          deleted_at: string | null
+          deleted_by: string | null
           full_name: string | null
           id: string
           is_disabled: boolean
@@ -23,10 +26,14 @@ export type Database = {
           short_name: string | null
           sort_order: number
           updated_at: string | null
+          updated_by: string | null
         }
         Insert: {
           code: string
-          created_at?: string
+          created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           full_name?: string | null
           id?: string
           is_disabled?: boolean
@@ -37,10 +44,14 @@ export type Database = {
           short_name?: string | null
           sort_order?: number
           updated_at?: string | null
+          updated_by?: string | null
         }
         Update: {
           code?: string
-          created_at?: string
+          created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           full_name?: string | null
           id?: string
           is_disabled?: boolean
@@ -51,8 +62,23 @@ export type Database = {
           short_name?: string | null
           sort_order?: number
           updated_at?: string | null
+          updated_by?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "admin_regions_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "v_runtime_user"
+            referencedColumns: ["person_id"]
+          },
+          {
+            foreignKeyName: "admin_regions_deleted_by_fkey"
+            columns: ["deleted_by"]
+            isOneToOne: false
+            referencedRelation: "v_runtime_user"
+            referencedColumns: ["person_id"]
+          },
           {
             foreignKeyName: "admin_regions_parent_code_fkey"
             columns: ["parent_code"]
@@ -60,13 +86,23 @@ export type Database = {
             referencedRelation: "admin_regions"
             referencedColumns: ["code"]
           },
+          {
+            foreignKeyName: "admin_regions_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "v_runtime_user"
+            referencedColumns: ["person_id"]
+          },
         ]
       }
       countries: {
         Row: {
           alpha3_code: string | null
           code: string
-          created_at: string
+          created_at: string | null
+          created_by: string | null
+          deleted_at: string | null
+          deleted_by: string | null
           english_name: string | null
           id: string
           is_disabled: boolean
@@ -74,11 +110,15 @@ export type Database = {
           numeric_code: string | null
           sort_order: number
           updated_at: string | null
+          updated_by: string | null
         }
         Insert: {
           alpha3_code?: string | null
           code: string
-          created_at?: string
+          created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           english_name?: string | null
           id?: string
           is_disabled?: boolean
@@ -86,11 +126,15 @@ export type Database = {
           numeric_code?: string | null
           sort_order?: number
           updated_at?: string | null
+          updated_by?: string | null
         }
         Update: {
           alpha3_code?: string | null
           code?: string
-          created_at?: string
+          created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           english_name?: string | null
           id?: string
           is_disabled?: boolean
@@ -98,11 +142,38 @@ export type Database = {
           numeric_code?: string | null
           sort_order?: number
           updated_at?: string | null
+          updated_by?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "countries_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "v_runtime_user"
+            referencedColumns: ["person_id"]
+          },
+          {
+            foreignKeyName: "countries_deleted_by_fkey"
+            columns: ["deleted_by"]
+            isOneToOne: false
+            referencedRelation: "v_runtime_user"
+            referencedColumns: ["person_id"]
+          },
+          {
+            foreignKeyName: "countries_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "v_runtime_user"
+            referencedColumns: ["person_id"]
+          },
+        ]
       }
       import_batches: {
         Row: {
+          created_at: string | null
+          created_by: string | null
+          deleted_at: string | null
+          deleted_by: string | null
           failed_count: number | null
           finished_at: string | null
           id: string
@@ -112,9 +183,15 @@ export type Database = {
           status: string
           table_name: string
           total_count: number
+          updated_at: string | null
+          updated_by: string | null
           updated_count: number | null
         }
         Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           failed_count?: number | null
           finished_at?: string | null
           id?: string
@@ -124,9 +201,15 @@ export type Database = {
           status?: string
           table_name: string
           total_count: number
+          updated_at?: string | null
+          updated_by?: string | null
           updated_count?: number | null
         }
         Update: {
+          created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           failed_count?: number | null
           finished_at?: string | null
           id?: string
@@ -136,43 +219,82 @@ export type Database = {
           status?: string
           table_name?: string
           total_count?: number
+          updated_at?: string | null
+          updated_by?: string | null
           updated_count?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "import_batches_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "v_runtime_user"
+            referencedColumns: ["person_id"]
+          },
+          {
+            foreignKeyName: "import_batches_deleted_by_fkey"
+            columns: ["deleted_by"]
+            isOneToOne: false
+            referencedRelation: "v_runtime_user"
+            referencedColumns: ["person_id"]
+          },
+          {
+            foreignKeyName: "import_batches_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "v_runtime_user"
+            referencedColumns: ["person_id"]
+          },
+        ]
       }
       import_records: {
         Row: {
           batch_id: string | null
           created_at: string | null
+          created_by: string | null
           data: Json | null
+          deleted_at: string | null
+          deleted_by: string | null
           external_version: number | null
           id: string
           message: string | null
           raw: Json | null
           status: string | null
           table_name: string | null
+          updated_at: string | null
+          updated_by: string | null
         }
         Insert: {
           batch_id?: string | null
           created_at?: string | null
+          created_by?: string | null
           data?: Json | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           external_version?: number | null
           id?: string
           message?: string | null
           raw?: Json | null
           status?: string | null
           table_name?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
         }
         Update: {
           batch_id?: string | null
           created_at?: string | null
+          created_by?: string | null
           data?: Json | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           external_version?: number | null
           id?: string
           message?: string | null
           raw?: Json | null
           status?: string | null
           table_name?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
         }
         Relationships: [
           {
@@ -182,12 +304,33 @@ export type Database = {
             referencedRelation: "import_batches"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "import_records_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "v_runtime_user"
+            referencedColumns: ["person_id"]
+          },
+          {
+            foreignKeyName: "import_records_deleted_by_fkey"
+            columns: ["deleted_by"]
+            isOneToOne: false
+            referencedRelation: "v_runtime_user"
+            referencedColumns: ["person_id"]
+          },
+          {
+            foreignKeyName: "import_records_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "v_runtime_user"
+            referencedColumns: ["person_id"]
+          },
         ]
       }
       master_data: {
         Row: {
           code: string
-          created_at: string
+          created_at: string | null
           created_by: string | null
           definition_id: string
           deleted_at: string | null
@@ -201,7 +344,7 @@ export type Database = {
         }
         Insert: {
           code: string
-          created_at?: string
+          created_at?: string | null
           created_by?: string | null
           definition_id: string
           deleted_at?: string | null
@@ -215,7 +358,7 @@ export type Database = {
         }
         Update: {
           code?: string
-          created_at?: string
+          created_at?: string | null
           created_by?: string | null
           definition_id?: string
           deleted_at?: string | null
@@ -233,7 +376,7 @@ export type Database = {
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "v_runtime_user"
-            referencedColumns: ["user_id"]
+            referencedColumns: ["person_id"]
           },
           {
             foreignKeyName: "master_data_definition_id_fkey"
@@ -254,21 +397,21 @@ export type Database = {
             columns: ["deleted_by"]
             isOneToOne: false
             referencedRelation: "v_runtime_user"
-            referencedColumns: ["user_id"]
+            referencedColumns: ["person_id"]
           },
           {
             foreignKeyName: "master_data_updated_by_fkey"
             columns: ["updated_by"]
             isOneToOne: false
             referencedRelation: "v_runtime_user"
-            referencedColumns: ["user_id"]
+            referencedColumns: ["person_id"]
           },
         ]
       }
       master_definitions: {
         Row: {
           code: string
-          created_at: string
+          created_at: string | null
           created_by: string | null
           deleted_at: string | null
           deleted_by: string | null
@@ -281,7 +424,7 @@ export type Database = {
         }
         Insert: {
           code: string
-          created_at?: string
+          created_at?: string | null
           created_by?: string | null
           deleted_at?: string | null
           deleted_by?: string | null
@@ -294,7 +437,7 @@ export type Database = {
         }
         Update: {
           code?: string
-          created_at?: string
+          created_at?: string | null
           created_by?: string | null
           deleted_at?: string | null
           deleted_by?: string | null
@@ -311,21 +454,21 @@ export type Database = {
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "v_runtime_user"
-            referencedColumns: ["user_id"]
+            referencedColumns: ["person_id"]
           },
           {
             foreignKeyName: "master_definitions_deleted_by_fkey"
             columns: ["deleted_by"]
             isOneToOne: false
             referencedRelation: "v_runtime_user"
-            referencedColumns: ["user_id"]
+            referencedColumns: ["person_id"]
           },
           {
             foreignKeyName: "master_definitions_updated_by_fkey"
             columns: ["updated_by"]
             isOneToOne: false
             referencedRelation: "v_runtime_user"
-            referencedColumns: ["user_id"]
+            referencedColumns: ["person_id"]
           },
         ]
       }
@@ -636,7 +779,7 @@ export type Database = {
       }
       user_favorite_projects: {
         Row: {
-          created_at: string
+          created_at: string | null
           created_by: string | null
           deleted_at: string | null
           deleted_by: string | null
@@ -648,7 +791,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
           created_by?: string | null
           deleted_at?: string | null
           deleted_by?: string | null
@@ -660,7 +803,7 @@ export type Database = {
           user_id: string
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
           created_by?: string | null
           deleted_at?: string | null
           deleted_by?: string | null
@@ -1072,39 +1215,6 @@ export type Database = {
           isSetofReturn: true
         }
       }
-      tree_query_organizations: {
-        Args: {
-          p_include_children?: boolean
-          p_limit?: number
-          p_offset?: number
-          p_parent_id?: string
-          p_search?: string
-        }
-        Returns: {
-          business_name: string | null
-          city_name: string | null
-          country_name: string | null
-          created_at: string | null
-          district_name: string | null
-          id: string | null
-          is_active: boolean | null
-          level: number | null
-          name: string | null
-          org_category_name: string | null
-          org_type_name: string | null
-          parent_id: string | null
-          parent_org_name: string | null
-          path: unknown
-          province_name: string | null
-          sort_order: number | null
-        }[]
-        SetofOptions: {
-          from: "*"
-          to: "v_organizations_list"
-          isOneToOne: false
-          isSetofReturn: true
-        }
-      }
     }
     Enums: {
       [_ in never]: never
@@ -1120,34 +1230,46 @@ export type Database = {
           action: string
           code: string
           created_at: string | null
+          created_by: string | null
+          deleted_at: string | null
+          deleted_by: string | null
           description: string | null
           id: string
           is_disabled: boolean | null
           module: string
           name: string
           updated_at: string | null
+          updated_by: string | null
         }
         Insert: {
           action: string
           code: string
           created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           description?: string | null
           id?: string
           is_disabled?: boolean | null
           module: string
           name: string
           updated_at?: string | null
+          updated_by?: string | null
         }
         Update: {
           action?: string
           code?: string
           created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           description?: string | null
           id?: string
           is_disabled?: boolean | null
           module?: string
           name?: string
           updated_at?: string | null
+          updated_by?: string | null
         }
         Relationships: []
       }
@@ -1179,37 +1301,73 @@ export type Database = {
       }
       post_permissions: {
         Row: {
+          created_at: string | null
+          created_by: string | null
+          deleted_at: string | null
+          deleted_by: string | null
           id: string
           permission_id: string
           post_id: string
+          updated_at: string | null
+          updated_by: string | null
         }
         Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           id?: string
           permission_id: string
           post_id: string
+          updated_at?: string | null
+          updated_by?: string | null
         }
         Update: {
+          created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           id?: string
           permission_id?: string
           post_id?: string
+          updated_at?: string | null
+          updated_by?: string | null
         }
         Relationships: []
       }
       role_permissions: {
         Row: {
+          created_at: string | null
+          created_by: string | null
+          deleted_at: string | null
+          deleted_by: string | null
           id: string
           permission_id: string | null
           role_id: string | null
+          updated_at: string | null
+          updated_by: string | null
         }
         Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           id?: string
           permission_id?: string | null
           role_id?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
         }
         Update: {
+          created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           id?: string
           permission_id?: string | null
           role_id?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
         }
         Relationships: [
           {
@@ -1232,49 +1390,79 @@ export type Database = {
         Row: {
           code: string
           created_at: string | null
+          created_by: string | null
+          deleted_at: string | null
+          deleted_by: string | null
           description: string | null
           id: string
           is_disabled: boolean | null
           name: string
           updated_at: string | null
+          updated_by: string | null
         }
         Insert: {
           code: string
           created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           description?: string | null
           id?: string
           is_disabled?: boolean | null
           name: string
           updated_at?: string | null
+          updated_by?: string | null
         }
         Update: {
           code?: string
           created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           description?: string | null
           id?: string
           is_disabled?: boolean | null
           name?: string
           updated_at?: string | null
+          updated_by?: string | null
         }
         Relationships: []
       }
       user_roles: {
         Row: {
           assigned_at: string | null
+          created_at: string | null
+          created_by: string | null
+          deleted_at: string | null
+          deleted_by: string | null
           id: string
           role_id: string
+          updated_at: string | null
+          updated_by: string | null
           user_id: string
         }
         Insert: {
           assigned_at?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           id?: string
           role_id: string
+          updated_at?: string | null
+          updated_by?: string | null
           user_id: string
         }
         Update: {
           assigned_at?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           id?: string
           role_id?: string
+          updated_at?: string | null
+          updated_by?: string | null
           user_id?: string
         }
         Relationships: [
@@ -1363,7 +1551,7 @@ export type Database = {
       }
       menus: {
         Row: {
-          created_at: string
+          created_at: string | null
           created_by: string | null
           deleted_at: string | null
           deleted_by: string | null
@@ -1383,7 +1571,7 @@ export type Database = {
           updated_by: string | null
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
           created_by?: string | null
           deleted_at?: string | null
           deleted_by?: string | null
@@ -1403,7 +1591,7 @@ export type Database = {
           updated_by?: string | null
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
           created_by?: string | null
           deleted_at?: string | null
           deleted_by?: string | null
@@ -1482,12 +1670,8 @@ export type Database = {
       allowed_org_ids: { Args: never; Returns: string[] }
       bootstrap: { Args: { p_user_id: string }; Returns: undefined }
       current_org_id: { Args: never; Returns: string }
-      current_user_id: { Args: never; Returns: string }
+      current_person_id: { Args: never; Returns: string }
       is_super_admin: { Args: never; Returns: boolean }
-      soft_delete: {
-        Args: { p_ids: string[]; p_table: string }
-        Returns: number
-      }
     }
     Enums: {
       [_ in never]: never

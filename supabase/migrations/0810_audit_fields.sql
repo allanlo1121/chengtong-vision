@@ -13,11 +13,11 @@ alter table public.master_definitions
 add column created_by uuid
 references hr.persons(id) on delete set null;
 
-alter table hr.master_definitions
+alter table public.master_definitions
 add column updated_by uuid
 references hr.persons(id) on delete set null;
 
-alter table hr.master_definitions
+alter table public.master_definitions
 add column deleted_by uuid
 references hr.persons(id) on delete set null;
 
@@ -35,11 +35,11 @@ alter table public.master_data
 add column created_by uuid
 references hr.persons(id) on delete set null;
 
-alter table hr.master_data
+alter table public.master_data
 add column updated_by uuid
 references hr.persons(id) on delete set null;
 
-alter table hr.master_data
+alter table public.master_data
 add column deleted_by uuid
 references hr.persons(id) on delete set null;
 
@@ -57,11 +57,11 @@ alter table public.countries
 add column created_by uuid
 references hr.persons(id) on delete set null;
 
-alter table hr.countries
+alter table public.countries
 add column updated_by uuid
 references hr.persons(id) on delete set null;
 
-alter table hr.countries
+alter table public.countries
 add column deleted_by uuid
 references hr.persons(id) on delete set null;
 
@@ -79,11 +79,11 @@ alter table public.admin_regions
 add column created_by uuid
 references hr.persons(id) on delete set null;
 
-alter table hr.admin_regions
+alter table public.admin_regions
 add column updated_by uuid
 references hr.persons(id) on delete set null;
 
-alter table hr.admin_regions
+alter table public.admin_regions
 add column deleted_by uuid
 references hr.persons(id) on delete set null;
 

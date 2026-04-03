@@ -4,7 +4,6 @@ create table public.projects (
   name text not null,
   description text,
   org_node_id uuid not null
-    references public.organizations(id),
-
+    references public.organizations(id)
 
 );

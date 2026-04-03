@@ -29,6 +29,6 @@ create table public.import_records (
   external_version int,
 
   status text, -- inserted / updated / skipped / error
-  message text,
+  message text
 
 );

@@ -15,3 +15,16 @@ create table hr.persons (
   phone text,
   email text
 );
+
+
+insert into hr.persons (
+  id,
+  code,
+  name
+)
+values (
+  '00000000-0000-0000-0000-000000000001',
+  'SYSTEM',
+  '系统用户'
+)
+on conflict (id) do nothing;

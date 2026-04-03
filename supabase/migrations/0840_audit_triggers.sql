@@ -135,19 +135,19 @@ execute function system.audit_delete();
 --Education audit triggers
 -- INSERT
 create trigger trg_org_insert
-before insert on hr.education
+before insert on hr.educations
 for each row
 execute function system.audit_insert();
 
 -- UPDATE
 create trigger trg_org_update
-before update on hr.education
+before update on hr.educations
 for each row
 execute function system.audit_update();
 
 -- DELETE
 create trigger trg_org_delete
-before delete on hr.education
+before delete on hr.educations
 for each row
 execute function system.audit_delete();
 
