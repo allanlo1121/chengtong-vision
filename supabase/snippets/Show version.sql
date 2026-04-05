@@ -445,3 +445,85 @@ begin
 
 end;
 $$;
+
+
+create or replace function system.bootstrap(p_user_id uuid)
+returns void
+language plpgsql
+security definer
+as $$
+declare
+  v_role_id uuid;
+  v_person_id uuid;
+begin
+
+  -- 🔒 防并发
+  perform pg_advisory_xact_lock(999999);
+
+  if auth.role() <> 'service_role' then
+    raise exception 'permission denied';
+  end if;
+
+  -- 已初始化直接返回
+  if exists (
+    select 1
+    from system.bootstrap_state
+    where version = '1.0.0'
+      and completed = true
+  ) then
+    return;
+  end if;
+
+  -- =========================
+  -- 1️⃣ 创建角色
+  -- =========================
+  insert into rbac.roles (code, name)
+  values ('SUPER_ADMIN', '超级管理员')
+  on conflict (code) do nothing;
+
+  select id into v_role_id
+  from rbac.roles
+  where code = 'SUPER_ADMIN';
+
+  -- =========================
+  -- 2️⃣ 创建 / 获取 person
+  -- =========================
+  select id into v_person_id
+  from hr.persons
+  where auth_id = p_user_id
+  limit 1;
+
+  if v_person_id is null then
+    insert into hr.persons (
+      id,
+      auth_id,
+      name,
+      code
+    )
+    values (
+      gen_random_uuid(),
+      p_user_id,
+      '系统管理员',
+      'admin'
+    )
+    returning id into v_person_id;
+  end if;
+
+  -- =========================
+  -- 3️⃣ 绑定角色
+  -- =========================
+  insert into rbac.user_roles (user_id, role_id)
+  values (v_person_id, v_role_id)
+  on conflict do nothing;
+
+  -- =========================
+  -- 4️⃣ 标记完成
+  -- =========================
+  insert into system.bootstrap_state (version, completed, executed_at)
+  values ('1.0.0', true, now())
+  on conflict (version)
+  do update set completed = true,
+                executed_at = now();
+
+end;
+$$;
