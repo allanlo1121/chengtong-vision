@@ -47,7 +47,7 @@ begin
     code
   )
   values (
-    gen_random_uuid(),   -- ⭐ 不再用 auth.id
+    gen_random_uuid(),
     p_user_id,           -- ⭐ 绑定 auth
     '系统管理员',
     'admin'

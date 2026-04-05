@@ -25,6 +25,8 @@ export async function runBootstrap() {
   // 2️⃣ 创建 admin 用户
   const userId = await createAdminUser();
 
+  console.log("admin user created with id:", userId);
+
   // 3️⃣ 调数据库 bootstrap
   const { error } = await supabase.rpc("bootstrap", {
     p_user_id: userId,
