@@ -5,13 +5,14 @@ import {
   latitudeSchema,
   longitudeSchema,
 } from "@/modules/shared/schema";
+import { title } from "process";
 
-import { z } from "zod";
+import { email, z } from "zod";
 
 /**
- * 基础字段规则
+ * Person字段规则
  */
-export const OrganizationFields = {
+export const PersonSchema = z.object({
   name: z
     .string()
     .min(2, { message: "员工姓名至少2个字符" })
@@ -41,22 +42,6 @@ export const OrganizationFields = {
       description: "唯一标识，建议使用字母、数字和下划线",
     }),
 
-  orgNodeId: idSchema.meta({
-    label: "所属组织节点",
-    component: "treeSelect",
-    section: "基本信息",
-    colSpan: 1,
-    option: { source: "organization_tree", parentId: null },
-  }),
-
-  employeeTypeId: idSchema.meta({
-    label: "员工类型",
-    component: "select",
-    section: "基本信息",
-    colSpan: 1,
-    option: { source: "master", code: "EMPLOYEE_TYPE" },
-  }),
-
   genderId: idSchema.meta({
     label: "性别",
     component: "select",
@@ -65,118 +50,102 @@ export const OrganizationFields = {
     option: { source: "master", code: "GENDER" },
   }),
 
-  eduLevelId: idSchema
-    .nullable()
-    .optional()
-    .meta({
-      label: "文化程度",
-      component: "select",
-      section: "基本信息",
-      colSpan: 1,
-      option: { source: "master", code: "EDU_LEVEL" },
-    }),
+  birthDate: z.string().optional().nullable().meta({
+    label: "出生日期",
+    component: "datePicker",
+    section: "基本信息",
+    colSpan: 1,
+  }),
 
-  jobTitleId: idSchema
-    .nullable()
-    .optional()
-    .meta({
-      label: "岗位",
-      component: "select",
-      section: "基本信息",
-      colSpan: 1,
-      option: { source: "master", code: "JOB_TITLE" },
-    }),
-
-  professional_title_id: idSchema
-    .nullable()
-    .optional()
-    .meta({
-      label: "职称",
-      component: "select",
-      section: "基本信息",
-      colSpan: 1,
-      option: { source: "master", code: "PROFESSIONAL_TITLE" },
-    }),
-  employeeMajor: z.string().max(50, { message: "专业最多50个字符" }).optional().nullable().meta({
-    label: "专业",
+  idCard: z.string().max(18, { message: "身份证号码最多18个字符" }).optional().nullable().meta({
+    label: "身份证号码",
     component: "input",
     section: "基本信息",
     colSpan: 1,
   }),
-  countryCode: countryCodeSchema.default("CN").meta({
-    label: "国家代码",
-    component: "select",
-    section: "地理信息",
-    colSpan: 1,
-    option: { source: "countries" },
-  }),
 
-  provinceCode: adminRegionCodeSchema.meta({
-    label: "省",
-    component: "select",
-    section: "地理信息",
-    colSpan: 1,
-    option: {
-      source: "admin_regions",
-      level: 1,
-    },
-  }),
-
-  cityCode: adminRegionCodeSchema.meta({
-    label: "市",
-    component: "select",
-    section: "地理信息",
-    colSpan: 1,
-    dependsOn: ["provinceCode"],
-    option: (v: any) => ({
-      source: "admin_regions",
-      level: 2,
-      parentCode: v.provinceCode,
+  phone: z
+    .string()
+    .regex(/^(\+?\d{1,3}[- ]?)?\d{10}$/, {
+      message: "请输入有效的电话号码",
+    })
+    .optional()
+    .nullable()
+    .meta({
+      label: "电话号码",
+      component: "input",
+      section: "基本信息",
+      colSpan: 1,
     }),
-  }),
 
-  districtCode: adminRegionCodeSchema.meta({
-    label: "区县",
+  email: z.email({ message: "请输入有效的邮箱地址" }).optional().nullable().meta({
+    label: "邮箱",
+    component: "input",
+    section: "基本信息",
+    colSpan: 1,
+  }),
+});
+
+export const EmployeeSchema = z.object({
+  personId: idSchema.meta({
+    label: "关联人员",
     component: "select",
-    section: "地理信息",
-    dependsOn: ["cityCode"],
-    option: (v: any) => ({
-      source: "admin_regions",
-      level: 3,
-      parentCode: v.cityCode,
-    }),
+    section: "基本信息",
+    colSpan: 1,
+    option: { source: "person", labelKey: "name", valueKey: "id" },
   }),
 
-  address: z.string().max(200, { message: "地址最多200个字符" }).optional().nullable().meta({
-    label: "地址",
-    component: "input",
-    section: "地理信息",
+  organizationId: idSchema.meta({
+    label: "所属组织节点",
+    component: "treeSelect",
+    section: "雇员信息",
+    colSpan: 1,
+    option: { source: "organization_tree", parentId: null },
+  }),
+
+  statusId: idSchema.meta({
+    label: "员工状态",
+    component: "select",
+    section: "雇员信息",
+    colSpan: 1,
+    option: { source: "master", code: "EMPLOYEE_STATUS" },
+  }),
+
+  employeeTypeId: idSchema.meta({
+    label: "员工类型",
+    component: "select",
+    section: "雇员信息",
+    colSpan: 1,
+    option: { source: "master", code: "EMPLOYEE_TYPE" },
+  }),
+
+  hireDate: z.string().optional().nullable().meta({
+    label: "入职日期",
+    component: "datePicker",
+    section: "雇员信息",
     colSpan: 1,
   }),
 
-  latitude: latitudeSchema.optional().nullable().meta({
-    label: "纬度",
-    component: "input",
-    section: "地理信息",
-    type: "number",
+  entryDate: z.string().optional().nullable().meta({
+    label: "转正日期",
+    component: "datePicker",
+    section: "雇员信息",
     colSpan: 1,
   }),
 
-  longitude: longitudeSchema.optional().nullable().meta({
-    label: "经度",
-    component: "input",
-    section: "地理信息",
-    type: "number",
+  leaveDate: z.string().optional().nullable().meta({
+    label: "离职日期",
+    component: "datePicker",
+    section: "雇员信息",
     colSpan: 1,
   }),
 
-  isActive: z.boolean().default(true).meta({
-    label: "是否启用",
-    component: "switch",
+  remark: z.string().max(500, { message: "备注最多500个字符" }).optional().nullable().meta({
+    label: "备注",
+    component: "input",
     section: "其他信息",
     colSpan: 1,
   }),
-
   sortOrder: z.coerce.number().default(0).meta({
     label: "排序",
     component: "input",
@@ -200,16 +169,89 @@ export const OrganizationFields = {
     colSpan: 1,
     disabled: true,
   }),
-};
+});
 
-export const OrganizationSchema = z.object(OrganizationFields);
+export const EmployeePostSchema = z.object({
+  employeeId: idSchema.meta({
+    label: "员工",
+    component: "select",
+    section: "基本信息",
+    colSpan: 1,
+    option: { source: "employee", labelKey: "name", valueKey: "id" },
+  }),
 
-export const CreateOrganizationSchema = OrganizationSchema;
+  organizationId: idSchema.meta({
+    label: "所属组织节点",
+    component: "treeSelect",
+    section: "雇员信息",
+    colSpan: 1,
+    option: { source: "organization_tree", parentId: null },
+  }),
 
-export type CreateOrganizationInput = z.infer<typeof CreateOrganizationSchema>;
+  postId: idSchema
+    .nullable()
+    .optional()
+    .meta({
+      label: "岗位",
+      component: "select",
+      section: "基本信息",
+      colSpan: 1,
+      option: { source: "master", code: "JOB_TITLE" },
+    }),
+});
 
-export const UpdateOrganizationSchema = OrganizationSchema.extend({
+export const EmployeeTitleSchema = z.object({
+  employeeId: idSchema.meta({
+    label: "员工",
+    component: "select",
+    section: "基本信息",
+    colSpan: 1,
+    option: { source: "employee", labelKey: "name", valueKey: "id" },
+  }),
+
+  titleId: idSchema
+    .nullable()
+    .optional()
+    .meta({
+      label: "职级",
+      component: "select",
+      section: "基本信息",
+      colSpan: 1,
+      option: { source: "master", code: "TITLE" },
+    }),
+
+  ObtainedDate: z.string().optional().nullable().meta({
+    label: "获得日期",
+    component: "datePicker",
+    section: "基本信息",
+    colSpan: 1,
+  }),
+});
+
+// export const PersonSchema = z.object(OrganizationFields);
+
+export const CreatePersonSchema = PersonSchema;
+
+export const UpdatePersonSchema = PersonSchema.extend({
   id: idSchema,
 });
 
-export type UpdateOrganizationInput = z.infer<typeof UpdateOrganizationSchema>;
+export const CreateEmployeeSchema = EmployeeSchema;
+
+export const UpdateEmployeeSchema = EmployeeSchema.extend({
+  id: idSchema,
+});
+
+export type EmployeeInput = z.infer<typeof EmployeeSchema>;
+
+export type EmployeePostInput = z.infer<typeof EmployeePostSchema>;
+
+export type EmployeeTitleInput = z.infer<typeof EmployeeTitleSchema>;
+
+// export type CreatePersonInput = z.infer<typeof CreatePersonSchema>;
+
+// export const UpdatePersonSchema = PersonSchema.extend({
+//   id: idSchema,
+// });
+
+// export type UpdatePersonInput = z.infer<typeof UpdatePersonSchema>;
