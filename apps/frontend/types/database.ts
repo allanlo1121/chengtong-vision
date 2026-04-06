@@ -1215,6 +1215,39 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      tree_query_organizations: {
+        Args: {
+          p_include_children?: boolean
+          p_limit?: number
+          p_offset?: number
+          p_parent_id?: string
+          p_search?: string
+        }
+        Returns: {
+          business_name: string | null
+          city_name: string | null
+          country_name: string | null
+          created_at: string | null
+          district_name: string | null
+          id: string | null
+          is_active: boolean | null
+          level: number | null
+          name: string | null
+          org_category_name: string | null
+          org_type_name: string | null
+          parent_id: string | null
+          parent_org_name: string | null
+          path: unknown
+          province_name: string | null
+          sort_order: number | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "v_organizations_list"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
     }
     Enums: {
       [_ in never]: never
