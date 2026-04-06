@@ -68,73 +68,56 @@ left join public.admin_regions ac on ac.code = o.city_code
 left join public.admin_regions ad on ad.code = o.district_code
 where o.deleted_at is null;
 
-create or replace view v_tree_nodes as
-select
-  o.id,
-  o.parent_id,
-  o.name,
-
-  o.path,
-  nlevel(o.path) as level,
-
-  o.sort_order,
-
-  exists (
-    select 1
-    from organizations c
-    where c.parent_id = o.id
-  ) as has_children,
-
-  'organization' as entity
-
-from organizations o
-where o.deleted_at is null;
 
 
-create or replace function public.tree_context_nodes(
-  p_node_id uuid,
-  p_entity text
+
+create or replace function public.tree_query_organizations(
+  p_parent_id uuid default null,
+  p_include_children boolean default false,
+  p_search text default null,
+  p_limit int default 20,
+  p_offset int default 0
 )
-returns setof v_tree_nodes
+returns setof v_organizations_list
 language plpgsql
 as $$
 declare
-  v_path ltree;
-  v_parent_id uuid;
+  v_parent_path ltree;
 begin
 
-  -- 1️⃣ 当前节点 path + parent
-  select path, parent_id
-  into v_path, v_parent_id
-  from v_tree_nodes
-  where id = p_node_id
-    and entity = p_entity;
-
-  if v_path is null then
-    raise exception 'Node not found: %', p_node_id;
+  if p_parent_id is not null then
+    select path into v_parent_path
+    from organizations
+    where id = p_parent_id;
   end if;
 
-  -- 2️⃣ 查询：祖先 + 同级 + 子节点
   return query
-  select distinct o.*
-  from v_tree_nodes o
+  select o.*
+  from v_organizations_list o   -- ✅ 改这里
   where
-    o.entity = p_entity
-    and (
-      -- ✅ ancestors + self
-      o.path @> v_path
+    (
+      p_parent_id is null
 
-      or
+      or (
+        p_include_children = true
+        and o.path <@ v_parent_path
+      )
 
-      -- ✅ siblings（同级节点）
-      o.parent_id = v_parent_id
-
-      or
-
-      -- ✅ children（一层）
-      o.parent_id = p_node_id
+      or (
+        p_include_children = false
+        and (
+          o.id = p_parent_id
+          or o.parent_id = p_parent_id
+        )
+      )
     )
-  order by o.path;
+    and (
+      p_search is null
+      or o.name ilike '%' || p_search || '%'
+    )
+  order by o.created_at desc
+  limit p_limit
+  offset p_offset;
 
 end;
 $$;
