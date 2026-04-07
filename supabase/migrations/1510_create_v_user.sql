@@ -10,7 +10,7 @@ join rbac.permissions p on rp.permission_id = p.id;
 create or replace view public.v_user_menu as
 select m.*
 from system.menus m
-where m.is_disabled = false
+where m.is_active = true
   and (
     m.permission_code is null
     or rbac.has_permission(m.permission_code)

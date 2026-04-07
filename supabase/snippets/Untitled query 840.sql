@@ -105,3 +105,58 @@ alter table hr.employees
 
 alter table hr.employees
     add column external_version text;
+
+drop view hr.v_employee_list cascade;
+create or replace view hr.v_employee_list as
+select
+  e.id,
+  p.name,
+  p.code,
+  e.organization_id,
+  org.name as organization_name,
+
+  status.name as status_name,
+
+  -- 主岗（简化版）
+  (
+    select md.name
+    from hr.employee_posts ep
+    left join master_data md on md.id = ep.post_id
+    where ep.employee_id = e.id
+      and ep.is_primary = true
+      and ep.end_date is null
+    limit 1
+  ) as primary_post_name
+
+from hr.employees e
+left join hr.persons p on p.id = e.person_id
+left join organizations org on org.id = e.organization_id
+left join master_data status on status.id = e.status_id;
+
+create or replace view hr.v_employee_list as
+select
+  e.id,
+  p.name,
+  p.code,
+  e.organization_id,
+  org.name as organization_name,
+
+  status.name as status_name,
+  e.sort_order,
+  e.created_at,
+
+  -- 主岗（简化版）
+  (
+    select md.name
+    from hr.employee_posts ep
+    left join master_data md on md.id = ep.post_id
+    where ep.employee_id = e.id
+      and ep.is_primary = true
+      and ep.end_date is null
+    limit 1
+  ) as primary_post_name
+
+from hr.employees e
+left join hr.persons p on p.id = e.person_id
+left join organizations org on org.id = e.organization_id
+left join master_data status on status.id = e.status_id;

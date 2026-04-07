@@ -284,11 +284,6 @@ add column deleted_by uuid
 references hr.persons(id) on delete set null;
 
 
-create unique index uq_user_project_active
-on public.user_favorite_projects(user_id, project_id)
-where deleted_at is null;
-
-
 --Add audit fields to audit_logs
 alter table audit.logs
 add column created_at timestamptz default now();

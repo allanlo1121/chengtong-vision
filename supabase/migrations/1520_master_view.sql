@@ -11,5 +11,4 @@ select
 from public.master_data d
 join public.master_definitions def
   on d.definition_id = def.id
-where d.is_active = true
-  and d.deleted_at is null;
+where d.is_active = true;

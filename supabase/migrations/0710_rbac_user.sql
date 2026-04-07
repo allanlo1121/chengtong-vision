@@ -7,7 +7,7 @@ create table public.user_favorite_projects (
   project_id uuid not null
     references public.projects(id) on delete cascade,
 
-  sort_order int not null default 0
+  sort_order int not null default 0,
 
   created_at timestamptz default now(),
 

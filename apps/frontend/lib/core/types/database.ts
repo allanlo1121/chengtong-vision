@@ -568,11 +568,9 @@ export type Database = {
           code: string;
           created_at: string | null;
           created_by: string | null;
-          deleted_at: string | null;
-          deleted_by: string | null;
           full_name: string | null;
           id: string;
-          is_disabled: boolean;
+          is_active: boolean;
           level: number;
           name: string;
           parent_code: string | null;
@@ -586,11 +584,9 @@ export type Database = {
           code: string;
           created_at?: string | null;
           created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
           full_name?: string | null;
           id?: string;
-          is_disabled?: boolean;
+          is_active?: boolean;
           level: number;
           name: string;
           parent_code?: string | null;
@@ -604,11 +600,9 @@ export type Database = {
           code?: string;
           created_at?: string | null;
           created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
           full_name?: string | null;
           id?: string;
-          is_disabled?: boolean;
+          is_active?: boolean;
           level?: number;
           name?: string;
           parent_code?: string | null;
@@ -622,13 +616,6 @@ export type Database = {
           {
             foreignKeyName: "admin_regions_created_by_fkey";
             columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
-          },
-          {
-            foreignKeyName: "admin_regions_deleted_by_fkey";
-            columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
             referencedColumns: ["person_id"];
@@ -655,11 +642,9 @@ export type Database = {
           code: string;
           created_at: string | null;
           created_by: string | null;
-          deleted_at: string | null;
-          deleted_by: string | null;
           english_name: string | null;
           id: string;
-          is_disabled: boolean;
+          is_active: boolean;
           name: string;
           numeric_code: string | null;
           sort_order: number;
@@ -671,11 +656,9 @@ export type Database = {
           code: string;
           created_at?: string | null;
           created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
           english_name?: string | null;
           id?: string;
-          is_disabled?: boolean;
+          is_active?: boolean;
           name: string;
           numeric_code?: string | null;
           sort_order?: number;
@@ -687,11 +670,9 @@ export type Database = {
           code?: string;
           created_at?: string | null;
           created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
           english_name?: string | null;
           id?: string;
-          is_disabled?: boolean;
+          is_active?: boolean;
           name?: string;
           numeric_code?: string | null;
           sort_order?: number;
@@ -702,13 +683,6 @@ export type Database = {
           {
             foreignKeyName: "countries_created_by_fkey";
             columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
-          },
-          {
-            foreignKeyName: "countries_deleted_by_fkey";
-            columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
             referencedColumns: ["person_id"];
@@ -887,11 +861,9 @@ export type Database = {
           created_at: string | null;
           created_by: string | null;
           definition_id: string;
-          deleted_at: string | null;
-          deleted_by: string | null;
           description: string | null;
           id: string;
-          is_disabled: boolean;
+          is_active: boolean;
           name: string;
           updated_at: string | null;
           updated_by: string | null;
@@ -901,11 +873,9 @@ export type Database = {
           created_at?: string | null;
           created_by?: string | null;
           definition_id: string;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
           description?: string | null;
           id?: string;
-          is_disabled?: boolean;
+          is_active?: boolean;
           name: string;
           updated_at?: string | null;
           updated_by?: string | null;
@@ -915,11 +885,9 @@ export type Database = {
           created_at?: string | null;
           created_by?: string | null;
           definition_id?: string;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
           description?: string | null;
           id?: string;
-          is_disabled?: boolean;
+          is_active?: boolean;
           name?: string;
           updated_at?: string | null;
           updated_by?: string | null;
@@ -947,13 +915,6 @@ export type Database = {
             referencedColumns: ["definition_id"];
           },
           {
-            foreignKeyName: "master_data_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
-          },
-          {
             foreignKeyName: "master_data_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
@@ -967,11 +928,9 @@ export type Database = {
           code: string;
           created_at: string | null;
           created_by: string | null;
-          deleted_at: string | null;
-          deleted_by: string | null;
           description: string | null;
           id: string;
-          is_disabled: boolean;
+          is_active: boolean;
           name: string;
           updated_at: string | null;
           updated_by: string | null;
@@ -980,11 +939,9 @@ export type Database = {
           code: string;
           created_at?: string | null;
           created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
           description?: string | null;
           id?: string;
-          is_disabled?: boolean;
+          is_active?: boolean;
           name: string;
           updated_at?: string | null;
           updated_by?: string | null;
@@ -993,11 +950,9 @@ export type Database = {
           code?: string;
           created_at?: string | null;
           created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
           description?: string | null;
           id?: string;
-          is_disabled?: boolean;
+          is_active?: boolean;
           name?: string;
           updated_at?: string | null;
           updated_by?: string | null;
@@ -1006,13 +961,6 @@ export type Database = {
           {
             foreignKeyName: "master_definitions_created_by_fkey";
             columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
-          },
-          {
-            foreignKeyName: "master_definitions_deleted_by_fkey";
-            columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
             referencedColumns: ["person_id"];
@@ -1334,55 +1282,26 @@ export type Database = {
       user_favorite_projects: {
         Row: {
           created_at: string | null;
-          created_by: string | null;
-          deleted_at: string | null;
-          deleted_by: string | null;
           id: string;
           project_id: string;
           sort_order: number;
-          updated_at: string | null;
-          updated_by: string | null;
           user_id: string;
         };
         Insert: {
           created_at?: string | null;
-          created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
           id?: string;
           project_id: string;
           sort_order?: number;
-          updated_at?: string | null;
-          updated_by?: string | null;
           user_id: string;
         };
         Update: {
           created_at?: string | null;
-          created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
           id?: string;
           project_id?: string;
           sort_order?: number;
-          updated_at?: string | null;
-          updated_by?: string | null;
           user_id?: string;
         };
         Relationships: [
-          {
-            foreignKeyName: "user_favorite_projects_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
-          },
-          {
-            foreignKeyName: "user_favorite_projects_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
-          },
           {
             foreignKeyName: "user_favorite_projects_project_id_fkey";
             columns: ["project_id"];
@@ -1396,13 +1315,6 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_user_favorite_projects";
             referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "user_favorite_projects_updated_by_fkey";
-            columns: ["updated_by"];
-            isOneToOne: false;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
           },
           {
             foreignKeyName: "user_favorite_projects_user_id_fkey";
@@ -1423,7 +1335,7 @@ export type Database = {
           definition_name: string | null;
           description: string | null;
           id: string | null;
-          is_disabled: boolean | null;
+          is_active: boolean | null;
           name: string | null;
         };
         Relationships: [];
@@ -1440,7 +1352,6 @@ export type Database = {
           district_name: string | null;
           full_name: string | null;
           id: string | null;
-          is_active: boolean | null;
           latitude: number | null;
           longitude: number | null;
           name: string | null;
@@ -1460,7 +1371,6 @@ export type Database = {
           created_at: string | null;
           district_name: string | null;
           id: string | null;
-          is_active: boolean | null;
           level: number | null;
           name: string | null;
           org_category_name: string | null;
@@ -1617,12 +1527,10 @@ export type Database = {
         Row: {
           created_at: string | null;
           created_by: string | null;
-          deleted_at: string | null;
-          deleted_by: string | null;
           group_name: string | null;
           icon: string | null;
           id: string | null;
-          is_disabled: boolean | null;
+          is_active: boolean | null;
           is_visible: boolean | null;
           label: string | null;
           level: number | null;
@@ -1637,12 +1545,10 @@ export type Database = {
         Insert: {
           created_at?: string | null;
           created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
           group_name?: string | null;
           icon?: string | null;
           id?: string | null;
-          is_disabled?: boolean | null;
+          is_active?: boolean | null;
           is_visible?: boolean | null;
           label?: string | null;
           level?: number | null;
@@ -1657,12 +1563,10 @@ export type Database = {
         Update: {
           created_at?: string | null;
           created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
           group_name?: string | null;
           icon?: string | null;
           id?: string | null;
-          is_disabled?: boolean | null;
+          is_active?: boolean | null;
           is_visible?: boolean | null;
           label?: string | null;
           level?: number | null;
@@ -1678,13 +1582,6 @@ export type Database = {
           {
             foreignKeyName: "menus_created_by_fkey";
             columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
-          },
-          {
-            foreignKeyName: "menus_deleted_by_fkey";
-            columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
             referencedColumns: ["person_id"];
@@ -1784,7 +1681,6 @@ export type Database = {
           created_at: string | null;
           district_name: string | null;
           id: string | null;
-          is_active: boolean | null;
           level: number | null;
           name: string | null;
           org_category_name: string | null;
@@ -1818,11 +1714,9 @@ export type Database = {
           code: string;
           created_at: string | null;
           created_by: string | null;
-          deleted_at: string | null;
-          deleted_by: string | null;
           description: string | null;
           id: string;
-          is_disabled: boolean | null;
+          is_active: boolean | null;
           module: string;
           name: string;
           updated_at: string | null;
@@ -1833,11 +1727,9 @@ export type Database = {
           code: string;
           created_at?: string | null;
           created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
           description?: string | null;
           id?: string;
-          is_disabled?: boolean | null;
+          is_active?: boolean | null;
           module: string;
           name: string;
           updated_at?: string | null;
@@ -1848,11 +1740,9 @@ export type Database = {
           code?: string;
           created_at?: string | null;
           created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
           description?: string | null;
           id?: string;
-          is_disabled?: boolean | null;
+          is_active?: boolean | null;
           module?: string;
           name?: string;
           updated_at?: string | null;
@@ -1888,73 +1778,37 @@ export type Database = {
       };
       post_permissions: {
         Row: {
-          created_at: string | null;
-          created_by: string | null;
-          deleted_at: string | null;
-          deleted_by: string | null;
           id: string;
           permission_id: string;
           post_id: string;
-          updated_at: string | null;
-          updated_by: string | null;
         };
         Insert: {
-          created_at?: string | null;
-          created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
           id?: string;
           permission_id: string;
           post_id: string;
-          updated_at?: string | null;
-          updated_by?: string | null;
         };
         Update: {
-          created_at?: string | null;
-          created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
           id?: string;
           permission_id?: string;
           post_id?: string;
-          updated_at?: string | null;
-          updated_by?: string | null;
         };
         Relationships: [];
       };
       role_permissions: {
         Row: {
-          created_at: string | null;
-          created_by: string | null;
-          deleted_at: string | null;
-          deleted_by: string | null;
           id: string;
           permission_id: string | null;
           role_id: string | null;
-          updated_at: string | null;
-          updated_by: string | null;
         };
         Insert: {
-          created_at?: string | null;
-          created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
           id?: string;
           permission_id?: string | null;
           role_id?: string | null;
-          updated_at?: string | null;
-          updated_by?: string | null;
         };
         Update: {
-          created_at?: string | null;
-          created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
           id?: string;
           permission_id?: string | null;
           role_id?: string | null;
-          updated_at?: string | null;
-          updated_by?: string | null;
         };
         Relationships: [
           {
@@ -1978,11 +1832,9 @@ export type Database = {
           code: string;
           created_at: string | null;
           created_by: string | null;
-          deleted_at: string | null;
-          deleted_by: string | null;
           description: string | null;
           id: string;
-          is_disabled: boolean | null;
+          is_active: boolean | null;
           name: string;
           updated_at: string | null;
           updated_by: string | null;
@@ -1991,11 +1843,9 @@ export type Database = {
           code: string;
           created_at?: string | null;
           created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
           description?: string | null;
           id?: string;
-          is_disabled?: boolean | null;
+          is_active?: boolean | null;
           name: string;
           updated_at?: string | null;
           updated_by?: string | null;
@@ -2004,11 +1854,9 @@ export type Database = {
           code?: string;
           created_at?: string | null;
           created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
           description?: string | null;
           id?: string;
-          is_disabled?: boolean | null;
+          is_active?: boolean | null;
           name?: string;
           updated_at?: string | null;
           updated_by?: string | null;
@@ -2018,38 +1866,23 @@ export type Database = {
       user_roles: {
         Row: {
           assigned_at: string | null;
-          created_at: string | null;
-          created_by: string | null;
-          deleted_at: string | null;
-          deleted_by: string | null;
+          assigned_by: string | null;
           id: string;
           role_id: string;
-          updated_at: string | null;
-          updated_by: string | null;
           user_id: string;
         };
         Insert: {
           assigned_at?: string | null;
-          created_at?: string | null;
-          created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
+          assigned_by?: string | null;
           id?: string;
           role_id: string;
-          updated_at?: string | null;
-          updated_by?: string | null;
           user_id: string;
         };
         Update: {
           assigned_at?: string | null;
-          created_at?: string | null;
-          created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
+          assigned_by?: string | null;
           id?: string;
           role_id?: string;
-          updated_at?: string | null;
-          updated_by?: string | null;
           user_id?: string;
         };
         Relationships: [
@@ -2140,12 +1973,10 @@ export type Database = {
         Row: {
           created_at: string | null;
           created_by: string | null;
-          deleted_at: string | null;
-          deleted_by: string | null;
           group_name: string | null;
           icon: string | null;
           id: string;
-          is_disabled: boolean | null;
+          is_active: boolean | null;
           is_visible: boolean | null;
           label: string;
           level: number | null;
@@ -2160,12 +1991,10 @@ export type Database = {
         Insert: {
           created_at?: string | null;
           created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
           group_name?: string | null;
           icon?: string | null;
           id?: string;
-          is_disabled?: boolean | null;
+          is_active?: boolean | null;
           is_visible?: boolean | null;
           label: string;
           level?: number | null;
@@ -2180,12 +2009,10 @@ export type Database = {
         Update: {
           created_at?: string | null;
           created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
           group_name?: string | null;
           icon?: string | null;
           id?: string;
-          is_disabled?: boolean | null;
+          is_active?: boolean | null;
           is_visible?: boolean | null;
           label?: string;
           level?: number | null;
@@ -2255,10 +2082,15 @@ export type Database = {
     };
     Functions: {
       allowed_org_ids: { Args: never; Returns: string[] };
+      attach_audit_triggers: { Args: { p_table: unknown }; Returns: undefined };
       bootstrap: { Args: { p_user_id: string }; Returns: undefined };
       current_org_id: { Args: never; Returns: string };
       current_person_id: { Args: never; Returns: string };
       is_super_admin: { Args: never; Returns: boolean };
+      soft_delete: {
+        Args: { p_ids: string[]; p_table: string };
+        Returns: number;
+      };
     };
     Enums: {
       [_ in never]: never;
