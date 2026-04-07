@@ -5,15 +5,15 @@ import type { ColumnConfig } from "@/components/data-table/column-types";
 export const columnConfigs: ColumnConfig[] = [
   {
     id: "name",
-    title: "组织名称",
+    title: "员工姓名",
     enableSorting: true,
     enableHiding: false,
     defaultVisible: true,
     fixed: true,
   },
   {
-    id: "parentOrgName",
-    title: "上级组织名称",
+    id: "organizationName",
+    title: "组织名称",
     enableSorting: false,
     enableHiding: true,
     defaultVisible: true,

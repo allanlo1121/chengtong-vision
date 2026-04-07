@@ -6,8 +6,6 @@ add column created_at timestamptz default now();
 alter table public.master_definitions
 add column updated_at timestamptz;
 
-alter table public.master_definitions
-add column deleted_at timestamptz;
 
 alter table public.master_definitions
 add column created_by uuid
@@ -15,10 +13,6 @@ references hr.persons(id) on delete set null;
 
 alter table public.master_definitions
 add column updated_by uuid
-references hr.persons(id) on delete set null;
-
-alter table public.master_definitions
-add column deleted_by uuid
 references hr.persons(id) on delete set null;
 
 -- Add audit fields to master_data tables
@@ -29,18 +23,11 @@ alter table public.master_data
 add column updated_at timestamptz;
 
 alter table public.master_data
-add column deleted_at timestamptz;
-
-alter table public.master_data
 add column created_by uuid
 references hr.persons(id) on delete set null;
 
 alter table public.master_data
 add column updated_by uuid
-references hr.persons(id) on delete set null;
-
-alter table public.master_data
-add column deleted_by uuid
 references hr.persons(id) on delete set null;
 
 -- Add audit fields to countries
@@ -51,18 +38,11 @@ alter table public.countries
 add column updated_at timestamptz;
 
 alter table public.countries
-add column deleted_at timestamptz;
-
-alter table public.countries
 add column created_by uuid
 references hr.persons(id) on delete set null;
 
 alter table public.countries
 add column updated_by uuid
-references hr.persons(id) on delete set null;
-
-alter table public.countries
-add column deleted_by uuid
 references hr.persons(id) on delete set null;
 
 -- Add audit fields to admin_regions
@@ -73,9 +53,6 @@ alter table public.admin_regions
 add column updated_at timestamptz;
 
 alter table public.admin_regions
-add column deleted_at timestamptz;
-
-alter table public.admin_regions
 add column created_by uuid
 references hr.persons(id) on delete set null;
 
@@ -83,9 +60,6 @@ alter table public.admin_regions
 add column updated_by uuid
 references hr.persons(id) on delete set null;
 
-alter table public.admin_regions
-add column deleted_by uuid
-references hr.persons(id) on delete set null;
 
 --Add audit fields to hr.persons
 alter table hr.persons
@@ -309,27 +283,6 @@ alter table public.projects
 add column deleted_by uuid
 references hr.persons(id) on delete set null;
 
---Add audit fields to user_favorite_projects
-alter table public.user_favorite_projects
-add column created_at timestamptz default now();
-
-alter table public.user_favorite_projects
-add column updated_at timestamptz;
-
-alter table public.user_favorite_projects
-add column deleted_at timestamptz;
-
-alter table public.user_favorite_projects
-add column created_by uuid
-references hr.persons(id) on delete set null;
-
-alter table public.user_favorite_projects
-add column updated_by uuid
-references hr.persons(id) on delete set null;
-
-alter table public.user_favorite_projects
-add column deleted_by uuid
-references hr.persons(id) on delete set null;
 
 create unique index uq_user_project_active
 on public.user_favorite_projects(user_id, project_id)
@@ -348,8 +301,6 @@ add column created_at timestamptz default now();
 alter table rbac.permissions
 add column updated_at timestamptz;
 
-alter table rbac.permissions
-add column deleted_at timestamptz;
 
 alter table rbac.permissions
 add column created_by uuid
@@ -359,31 +310,6 @@ alter table rbac.permissions
 add column updated_by uuid
 references hr.persons(id) on delete set null;
 
-alter table rbac.permissions
-add column deleted_by uuid
-references hr.persons(id) on delete set null;
-
--- Add audit fields to post_permissions
-alter table rbac.post_permissions
-add column created_at timestamptz default now();
-
-alter table rbac.post_permissions
-add column updated_at timestamptz;
-
-alter table rbac.post_permissions
-add column deleted_at timestamptz;
-
-alter table rbac.post_permissions
-add column created_by uuid
-references hr.persons(id) on delete set null;
-
-alter table rbac.post_permissions
-add column updated_by uuid
-references hr.persons(id) on delete set null;
-
-alter table rbac.post_permissions
-add column deleted_by uuid
-references hr.persons(id) on delete set null;
 
 -- Add audit fields to roles
 alter table rbac.roles
@@ -393,9 +319,6 @@ alter table rbac.roles
 add column updated_at timestamptz;
 
 alter table rbac.roles
-add column deleted_at timestamptz;
-
-alter table rbac.roles
 add column created_by uuid
 references hr.persons(id) on delete set null;
 
@@ -403,53 +326,7 @@ alter table rbac.roles
 add column updated_by uuid
 references hr.persons(id) on delete set null;
 
-alter table rbac.roles
-add column deleted_by uuid
-references hr.persons(id) on delete set null;
 
--- Add audit fields to role_permissions
-alter table rbac.role_permissions
-add column created_at timestamptz default now();
-
-alter table rbac.role_permissions
-add column updated_at timestamptz;
-
-alter table rbac.role_permissions
-add column deleted_at timestamptz;
-
-alter table rbac.role_permissions
-add column created_by uuid
-references hr.persons(id) on delete set null;
-
-alter table rbac.role_permissions
-add column updated_by uuid
-references hr.persons(id) on delete set null;
-
-alter table rbac.role_permissions
-add column deleted_by uuid
-references hr.persons(id) on delete set null;
-
--- Add audit fields to user_roles
-alter table rbac.user_roles
-add column created_at timestamptz default now();
-
-alter table rbac.user_roles
-add column updated_at timestamptz;
-
-alter table rbac.user_roles
-add column deleted_at timestamptz;
-
-alter table rbac.user_roles
-add column created_by uuid
-references hr.persons(id) on delete set null;
-
-alter table rbac.user_roles
-add column updated_by uuid
-references hr.persons(id) on delete set null;
-
-alter table rbac.user_roles
-add column deleted_by uuid
-references hr.persons(id) on delete set null;
 
 -- Add audit fields to system.menus
 alter table system.menus
@@ -458,8 +335,6 @@ add column created_at timestamptz default now();
 alter table system.menus
 add column updated_at timestamptz;
 
-alter table system.menus
-add column deleted_at timestamptz;
 
 alter table system.menus
 add column created_by uuid
@@ -469,9 +344,7 @@ alter table system.menus
 add column updated_by uuid
 references hr.persons(id) on delete set null;
 
-alter table system.menus
-add column deleted_by uuid
-references hr.persons(id) on delete set null;
+
 
 
 

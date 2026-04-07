@@ -1,10 +1,11 @@
 import { createClient } from "@/lib/infra/supabase/server";
+import { SoftDeleteTable } from "../types/entity.types";
 import { assertNoError } from "@/lib/infra/repositories/base.repository";
 
-export async function deleteEntity(table: string, id: string): Promise<number> {
+export async function deleteEntity(table: SoftDeleteTable, id: string): Promise<number> {
   const supabase = await createClient();
 
-  const { data: count, error } = await supabase.schema("system").rpc("soft_delete", {
+  const { data: count, error } = await supabase.schema("system").rpc("audit_delete", {
     p_table: table,
     p_ids: [id],
   });

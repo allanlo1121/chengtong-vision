@@ -16,13 +16,13 @@ function normalizeSearchParams(params: Record<string, string | string[] | undefi
 export function createListQuerySchema<
   TSortFields extends readonly [string, ...string[]],
   TExtra extends z.ZodRawShape = {},
->(options: { sortFields: TSortFields; extra: TExtra }) {
+>(options: { sortFields: TSortFields; defaultSortField: TSortFields[number]; extra: TExtra }) {
   const BaseSchema = z.object({
     page: z.coerce.number().min(1).default(1),
 
     pageSize: z.coerce.number().min(1).max(100).default(20),
 
-    sortBy: z.enum(options.sortFields).optional(),
+    sortBy: z.enum(options.sortFields).default(options.defaultSortField),
 
     sortDirection: z.enum(["asc", "desc"]).default("asc"),
 

@@ -25,6 +25,16 @@ grant select on tables to anon, authenticated, service_role;
 -- 2) TABLES
 -- =====================================================
 
+-- 角色
+create table if not exists rbac.roles (
+  id uuid primary key default gen_random_uuid(),
+  code text not null unique,         -- SUPER_ADMIN
+  name text not null,
+  description text,
+  is_active boolean default true
+
+);
+
 -- 权限定义
 create table if not exists rbac.permissions (
   id uuid primary key default gen_random_uuid(),
@@ -33,7 +43,7 @@ create table if not exists rbac.permissions (
   description text,
   module text not null,
   action text not null,
-  is_disabled boolean default false,
+  is_active boolean default true,
   constraint permissions_module_action_unique unique (module, action)
 );
 
@@ -56,14 +66,7 @@ create table rbac.person_permissions (
   unique (person_id, permission_id)
 );
 
--- 角色
-create table if not exists rbac.roles (
-  id uuid primary key default gen_random_uuid(),
-  code text not null unique,         -- SUPER_ADMIN
-  name text not null,
-  description text,
-  is_disabled boolean default false
-);
+
 
 -- 角色-权限
 create table if not exists rbac.role_permissions (
@@ -79,6 +82,7 @@ create table if not exists rbac.user_roles (
   user_id uuid not null references hr.persons(id) on delete cascade,
   role_id uuid not null references rbac.roles(id) on delete cascade,
   assigned_at timestamptz default now(),
+  assigned_by uuid references hr.persons(id) on delete set null, -- 记录分配者（可选）
   unique (user_id, role_id)
 );
 

@@ -9,4 +9,8 @@ create table public.user_favorite_projects (
 
   sort_order int not null default 0
 
+  created_at timestamptz default now(),
+
+  unique (user_id, project_id)
+
 );

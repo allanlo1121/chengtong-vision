@@ -1,7 +1,7 @@
 import { PageHeader } from "@/components/layout/page-header";
 import { ErrorBlock } from "@/components/common/error-block";
 import { organizationQuery } from "@/modules/organization/queries";
-import { listOrganizations } from "@/modules/organization/services";
+import { listEmployees } from "@/modules/employee/services";
 import { getTreeNodes } from "@/lib/core/tree/tree.service";
 import { Metadata } from "next";
 import { OrganizationListToolbar } from "@/modules/organization/ui/components/organization-list-toolbar";

@@ -5,7 +5,6 @@ create schema if not exists hr;
 grant usage on schema hr to service_role;
 
 create table hr.employees (
-    -- 登录主体（= auth.users.id）
     id                  uuid primary key default gen_random_uuid(),
 
     person_id          uuid not null unique

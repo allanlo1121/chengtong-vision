@@ -1,7 +1,7 @@
 
 insert into system.menus (name, label, path, icon, sort_order)
 values
-('system','System',null,'Settings',0);
+('system','系统设置',null,'Settings',0);
 
 insert into system.menus (name, label, path, icon, sort_order, permission_code)
 values

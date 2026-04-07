@@ -108,9 +108,12 @@ select
   e.id,
   p.name,
   p.code,
+  e.organization_id,
   org.name as organization_name,
 
   status.name as status_name,
+  e.sort_order,
+  e.created_at,
 
   -- 主岗（简化版）
   (

@@ -21,7 +21,6 @@ select
   o.latitude,
   o.longitude,
 
-  o.is_active,
   o.created_at,
   o.updated_at
 
@@ -43,7 +42,6 @@ select
   o.name,
   o.parent_id,
   p.name as parent_org_name,
-  o.is_active,
   o.path,
   nlevel(o.path) as level,
   o.sort_order,

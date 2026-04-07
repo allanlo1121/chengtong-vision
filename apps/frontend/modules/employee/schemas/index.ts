@@ -1,2 +1,2 @@
-export * from "./organization.schema";
-export * from "./query.schema";
+export * from "./employee.schema";
+// export * from "./query.schema";

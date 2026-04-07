@@ -20,7 +20,7 @@ create table system.menus (
     references rbac.permissions(code),
 
   is_visible boolean default true,
-  is_disabled boolean default false
+  is_active boolean default true
 
 );
 

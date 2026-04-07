@@ -65,3 +65,5 @@ export type HasId<T extends TableName> =
 
 export type UpsertResult<T extends TableName> =
   HasId<T> extends true ? TableRow<T> & { id: string } : TableRow<T>;
+
+export type SoftDeleteTable = "organizations" | "employees" | "projects" | "tbms";

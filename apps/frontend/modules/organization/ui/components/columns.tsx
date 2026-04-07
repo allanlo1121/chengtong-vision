@@ -4,9 +4,8 @@ import { type ColumnDef } from "@tanstack/react-table";
 
 import { Checkbox } from "@/components/ui/checkbox";
 
-import { regionNames } from "./data/data";
-import { type OrganizationListItem } from "@/modules/organization/types/organization.types";
-import { DataTableColumnHeader } from "@/components/ui/data-table/data-table-column-header";
+import { type OrganizationListItem } from "@/modules/organization/types";
+import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { Badge } from "@/components/ui/badge";
 import { formatDateTime } from "@/lib/core/utils";
@@ -47,19 +46,12 @@ export function getOrganizationColumns(
       enableHiding: false,
     },
     {
-      accessorKey: "regionName",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="所属片区" />,
+      accessorKey: "parentOrgName",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="上级组织名称" />,
       cell: ({ row }) => {
-        const region = regionNames.find((region) => region.value === row.getValue("regionName"));
-        if (!region) {
-          return null;
-        }
         return (
           <div className="flex gap-2">
-            {region && <Badge variant="outline">{region.label}</Badge>}
-            {/* <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("regionName")}
-                    </span> */}
+            <Badge variant="outline">{row.getValue("parentOrgName")}</Badge>
           </div>
         );
       },
@@ -87,11 +79,23 @@ export function getOrganizationColumns(
     },
 
     {
-      accessorKey: "adminRegionName",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="行政区域" />,
-      cell: ({ row }) => <div className="w-[120px]">{row.getValue("adminRegionName")}</div>,
+      accessorKey: "provinceName",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="所在省份" />,
+      cell: ({ row }) => <div className="w-[120px]">{row.getValue("provinceName")}</div>,
       enableSorting: false,
       enableHiding: true,
+    },
+    {
+      accessorKey: "cityName",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="所在城市" />,
+      cell: ({ row }) => <div className="w-[120px]">{row.getValue("cityName")}</div>,
+      enableSorting: false,
+      enableHiding: true,
+    },
+    {
+      accessorKey: "districtName",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="所在区县" />,
+      cell: ({ row }) => <div className="w-[120px]">{row.getValue("districtName")}</div>,
     },
     {
       accessorKey: "isActive",

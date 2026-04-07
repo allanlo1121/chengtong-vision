@@ -7,7 +7,7 @@ create table public.master_definitions (
   code text not null unique,
   name text not null,
   description text,
-  is_disabled boolean not null default false 
+  is_active boolean not null default true 
 
 ) TABLESPACE pg_default;
 
@@ -20,7 +20,7 @@ create table public.master_data (
   name text not null,
   description text null,
 
-  is_disabled boolean not null default false,
+  is_active boolean not null default true,
 
   constraint uq_master_data_def_code 
       unique (definition_id, code)
@@ -42,7 +42,7 @@ create table public.countries (
   numeric_code text unique,
 
   sort_order integer not null default 0,
-  is_disabled boolean not null default false
+  is_active boolean not null default true
 
 );
 
@@ -62,6 +62,6 @@ create table public.admin_regions (
   pinyin_code text,
 
   sort_order integer not null default 0,
-  is_disabled boolean not null default false
+  is_active boolean not null default true
 );
 

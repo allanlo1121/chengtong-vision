@@ -10,19 +10,15 @@ import { title } from "process";
 import { email, z } from "zod";
 
 /**
- * Employee字段规则
+ * Person字段规则
  */
-export const EmployeeSchema = z.object({
+export const PersonSchema = z.object({
   name: z
     .string()
     .min(2, { message: "员工姓名至少2个字符" })
     .max(10, { message: "员工姓名最多10个字符" })
     .meta({
-      table: "persons",
       label: "员工姓名",
-      field: "name",
-      searchable: true, // ⭐
-      sortable: true,
       component: "input",
       section: "基本信息",
       type: "text",
@@ -38,7 +34,6 @@ export const EmployeeSchema = z.object({
       message: "编码只能包含字母、数字、下划线和中划线",
     })
     .meta({
-      table: "persons",
       label: "编码",
       component: "input",
       type: "text",
@@ -48,7 +43,6 @@ export const EmployeeSchema = z.object({
     }),
 
   genderId: idSchema.meta({
-    table: "persons",
     label: "性别",
     component: "select",
     section: "基本信息",
@@ -57,7 +51,6 @@ export const EmployeeSchema = z.object({
   }),
 
   birthDate: z.string().optional().nullable().meta({
-    table: "persons",
     label: "出生日期",
     component: "datePicker",
     section: "基本信息",
@@ -65,7 +58,6 @@ export const EmployeeSchema = z.object({
   }),
 
   idCard: z.string().max(18, { message: "身份证号码最多18个字符" }).optional().nullable().meta({
-    table: "persons",
     label: "身份证号码",
     component: "input",
     section: "基本信息",
@@ -80,7 +72,6 @@ export const EmployeeSchema = z.object({
     .optional()
     .nullable()
     .meta({
-      table: "persons",
       label: "电话号码",
       component: "input",
       section: "基本信息",
@@ -88,49 +79,47 @@ export const EmployeeSchema = z.object({
     }),
 
   email: z.email({ message: "请输入有效的邮箱地址" }).optional().nullable().meta({
-    table: "persons",
     label: "邮箱",
     component: "input",
     section: "基本信息",
     colSpan: 1,
   }),
+});
+
+export const EmployeeSchema = z.object({
+  personId: idSchema.meta({
+    label: "关联人员",
+    component: "select",
+    section: "基本信息",
+    colSpan: 1,
+    option: { source: "person", labelKey: "name", valueKey: "id" },
+  }),
 
   organizationId: idSchema.meta({
-    table: "employees",
     label: "所属组织节点",
     component: "treeSelect",
-    field: "organization_id",
-    filterable: true,
     section: "雇员信息",
     colSpan: 1,
     option: { source: "organization_tree", parentId: null },
   }),
 
   statusId: idSchema.meta({
-    table: "employees",
     label: "员工状态",
     component: "select",
-    field: "status_id",
-    filterable: true,
     section: "雇员信息",
     colSpan: 1,
     option: { source: "master", code: "EMPLOYEE_STATUS" },
   }),
 
   employeeTypeId: idSchema.meta({
-    table: "employees",
     label: "员工类型",
     component: "select",
-    field: "employee_type_id",
-    filterable: true,
     section: "雇员信息",
     colSpan: 1,
     option: { source: "master", code: "EMPLOYEE_TYPE" },
   }),
 
   hireDate: z.string().optional().nullable().meta({
-    table: "employees",
-
     label: "入职日期",
     component: "datePicker",
     section: "雇员信息",
@@ -138,7 +127,6 @@ export const EmployeeSchema = z.object({
   }),
 
   entryDate: z.string().optional().nullable().meta({
-    table: "employees",
     label: "转正日期",
     component: "datePicker",
     section: "雇员信息",
@@ -146,7 +134,6 @@ export const EmployeeSchema = z.object({
   }),
 
   leaveDate: z.string().optional().nullable().meta({
-    table: "employees",
     label: "离职日期",
     component: "datePicker",
     section: "雇员信息",
@@ -154,14 +141,12 @@ export const EmployeeSchema = z.object({
   }),
 
   remark: z.string().max(500, { message: "备注最多500个字符" }).optional().nullable().meta({
-    table: "employees",
     label: "备注",
     component: "input",
     section: "其他信息",
     colSpan: 1,
   }),
   sortOrder: z.coerce.number().default(0).meta({
-    table: "employees",
     label: "排序",
     component: "input",
     section: "其他信息",
@@ -170,7 +155,6 @@ export const EmployeeSchema = z.object({
   }),
 
   externalId: z.string().optional().meta({
-    table: "employees",
     label: "外部ID",
     component: "input",
     section: "系统字段",
@@ -179,106 +163,90 @@ export const EmployeeSchema = z.object({
   }),
 
   externalVersion: z.coerce.number().optional().meta({
-    table: "employees",
     label: "外部版本",
     component: "input",
     section: "系统字段",
     colSpan: 1,
     disabled: true,
   }),
-  posts: z
-    .array(
-      z.object({
-        postId: idSchema.meta({
-          label: "岗位",
-          component: "select",
-          section: "岗位信息",
-          colSpan: 1,
-          option: { source: "master", code: "JOB_TITLE" },
-        }),
-        organizationId: idSchema.meta({
-          label: "所属组织节点",
-          component: "treeSelect",
-          section: "岗位信息",
-          colSpan: 1,
-          option: { source: "organization_tree", parentId: null },
-        }),
-        postTypeId: idSchema
-          .optional()
-          .nullable()
-          .meta({
-            label: "岗位类型",
-            component: "select",
-            section: "岗位信息",
-            colSpan: 1,
-            option: { source: "master", code: "POST_TYPE" },
-          }),
-        isPrimary: z.boolean().default(false).meta({
-          label: "是否主岗",
-          component: "checkbox",
-          section: "岗位信息",
-          colSpan: 1,
-        }),
-      })
-    )
+});
+
+export const EmployeePostSchema = z.object({
+  employeeId: idSchema.meta({
+    label: "员工",
+    component: "select",
+    section: "基本信息",
+    colSpan: 1,
+    option: { source: "employee", labelKey: "name", valueKey: "id" },
+  }),
+
+  organizationId: idSchema.meta({
+    label: "所属组织节点",
+    component: "treeSelect",
+    section: "雇员信息",
+    colSpan: 1,
+    option: { source: "organization_tree", parentId: null },
+  }),
+
+  postId: idSchema
+    .nullable()
     .optional()
     .meta({
-      table: "employee_posts",
-      label: "岗位信息",
-      component: "subTable",
-      section: "岗位信息",
-      colSpan: 2,
-      key: ["postId", "organizationId"], // 复合唯一键
+      label: "岗位",
+      component: "select",
+      section: "基本信息",
+      colSpan: 1,
+      option: { source: "master", code: "JOB_TITLE" },
+    }),
+});
+
+export const EmployeeTitleSchema = z.object({
+  employeeId: idSchema.meta({
+    label: "员工",
+    component: "select",
+    section: "基本信息",
+    colSpan: 1,
+    option: { source: "employee", labelKey: "name", valueKey: "id" },
+  }),
+
+  titleId: idSchema
+    .nullable()
+    .optional()
+    .meta({
+      label: "职级",
+      component: "select",
+      section: "基本信息",
+      colSpan: 1,
+      option: { source: "master", code: "TITLE" },
     }),
 
-  titles: z
-    .array(
-      z.object({
-        titleId: idSchema.meta({
-          label: "职级",
-          component: "select",
-          section: "职级信息",
-          colSpan: 1,
-          option: { source: "master", code: "TITLE" },
-        }),
-        obtainedDate: z.string().optional().nullable().meta({
-          label: "获得日期",
-          component: "datePicker",
-          section: "职级信息",
-          colSpan: 1,
-        }),
-      })
-    )
-    .optional()
-    .meta({
-      table: "employee_titles",
-      label: "职级信息",
-      component: "subTable",
-      section: "职级信息",
-      colSpan: 2,
-      key: ["titleId"], // 唯一键
-    }),
+  ObtainedDate: z.string().optional().nullable().meta({
+    label: "获得日期",
+    component: "datePicker",
+    section: "基本信息",
+    colSpan: 1,
+  }),
 });
 
 // export const PersonSchema = z.object(OrganizationFields);
 
-// export const CreatePersonSchema = PersonSchema;
+export const CreatePersonSchema = PersonSchema;
 
-// export const UpdatePersonSchema = PersonSchema.extend({
-//   id: idSchema,
-// });
+export const UpdatePersonSchema = PersonSchema.extend({
+  id: idSchema,
+});
 
-// export const CreateEmployeeSchema = EmployeeSchema;
+export const CreateEmployeeSchema = EmployeeSchema;
 
-// export const UpdateEmployeeSchema = EmployeeSchema.extend({
-//   id: idSchema,
-// });
+export const UpdateEmployeeSchema = EmployeeSchema.extend({
+  id: idSchema,
+});
 
-// export type EmployeeInput = z.infer<typeof EmployeeSchema>;
+export type EmployeeInput = z.infer<typeof EmployeeSchema>;
 
-// export type EmployeePostInput = z.infer<typeof EmployeePostSchema>;
+export type EmployeePostInput = z.infer<typeof EmployeePostSchema>;
 
-// export type EmployeeTitleInput = z.infer<typeof EmployeeTitleSchema>;
+export type EmployeeTitleInput = z.infer<typeof EmployeeTitleSchema>;
 
 // export type CreatePersonInput = z.infer<typeof CreatePersonSchema>;
 
