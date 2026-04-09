@@ -2,7 +2,7 @@ create table public.user_favorite_projects (
   id uuid primary key default gen_random_uuid(),
 
   user_id uuid not null
-    references auth.users(id) on delete cascade,
+    references hr.employees(id) on delete cascade,
 
   project_id uuid not null
     references public.projects(id) on delete cascade,

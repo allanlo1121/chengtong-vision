@@ -48,13 +48,14 @@ create table if not exists rbac.permissions (
   constraint permissions_module_action_unique unique (module, action)
 );
 
-create table rbac.post_permissions (
+-- 岗位-角色（可选）
+create table if not exists rbac.post_roles (
   id uuid primary key default gen_random_uuid(),
 
-  post_id uuid not null references public.master_data(id) on delete set null, -- 岗位
-  permission_id uuid not null references rbac.permissions(id) on delete cascade,
+  post_id uuid not null references public.master_data(id) on delete cascade,
+  role_id uuid not null references rbac.roles(id) on delete cascade,
 
-  unique (post_id, permission_id)
+  unique (post_id, role_id)
 );
 
 -- 数据范围（可选）
@@ -75,15 +76,15 @@ create table if not exists rbac.post_data_scopes (
 -- 角色-权限
 create table if not exists rbac.role_permissions (
   id uuid primary key default gen_random_uuid(),
-  role_id uuid references rbac.roles(id) on delete cascade,
-  permission_id uuid references rbac.permissions(id) on delete cascade,
+  role_id uuid not null references rbac.roles(id) on delete cascade,
+  permission_id uuid not null references rbac.permissions(id) on delete cascade,
   unique (role_id, permission_id)
 );
 
--- 用户-角色（auth.users.id 对应 auth.uid()）
-create table if not exists rbac.user_roles (
+-- 用户-角色（employee.id 对应 auth.uid()）
+create table if not exists rbac.employee_roles (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references auth.users(id) on delete cascade,
+  user_id uuid not null references hr.employees(id) on delete cascade,
   role_id uuid not null references rbac.roles(id) on delete cascade,
   assigned_at timestamptz default now(),
   assigned_by uuid references hr.employees(id) on delete set null, -- 记录分配者（可选）
@@ -96,14 +97,20 @@ create table if not exists rbac.user_roles (
 -- 3) INDEXES（生产必须）
 -- =====================================================
 
-create index if not exists idx_user_roles_user
-  on rbac.user_roles(user_id);
+create index if not exists idx_employee_roles_user
+  on rbac.employee_roles(user_id);
 
 create index if not exists idx_role_permissions_role
   on rbac.role_permissions(role_id);
 
 create index if not exists idx_permissions_code
   on rbac.permissions(code);
+
+  create index if not exists idx_post_roles_post
+  on rbac.post_roles(post_id);
+
+create index if not exists idx_post_roles_role
+  on rbac.post_roles(role_id);
 
 -- =====================================================
 -- 4) DEFAULT PRIVILEGES（未来表自动授权）

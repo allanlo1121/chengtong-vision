@@ -11,7 +11,7 @@ security definer
 as $$
 declare
   v_role_id uuid;
-  v_person_id uuid;
+  v_employee_id uuid;
 begin
 
   if auth.role() <> 'service_role' then
@@ -55,10 +55,10 @@ begin
   returning id into v_employee_id;
 
   -- =========================
-  -- 3️⃣ 绑定角色（auth.user级）
+  -- 3️⃣ 绑定角色（employee级）
   -- =========================
-  insert into rbac.user_roles (user_id, role_id)
-  values (p_user_id, v_role_id)
+  insert into rbac.employee_roles (user_id, role_id)
+  values (v_employee_id, v_role_id)
   on conflict do nothing;
 
   -- =========================

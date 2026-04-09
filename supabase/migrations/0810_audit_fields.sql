@@ -130,49 +130,28 @@ alter table hr.educations
 add column deleted_by uuid
 references hr.employees(id) on delete set null;
 
--- Add audit fields to employee_posts
-alter table hr.employee_posts
+-- Add audit fields to employee_positions
+alter table hr.employee_positions
 add column created_at timestamptz default now();
 
-alter table hr.employee_posts
+alter table hr.employee_positions
 add column updated_at timestamptz;
 
-alter table hr.employee_posts
+alter table hr.employee_positions
 add column deleted_at timestamptz;
 
-alter table hr.employee_posts
+alter table hr.employee_positions
 add column created_by uuid
 references hr.employees(id) on delete set null;
 
-alter table hr.employee_posts
+alter table hr.employee_positions
 add column updated_by uuid
 references hr.employees(id) on delete set null;
 
-alter table hr.employee_posts
+alter table hr.employee_positions
 add column deleted_by uuid
 references hr.employees(id) on delete set null;
 
--- Add audit fields to employee_post_history
-alter table hr.employee_post_history    
-add column created_at timestamptz default now();
-
-alter table hr.employee_post_history
-add column updated_at timestamptz;
-
-alter table hr.employee_post_history
-add column deleted_at timestamptz;
-
-alter table hr.employee_post_history
-add column created_by uuid
-references hr.employees(id) on delete set null;
-
-alter table hr.employee_post_history
-add column updated_by uuid
-references hr.employees(id) on delete set null;
-
-alter table hr.employee_post_history
-add column deleted_by uuid
-references hr.employees(id) on delete set null;
 
 -- Add audit fields to employee_titles
 alter table hr.employee_titles

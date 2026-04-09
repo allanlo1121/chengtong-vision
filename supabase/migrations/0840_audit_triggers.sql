@@ -8,7 +8,6 @@ select system.attach_audit_triggers('public.organizations');
 select system.attach_audit_triggers('hr.employees');
 select system.attach_audit_triggers('hr.educations');
 select system.attach_audit_triggers('hr.employee_positions');
-select system.attach_audit_triggers('hr.employee_post_history');
 select system.attach_audit_triggers('hr.employee_titles');
 select system.attach_audit_triggers('public.import_batches');
 select system.attach_audit_triggers('public.import_records');

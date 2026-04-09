@@ -22,7 +22,7 @@ create table hr.employees (
     birth_date date,
     id_card text,
     phone text,
-    email text
+    email text,
  
     employment_status_id uuid references master_data(id) on delete set null,
     employment_type_id uuid references master_data(id) on delete set null,

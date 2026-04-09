@@ -8,11 +8,11 @@ select
   -- =========================
   -- 📌 状态
   -- =========================
-  e.status_id,
-  status.name as status_name,
+  e.employment_status_id,
+  status.name as employment_status_name,
 
-  e.employee_type_id,
-  et.name as employee_type_name,
+  e.employment_type_id,
+  et.name as employment_type_name,
 
   -- =========================
   -- ⭐ 主岗 + 主组织
@@ -102,8 +102,8 @@ left join lateral (
 left join lateral (
   select jsonb_agg(
     jsonb_build_object(
-      'school', ed.school,
-      'degree_id', ed.degree_id,
+      'school', ed.school,      
+      'education_level_id', ed.education_level_id,
       'degree_name', md.name,
       'start_date', ed.start_date,
       'end_date', ed.end_date
@@ -111,12 +111,12 @@ left join lateral (
     order by ed.start_date desc
   ) as educations
   from hr.educations ed
-  left join master_data md on md.id = ed.degree_id
+  left join master_data md on md.id = ed.education_level_id
   where ed.employee_id = e.id
 ) eds on true
 
-left join master_data status on status.id = e.status_id
-left join master_data et on et.id = e.employee_type_id;
+left join master_data status on status.id = e.employment_status_id
+left join master_data et on et.id = e.employment_type_id;
 
 
 create or replace view hr.v_employee_list as
