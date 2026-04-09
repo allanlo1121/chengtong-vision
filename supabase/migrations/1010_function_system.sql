@@ -39,24 +39,26 @@ begin
   from rbac.roles
   where code = 'SUPER_ADMIN';
 
-  -- 创建 person，并绑定 auth
-  insert into hr.persons (
+  -- 创建 employee，并绑定 auth
+  insert into hr.employees (
     id,
     auth_id,
-    name
+    name,
+    code
   )
   values (
     gen_random_uuid(),
     p_user_id,           -- ⭐ 绑定 auth
-    '系统管理员'
+    '系统管理员',
+    'SUPER_ADMIN'
   )
-  returning id into v_person_id;
+  returning id into v_employee_id;
 
   -- =========================
-  -- 3️⃣ 绑定角色（person 级）
+  -- 3️⃣ 绑定角色（auth.user级）
   -- =========================
   insert into rbac.user_roles (user_id, role_id)
-  values (v_person_id, v_role_id)
+  values (p_user_id, v_role_id)
   on conflict do nothing;
 
   -- =========================

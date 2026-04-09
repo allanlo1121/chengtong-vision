@@ -49,7 +49,7 @@ create table audit.logs (
 
   -- 操作人
   operated_by uuid
-    references hr.persons(id),
+    references auth.users(id),
 
   -- 请求追踪
   request_id uuid,
@@ -60,3 +60,5 @@ create table audit.logs (
 create index idx_audit_entity
 on audit.logs(table_name, entity_id);
 
+create index idx_audit_operated_by
+on audit.logs(operated_by);

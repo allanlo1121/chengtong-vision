@@ -22,11 +22,11 @@ ON CONFLICT (definition_id, code) DO NOTHING;
 
 
 -- ==========================================
--- 人员类型 EMPLOYEE_TYPE
+-- 人员类型 EMPLOYMENT_TYPE
 -- ==========================================
 
 INSERT INTO public.master_definitions (name, code)
-VALUES ('人员类型', 'EMPLOYEE_TYPE')
+VALUES ('人员类型', 'EMPLOYMENT_TYPE')
 ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO public.master_data (definition_id, code, name)
@@ -42,15 +42,15 @@ JOIN (
     ('10170006', '外部人员')
 ) AS v(code, name)
 ON true
-WHERE md.code = 'EMPLOYEE_TYPE'
+WHERE md.code = 'EMPLOYMENT_TYPE'
 ON CONFLICT (definition_id, code) DO NOTHING;
 
 -- ==========================================
--- 任职状态 EMPLOYEE_STATUS
+-- 任职状态 EMPLOYMENT_STATUS
 -- ==========================================
 
 INSERT INTO public.master_definitions (name, code)
-VALUES ('任职状态', 'EMPLOYEE_STATUS')
+VALUES ('任职状态', 'EMPLOYMENT_STATUS')
 ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO public.master_data (definition_id, code, name)
@@ -69,7 +69,7 @@ JOIN (
     ('10310009', '其他')
 ) AS v(code, name)
 ON true
-WHERE md.code = 'EMPLOYEE_STATUS'
+WHERE md.code = 'EMPLOYMENT_STATUS'
 ON CONFLICT (definition_id, code) DO NOTHING;
 
 -- ==========================================
@@ -129,11 +129,11 @@ WHERE md.code = 'MAJOR'
 ON CONFLICT (definition_id, code) DO NOTHING;
 
 -- ==========================================
--- 岗位 JOB_TITLE
+-- 岗位 POST
 -- ==========================================
 
 INSERT INTO public.master_definitions (name, code)
-VALUES ('岗位', 'JOB_TITLE')
+VALUES ('岗位', 'POST')
 ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO public.master_data (definition_id, code, name)
@@ -259,7 +259,7 @@ JOIN (
     ('10180116', '商务经理')
 ) AS v(code, name)
 ON true
-WHERE md.code = 'JOB_TITLE'
+WHERE md.code = 'POST'
 ON CONFLICT (definition_id, code) DO NOTHING;
 
 

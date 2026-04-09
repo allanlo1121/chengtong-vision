@@ -63,7 +63,7 @@ ON CONFLICT (definition_id, code) DO NOTHING;
 -- ==========================================
 
 INSERT INTO public.master_definitions (name, code)
-VALUES ('业务板块', 'BUSINESS')
+VALUES ('业务板块', 'ORG_BUSINESS')
 ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO public.master_data (definition_id, code, name)
@@ -86,7 +86,7 @@ JOIN (
     ('10100013', '其他')
 ) AS v(code, name)
 ON true
-WHERE md.code = 'BUSINESS'
+WHERE md.code = 'ORG_BUSINESS'
 ON CONFLICT (definition_id, code) DO NOTHING;
 
 -- ==========================================
@@ -150,11 +150,11 @@ ON CONFLICT (definition_id, code) DO NOTHING;
 
 
 -- ==========================================
--- 业务板块 ORG_CATEGORY
+-- 组织类别 ORG_CATEGORY
 -- ==========================================
 
 INSERT INTO public.master_definitions (name, code)
-VALUES ('业务板块', 'ORG_CATEGORY')
+VALUES ('组织类别', 'ORG_CATEGORY')
 ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO public.master_data (definition_id, code, name)

@@ -43,6 +43,7 @@ create table if not exists rbac.permissions (
   description text,
   module text not null,
   action text not null,
+  resource text,           -- 可选，进一步细化权限作用的资源（如特定项目 ID）
   is_active boolean default true,
   constraint permissions_module_action_unique unique (module, action)
 );
@@ -50,23 +51,26 @@ create table if not exists rbac.permissions (
 create table rbac.post_permissions (
   id uuid primary key default gen_random_uuid(),
 
-  post_id uuid not null,
-  permission_id uuid not null,
+  post_id uuid not null references public.master_data(id) on delete set null, -- 岗位
+  permission_id uuid not null references rbac.permissions(id) on delete cascade,
 
   unique (post_id, permission_id)
 );
 
-
-create table rbac.person_permissions (
+-- 数据范围（可选）
+create table if not exists rbac.post_data_scopes (
   id uuid primary key default gen_random_uuid(),
 
-  person_id uuid not null references hr.persons(id) on delete cascade,
-  permission_id uuid not null references rbac.permissions(id) on delete cascade,
+  post_id uuid not null references public.master_data(id) on delete cascade,
 
-  unique (person_id, permission_id)
+  scope_type_id uuid not null references public.master_data(id), -- DATA_SCOPE
+
+  -- 可选：限定到具体资源（例如 project / tunnel）
+  resource_type text,      -- 'project' | 'tunnel' | null
+  resource_id uuid,        -- 具体项目ID（可空）
+
+  unique (post_id, scope_type_id, resource_type, resource_id)
 );
-
-
 
 -- 角色-权限
 create table if not exists rbac.role_permissions (
@@ -76,13 +80,13 @@ create table if not exists rbac.role_permissions (
   unique (role_id, permission_id)
 );
 
--- 用户-角色（persons.id 对应 auth.uid()）
+-- 用户-角色（auth.users.id 对应 auth.uid()）
 create table if not exists rbac.user_roles (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references hr.persons(id) on delete cascade,
+  user_id uuid not null references auth.users(id) on delete cascade,
   role_id uuid not null references rbac.roles(id) on delete cascade,
   assigned_at timestamptz default now(),
-  assigned_by uuid references hr.persons(id) on delete set null, -- 记录分配者（可选）
+  assigned_by uuid references hr.employees(id) on delete set null, -- 记录分配者（可选）
   unique (user_id, role_id)
 );
 

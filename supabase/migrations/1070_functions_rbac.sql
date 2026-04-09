@@ -7,50 +7,60 @@ returns boolean
 language sql
 stable
 security definer
-set search_path = public, rbac
+set search_path = public, rbac, hr
 as $$
-  with current_person as (
-    select id
-    from hr.persons
-    where auth_id = auth.uid()
-  ),
-
-  role_perms as (
-    select p.code
-    from current_person cp
-    join rbac.user_roles ur on ur.user_id = cp.id
-    join rbac.role_permissions rp on rp.role_id = ur.role_id
-    join rbac.permissions p on p.id = rp.permission_id
-  ),
-
-  post_perms as (
-    select p.code
-    from current_person cp
-    join hr.employees e on e.person_id = cp.id
-    join hr.employee_posts ep on ep.employee_id = e.id
-    join rbac.post_permissions pp on pp.post_id = ep.post_id
-    join rbac.permissions p on p.id = pp.permission_id
-  ),
-
-  direct_perms as (
-    select p.code
-    from current_person cp
-    join rbac.person_permissions dp on dp.person_id = cp.id
-    join rbac.permissions p on p.id = dp.permission_id
+  with current_employee as (
+    select e.id
+    from hr.employees e
+    where e.auth_id = auth.uid()
+      and e.deleted_at is null
+    limit 1
   )
 
-  select exists (
-    select 1
-    from (
-      select code from role_perms
-      union
-      select code from post_perms
-      union
-      select code from direct_perms
-    ) all_perms
-    where code = p_code
-  );
+  select
+    -- 1️⃣ 岗位权限（主）
+    exists (
+      select 1
+      from current_employee ce
+      join hr.employee_positions ep
+        on ep.employee_id = ce.id
+       and ep.end_date is null
+      join rbac.post_permissions pp
+        on pp.post_id = ep.post_id
+      join rbac.permissions p
+        on p.id = pp.permission_id
+      where p.code = p_code
+    )
+
+    or
+
+    -- 2️⃣ 角色权限（兜底）
+    exists (
+      select 1
+      from current_employee ce
+      join rbac.user_roles ur
+        on ur.user_id = ce.id
+      join rbac.role_permissions rp
+        on rp.role_id = ur.role_id
+      join rbac.permissions p
+        on p.id = rp.permission_id
+      where p.code = p_code
+    )
+
+    or
+
+    -- 3️⃣ 直接赋权（可选）
+    exists (
+      select 1
+      from current_employee ce
+      join rbac.employee_permissions dp
+        on dp.employee_id = ce.id
+      join rbac.permissions p
+        on p.id = dp.permission_id
+      where p.code = p_code
+    );
 $$;
+
 
 -- 确保函数可执行
 grant execute on function rbac.has_permission(text) to authenticated;

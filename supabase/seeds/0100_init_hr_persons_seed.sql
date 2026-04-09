@@ -1,10 +1,12 @@
 
 
-insert into hr.persons (
+insert into hr.employees (
     id,
-    name  
+    name,
+    code  
 )
 select
   '00000000-0000-0000-0000-000000000001',
-  '系统用户'
-on conflict (code) do nothing;
+  '系统用户',
+  'SYSTEM_USER'
+on conflict (id) do nothing;

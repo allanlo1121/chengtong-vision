@@ -1,15 +1,20 @@
+
 create or replace function system.current_org_id()
 returns uuid
 language sql
 stable
 security definer
+set search_path = public, hr
 as $$
-  select e.organization_id
-  from hr.persons p
-  join hr.employees e on e.person_id = p.id
-  where p.auth_id = auth.uid()
-  limit 1;
-$$;
+  select ep.organization_id
+  from hr.employees e
+  join hr.employee_positions ep
+    on ep.employee_id = e.id
+   and ep.is_primary = true
+   and ep.end_date is null
+  where e.auth_id = auth.uid()
+  limit 1
+$$;;
 
 create or replace function system.is_super_admin()
 returns boolean
