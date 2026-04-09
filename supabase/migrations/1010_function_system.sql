@@ -43,14 +43,12 @@ begin
   insert into hr.persons (
     id,
     auth_id,
-    name,
-    code
+    name
   )
   values (
     gen_random_uuid(),
     p_user_id,           -- ⭐ 绑定 auth
-    '系统管理员',
-    'admin'
+    '系统管理员'
   )
   returning id into v_person_id;
 

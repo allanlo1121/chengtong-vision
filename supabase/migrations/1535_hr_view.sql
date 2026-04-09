@@ -4,7 +4,7 @@ select
 
   -- 👤 人信息
   p.name,
-  p.code,
+  e.code,
   p.gender_id,
 
   -- 🏢 组织
@@ -107,7 +107,7 @@ create or replace view hr.v_employee_list as
 select
   e.id,
   p.name,
-  p.code,
+  e.code,
   e.organization_id,
   org.name as organization_name,
 

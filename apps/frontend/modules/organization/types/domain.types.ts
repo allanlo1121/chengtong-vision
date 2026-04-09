@@ -17,7 +17,6 @@ export type OrganizationListItem = {
   createdAt: string;
 
   sortOrder: number;
-  isActive: boolean;
 };
 
 export type TreeNode = {

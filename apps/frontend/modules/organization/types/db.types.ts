@@ -44,8 +44,8 @@ export type OrganizationListRow = RemoveNull<RawOrganizationListRow> & {
   district_name: string | null;
 };
 
-export type RawOrganizationTreeRow = Database["public"]["Views"]["v_organizations_tree"]["Row"];
+// export type RawOrganizationTreeRow = Database["public"]["Views"]["v_organizations_tree"]["Row"];
 
-export type OrganizationTreeRow = RemoveNull<RawOrganizationTreeRow> & {
-  parent_id: string | null;
-};
+// export type OrganizationTreeRow = RemoveNull<RawOrganizationTreeRow> & {
+//   parent_id: string | null;
+// };

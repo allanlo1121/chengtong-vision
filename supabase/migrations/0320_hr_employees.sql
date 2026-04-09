@@ -7,6 +7,8 @@ grant usage on schema hr to service_role;
 create table hr.employees (
     id                  uuid primary key default gen_random_uuid(),
 
+    code text unique not null,
+
     person_id          uuid not null unique
                         references hr.persons(id) on delete cascade,
     -- 组织关系

@@ -38,6 +38,8 @@ export type TableUpdate<T extends TableName> = Omit<
 // 业务层（camel）
 // ======================
 
+export type TableEntity = "organizations" | "employees";
+
 export type Entity<T extends TableName> = Camelize<TableRow<T>>;
 
 export type InsertEntity<T extends TableName> = Camelize<TableInsert<T>>;

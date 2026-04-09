@@ -5,9 +5,85 @@ import {
   latitudeSchema,
   longitudeSchema,
 } from "@/modules/shared/schema";
-import { title } from "process";
 
 import { email, z } from "zod";
+
+/**
+ * Person字段规则
+ */
+export const PersonSchema = z.object({
+  name: z
+    .string()
+    .min(2, { message: "姓名至少2个字符" })
+    .max(10, { message: "姓名最多10个字符" })
+    .meta({
+      label: "姓名",
+      component: "input",
+      section: "基本信息",
+      type: "text",
+      disabled: false,
+      required: true,
+      readonly: false,
+      colSpan: 1,
+    }),
+
+  code: z
+    .string()
+    .regex(/^[a-zA-Z0-9_-]+$/, {
+      message: "编码只能包含字母、数字、下划线和中划线",
+    })
+    .meta({
+      label: "编码",
+      component: "input",
+      type: "text",
+      section: "基本信息",
+      colSpan: 1,
+      description: "唯一标识，建议使用字母、数字和下划线",
+    }),
+
+  genderId: idSchema.meta({
+    label: "性别",
+    component: "select",
+    section: "基本信息",
+    colSpan: 1,
+    option: { source: "master", code: "GENDER" },
+  }),
+
+  birthDate: z.string().optional().nullable().meta({
+    label: "出生日期",
+    component: "datePicker",
+    section: "基本信息",
+    colSpan: 1,
+  }),
+
+  idCard: z.string().max(18, { message: "身份证号码最多18个字符" }).optional().nullable().meta({
+    label: "身份证号码",
+    component: "input",
+    section: "基本信息",
+    colSpan: 1,
+  }),
+
+  phone: z
+    .string()
+    .regex(/^(\+?\d{1,3}[- ]?)?\d{10}$/, {
+      message: "请输入有效的电话号码",
+    })
+    .optional()
+    .nullable()
+    .meta({
+      label: "电话号码",
+      component: "input",
+      section: "基本信息",
+      colSpan: 1,
+    }),
+
+  email: z.email({ message: "请输入有效的邮箱地址" }).optional().nullable().meta({
+    label: "邮箱",
+    component: "input",
+    section: "基本信息",
+    colSpan: 1,
+  }),
+});
 
 /**
  * Employee字段规则

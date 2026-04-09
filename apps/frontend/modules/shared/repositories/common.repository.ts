@@ -1,4 +1,6 @@
-// import { createClient } from "@/lib/core/supabase/client";
+import { TableEntity } from "@/lib/core/types/entity.types";
+import { assertNoError } from "@/lib/infra/repositories/base.repository";
+import { createClient } from "@/lib/infra/supabase/client";
 // import { z } from "zod";
 // import { TableName, TableSchemaMap } from "../types";
 // import { camelToSnake, snakeToCamel } from "../utils/case-converter";
@@ -32,3 +34,45 @@
 //   }
 
 // }
+
+export async function getVersionsByCodes<T extends TableEntity>(
+  entity: T,
+  codes: string[]
+): Promise<Map<string, number>> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from(entity)
+    .select("code, external_version")
+    .in("code", codes);
+
+  assertNoError(error);
+
+  const map = new Map<string, number>();
+
+  for (const row of data ?? []) {
+    map.set(row.code, row.external_version ?? 0);
+  }
+
+  return map;
+}
+
+export async function getVersionsByCode<T extends TableEntity>(
+  entity: T,
+  code: string
+): Promise<number | undefined> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from(entity)
+    .select("code, external_version")
+    .eq("code", code);
+
+  assertNoError(error);
+
+  if (data && data.length > 0) {
+    return data[0].external_version ?? 0;
+  }
+
+  return undefined;
+}

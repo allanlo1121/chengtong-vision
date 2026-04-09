@@ -5,4 +5,4 @@ export * from "./list-employee.service";
 // export * from "./organization-detail.service";
 
 export * from "./get-organization-by-id.service";
-export * from "./delete-organizaiton.service";
+export * from "./delete-employee.service";

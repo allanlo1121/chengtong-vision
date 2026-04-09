@@ -1,9 +1,9 @@
-import { ActionResult, PageData, PaginatedResult, Result } from "@/modules/shared/contracts";
+import { PaginatedResult, Result } from "@/modules/shared/contracts";
 
 import { mapOrganizationList } from "./mapper";
 
 import { OrganizationListItem } from "../types";
-import { listOrganizationsRepository } from "../repositories/organization-list.repository";
+import { listOrganizationsRepository } from "../repositories";
 import { OrganizationQueryType } from "../queries";
 
 export async function listOrganizations(

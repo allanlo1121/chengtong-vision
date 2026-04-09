@@ -160,13 +160,6 @@ export const OrganizationFields = {
     colSpan: 1,
   }),
 
-  isActive: z.boolean().default(true).meta({
-    label: "是否启用",
-    component: "switch",
-    section: "其他信息",
-    colSpan: 1,
-  }),
-
   sortOrder: z.coerce.number().default(0).meta({
     label: "排序",
     component: "input",

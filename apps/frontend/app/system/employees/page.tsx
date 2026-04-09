@@ -4,14 +4,15 @@ import { organizationQuery } from "@/modules/organization/queries";
 import { listEmployees } from "@/modules/employee/services";
 import { getTreeNodes } from "@/lib/core/tree/tree.service";
 import { Metadata } from "next";
-import { OrganizationListToolbar } from "@/modules/organization/ui/components/organization-list-toolbar";
+
 import { Suspense } from "react";
-import { DataTable } from "@/components/data-table/data-table";
 import { OrganizationListItem } from "@/modules/organization/types";
 import { organizationColumns } from "@/modules/organization/ui/components/organization-columns";
 import { OrganizationTreePanel } from "@/modules/organization/ui/organization-tree-panel";
 import { OrganizationTreeToolbar } from "@/modules/organization/ui/components/organization-tree-toolbar";
 import { OrganizationTableClient } from "@/modules/organization/ui/pages/organization-table-client";
+import { EmployeeListToolbar } from "@/modules/employee/ui/components/employee-list-toolbar";
+import { EmployeeTableClient } from "@/modules/employee/ui/pages/employee-table-client";
 
 export const metadata: Metadata = {
   title: "员工管理",
@@ -63,12 +64,12 @@ export default async function Page({
       <div className="flex-1 flex flex-col">
         <PageHeader title="员工管理" />
 
-        <OrganizationListToolbar />
+        <EmployeeListToolbar />
 
         {/* 表格 */}
 
         <Suspense key={params.search ?? "" + params.page}>
-          <OrganizationTableClient
+          <EmployeeTableClient
             items={items}
             total={total}
             page={page}

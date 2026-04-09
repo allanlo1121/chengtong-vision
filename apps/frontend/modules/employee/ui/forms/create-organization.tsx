@@ -1,7 +1,7 @@
 "use client";
 
-import { createOrganizationAction } from "@/modules/organization/actions/create-organization.action";
-import { CreateOrganizationSchema } from "@/modules/organization/schemas/organization.schema";
+import { createEmployeeAction } from "@/modules/employee/actions";
+import { CreateEmployeeSchema } from "@/modules/employee/schemas";
 import { CrudFormPage } from "@/modules/shared/crud/components/crud-form-page";
 
 type Props = {
@@ -10,13 +10,13 @@ type Props = {
   parentId?: string;
 };
 
-export default function CreateOrganization({ title, description, parentId }: Props) {
+export default function CreateEmployee({ title, description, parentId }: Props) {
   return (
     <CrudFormPage
       title={title}
       description={description}
-      schema={CreateOrganizationSchema}
-      action={createOrganizationAction}
+      schema={CreateEmployeeSchema}
+      action={createEmployeeAction}
       initialValues={{
         parentId,
       }}

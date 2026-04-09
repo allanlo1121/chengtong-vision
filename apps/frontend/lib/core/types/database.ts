@@ -552,7 +552,7 @@ export type Database = {
       };
     };
     Functions: {
-      [_ in never]: never;
+      upsert_employee_full: { Args: { p_data: Json }; Returns: Json };
     };
     Enums: {
       [_ in never]: never;
