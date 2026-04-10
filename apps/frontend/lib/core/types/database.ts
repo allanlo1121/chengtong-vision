@@ -10,10 +10,11 @@ export type Database = {
           degree_id: string | null;
           deleted_at: string | null;
           deleted_by: string | null;
+          education_level_id: string | null;
+          employee_id: string;
           end_date: string | null;
           id: string;
           major_id: string | null;
-          person_id: string;
           school: string | null;
           start_date: string | null;
           updated_at: string | null;
@@ -25,10 +26,11 @@ export type Database = {
           degree_id?: string | null;
           deleted_at?: string | null;
           deleted_by?: string | null;
+          education_level_id?: string | null;
+          employee_id: string;
           end_date?: string | null;
           id?: string;
           major_id?: string | null;
-          person_id: string;
           school?: string | null;
           start_date?: string | null;
           updated_at?: string | null;
@@ -40,10 +42,11 @@ export type Database = {
           degree_id?: string | null;
           deleted_at?: string | null;
           deleted_by?: string | null;
+          education_level_id?: string | null;
+          employee_id?: string;
           end_date?: string | null;
           id?: string;
           major_id?: string | null;
-          person_id?: string;
           school?: string | null;
           start_date?: string | null;
           updated_at?: string | null;
@@ -54,116 +57,81 @@ export type Database = {
             foreignKeyName: "educations_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
-            referencedRelation: "persons";
+            referencedRelation: "employees";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "educations_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_full";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "educations_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_list";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "educations_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
-            referencedRelation: "persons";
+            referencedRelation: "employees";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "educations_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_full";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "educations_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_list";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "educations_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
-            referencedRelation: "persons";
+            referencedRelation: "employees";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "fk_education_person";
-            columns: ["person_id"];
-            isOneToOne: false;
-            referencedRelation: "persons";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      employee_post_history: {
-        Row: {
-          created_at: string | null;
-          created_by: string | null;
-          deleted_at: string | null;
-          deleted_by: string | null;
-          employee_id: string;
-          end_date: string | null;
-          id: string;
-          organization_id: string | null;
-          post_id: string;
-          post_type_id: string | null;
-          start_date: string;
-          updated_at: string | null;
-          updated_by: string | null;
-        };
-        Insert: {
-          created_at?: string | null;
-          created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
-          employee_id: string;
-          end_date?: string | null;
-          id?: string;
-          organization_id?: string | null;
-          post_id: string;
-          post_type_id?: string | null;
-          start_date: string;
-          updated_at?: string | null;
-          updated_by?: string | null;
-        };
-        Update: {
-          created_at?: string | null;
-          created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
-          employee_id?: string;
-          end_date?: string | null;
-          id?: string;
-          organization_id?: string | null;
-          post_id?: string;
-          post_type_id?: string | null;
-          start_date?: string;
-          updated_at?: string | null;
-          updated_by?: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "employee_post_history_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "persons";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employee_post_history_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "persons";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employee_post_history_updated_by_fkey";
+            foreignKeyName: "educations_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
-            referencedRelation: "persons";
+            referencedRelation: "v_employee_full";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "fk_post_history_employee";
+            foreignKeyName: "educations_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "fk_education_employee";
             columns: ["employee_id"];
             isOneToOne: false;
             referencedRelation: "employees";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "fk_post_history_employee";
+            foreignKeyName: "fk_education_employee";
             columns: ["employee_id"];
             isOneToOne: false;
             referencedRelation: "v_employee_full";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "fk_post_history_employee";
+            foreignKeyName: "fk_education_employee";
             columns: ["employee_id"];
             isOneToOne: false;
             referencedRelation: "v_employee_list";
@@ -171,7 +139,7 @@ export type Database = {
           },
         ];
       };
-      employee_posts: {
+      employee_positions: {
         Row: {
           created_at: string | null;
           created_by: string | null;
@@ -183,7 +151,6 @@ export type Database = {
           is_primary: boolean | null;
           organization_id: string | null;
           post_id: string;
-          post_type_id: string | null;
           start_date: string | null;
           updated_at: string | null;
           updated_by: string | null;
@@ -199,7 +166,6 @@ export type Database = {
           is_primary?: boolean | null;
           organization_id?: string | null;
           post_id: string;
-          post_type_id?: string | null;
           start_date?: string | null;
           updated_at?: string | null;
           updated_by?: string | null;
@@ -215,31 +181,72 @@ export type Database = {
           is_primary?: boolean | null;
           organization_id?: string | null;
           post_id?: string;
-          post_type_id?: string | null;
           start_date?: string | null;
           updated_at?: string | null;
           updated_by?: string | null;
         };
         Relationships: [
           {
-            foreignKeyName: "employee_posts_created_by_fkey";
+            foreignKeyName: "employee_positions_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
-            referencedRelation: "persons";
+            referencedRelation: "employees";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "employee_posts_deleted_by_fkey";
+            foreignKeyName: "employee_positions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_full";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employee_positions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employee_positions_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
-            referencedRelation: "persons";
+            referencedRelation: "employees";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "employee_posts_updated_by_fkey";
+            foreignKeyName: "employee_positions_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_full";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employee_positions_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employee_positions_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
-            referencedRelation: "persons";
+            referencedRelation: "employees";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employee_positions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_full";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employee_positions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_list";
             referencedColumns: ["id"];
           },
           {
@@ -307,21 +314,63 @@ export type Database = {
             foreignKeyName: "employee_titles_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
-            referencedRelation: "persons";
+            referencedRelation: "employees";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employee_titles_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_full";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employee_titles_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_list";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "employee_titles_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
-            referencedRelation: "persons";
+            referencedRelation: "employees";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employee_titles_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_full";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employee_titles_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_list";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "employee_titles_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
-            referencedRelation: "persons";
+            referencedRelation: "employees";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employee_titles_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_full";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employee_titles_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_list";
             referencedColumns: ["id"];
           },
           {
@@ -349,98 +398,6 @@ export type Database = {
       };
       employees: {
         Row: {
-          created_at: string | null;
-          created_by: string | null;
-          deleted_at: string | null;
-          deleted_by: string | null;
-          employee_type_id: string | null;
-          entry_date: string | null;
-          external_id: string | null;
-          external_version: number | null;
-          hire_date: string | null;
-          id: string;
-          leave_date: string | null;
-          organization_id: string | null;
-          person_id: string;
-          remark: string | null;
-          sort_order: number | null;
-          status_id: string | null;
-          updated_at: string | null;
-          updated_by: string | null;
-        };
-        Insert: {
-          created_at?: string | null;
-          created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
-          employee_type_id?: string | null;
-          entry_date?: string | null;
-          external_id?: string | null;
-          external_version?: number | null;
-          hire_date?: string | null;
-          id?: string;
-          leave_date?: string | null;
-          organization_id?: string | null;
-          person_id: string;
-          remark?: string | null;
-          sort_order?: number | null;
-          status_id?: string | null;
-          updated_at?: string | null;
-          updated_by?: string | null;
-        };
-        Update: {
-          created_at?: string | null;
-          created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
-          employee_type_id?: string | null;
-          entry_date?: string | null;
-          external_id?: string | null;
-          external_version?: number | null;
-          hire_date?: string | null;
-          id?: string;
-          leave_date?: string | null;
-          organization_id?: string | null;
-          person_id?: string;
-          remark?: string | null;
-          sort_order?: number | null;
-          status_id?: string | null;
-          updated_at?: string | null;
-          updated_by?: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "employees_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "persons";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employees_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "persons";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employees_person_id_fkey";
-            columns: ["person_id"];
-            isOneToOne: true;
-            referencedRelation: "persons";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "employees_updated_by_fkey";
-            columns: ["updated_by"];
-            isOneToOne: false;
-            referencedRelation: "persons";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      persons: {
-        Row: {
           auth_id: string | null;
           birth_date: string | null;
           code: string;
@@ -449,11 +406,20 @@ export type Database = {
           deleted_at: string | null;
           deleted_by: string | null;
           email: string | null;
+          employment_status_id: string | null;
+          employment_type_id: string | null;
+          entry_date: string | null;
+          external_id: string | null;
+          external_version: number | null;
           gender_id: string | null;
+          hire_date: string | null;
           id: string;
           id_card: string | null;
+          leave_date: string | null;
           name: string;
           phone: string | null;
+          remark: string | null;
+          sort_order: number | null;
           updated_at: string | null;
           updated_by: string | null;
         };
@@ -466,11 +432,20 @@ export type Database = {
           deleted_at?: string | null;
           deleted_by?: string | null;
           email?: string | null;
+          employment_status_id?: string | null;
+          employment_type_id?: string | null;
+          entry_date?: string | null;
+          external_id?: string | null;
+          external_version?: number | null;
           gender_id?: string | null;
+          hire_date?: string | null;
           id?: string;
           id_card?: string | null;
+          leave_date?: string | null;
           name: string;
           phone?: string | null;
+          remark?: string | null;
+          sort_order?: number | null;
           updated_at?: string | null;
           updated_by?: string | null;
         };
@@ -483,34 +458,85 @@ export type Database = {
           deleted_at?: string | null;
           deleted_by?: string | null;
           email?: string | null;
+          employment_status_id?: string | null;
+          employment_type_id?: string | null;
+          entry_date?: string | null;
+          external_id?: string | null;
+          external_version?: number | null;
           gender_id?: string | null;
+          hire_date?: string | null;
           id?: string;
           id_card?: string | null;
+          leave_date?: string | null;
           name?: string;
           phone?: string | null;
+          remark?: string | null;
+          sort_order?: number | null;
           updated_at?: string | null;
           updated_by?: string | null;
         };
         Relationships: [
           {
-            foreignKeyName: "persons_created_by_fkey";
+            foreignKeyName: "employees_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
-            referencedRelation: "persons";
+            referencedRelation: "employees";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "persons_deleted_by_fkey";
+            foreignKeyName: "employees_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_full";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employees_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employees_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
-            referencedRelation: "persons";
+            referencedRelation: "employees";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "persons_updated_by_fkey";
+            foreignKeyName: "employees_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_full";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employees_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employees_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
-            referencedRelation: "persons";
+            referencedRelation: "employees";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employees_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_full";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employees_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_list";
             referencedColumns: ["id"];
           },
         ];
@@ -521,8 +547,10 @@ export type Database = {
         Row: {
           code: string | null;
           educations: Json | null;
-          employee_type_id: string | null;
-          employee_type_name: string | null;
+          employment_status_id: string | null;
+          employment_status_name: string | null;
+          employment_type_id: string | null;
+          employment_type_name: string | null;
           gender_id: string | null;
           id: string | null;
           name: string | null;
@@ -530,8 +558,6 @@ export type Database = {
           organization_name: string | null;
           posts: Json | null;
           primary_post: Json | null;
-          status_id: string | null;
-          status_name: string | null;
           titles: Json | null;
         };
         Relationships: [];
@@ -540,19 +566,19 @@ export type Database = {
         Row: {
           code: string | null;
           created_at: string | null;
+          employment_status_name: string | null;
           id: string | null;
           name: string | null;
           organization_id: string | null;
           organization_name: string | null;
-          primary_post_name: string | null;
+          post_name: string | null;
           sort_order: number | null;
-          status_name: string | null;
         };
         Relationships: [];
       };
     };
     Functions: {
-      upsert_employee_full: { Args: { p_data: Json }; Returns: Json };
+      [_ in never]: never;
     };
     Enums: {
       [_ in never]: never;
@@ -618,7 +644,7 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
           {
             foreignKeyName: "admin_regions_parent_code_fkey";
@@ -632,7 +658,7 @@ export type Database = {
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
         ];
       };
@@ -685,14 +711,14 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
           {
             foreignKeyName: "countries_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
         ];
       };
@@ -757,21 +783,21 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
           {
             foreignKeyName: "import_batches_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
           {
             foreignKeyName: "import_batches_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
         ];
       };
@@ -837,21 +863,21 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
           {
             foreignKeyName: "import_records_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
           {
             foreignKeyName: "import_records_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
         ];
       };
@@ -898,7 +924,7 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
           {
             foreignKeyName: "master_data_definition_id_fkey";
@@ -919,7 +945,7 @@ export type Database = {
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
         ];
       };
@@ -963,14 +989,14 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
           {
             foreignKeyName: "master_definitions_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
         ];
       };
@@ -1102,14 +1128,14 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
           {
             foreignKeyName: "organizations_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
           {
             foreignKeyName: "organizations_district_code_fkey";
@@ -1186,7 +1212,7 @@ export type Database = {
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
         ];
       };
@@ -1233,14 +1259,14 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
           {
             foreignKeyName: "projects_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
           {
             foreignKeyName: "projects_org_node_id_fkey";
@@ -1275,7 +1301,7 @@ export type Database = {
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
         ];
       };
@@ -1321,7 +1347,7 @@ export type Database = {
             columns: ["user_id"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
         ];
       };
@@ -1418,35 +1444,35 @@ export type Database = {
           name: string | null;
           org_path: unknown;
           organization_id: string | null;
+          organization_ids: string[] | null;
           permissions: string[] | null;
-          person_id: string | null;
           roles: string[] | null;
           user_id: string | null;
         };
         Relationships: [
           {
-            foreignKeyName: "employees_organization_id_fkey";
+            foreignKeyName: "employee_positions_organization_id_fkey";
             columns: ["organization_id"];
             isOneToOne: false;
             referencedRelation: "organizations";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "employees_organization_id_fkey";
+            foreignKeyName: "employee_positions_organization_id_fkey";
             columns: ["organization_id"];
             isOneToOne: false;
             referencedRelation: "v_organizations_detail";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "employees_organization_id_fkey";
+            foreignKeyName: "employee_positions_organization_id_fkey";
             columns: ["organization_id"];
             isOneToOne: false;
             referencedRelation: "v_organizations_list";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "employees_organization_id_fkey";
+            foreignKeyName: "employee_positions_organization_id_fkey";
             columns: ["organization_id"];
             isOneToOne: false;
             referencedRelation: "v_tree_nodes";
@@ -1584,7 +1610,7 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
           {
             foreignKeyName: "menus_parent_id_fkey";
@@ -1598,7 +1624,7 @@ export type Database = {
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
-            referencedColumns: ["person_id"];
+            referencedColumns: ["employee_id"];
           },
         ];
       };
@@ -1708,6 +1734,52 @@ export type Database = {
   };
   rbac: {
     Tables: {
+      employee_roles: {
+        Row: {
+          assigned_at: string | null;
+          assigned_by: string | null;
+          id: string;
+          role_id: string;
+          user_id: string;
+        };
+        Insert: {
+          assigned_at?: string | null;
+          assigned_by?: string | null;
+          id?: string;
+          role_id: string;
+          user_id: string;
+        };
+        Update: {
+          assigned_at?: string | null;
+          assigned_by?: string | null;
+          id?: string;
+          role_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "employee_roles_assigned_by_fkey";
+            columns: ["assigned_by"];
+            isOneToOne: false;
+            referencedRelation: "v_user_permissions";
+            referencedColumns: ["user_id"];
+          },
+          {
+            foreignKeyName: "employee_roles_role_id_fkey";
+            columns: ["role_id"];
+            isOneToOne: false;
+            referencedRelation: "roles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employee_roles_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "v_user_permissions";
+            referencedColumns: ["user_id"];
+          },
+        ];
+      };
       permissions: {
         Row: {
           action: string;
@@ -1719,6 +1791,7 @@ export type Database = {
           is_active: boolean | null;
           module: string;
           name: string;
+          resource: string | null;
           updated_at: string | null;
           updated_by: string | null;
         };
@@ -1732,6 +1805,7 @@ export type Database = {
           is_active?: boolean | null;
           module: string;
           name: string;
+          resource?: string | null;
           updated_at?: string | null;
           updated_by?: string | null;
         };
@@ -1745,70 +1819,92 @@ export type Database = {
           is_active?: boolean | null;
           module?: string;
           name?: string;
+          resource?: string | null;
           updated_at?: string | null;
           updated_by?: string | null;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "permissions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_user_permissions";
+            referencedColumns: ["user_id"];
+          },
+          {
+            foreignKeyName: "permissions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_user_permissions";
+            referencedColumns: ["user_id"];
+          },
+        ];
       };
-      person_permissions: {
+      post_data_scopes: {
         Row: {
           id: string;
-          permission_id: string;
-          person_id: string;
+          post_id: string;
+          resource_id: string | null;
+          resource_type: string | null;
+          scope_type_id: string;
         };
         Insert: {
           id?: string;
-          permission_id: string;
-          person_id: string;
+          post_id: string;
+          resource_id?: string | null;
+          resource_type?: string | null;
+          scope_type_id: string;
         };
         Update: {
           id?: string;
-          permission_id?: string;
-          person_id?: string;
+          post_id?: string;
+          resource_id?: string | null;
+          resource_type?: string | null;
+          scope_type_id?: string;
+        };
+        Relationships: [];
+      };
+      post_roles: {
+        Row: {
+          id: string;
+          post_id: string;
+          role_id: string;
+        };
+        Insert: {
+          id?: string;
+          post_id: string;
+          role_id: string;
+        };
+        Update: {
+          id?: string;
+          post_id?: string;
+          role_id?: string;
         };
         Relationships: [
           {
-            foreignKeyName: "person_permissions_permission_id_fkey";
-            columns: ["permission_id"];
+            foreignKeyName: "post_roles_role_id_fkey";
+            columns: ["role_id"];
             isOneToOne: false;
-            referencedRelation: "permissions";
+            referencedRelation: "roles";
             referencedColumns: ["id"];
           },
         ];
       };
-      post_permissions: {
+      role_permissions: {
         Row: {
           id: string;
           permission_id: string;
-          post_id: string;
+          role_id: string;
         };
         Insert: {
           id?: string;
           permission_id: string;
-          post_id: string;
+          role_id: string;
         };
         Update: {
           id?: string;
           permission_id?: string;
-          post_id?: string;
-        };
-        Relationships: [];
-      };
-      role_permissions: {
-        Row: {
-          id: string;
-          permission_id: string | null;
-          role_id: string | null;
-        };
-        Insert: {
-          id?: string;
-          permission_id?: string | null;
-          role_id?: string | null;
-        };
-        Update: {
-          id?: string;
-          permission_id?: string | null;
-          role_id?: string | null;
+          role_id?: string;
         };
         Relationships: [
           {
@@ -1861,37 +1957,20 @@ export type Database = {
           updated_at?: string | null;
           updated_by?: string | null;
         };
-        Relationships: [];
-      };
-      user_roles: {
-        Row: {
-          assigned_at: string | null;
-          assigned_by: string | null;
-          id: string;
-          role_id: string;
-          user_id: string;
-        };
-        Insert: {
-          assigned_at?: string | null;
-          assigned_by?: string | null;
-          id?: string;
-          role_id: string;
-          user_id: string;
-        };
-        Update: {
-          assigned_at?: string | null;
-          assigned_by?: string | null;
-          id?: string;
-          role_id?: string;
-          user_id?: string;
-        };
         Relationships: [
           {
-            foreignKeyName: "user_roles_role_id_fkey";
-            columns: ["role_id"];
+            foreignKeyName: "roles_created_by_fkey";
+            columns: ["created_by"];
             isOneToOne: false;
-            referencedRelation: "roles";
-            referencedColumns: ["id"];
+            referencedRelation: "v_user_permissions";
+            referencedColumns: ["user_id"];
+          },
+          {
+            foreignKeyName: "roles_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_user_permissions";
+            referencedColumns: ["user_id"];
           },
         ];
       };
@@ -2084,8 +2163,8 @@ export type Database = {
       allowed_org_ids: { Args: never; Returns: string[] };
       attach_audit_triggers: { Args: { p_table: unknown }; Returns: undefined };
       bootstrap: { Args: { p_user_id: string }; Returns: undefined };
+      current_employee_id: { Args: never; Returns: string };
       current_org_id: { Args: never; Returns: string };
-      current_person_id: { Args: never; Returns: string };
       is_super_admin: { Args: never; Returns: boolean };
       soft_delete: {
         Args: { p_ids: string[]; p_table: string };
