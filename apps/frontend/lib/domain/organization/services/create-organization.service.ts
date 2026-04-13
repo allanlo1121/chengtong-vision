@@ -2,13 +2,13 @@ import { CreateOrganizationInput } from "../schemas";
 import { Result } from "@/lib/shared/contracts/service-result";
 import { organizationRepository } from "../repositories";
 import { Organization } from "../types";
-import { mapOrganization, mapOrganizationRow } from "../mappers";
+import { mapOrganization, mapOrganizationToInsert } from "../mappers";
 
 export async function createOrganization(
   input: CreateOrganizationInput
 ): Promise<Result<Organization>> {
   try {
-    const data = mapOrganizationRow(input);
+    const data = mapOrganizationToInsert(input);
     const result = await organizationRepository.insert(data);
     return {
       success: true,

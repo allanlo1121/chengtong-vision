@@ -1,16 +1,18 @@
-import { PaginatedResult, Result } from "@/modules/shared/contracts";
+import { PaginatedResult, Result } from "@/lib/shared/contracts";
 
 import { mapEmployeeList } from "../mappers";
 
 import { EmployeeListItem } from "../types";
-import { listEmployeesRepository } from "../repositories";
+import { employeeRepository } from "../repositories";
 import { EmployeeQueryType } from "../queries";
 
 export async function listEmployees(
   query: EmployeeQueryType
 ): Promise<Result<PaginatedResult<EmployeeListItem>>> {
   try {
-    const data = await listEmployeesRepository(query);
+    const data = await employeeRepository.paginate(query);
+
+    console.log("Mapped employee list data:", data);
 
     return {
       success: true,

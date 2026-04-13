@@ -1,6 +1,6 @@
 "use server";
 
-import { Result } from "@/modules/shared/contracts";
+import { Result } from "@/lib/shared/contracts";
 import { deleteEmployee } from "../services";
 
 export async function deleteEmployeeAction(id: string): Promise<Result<number>> {

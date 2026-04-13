@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { DataTable } from "@/components/data-table/data-table";
-import { organizationColumns } from "@/lib/domain/organization/ui/components/organization-columns";
+import { employeeColumns } from "@/lib/domain/employee/ui/components/employee-columns";
 
 export function EmployeeTableClient(props: {
   items: any[];
@@ -16,7 +16,7 @@ export function EmployeeTableClient(props: {
 
   return (
     <DataTable
-      columns={organizationColumns}
+      columns={employeeColumns}
       data={props.items}
       total={props.total}
       page={props.page}

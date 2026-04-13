@@ -1,34 +1,39 @@
 "use server";
 
-import {
-  getEmployeePrimaryPosition,
-  insertEmployee,
-  insertEmployeePosition,
-  updateEmployee,
-  deactivateOldPosition,
-} from "../repositories";
-import { getVersionsByCode } from "@/lib/shared/repositories/common.repository";
 import { EmployeeInsertInput } from "../schemas";
 import { WriterResult } from "@/lib/core/import/types";
-import { TableInsert, TableRow, TableUpdate } from "@/lib/core/types/entity.types";
-import { EmployeeInsertRow, EmployeePositionInsertRow } from "../types";
-import { employeeRepository } from "../repositories/employee.respository";
-import { employeePositionsRepository } from "../repositories/employee-positions.repository";
 
-async function syncEmployeePosition(employeeId: string, data: TableInsert<"employee_positions">) {
-  const old = await getEmployeePrimaryPosition(employeeId); // 👈 关键
+import {
+  EmployeeAssignmentInsertRow,
+  EmployeeAssignmentRow,
+  EmployeeAssignmentUpdateRow,
+  EmployeeInsertRow,
+  EmployeeUpdateRow,
+} from "../types";
+import { employeeRepository, employeeAssignmentsRepository } from "../repositories";
+
+async function syncEmployeeAssignment(
+  employeeId: string,
+  data: EmployeeAssignmentInsertRow
+): Promise<EmployeeAssignmentRow | void> {
+  const old = await employeeAssignmentsRepository.getByEmployeeId(employeeId); // 👈 关键
+  console.log("Existing assignment for employee ID", employeeId, ":", old);
 
   if (!old) {
-    return insertEmployeePosition(data);
+    return employeeAssignmentsRepository.insert(data);
   }
 
   const changed = old.organization_id !== data.organization_id || old.post_id !== data.post_id;
 
+  console.log("Assignment changed for employee ID", employeeId, ":", changed);
+
   if (!changed) return;
 
-  await deactivateOldPosition(employeeId);
+  console.log("Deactivating existing assignment for employee ID", employeeId);
+  await employeeAssignmentsRepository.deactivateByEmployeeId(employeeId);
+  console.log("Inserting new assignment for employee ID", employeeId, "with data:", data);
 
-  return insertEmployeePosition(data);
+  return employeeAssignmentsRepository.insert(data);
 }
 
 export const employeeWriter = async (data: EmployeeInsertInput): Promise<WriterResult> => {
@@ -36,7 +41,19 @@ export const employeeWriter = async (data: EmployeeInsertInput): Promise<WriterR
     const currentVersion = data.externalVersion ?? 0;
 
     // 1️⃣ 查版本
-    const { id, version } = await getVersionsByCode("employees", data.code);
+    const result = await employeeRepository.findByCode(data.code);
+
+    const id = result?.id ?? null;
+    const version = result?.external_version ?? null;
+
+    console.log(
+      "Employee code:",
+      data.code,
+      "Current version:",
+      currentVersion,
+      "Existing version:",
+      version
+    );
 
     // ======================
     // 2️⃣ 如果已有版本且不需要更新 → 跳过
@@ -68,6 +85,7 @@ export const employeeWriter = async (data: EmployeeInsertInput): Promise<WriterR
     // ======================
     if (!id) {
       const insertData: EmployeeInsertRow = baseData;
+      console.log("Inserting new employee with data:", insertData);
 
       const res = await employeeRepository.insert(insertData);
 
@@ -76,14 +94,14 @@ export const employeeWriter = async (data: EmployeeInsertInput): Promise<WriterR
       }
 
       // 👉 插入岗位
-      const positionData: EmployeePositionInsertRow = {
+      const assignmentData: EmployeeAssignmentInsertRow = {
         employee_id: res.id,
         organization_id: data.organizationId,
         post_id: data.postId,
         is_primary: true,
       };
 
-      await employeePositionsRepository.insert(positionData);
+      await employeeAssignmentsRepository.insert(assignmentData);
 
       return {
         success: true,
@@ -95,15 +113,17 @@ export const employeeWriter = async (data: EmployeeInsertInput): Promise<WriterR
     // ======================
     // 5️⃣ 存在 → UPDATE
     // ======================
-    const updateData: TableUpdate<"employees"> = baseData;
+    const updateData: EmployeeUpdateRow = baseData;
 
-    const updateRes = await updateEmployee(data.code, updateData);
+    console.log("Updating existing employee (ID:", id, ") with data:", updateData);
+
+    const updateRes = await employeeRepository.update(id, updateData);
 
     if (!updateRes?.id) {
       throw new Error("Failed to update employee: no id returned");
     }
 
-    await syncEmployeePosition(updateRes.id, {
+    await syncEmployeeAssignment(updateRes.id, {
       employee_id: updateRes.id,
       organization_id: data.organizationId,
       post_id: data.postId,

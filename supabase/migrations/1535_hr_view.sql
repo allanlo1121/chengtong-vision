@@ -169,7 +169,9 @@ left join master_data status
 grant usage on schema hr to anon, authenticated;
 
 -- 2. 表
-grant select on all tables in schema hr to anon, authenticated;
+grant select, insert, update, delete
+on all tables in schema hr
+to anon, authenticated;
 
 -- 3. view（批量）
 do $$

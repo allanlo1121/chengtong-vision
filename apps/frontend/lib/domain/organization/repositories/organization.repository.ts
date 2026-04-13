@@ -1,9 +1,7 @@
 import { createClient } from "@/lib/infra/supabase/server";
 
 import { OrganizationQueryType, organizationQuery } from "../queries";
-
 import { PageData } from "@/lib/shared/contracts";
-
 import { applyPagination, assertNoError } from "@/lib/infra/repositories/base.repository";
 
 import {
@@ -18,7 +16,7 @@ export async function findOrganizationDetailById(id: string): Promise<Organizati
   const supabase = await createClient();
 
   const { data, error } = await supabase
-    .from("v_organizations_detail")
+    .from("v_organization_detail")
     .select("*")
     .eq("id", id)
     .single();
@@ -34,7 +32,7 @@ export async function findOrganizationDetailById(id: string): Promise<Organizati
 export async function getAllOrganizationList(): Promise<OrganizationListRow[]> {
   const supabase = await createClient();
 
-  const { data, error } = await supabase.from("v_organizations_list").select("*");
+  const { data, error } = await supabase.from("v_organization_list").select("*");
 
   assertNoError(error);
 
@@ -59,7 +57,7 @@ async function paginate(query: OrganizationQueryType): Promise<PageData<Organiza
   const { from, to } = applyPagination(query.page, query.pageSize);
 
   let dbQuery = supabase
-    .from("v_organizations_list")
+    .from("v_organization_list")
     .select("*", { count: "exact" })
     .range(from, to);
 
@@ -94,7 +92,7 @@ export const organizationRepository = {
 
     const { data, error } = await supabase
       .from("organizations")
-      .insert(input as any)
+      .insert(input as OrganizationInsertRow)
       .select("*")
       .single();
 
@@ -124,6 +122,20 @@ export const organizationRepository = {
 
     return data as OrganizationRow;
   },
+  findByCode: async (code: string): Promise<OrganizationRow | null> => {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from("organizations")
+      .select("*")
+      .eq("code", code)
+      .maybeSingle();
+
+    assertNoError(error);
+
+    return data as OrganizationRow | null;
+  },
+
   findById: findOrganizationDetailById,
   getAllList: getAllOrganizationList,
   paginate,

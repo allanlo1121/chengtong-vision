@@ -1,6 +1,7 @@
 import { Database } from "./database";
 
-type SchemaName = keyof Database;
+export type SchemaName = keyof Database;
+export type TableName<S extends SchemaName> = keyof Database[S]["Tables"];
 
 export type TableKey<S extends keyof Database, T extends keyof Database[S]["Tables"]> = {
   schema: S;
@@ -37,11 +38,11 @@ export function createTable<S extends keyof Database, T extends keyof Database[S
 
 // type AppSchemas = "public" | "hr" | "rbac" | "system";
 
-export type TableName =
-  | keyof Database["public"]["Tables"]
-  | keyof Database["hr"]["Tables"]
-  | keyof Database["rbac"]["Tables"]
-  | keyof Database["system"]["Tables"];
+// export type TableName =
+//   | keyof Database["public"]["Tables"]
+//   | keyof Database["hr"]["Tables"]
+//   | keyof Database["rbac"]["Tables"]
+//   | keyof Database["system"]["Tables"];
 
 export type BaseSystemFields =
   | "id"

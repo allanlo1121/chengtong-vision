@@ -3,20 +3,16 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { ImportRowMap } from "@/modules/import/types";
+import { ImportRowMap } from "@/lib/core/import/types";
 
 import JsonUploader from "./json-uploader";
 import JsonPreview from "./json-preview";
 
 import { Button } from "@/components/ui/button";
 import { ImportRow, ImportErrorRow } from "../types";
-// import { handleImportData } from "@/lib/import-engine/engine/handle-import-data";
-// import { importEntitiesAction } from "@/lib/import-engine/actions/import.action";
-// import { importValidatorData } from "@/lib/import-engine/engine/import-validator-data";
+
 import { ImportResultDialog } from "./import-result-dialog";
 import { runImport } from "../import-orchestrator";
-// import { ImportEntity } from "@/modules/import/registry/import.registry";
-// import { processRow } from "../processors/pipeline";
 import { handleImportData } from "../engine/handle-import-data";
 import { TableEntity } from "@/lib/core/types/entity.types";
 
@@ -52,7 +48,7 @@ export default function ImportPage<T extends TableEntity>({ entity }: { entity: 
       //插入验证数据
       const result = await runImport<T>(entity, validRows);
 
-      // console.log("result", result);
+      console.log("result", result);
 
       if (!result.success) {
         alert(result.message ?? "导入失败");

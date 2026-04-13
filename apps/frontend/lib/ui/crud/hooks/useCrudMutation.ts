@@ -3,7 +3,7 @@
 import { useTransition, useState } from "react";
 import { toast } from "sonner";
 
-import type { Result } from "@/modules/shared/contracts";
+import type { Result } from "@/lib/shared/contracts";
 
 export interface CrudMutationOptions<TInput, TResult> {
   action: (input: TInput) => Promise<Result<TResult>>;

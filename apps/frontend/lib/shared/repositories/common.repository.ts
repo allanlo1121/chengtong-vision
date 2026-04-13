@@ -1,6 +1,7 @@
-import { TableEntity } from "@/lib/core/types/entity.types";
-import { assertNoError } from "@/lib/infra/repositories/base.repository";
-import { createClient } from "@/lib/infra/supabase/client";
+// import { SchemaName, TableEntity, TableKey, TableName } from "@/lib/core/types/entity.types";
+// import { assertNoError } from "@/lib/infra/repositories/base.repository";
+// import { createClient } from "@/lib/infra/supabase/server";
+
 // import { z } from "zod";
 // import { TableName, TableSchemaMap } from "../types";
 // import { camelToSnake, snakeToCamel } from "../utils/case-converter";
@@ -35,47 +36,56 @@ import { createClient } from "@/lib/infra/supabase/client";
 
 // }
 
-export async function getVersionsByCodes<T extends TableEntity>(
-  entity: T,
-  codes: string[]
-): Promise<Map<string, number>> {
-  const supabase = await createClient();
+// export async function getVersionsByCodes<T extends TableEntity>(
+//   entity: T,
+//   codes: string[]
+// ): Promise<Map<string, number>> {
+//   const supabase = await createClient();
 
-  const { data, error } = await supabase
-    .from(entity)
-    .select("code, external_version")
-    .in("code", codes);
+//   const { data, error } = await supabase
+//     .from(entity)
+//     .select("code, external_version")
+//     .in("code", codes);
 
-  assertNoError(error);
+//   assertNoError(error);
 
-  const map = new Map<string, number>();
+//   const map = new Map<string, number>();
 
-  for (const row of data ?? []) {
-    map.set(row.code, row.external_version ?? 0);
-  }
+//   for (const row of data ?? []) {
+//     map.set(row.code, row.external_version ?? 0);
+//   }
 
-  return map;
-}
+//   return map;
+// }
 
-export async function getVersionsByCode<T extends TableEntity>(
-  entity: T,
-  code: string
-): Promise<{ id: string | null; version: number | null }> {
-  const supabase = await createClient();
+// export async function getVersionsByCode<
+//   S extends SchemaName,
+//   T extends TableName<S>
+// >(
+//   entity: TableKey<S, T>,
+//   code: string
+// ): Promise<{ id: string | null; version: number | null }> {
 
-  const { data, error } = await supabase
-    .from(entity)
-    .select("code, external_version")
-    .eq("code", code);
+//   const supabase = await createClient();
+//   console.log(await supabase.auth.getUser());
+//   console.log("Getting versions by code for entity:", entity, "code:", code);
 
-  assertNoError(error);
+//   const { data, error } = await supabase
+//     .schema(entity.schema)
+//     .from(entity.table as string)
+//     .select("id,code,external_version")
+//     .eq("code", code);
 
-  if (data && data.length > 0) {
-    return {
-      id: data[0].id ?? null,
-      version: data[0].external_version ?? null,
-    };
-  }
+//   console.log("Version query result for code", code, ":", data, "error:", error);
 
-  return { id: null, version: null };
-}
+//   assertNoError(error);
+
+//   if (data && data.length > 0) {
+//     return {
+//       id: data[0].id ?? null,
+//       version: data[0].external_version ?? null,
+//     };
+//   }
+
+//   return { id: null, version: null };
+// }

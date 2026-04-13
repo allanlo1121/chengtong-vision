@@ -61,6 +61,8 @@ export function DataTable<TData, TValue>({
   enableRowSelection = false,
   onRowSelectionChange,
 }: DataTableProps<TData, TValue>) {
+  console.log("DataTable render with data:", data);
+
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);

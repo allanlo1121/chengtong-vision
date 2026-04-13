@@ -3,7 +3,7 @@ import { Result } from "@/lib/shared/contracts/service-result";
 import { UpdateOrganizationInput } from "../schemas";
 
 import { organizationRepository } from "../repositories";
-import { mapOrganization, mapUpdateOrganizationInputToRow } from "../mappers/organization.mapper";
+import { mapOrganization, mapOrganizationToUpdate } from "../mappers/organization.mapper";
 import { Organization } from "../types";
 
 export async function updateOrganization(
@@ -11,7 +11,7 @@ export async function updateOrganization(
   input: UpdateOrganizationInput
 ): Promise<Result<Organization>> {
   try {
-    const data = mapUpdateOrganizationInputToRow(input);
+    const data = mapOrganizationToUpdate(input);
 
     const result = await organizationRepository.update(id, data);
     return {

@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { type ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
-import { type OrganizationListItem } from "@/modules/organization/types";
+import { type EmployeeListItem } from "@/lib/domain/employee/types";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
-import { formatDateTime } from "@/lib/core/utils";
+import { formatDateTime } from "@/lib/utils";
 
-export const organizationColumns: ColumnDef<OrganizationListItem>[] = [
+export const employeeColumns: ColumnDef<EmployeeListItem>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -47,34 +47,41 @@ export const organizationColumns: ColumnDef<OrganizationListItem>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "orgTypeName",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="组织类型" />,
-    cell: ({ row }) => <div className="w-[120px]">{row.getValue("orgTypeName")}</div>,
+    accessorKey: "code",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="编号" />,
+    cell: ({ row }) => <div className="w-[120px]">{row.getValue("code")}</div>,
     enableSorting: false,
     enableHiding: true,
   },
   {
-    accessorKey: "businessName",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="业务板块" />,
-    cell: ({ row }) => <div className="w-[120px]">{row.getValue("businessName")}</div>,
+    accessorKey: "organizationName",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="所在部门" />,
+    cell: ({ row }) => <div className="w-[120px]">{row.getValue("organizationName")}</div>,
     enableSorting: false,
     enableHiding: true,
   },
   {
-    accessorKey: "countryName",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="所属国家" />,
-    cell: ({ row }) => <div className="w-[120px]">{row.getValue("countryName")}</div>,
+    accessorKey: "postName",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="岗位" />,
+    cell: ({ row }) => <div className="w-[120px]">{row.getValue("postName")}</div>,
+    enableSorting: false,
+    enableHiding: true,
+  },
+  {
+    accessorKey: "employmentStatusName",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="状态" />,
+    cell: ({ row }) => <div className="w-[120px]">{row.getValue("employmentStatusName")}</div>,
+    enableSorting: false,
+    enableHiding: true,
+  },
+  {
+    accessorKey: "sortOrder",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="排序" />,
+    cell: ({ row }) => <div className="w-[120px]">{row.getValue("sortOrder")}</div>,
     enableSorting: false,
     enableHiding: true,
   },
 
-  {
-    accessorKey: "adminRegionName",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="行政区域" />,
-    cell: ({ row }) => <div className="w-[120px]">{row.getValue("adminRegionName")}</div>,
-    enableSorting: false,
-    enableHiding: true,
-  },
   {
     accessorKey: "isActive",
     header: ({ column }) => <DataTableColumnHeader column={column} title="是否激活" />,
@@ -91,13 +98,7 @@ export const organizationColumns: ColumnDef<OrganizationListItem>[] = [
     enableSorting: false,
     enableHiding: true,
   },
-  {
-    accessorKey: "sortOrder",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="排序" />,
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("sortOrder")}</div>,
-    enableSorting: true,
-    enableHiding: true,
-  },
+
   {
     id: "actions",
     cell: ({ row }) => <DataTableRowActions row={row} />,

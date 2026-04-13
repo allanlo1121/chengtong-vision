@@ -3,7 +3,7 @@ import { Database, Tables, TablesInsert, TablesUpdate } from "@/lib/core/types/d
 
 import { BaseSystemFields } from "@/lib/core/types";
 
-export type RawOrganizationDetailRow = Database["public"]["Views"]["v_organizations_detail"]["Row"];
+export type RawOrganizationDetailRow = Database["public"]["Views"]["v_organization_detail"]["Row"];
 
 export type OrganizationDetailRow = RemoveNull<RawOrganizationDetailRow> & {
   full_name: string | null;
@@ -19,7 +19,7 @@ export type OrganizationDetailRow = RemoveNull<RawOrganizationDetailRow> & {
   country_name: string | null;
 };
 
-export type RawOrganizationListRow = Database["public"]["Views"]["v_organizations_list"]["Row"];
+export type RawOrganizationListRow = Database["public"]["Views"]["v_organization_list"]["Row"];
 
 // export type OrganizationListRow = {
 //     business_name: string | null;

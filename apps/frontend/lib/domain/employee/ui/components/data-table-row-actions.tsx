@@ -18,10 +18,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { EmployeeListItem } from "@/modules/employee/types";
+import { EmployeeListItem } from "@/lib/domain/employee/types";
 
-import { useCrudMutation } from "@/lib/crud/hooks/useCrudMutation";
-import { deleteOrganizationAction } from "@/modules/organization/actions/delete-organization.action";
+import { useCrudMutation } from "@/lib/ui/crud/hooks/useCrudMutation";
+import { deleteEmployeeAction } from "../../actions/delete-employee.action";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -34,7 +34,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<Emp
   const router = useRouter();
 
   const deleteMutation = useCrudMutation<string, number>({
-    action: deleteOrganizationAction,
+    action: deleteEmployeeAction,
     successMessage: "删除成功",
     onSuccess: () => router.refresh(),
   });

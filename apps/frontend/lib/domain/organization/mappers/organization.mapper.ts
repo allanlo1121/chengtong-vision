@@ -51,6 +51,11 @@ export function mapOrganizationDetail(row: OrganizationDetailRow): OrganizationD
     latitude: row.latitude,
     longitude: row.longitude,
 
+    isActive: row.is_active,
+
+    externalId: row.external_id,
+    externalVersion: row.external_version,
+
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -97,7 +102,7 @@ export function mapOrganization(row: OrganizationRow): Organization {
   };
 }
 
-export function mapOrganizationRow(row: CreateOrganizationInput): OrganizationInsertRow {
+export function mapOrganizationToInsert(row: CreateOrganizationInput): OrganizationInsertRow {
   return {
     code: row.code,
     name: row.name,
@@ -126,7 +131,7 @@ export function mapOrganizationRow(row: CreateOrganizationInput): OrganizationIn
   };
 }
 
-export function mapUpdateOrganizationInputToRow(
+export function mapOrganizationToUpdate(
   input: Partial<UpdateOrganizationInput>
 ): Partial<OrganizationUpdateRow> {
   return {

@@ -1,16 +1,18 @@
 "use server";
 
-import { getVersionsByCode } from "@/lib/shared/repositories/common.repository";
 import { CreateOrganizationInput, UpdateOrganizationInput } from "../schemas";
 import { WriterResult } from "@/lib/core/import/types";
 
-import { createOrganization } from "../services";
-import { updateOrganization } from "../services/update-organizations.service";
-import { map } from "zod";
+import { organizationRepository } from "../repositories";
+import { OrganizationInsertRow, OrganizationUpdateRow } from "../types";
+import { mapOrganization, mapOrganizationToInsert } from "../mappers";
 
 export const organizationWriter = async (data: CreateOrganizationInput): Promise<WriterResult> => {
   try {
-    const { id, version } = await getVersionsByCode("organizations", data.code);
+    const result = await organizationRepository.findByCode(data.code);
+
+    const id = result?.id ?? null;
+    const version = result?.external_version ?? null;
 
     const currentVersion = data.externalVersion ?? 0;
 
@@ -24,31 +26,33 @@ export const organizationWriter = async (data: CreateOrganizationInput): Promise
     }
 
     // insert
-    if (!id) {
-      const res = await createOrganization(data);
+    const baseData: OrganizationInsertRow = mapOrganizationToInsert(data);
 
-      if (!res.success || !res.data) {
+    if (!id) {
+      const res = await organizationRepository.insert(baseData);
+
+      if (!res.id) {
         throw new Error("Failed to insert organization");
       }
 
       return {
         success: true,
         action: "inserted",
-        id: res.data.id ?? null,
+        id: res.id ?? null,
       };
     }
 
     // update
-    const res = await updateOrganization(id, data as UpdateOrganizationInput);
+    const updateRes = await organizationRepository.update(id, baseData as OrganizationUpdateRow);
 
-    if (!res.success || !res.data) {
+    if (!updateRes.id) {
       throw new Error("Failed to update organization");
     }
 
     return {
       success: true,
       action: "updated",
-      id: res.data.id ?? null,
+      id: updateRes.id ?? null,
     };
   } catch (err) {
     return {

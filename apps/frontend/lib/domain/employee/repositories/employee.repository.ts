@@ -1,9 +1,7 @@
 import { createClient } from "@/lib/infra/supabase/server";
 
 import { employeeQuery, EmployeeQueryType } from "../queries";
-
 import { PageData } from "@/lib/shared/contracts";
-
 import { applyPagination, assertNoError } from "@/lib/infra/repositories/base.repository";
 
 import {
@@ -84,6 +82,8 @@ async function paginate(query: EmployeeQueryType): Promise<PageData<EmployeeList
 
   const { data, count, error } = await dbQuery;
 
+  console.log("Employee paginate query result:", { data, count, error });
+
   assertNoError(error);
 
   return {
@@ -129,6 +129,20 @@ export const employeeRepository = {
     }
 
     return data as EmployeeRow;
+  },
+  findByCode: async (code: string): Promise<EmployeeRow | null> => {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .schema("hr")
+      .from("employees")
+      .select("*")
+      .eq("code", code)
+      .single();
+
+    assertNoError(error);
+
+    return data as EmployeeRow | null;
   },
   findById: findEmployeeDetailById,
   getAllList: getAllEmployeeList,

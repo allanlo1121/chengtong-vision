@@ -1,7 +1,7 @@
 "use server";
 
 import { importBatchRepo } from "./repositories";
-import { Result } from "@/modules/shared/contracts";
+import { Result } from "@/lib/shared/contracts";
 import { ImportRow, SyncImportResult } from "./types";
 import { chunkArray } from "@/lib/utils/chunk-array";
 import { processChunk } from "./processors/chunk-processor";

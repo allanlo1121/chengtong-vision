@@ -33,6 +33,8 @@ export function ImportResultDialog({
 }: Props) {
   if (!result) return null;
 
+  const total = result.inserted + result.updated + result.failed + result.skipped;
+
   return (
     <AlertDialog open={open} onOpenChange={onClose}>
       <AlertDialogContent>
@@ -40,8 +42,9 @@ export function ImportResultDialog({
           <AlertDialogTitle>导入结果</AlertDialogTitle>
 
           <AlertDialogDescription className="space-y-2">
-            <span className="block ">总数据：{result.total}</span>
-            <span className="block text-green-600">成功：{result.inserted}</span>
+            <span className="block ">总数据：{total}</span>
+            <span className="block text-green-600">插入：{result.inserted}</span>
+            <span className="block text-blue-600">更新：{result.updated}</span>
             <span className="block text-red-600">失败：{result.failed}</span>
             <span className="block text-red-600">跳过：{result.skipped}</span>
             <span className="block border-t pt-2 text-sm text-muted-foreground">
