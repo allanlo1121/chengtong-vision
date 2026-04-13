@@ -9,7 +9,7 @@ create table public.organizations (
   node_key text NOT NULL DEFAULT gen_random_uuid(),
   path ltree NOT NULL DEFAULT ''::ltree,
 
-  level int GENERATED ALWAYS AS (nlevel(path)) STORED
+  level int GENERATED ALWAYS AS (nlevel(path)) STORED,
 
   code text not null unique,
   name text not null,
