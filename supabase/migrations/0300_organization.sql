@@ -6,9 +6,10 @@ create table public.organizations (
   id uuid primary key default gen_random_uuid(),
 
   parent_id uuid references public.organizations(id) on delete restrict,
-  node_key text not null,
-  path ltree not null, -- 可选（建议开启 ltree 扩展）
-  level int generated always as (nlevel(path)) stored,
+  node_key text NOT NULL DEFAULT gen_random_uuid(),
+  path ltree NOT NULL DEFAULT ''::ltree,
+
+  level int GENERATED ALWAYS AS (nlevel(path)) STORED
 
   code text not null unique,
   name text not null,

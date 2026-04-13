@@ -130,25 +130,25 @@ alter table hr.educations
 add column deleted_by uuid
 references hr.employees(id) on delete set null;
 
--- Add audit fields to employee_positions
-alter table hr.employee_positions
+-- Add audit fields to employee_assignments
+alter table hr.employee_assignments
 add column created_at timestamptz default now();
 
-alter table hr.employee_positions
+alter table hr.employee_assignments
 add column updated_at timestamptz;
 
-alter table hr.employee_positions
+alter table hr.employee_assignments
 add column deleted_at timestamptz;
 
-alter table hr.employee_positions
+alter table hr.employee_assignments
 add column created_by uuid
 references hr.employees(id) on delete set null;
 
-alter table hr.employee_positions
+alter table hr.employee_assignments
 add column updated_by uuid
 references hr.employees(id) on delete set null;
 
-alter table hr.employee_positions
+alter table hr.employee_assignments
 add column deleted_by uuid
 references hr.employees(id) on delete set null;
 

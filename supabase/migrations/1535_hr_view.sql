@@ -44,17 +44,17 @@ from hr.employees e
 -- =========================
 left join lateral (
   select jsonb_build_object(
-    'post_id', ep.post_id,
+    'post_id', ea.post_id,
     'post_name', md.name,
-    'organization_id', ep.organization_id,
+    'organization_id', ea.organization_id,
     'organization_name', org.name
   ) as primary_post
-  from hr.employee_positions ep
-  left join master_data md on md.id = ep.post_id
-  left join organizations org on org.id = ep.organization_id
-  where ep.employee_id = e.id
-    and ep.is_primary = true
-    and ep.end_date is null
+  from hr.employee_assignments ea
+  left join master_data md on md.id = ea.post_id
+  left join organizations org on org.id = ea.organization_id
+  where ea.employee_id = e.id
+    and ea.is_primary = true
+    and ea.end_date is null
   limit 1
 ) pp on true
 
@@ -64,19 +64,19 @@ left join lateral (
 left join lateral (
   select jsonb_agg(
     jsonb_build_object(
-      'post_id', ep.post_id,
+      'post_id', ea.post_id,
       'post_name', md.name,
-      'organization_id', ep.organization_id,
+      'organization_id', ea.organization_id,
       'organization_name', org.name,
-      'is_primary', ep.is_primary
+      'is_primary', ea.is_primary
     )
-    order by ep.is_primary desc
+    order by ea.is_primary desc
   ) as posts
-  from hr.employee_positions ep
-  left join master_data md on md.id = ep.post_id
-  left join organizations org on org.id = ep.organization_id
-  where ep.employee_id = e.id
-    and ep.end_date is null
+  from hr.employee_assignments ea
+  left join master_data md on md.id = ea.post_id
+  left join organizations org on org.id = ea.organization_id
+  where ea.employee_id = e.id
+    and ea.end_date is null
 ) ps on true
 
 -- =========================
@@ -122,12 +122,12 @@ left join master_data et on et.id = e.employment_type_id;
 create or replace view hr.v_employee_list as
 with primary_position as (
   select
-    ep.employee_id,
-    ep.post_id,
-    ep.organization_id
-  from hr.employee_positions ep
-  where ep.is_primary = true
-    and ep.end_date is null
+    ea.employee_id,
+    ea.post_id,
+    ea.organization_id
+  from hr.employee_assignments ea
+  where ea.is_primary = true
+    and ea.end_date is null
 )
 
 select
@@ -163,3 +163,30 @@ left join organizations org
 -- 状态
 left join master_data status
   on status.id = e.employment_status_id;
+
+
+-- 1. schema
+grant usage on schema hr to anon, authenticated;
+
+-- 2. 表
+grant select on all tables in schema hr to anon, authenticated;
+
+-- 3. view（批量）
+do $$
+declare r record;
+begin
+  for r in
+    select table_name
+    from information_schema.views
+    where table_schema = 'hr'
+  loop
+    execute format(
+      'grant select on hr.%I to anon, authenticated;',
+      r.table_name
+    );
+  end loop;
+end $$;
+
+-- 4. 默认权限（未来）
+alter default privileges in schema hr
+grant select on tables to anon, authenticated;

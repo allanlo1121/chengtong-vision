@@ -19,11 +19,11 @@ with current_employee as (
 post_roles_cte as (
   select pr.role_id
   from current_employee ce
-  join hr.employee_positions ep
-    on ep.employee_id = ce.id
-   and ep.end_date is null
+  join hr.employee_assignments ea
+    on ea.employee_id = ce.id
+   and ea.end_date is null
   join rbac.post_roles pr
-    on pr.post_id = ep.post_id
+    on pr.post_id = ea.post_id
 ),
 
 -- 2️⃣ 用户直接角色
@@ -77,11 +77,11 @@ as $$
   post_roles_cte as (
     select pr.role_id
     from current_employee ce
-    join hr.employee_positions ep
-      on ep.employee_id = ce.id
-     and ep.end_date is null
+    join hr.employee_assignments ea
+      on ea.employee_id = ce.id
+     and ea.end_date is null
     join rbac.post_roles pr
-      on pr.post_id = ep.post_id
+      on pr.post_id = ea.post_id
   ),
 
   -- 2️⃣ 用户直接角色

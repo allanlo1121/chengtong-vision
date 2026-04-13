@@ -3,7 +3,6 @@ import { notoSansSC } from "@/components/ui/font";
 import { Toaster } from "sonner";
 // import { MasterDataProvider } from "@/providers/master-data-provider"
 import "./globals.css";
-import "@/lib/init";
 
 import { runBootstrap } from "@/lib/domain/bootstrap/service";
 

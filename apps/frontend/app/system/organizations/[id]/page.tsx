@@ -1,5 +1,5 @@
 import { ArrowLeft } from "lucide-react";
-import { getOrganizationDetailById } from "@/modules/organization/services";
+import { getOrganizationDetailById } from "@/lib/domain/organization/services";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -73,7 +73,7 @@ export default async function OrganizationDetailPage({
         <CardContent className="grid grid-cols-2 gap-4">
           <DetailItem label="组织类型" value={org.orgTypeName} />
           <DetailItem label="业务类型" value={org.businessName} />
-          <DetailItem label="状态" value={org.isActive ? "启用" : "停用"} />
+          {/* <DetailItem label="状态" value={org.isActive ? "启用" : "停用"} /> */}
         </CardContent>
       </Card>
       {/* 地址信息 */}

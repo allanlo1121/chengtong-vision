@@ -6,12 +6,12 @@ stable
 security definer
 set search_path = public, hr
 as $$
-  select ep.organization_id
+  select ea.organization_id
   from hr.employees e
-  join hr.employee_positions ep
-    on ep.employee_id = e.id
-   and ep.is_primary = true
-   and ep.end_date is null
+  join hr.employee_assignments ea
+    on ea.employee_id = e.id
+   and ea.is_primary = true
+   and ea.end_date is null
   where e.auth_id = auth.uid()
     and e.deleted_at is null
   limit 1
@@ -36,11 +36,11 @@ as $$
   post_roles_cte as (
     select pr.role_id
     from current_employee ce
-    join hr.employee_positions ep
-      on ep.employee_id = ce.id
-     and ep.end_date is null
+  join hr.employee_assignments ea
+      on ea.employee_id = ce.id
+     and ea.end_date is null
     join rbac.post_roles pr
-      on pr.post_id = ep.post_id
+      on pr.post_id = ea.post_id
   ),
 
   -- 用户角色

@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/infra/supabase/server";
 import { assertNoError } from "@/lib/infra/repositories/base.repository";
 import { TreeEntity, TreeNodeRow } from "./types";
-import { rpc } from "@/lib/core/rpc";
+import { rpc } from "@/lib/core/db/rpc";
 
 export async function getTreeRows(
   parentId?: string | null,

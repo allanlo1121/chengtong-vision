@@ -1,39 +1,47 @@
-import { createClient } from "@/lib/infra/supabase/server";
-import {
-  Entity,
-  InsertEntity,
-  TableName,
-  tableOf,
-  UpsertResult,
-  UpsertEntity,
-} from "../types/entity.types";
-import { toDb } from "../mapper/base-mapper";
+// import { TableInsert, TableKey, TableRow } from "../types/entity.types";
+// import { diffFields } from "./diff-fields";
+// import { findOne } from "./findone";
+// import { insertOne } from "./insert";
+// import { updateOne } from "./update";
 
-import { mapperRegistry, type MapperTable } from "../mapper/mapper-registry";
+// export function isEmpty(obj: object) {
+//     return Object.keys(obj).length === 0;
+// }
 
-export async function upsertOne<T extends MapperTable>(
-  table: T,
-  data: UpsertEntity<T>
-): Promise<UpsertResult<T>> {
-  const supabase = await createClient();
+// export async function smartUpsert<T extends TableKey>(
+//     target: T,
+//     match: Partial<TableRow<T>>,
+//     input: Partial<TableRow<T>>,
+//     options?: {
+//         ignoreKeys?: (keyof TableRow<T>)[];
+//     }
+// ): Promise<{
+//     action: "insert" | "update" | "skip";
+//     row: TableRow<T>;
+// }> {
+//     const existing = await findOne(target, match);
 
-  const mapper = mapperRegistry[table];
+//     // 🟢 insert
+//     if (!existing) {
+//         const row = await insertOne(target, input);
+//         return { action: "insert", row };
+//     }
 
-  if (!mapper) {
-    throw new Error(`No mapper for table: ${table}`);
-  }
+//     // 🔵 diff
+//     const changes = diffFields(existing, input, [
+//         "id",
+//         "created_at",
+//         "created_by",
+//         ...(options?.ignoreKeys ?? []),
+//     ]);
 
-  const dbData = toDb(data);
+//     // ⚪ skip
+//     if (isEmpty(changes)) {
+//         return { action: "skip", row: existing };
+//     }
 
-  const { data: result, error } = await supabase
-    .from(tableOf(table))
-    .upsert([dbData], {
-      onConflict: mapper.conflict ?? "code",
-    })
-    .select("*")
-    .single();
+//     // 🔴 update（⚠️ 用 match，不用 id）
+//     const row = await updateOne(target, match, changes);
 
-  if (error) throw error;
-
-  return result as UpsertResult<T>;
-}
+//     return { action: "update", row };
+// }

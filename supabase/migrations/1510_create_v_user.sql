@@ -12,11 +12,11 @@ with current_employee as (
 post_roles_cte as (
   select pr.role_id
   from current_employee ce
-  join hr.employee_positions ep
-    on ep.employee_id = ce.id
-   and ep.end_date is null
+  join hr.employee_assignments ea
+    on ea.employee_id = ce.id
+   and ea.end_date is null
   join rbac.post_roles pr
-    on pr.post_id = ep.post_id
+    on pr.post_id = ea.post_id
 ),
 
 -- 用户角色
@@ -89,10 +89,10 @@ with current_employee as (
 
 -- 当前岗位
 current_positions as (
-  select ep.*
-  from hr.employee_positions ep
-  join current_employee ce on ce.id = ep.employee_id
-  where ep.end_date is null
+  select ea.*
+  from hr.employee_assignments ea
+  join current_employee ce on ce.id = ea.employee_id
+  where ea.end_date is null
 ),
 
 -- 主岗位
@@ -106,9 +106,9 @@ primary_position as (
 -- 岗位角色
 post_roles_cte as (
   select pr.role_id
-  from current_positions ep
+  from current_positions ea
   join rbac.post_roles pr
-    on pr.post_id = ep.post_id
+    on pr.post_id = ea.post_id
 ),
 
 -- 用户角色

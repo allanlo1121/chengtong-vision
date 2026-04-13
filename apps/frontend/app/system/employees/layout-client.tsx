@@ -1,5 +1,5 @@
 // app/system/organizations/layout.tsx
-import { OrganizationTree } from "@/modules/organization/ui/tree/organization-tree";
+import { OrganizationTree } from "@/lib/domain/organization/ui/tree/organization-tree";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

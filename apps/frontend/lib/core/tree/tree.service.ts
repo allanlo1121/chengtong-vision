@@ -1,7 +1,7 @@
 import { mapTreeNode } from "./map-tree-node";
 import { getTreeRows } from "./tree.repository";
 
-import { Result } from "@/modules/shared/contracts";
+import { Result } from "@/lib/shared/contracts";
 import { TreeEntity, TreeNode } from "./types";
 import { buildTreeFromRows } from "./build-tree-from-rows";
 

@@ -14,10 +14,10 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-import { menuData } from "@/lib/navigation/menu-data";
+import { menuData } from "@/lib/domain/navigation/menu-data";
 import { useMenu } from "@/lib/runtime/menu/useMenu";
 import { useMemo } from "react";
-import { mapMenuToNav } from "@/lib/navigation/adapter";
+import { mapMenuToNav } from "@/lib/domain/navigation/adapter";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const menus = useMenu();

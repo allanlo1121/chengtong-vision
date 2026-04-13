@@ -1,4 +1,4 @@
-create or replace view public.v_organizations_detail as
+create or replace view public.v_organization_detail as
 select
   o.id,
   o.code,
@@ -21,6 +21,9 @@ select
   o.latitude,
   o.longitude,
 
+  o.is_active,
+  o.external_id,
+  o.external_version,
   o.created_at,
   o.updated_at
 
@@ -36,7 +39,7 @@ left join public.admin_regions ad on ad.code = o.district_code
 where o.deleted_at is null;
 
 
-create or replace view public.v_organizations_list as
+create or replace view public.v_organization_list as
 select
   o.id,
   o.name,
@@ -76,7 +79,7 @@ create or replace function public.tree_query_organizations(
   p_limit int default 20,
   p_offset int default 0
 )
-returns setof v_organizations_list
+returns setof v_organization_list
 language plpgsql
 as $$
 declare
@@ -91,7 +94,7 @@ begin
 
   return query
   select o.*
-  from v_organizations_list o   -- ✅ 改这里
+  from v_organization_list o   -- ✅ 改这里
   where
     (
       p_parent_id is null

@@ -1,44 +1,45 @@
-import { createClient } from "@/lib/infra/supabase/server";
-import { Database } from "@/lib/core/types/database";
-import {
-  Entity,
-  InsertEntity,
-  TableInsert,
-  TableName,
-  tableOf,
-  TableRow,
-} from "../types/entity.types";
+// import { createClient } from "@/lib/infra/supabase/server";
 
-import { toDbUpdate } from "@/lib/core/mapper/to-db";
-import { fromDb } from "../mapper/base-mapper";
-import { getMapper } from "../mapper/registry";
-import { assertNoError } from "@/lib/infra/repositories/base.repository";
-import { fromDbEntity } from "../mapper/from-db";
+// import {
 
-export async function update<T extends TableName>(
-  table: T,
-  id: string,
-  data: InsertEntity<T>
-): Promise<Entity<T>> {
-  const supabase = await createClient();
+//   TableKey,
+//   TableRow,
+//   TableUpdate
+// } from "../types/entity.types";
 
-  const dbData = toDbUpdate(table, data) as unknown as Database["public"]["Tables"][T]["Update"];
+// import { assertNoError } from "@/lib/infra/repositories/base.repository";
+// import { typedEntries } from "../../utils";
 
-  const { data: result, error } = await supabase
-    .from(tableOf(table))
-    .update(dbData)
-    .eq("id", id)
-    .select("*");
+// export async function updateOne<T extends TableKey>(
+//   target: T,
+//   match: Partial<TableRow<T>>,
+//   data: TableUpdate<T>
+// ): Promise<TableRow<T>> {
+//   const supabase = await createClient();
 
-  assertNoError(error);
+//   let query = supabase
+//     .schema(target.schema)
+//     .from(target.table)
+//     .update(data);
 
-  if (!result) {
-    throw new Error(`[${table}] update failed, id=${id} not found`);
-  }
+//   for (const [key, value] of typedEntries(match)) {
+//     if (value !== undefined) {
+//       query = query.eq(key as string, value);
+//     }
+//   }
 
-  if (Array.isArray(result) && result.length > 1) {
-    throw new Error(`[${table}] update returned multiple rows`);
-  }
+//   const { data: result, error } = await query
+//     .select("*")
+//     .limit(1)
+//     .single();
 
-  return fromDbEntity(table, result[0] as TableRow<T>);
-}
+//   assertNoError(error);
+
+//   if (!result) {
+//     throw new Error(
+//       `Update failed: ${target.schema}.${String(target.table)}`
+//     );
+//   }
+
+//   return result;
+// }

@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createClient } from "@/lib/core/supabase/client";
+import { createClient } from "@/lib/infra/supabase/client";
 import { AuthContext } from "./AuthContext";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {

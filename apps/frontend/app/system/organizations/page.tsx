@@ -1,17 +1,17 @@
 import { PageHeader } from "@/components/layout/page-header";
 import { ErrorBlock } from "@/components/common/error-block";
-import { organizationQuery } from "@/modules/organization/queries";
-import { listOrganizations } from "@/modules/organization/services";
+import { organizationQuery } from "@/lib/domain/organization/queries";
+import { listOrganizations } from "@/lib/domain/organization/services";
 import { getTreeNodes } from "@/lib/core/tree/tree.service";
 import { Metadata } from "next";
-import { OrganizationListToolbar } from "@/modules/organization/ui/components/organization-list-toolbar";
+import { OrganizationListToolbar } from "@/lib/domain/organization/ui/components/organization-list-toolbar";
 import { Suspense } from "react";
 import { DataTable } from "@/components/data-table/data-table";
-import { OrganizationListItem } from "@/modules/organization/types";
-import { organizationColumns } from "@/modules/organization/ui/components/organization-columns";
-import { OrganizationTreePanel } from "@/modules/organization/ui/organization-tree-panel";
-import { OrganizationTreeToolbar } from "@/modules/organization/ui/components/organization-tree-toolbar";
-import { OrganizationTableClient } from "@/modules/organization/ui/pages/organization-table-client";
+import { OrganizationListItem } from "@/lib/domain/organization/types";
+import { organizationColumns } from "@/lib/domain/organization/ui/components/organization-columns";
+import { OrganizationTreePanel } from "@/lib/domain/organization/ui/organization-tree-panel";
+import { OrganizationTreeToolbar } from "@/lib/domain/organization/ui/components/organization-tree-toolbar";
+import { OrganizationTableClient } from "@/lib/domain/organization/ui/pages/organization-table-client";
 
 export const metadata: Metadata = {
   title: "组织管理",
