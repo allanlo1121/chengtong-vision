@@ -1110,6 +1110,69 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "organizations_business_id_fkey";
+            columns: ["business_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["progress_status_id"];
+          },
+          {
+            foreignKeyName: "organizations_business_id_fkey";
+            columns: ["business_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_attention_level_id"];
+          },
+          {
+            foreignKeyName: "organizations_business_id_fkey";
+            columns: ["business_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_control_level_id"];
+          },
+          {
+            foreignKeyName: "organizations_business_id_fkey";
+            columns: ["business_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_management_mode_id"];
+          },
+          {
+            foreignKeyName: "organizations_business_id_fkey";
+            columns: ["business_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_risk_level_id"];
+          },
+          {
+            foreignKeyName: "organizations_business_id_fkey";
+            columns: ["business_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_status_id"];
+          },
+          {
+            foreignKeyName: "organizations_business_id_fkey";
+            columns: ["business_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_sub_type_id"];
+          },
+          {
+            foreignKeyName: "organizations_business_id_fkey";
+            columns: ["business_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_type_id"];
+          },
+          {
+            foreignKeyName: "organizations_business_id_fkey";
+            columns: ["business_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["region_id"];
+          },
+          {
             foreignKeyName: "organizations_city_code_fkey";
             columns: ["city_code"];
             isOneToOne: false;
@@ -1159,6 +1222,69 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "organizations_org_category_id_fkey";
+            columns: ["org_category_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["progress_status_id"];
+          },
+          {
+            foreignKeyName: "organizations_org_category_id_fkey";
+            columns: ["org_category_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_attention_level_id"];
+          },
+          {
+            foreignKeyName: "organizations_org_category_id_fkey";
+            columns: ["org_category_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_control_level_id"];
+          },
+          {
+            foreignKeyName: "organizations_org_category_id_fkey";
+            columns: ["org_category_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_management_mode_id"];
+          },
+          {
+            foreignKeyName: "organizations_org_category_id_fkey";
+            columns: ["org_category_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_risk_level_id"];
+          },
+          {
+            foreignKeyName: "organizations_org_category_id_fkey";
+            columns: ["org_category_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_status_id"];
+          },
+          {
+            foreignKeyName: "organizations_org_category_id_fkey";
+            columns: ["org_category_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_sub_type_id"];
+          },
+          {
+            foreignKeyName: "organizations_org_category_id_fkey";
+            columns: ["org_category_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_type_id"];
+          },
+          {
+            foreignKeyName: "organizations_org_category_id_fkey";
+            columns: ["org_category_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["region_id"];
+          },
+          {
             foreignKeyName: "organizations_org_type_id_fkey";
             columns: ["org_type_id"];
             isOneToOne: false;
@@ -1171,6 +1297,69 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_master_options";
             referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "organizations_org_type_id_fkey";
+            columns: ["org_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["progress_status_id"];
+          },
+          {
+            foreignKeyName: "organizations_org_type_id_fkey";
+            columns: ["org_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_attention_level_id"];
+          },
+          {
+            foreignKeyName: "organizations_org_type_id_fkey";
+            columns: ["org_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_control_level_id"];
+          },
+          {
+            foreignKeyName: "organizations_org_type_id_fkey";
+            columns: ["org_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_management_mode_id"];
+          },
+          {
+            foreignKeyName: "organizations_org_type_id_fkey";
+            columns: ["org_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_risk_level_id"];
+          },
+          {
+            foreignKeyName: "organizations_org_type_id_fkey";
+            columns: ["org_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_status_id"];
+          },
+          {
+            foreignKeyName: "organizations_org_type_id_fkey";
+            columns: ["org_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_sub_type_id"];
+          },
+          {
+            foreignKeyName: "organizations_org_type_id_fkey";
+            columns: ["org_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_type_id"];
+          },
+          {
+            foreignKeyName: "organizations_org_type_id_fkey";
+            columns: ["org_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["region_id"];
           },
           {
             foreignKeyName: "organizations_parent_id_fkey";
@@ -1216,44 +1405,295 @@ export type Database = {
           },
         ];
       };
-      projects: {
+      project_attention_types: {
         Row: {
+          attention_type_id: string;
           created_at: string | null;
           created_by: string | null;
           deleted_at: string | null;
           deleted_by: string | null;
-          description: string | null;
           id: string;
-          name: string;
-          org_node_id: string;
+          project_id: string;
           updated_at: string | null;
           updated_by: string | null;
         };
         Insert: {
+          attention_type_id: string;
           created_at?: string | null;
           created_by?: string | null;
           deleted_at?: string | null;
           deleted_by?: string | null;
-          description?: string | null;
           id?: string;
-          name: string;
-          org_node_id: string;
+          project_id: string;
           updated_at?: string | null;
           updated_by?: string | null;
         };
         Update: {
+          attention_type_id?: string;
           created_at?: string | null;
           created_by?: string | null;
           deleted_at?: string | null;
           deleted_by?: string | null;
-          description?: string | null;
           id?: string;
-          name?: string;
-          org_node_id?: string;
+          project_id?: string;
           updated_at?: string | null;
           updated_by?: string | null;
         };
         Relationships: [
+          {
+            foreignKeyName: "project_attention_types_attention_type_id_fkey";
+            columns: ["attention_type_id"];
+            isOneToOne: false;
+            referencedRelation: "master_data";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "project_attention_types_attention_type_id_fkey";
+            columns: ["attention_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_master_options";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "project_attention_types_attention_type_id_fkey";
+            columns: ["attention_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["progress_status_id"];
+          },
+          {
+            foreignKeyName: "project_attention_types_attention_type_id_fkey";
+            columns: ["attention_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_attention_level_id"];
+          },
+          {
+            foreignKeyName: "project_attention_types_attention_type_id_fkey";
+            columns: ["attention_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_control_level_id"];
+          },
+          {
+            foreignKeyName: "project_attention_types_attention_type_id_fkey";
+            columns: ["attention_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_management_mode_id"];
+          },
+          {
+            foreignKeyName: "project_attention_types_attention_type_id_fkey";
+            columns: ["attention_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_risk_level_id"];
+          },
+          {
+            foreignKeyName: "project_attention_types_attention_type_id_fkey";
+            columns: ["attention_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_status_id"];
+          },
+          {
+            foreignKeyName: "project_attention_types_attention_type_id_fkey";
+            columns: ["attention_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_sub_type_id"];
+          },
+          {
+            foreignKeyName: "project_attention_types_attention_type_id_fkey";
+            columns: ["attention_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_type_id"];
+          },
+          {
+            foreignKeyName: "project_attention_types_attention_type_id_fkey";
+            columns: ["attention_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["region_id"];
+          },
+          {
+            foreignKeyName: "project_attention_types_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_runtime_user";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "project_attention_types_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_runtime_user";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "project_attention_types_project_id_fkey";
+            columns: ["project_id"];
+            isOneToOne: false;
+            referencedRelation: "projects";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "project_attention_types_project_id_fkey";
+            columns: ["project_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "project_attention_types_project_id_fkey";
+            columns: ["project_id"];
+            isOneToOne: false;
+            referencedRelation: "v_user_favorite_projects";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "project_attention_types_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_runtime_user";
+            referencedColumns: ["employee_id"];
+          },
+        ];
+      };
+      projects: {
+        Row: {
+          actual_end_date: string | null;
+          actual_start_date: string | null;
+          address: string | null;
+          city_code: string | null;
+          code: string;
+          commissioning_date: string | null;
+          country_code: string | null;
+          created_at: string | null;
+          created_by: string | null;
+          deleted_at: string | null;
+          deleted_by: string | null;
+          district_code: string | null;
+          external_id: string | null;
+          external_version: number | null;
+          fullname: string | null;
+          id: string;
+          latitude: number | null;
+          longitude: number | null;
+          name: string;
+          organization_id: string | null;
+          plan_end_date: string | null;
+          plan_start_date: string | null;
+          project_attention_level_id: string | null;
+          project_control_level_id: string | null;
+          project_key_points: string | null;
+          project_management_mode_id: string | null;
+          project_overview: string | null;
+          project_risk_level_id: string | null;
+          project_scope: string | null;
+          project_status_id: string | null;
+          project_sub_status_id: string | null;
+          project_sub_type_id: string | null;
+          project_type_id: string | null;
+          province_code: string | null;
+          region_id: string | null;
+          updated_at: string | null;
+          updated_by: string | null;
+        };
+        Insert: {
+          actual_end_date?: string | null;
+          actual_start_date?: string | null;
+          address?: string | null;
+          city_code?: string | null;
+          code: string;
+          commissioning_date?: string | null;
+          country_code?: string | null;
+          created_at?: string | null;
+          created_by?: string | null;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
+          district_code?: string | null;
+          external_id?: string | null;
+          external_version?: number | null;
+          fullname?: string | null;
+          id?: string;
+          latitude?: number | null;
+          longitude?: number | null;
+          name: string;
+          organization_id?: string | null;
+          plan_end_date?: string | null;
+          plan_start_date?: string | null;
+          project_attention_level_id?: string | null;
+          project_control_level_id?: string | null;
+          project_key_points?: string | null;
+          project_management_mode_id?: string | null;
+          project_overview?: string | null;
+          project_risk_level_id?: string | null;
+          project_scope?: string | null;
+          project_status_id?: string | null;
+          project_sub_status_id?: string | null;
+          project_sub_type_id?: string | null;
+          project_type_id?: string | null;
+          province_code?: string | null;
+          region_id?: string | null;
+          updated_at?: string | null;
+          updated_by?: string | null;
+        };
+        Update: {
+          actual_end_date?: string | null;
+          actual_start_date?: string | null;
+          address?: string | null;
+          city_code?: string | null;
+          code?: string;
+          commissioning_date?: string | null;
+          country_code?: string | null;
+          created_at?: string | null;
+          created_by?: string | null;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
+          district_code?: string | null;
+          external_id?: string | null;
+          external_version?: number | null;
+          fullname?: string | null;
+          id?: string;
+          latitude?: number | null;
+          longitude?: number | null;
+          name?: string;
+          organization_id?: string | null;
+          plan_end_date?: string | null;
+          plan_start_date?: string | null;
+          project_attention_level_id?: string | null;
+          project_control_level_id?: string | null;
+          project_key_points?: string | null;
+          project_management_mode_id?: string | null;
+          project_overview?: string | null;
+          project_risk_level_id?: string | null;
+          project_scope?: string | null;
+          project_status_id?: string | null;
+          project_sub_status_id?: string | null;
+          project_sub_type_id?: string | null;
+          project_type_id?: string | null;
+          province_code?: string | null;
+          region_id?: string | null;
+          updated_at?: string | null;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "projects_city_code_fkey";
+            columns: ["city_code"];
+            isOneToOne: false;
+            referencedRelation: "admin_regions";
+            referencedColumns: ["code"];
+          },
+          {
+            foreignKeyName: "projects_country_code_fkey";
+            columns: ["country_code"];
+            isOneToOne: false;
+            referencedRelation: "countries";
+            referencedColumns: ["code"];
+          },
           {
             foreignKeyName: "projects_created_by_fkey";
             columns: ["created_by"];
@@ -1269,32 +1709,739 @@ export type Database = {
             referencedColumns: ["employee_id"];
           },
           {
-            foreignKeyName: "projects_org_node_id_fkey";
-            columns: ["org_node_id"];
+            foreignKeyName: "projects_district_code_fkey";
+            columns: ["district_code"];
+            isOneToOne: false;
+            referencedRelation: "admin_regions";
+            referencedColumns: ["code"];
+          },
+          {
+            foreignKeyName: "projects_organization_id_fkey";
+            columns: ["organization_id"];
             isOneToOne: false;
             referencedRelation: "organizations";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "projects_org_node_id_fkey";
-            columns: ["org_node_id"];
+            foreignKeyName: "projects_organization_id_fkey";
+            columns: ["organization_id"];
             isOneToOne: false;
             referencedRelation: "v_organization_detail";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "projects_org_node_id_fkey";
-            columns: ["org_node_id"];
+            foreignKeyName: "projects_organization_id_fkey";
+            columns: ["organization_id"];
             isOneToOne: false;
             referencedRelation: "v_organization_list";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "projects_org_node_id_fkey";
-            columns: ["org_node_id"];
+            foreignKeyName: "projects_organization_id_fkey";
+            columns: ["organization_id"];
             isOneToOne: false;
             referencedRelation: "v_tree_nodes";
             referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_project_attention_level_id_fkey";
+            columns: ["project_attention_level_id"];
+            isOneToOne: false;
+            referencedRelation: "master_data";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_project_attention_level_id_fkey";
+            columns: ["project_attention_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_master_options";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_project_attention_level_id_fkey";
+            columns: ["project_attention_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["progress_status_id"];
+          },
+          {
+            foreignKeyName: "projects_project_attention_level_id_fkey";
+            columns: ["project_attention_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_attention_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_attention_level_id_fkey";
+            columns: ["project_attention_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_control_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_attention_level_id_fkey";
+            columns: ["project_attention_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_management_mode_id"];
+          },
+          {
+            foreignKeyName: "projects_project_attention_level_id_fkey";
+            columns: ["project_attention_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_risk_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_attention_level_id_fkey";
+            columns: ["project_attention_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_status_id"];
+          },
+          {
+            foreignKeyName: "projects_project_attention_level_id_fkey";
+            columns: ["project_attention_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_sub_type_id"];
+          },
+          {
+            foreignKeyName: "projects_project_attention_level_id_fkey";
+            columns: ["project_attention_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_type_id"];
+          },
+          {
+            foreignKeyName: "projects_project_attention_level_id_fkey";
+            columns: ["project_attention_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["region_id"];
+          },
+          {
+            foreignKeyName: "projects_project_control_level_id_fkey";
+            columns: ["project_control_level_id"];
+            isOneToOne: false;
+            referencedRelation: "master_data";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_project_control_level_id_fkey";
+            columns: ["project_control_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_master_options";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_project_control_level_id_fkey";
+            columns: ["project_control_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["progress_status_id"];
+          },
+          {
+            foreignKeyName: "projects_project_control_level_id_fkey";
+            columns: ["project_control_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_attention_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_control_level_id_fkey";
+            columns: ["project_control_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_control_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_control_level_id_fkey";
+            columns: ["project_control_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_management_mode_id"];
+          },
+          {
+            foreignKeyName: "projects_project_control_level_id_fkey";
+            columns: ["project_control_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_risk_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_control_level_id_fkey";
+            columns: ["project_control_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_status_id"];
+          },
+          {
+            foreignKeyName: "projects_project_control_level_id_fkey";
+            columns: ["project_control_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_sub_type_id"];
+          },
+          {
+            foreignKeyName: "projects_project_control_level_id_fkey";
+            columns: ["project_control_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_type_id"];
+          },
+          {
+            foreignKeyName: "projects_project_control_level_id_fkey";
+            columns: ["project_control_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["region_id"];
+          },
+          {
+            foreignKeyName: "projects_project_management_mode_id_fkey";
+            columns: ["project_management_mode_id"];
+            isOneToOne: false;
+            referencedRelation: "master_data";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_project_management_mode_id_fkey";
+            columns: ["project_management_mode_id"];
+            isOneToOne: false;
+            referencedRelation: "v_master_options";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_project_management_mode_id_fkey";
+            columns: ["project_management_mode_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["progress_status_id"];
+          },
+          {
+            foreignKeyName: "projects_project_management_mode_id_fkey";
+            columns: ["project_management_mode_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_attention_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_management_mode_id_fkey";
+            columns: ["project_management_mode_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_control_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_management_mode_id_fkey";
+            columns: ["project_management_mode_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_management_mode_id"];
+          },
+          {
+            foreignKeyName: "projects_project_management_mode_id_fkey";
+            columns: ["project_management_mode_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_risk_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_management_mode_id_fkey";
+            columns: ["project_management_mode_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_status_id"];
+          },
+          {
+            foreignKeyName: "projects_project_management_mode_id_fkey";
+            columns: ["project_management_mode_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_sub_type_id"];
+          },
+          {
+            foreignKeyName: "projects_project_management_mode_id_fkey";
+            columns: ["project_management_mode_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_type_id"];
+          },
+          {
+            foreignKeyName: "projects_project_management_mode_id_fkey";
+            columns: ["project_management_mode_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["region_id"];
+          },
+          {
+            foreignKeyName: "projects_project_risk_level_id_fkey";
+            columns: ["project_risk_level_id"];
+            isOneToOne: false;
+            referencedRelation: "master_data";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_project_risk_level_id_fkey";
+            columns: ["project_risk_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_master_options";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_project_risk_level_id_fkey";
+            columns: ["project_risk_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["progress_status_id"];
+          },
+          {
+            foreignKeyName: "projects_project_risk_level_id_fkey";
+            columns: ["project_risk_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_attention_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_risk_level_id_fkey";
+            columns: ["project_risk_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_control_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_risk_level_id_fkey";
+            columns: ["project_risk_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_management_mode_id"];
+          },
+          {
+            foreignKeyName: "projects_project_risk_level_id_fkey";
+            columns: ["project_risk_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_risk_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_risk_level_id_fkey";
+            columns: ["project_risk_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_status_id"];
+          },
+          {
+            foreignKeyName: "projects_project_risk_level_id_fkey";
+            columns: ["project_risk_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_sub_type_id"];
+          },
+          {
+            foreignKeyName: "projects_project_risk_level_id_fkey";
+            columns: ["project_risk_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_type_id"];
+          },
+          {
+            foreignKeyName: "projects_project_risk_level_id_fkey";
+            columns: ["project_risk_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["region_id"];
+          },
+          {
+            foreignKeyName: "projects_project_status_id_fkey";
+            columns: ["project_status_id"];
+            isOneToOne: false;
+            referencedRelation: "master_data";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_project_status_id_fkey";
+            columns: ["project_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_master_options";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_project_status_id_fkey";
+            columns: ["project_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["progress_status_id"];
+          },
+          {
+            foreignKeyName: "projects_project_status_id_fkey";
+            columns: ["project_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_attention_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_status_id_fkey";
+            columns: ["project_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_control_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_status_id_fkey";
+            columns: ["project_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_management_mode_id"];
+          },
+          {
+            foreignKeyName: "projects_project_status_id_fkey";
+            columns: ["project_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_risk_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_status_id_fkey";
+            columns: ["project_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_status_id"];
+          },
+          {
+            foreignKeyName: "projects_project_status_id_fkey";
+            columns: ["project_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_sub_type_id"];
+          },
+          {
+            foreignKeyName: "projects_project_status_id_fkey";
+            columns: ["project_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_type_id"];
+          },
+          {
+            foreignKeyName: "projects_project_status_id_fkey";
+            columns: ["project_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["region_id"];
+          },
+          {
+            foreignKeyName: "projects_project_sub_status_id_fkey";
+            columns: ["project_sub_status_id"];
+            isOneToOne: false;
+            referencedRelation: "master_data";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_project_sub_status_id_fkey";
+            columns: ["project_sub_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_master_options";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_project_sub_status_id_fkey";
+            columns: ["project_sub_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["progress_status_id"];
+          },
+          {
+            foreignKeyName: "projects_project_sub_status_id_fkey";
+            columns: ["project_sub_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_attention_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_sub_status_id_fkey";
+            columns: ["project_sub_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_control_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_sub_status_id_fkey";
+            columns: ["project_sub_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_management_mode_id"];
+          },
+          {
+            foreignKeyName: "projects_project_sub_status_id_fkey";
+            columns: ["project_sub_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_risk_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_sub_status_id_fkey";
+            columns: ["project_sub_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_status_id"];
+          },
+          {
+            foreignKeyName: "projects_project_sub_status_id_fkey";
+            columns: ["project_sub_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_sub_type_id"];
+          },
+          {
+            foreignKeyName: "projects_project_sub_status_id_fkey";
+            columns: ["project_sub_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_type_id"];
+          },
+          {
+            foreignKeyName: "projects_project_sub_status_id_fkey";
+            columns: ["project_sub_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["region_id"];
+          },
+          {
+            foreignKeyName: "projects_project_sub_type_id_fkey";
+            columns: ["project_sub_type_id"];
+            isOneToOne: false;
+            referencedRelation: "master_data";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_project_sub_type_id_fkey";
+            columns: ["project_sub_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_master_options";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_project_sub_type_id_fkey";
+            columns: ["project_sub_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["progress_status_id"];
+          },
+          {
+            foreignKeyName: "projects_project_sub_type_id_fkey";
+            columns: ["project_sub_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_attention_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_sub_type_id_fkey";
+            columns: ["project_sub_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_control_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_sub_type_id_fkey";
+            columns: ["project_sub_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_management_mode_id"];
+          },
+          {
+            foreignKeyName: "projects_project_sub_type_id_fkey";
+            columns: ["project_sub_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_risk_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_sub_type_id_fkey";
+            columns: ["project_sub_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_status_id"];
+          },
+          {
+            foreignKeyName: "projects_project_sub_type_id_fkey";
+            columns: ["project_sub_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_sub_type_id"];
+          },
+          {
+            foreignKeyName: "projects_project_sub_type_id_fkey";
+            columns: ["project_sub_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_type_id"];
+          },
+          {
+            foreignKeyName: "projects_project_sub_type_id_fkey";
+            columns: ["project_sub_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["region_id"];
+          },
+          {
+            foreignKeyName: "projects_project_type_id_fkey";
+            columns: ["project_type_id"];
+            isOneToOne: false;
+            referencedRelation: "master_data";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_project_type_id_fkey";
+            columns: ["project_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_master_options";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_project_type_id_fkey";
+            columns: ["project_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["progress_status_id"];
+          },
+          {
+            foreignKeyName: "projects_project_type_id_fkey";
+            columns: ["project_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_attention_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_type_id_fkey";
+            columns: ["project_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_control_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_type_id_fkey";
+            columns: ["project_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_management_mode_id"];
+          },
+          {
+            foreignKeyName: "projects_project_type_id_fkey";
+            columns: ["project_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_risk_level_id"];
+          },
+          {
+            foreignKeyName: "projects_project_type_id_fkey";
+            columns: ["project_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_status_id"];
+          },
+          {
+            foreignKeyName: "projects_project_type_id_fkey";
+            columns: ["project_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_sub_type_id"];
+          },
+          {
+            foreignKeyName: "projects_project_type_id_fkey";
+            columns: ["project_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_type_id"];
+          },
+          {
+            foreignKeyName: "projects_project_type_id_fkey";
+            columns: ["project_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["region_id"];
+          },
+          {
+            foreignKeyName: "projects_province_code_fkey";
+            columns: ["province_code"];
+            isOneToOne: false;
+            referencedRelation: "admin_regions";
+            referencedColumns: ["code"];
+          },
+          {
+            foreignKeyName: "projects_region_id_fkey";
+            columns: ["region_id"];
+            isOneToOne: false;
+            referencedRelation: "master_data";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_region_id_fkey";
+            columns: ["region_id"];
+            isOneToOne: false;
+            referencedRelation: "v_master_options";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_region_id_fkey";
+            columns: ["region_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["progress_status_id"];
+          },
+          {
+            foreignKeyName: "projects_region_id_fkey";
+            columns: ["region_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_attention_level_id"];
+          },
+          {
+            foreignKeyName: "projects_region_id_fkey";
+            columns: ["region_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_control_level_id"];
+          },
+          {
+            foreignKeyName: "projects_region_id_fkey";
+            columns: ["region_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_management_mode_id"];
+          },
+          {
+            foreignKeyName: "projects_region_id_fkey";
+            columns: ["region_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_risk_level_id"];
+          },
+          {
+            foreignKeyName: "projects_region_id_fkey";
+            columns: ["region_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_status_id"];
+          },
+          {
+            foreignKeyName: "projects_region_id_fkey";
+            columns: ["region_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_sub_type_id"];
+          },
+          {
+            foreignKeyName: "projects_region_id_fkey";
+            columns: ["region_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["project_type_id"];
+          },
+          {
+            foreignKeyName: "projects_region_id_fkey";
+            columns: ["region_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
+            referencedColumns: ["region_id"];
           },
           {
             foreignKeyName: "projects_updated_by_fkey";
@@ -1333,6 +2480,13 @@ export type Database = {
             columns: ["project_id"];
             isOneToOne: false;
             referencedRelation: "projects";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "user_favorite_projects_project_id_fkey";
+            columns: ["project_id"];
+            isOneToOne: false;
+            referencedRelation: "v_projects_list";
             referencedColumns: ["id"];
           },
           {
@@ -1435,6 +2589,82 @@ export type Database = {
           {
             foreignKeyName: "organizations_parent_id_fkey";
             columns: ["parent_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tree_nodes";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      v_projects_list: {
+        Row: {
+          actual_end_date: string | null;
+          actual_start_date: string | null;
+          address: string | null;
+          city_id: string | null;
+          city_name: string | null;
+          code: string | null;
+          commissioning_date: string | null;
+          country_id: string | null;
+          country_name: string | null;
+          district_id: string | null;
+          district_name: string | null;
+          external_id: string | null;
+          external_version: number | null;
+          fullname: string | null;
+          id: string | null;
+          latitude: number | null;
+          longitude: number | null;
+          name: string | null;
+          organization_id: string | null;
+          organization_name: string | null;
+          plan_end_date: string | null;
+          plan_start_date: string | null;
+          progress_status_id: string | null;
+          progress_status_name: string | null;
+          project_attention_level_id: string | null;
+          project_attention_level_name: string | null;
+          project_control_level_id: string | null;
+          project_control_level_name: string | null;
+          project_management_mode_id: string | null;
+          project_management_mode_name: string | null;
+          project_risk_level_id: string | null;
+          project_risk_level_name: string | null;
+          project_status_id: string | null;
+          project_status_name: string | null;
+          project_sub_type_id: string | null;
+          project_sub_type_name: string | null;
+          project_type_id: string | null;
+          project_type_name: string | null;
+          province_id: string | null;
+          province_name: string | null;
+          region_id: string | null;
+          region_name: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "projects_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "v_organization_detail";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "v_organization_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_organization_id_fkey";
+            columns: ["organization_id"];
             isOneToOne: false;
             referencedRelation: "v_tree_nodes";
             referencedColumns: ["id"];

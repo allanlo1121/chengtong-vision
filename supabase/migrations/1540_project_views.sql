@@ -1,5 +1,4 @@
 
-DROP VIEW IF exists v_projects_list cascade;
 
 create or replace view public.v_projects_list as
 select
@@ -8,7 +7,8 @@ select
   p.name,
   p.fullname,
   p.code,
-  p.external_global_id,
+  p.external_id,
+  p.external_version,
 
   -- ===== 组织 =====
   p.organization_id,
@@ -66,23 +66,23 @@ select
   p.actual_start_date,
   p.plan_end_date,
   p.actual_end_date,
-  p.commissioning_date,
+  p.commissioning_date
 
 
 from projects p
 left join organizations org on org.id = p.organization_id
 
-left join master_data_new pm on pm.id = p.project_management_mode_id
-left join master_data_new pr on pr.id = p.project_risk_level_id
-left join master_data_new pt on pt.id = p.project_type_id
-left join master_data_new ps on ps.id = p.project_status_id
-left join master_data_new pa on pa.id = p.project_attention_level_id
-left join master_data_new pc on pc.id = p.project_control_level_id
-left join master_data_new pg on pg.id = p.progress_status_id
-left join master_data_new spt on spt.id =p.project_sub_type_id
+left join master_data pm on pm.id = p.project_management_mode_id
+left join master_data pr on pr.id = p.project_risk_level_id
+left join master_data pt on pt.id = p.project_type_id
+left join master_data ps on ps.id = p.project_status_id
+left join master_data pa on pa.id = p.project_attention_level_id
+left join master_data pc on pc.id = p.project_control_level_id
+left join master_data pg on pg.id = p.project_sub_status_id
+left join master_data spt on spt.id =p.project_sub_type_id
 
-left join master_data_new country  on country.id  = p.country_id
-left join master_data_new region   on region.id   = p.region_id
-left join master_data_new province on province.id = p.province_id
-left join master_data_new city     on city.id     = p.city_id
-left join master_data_new district on district.id = p.district_id;
+left join countries country  on country.code  = p.country_code
+left join master_data region   on region.id   = p.region_id
+left join admin_regions province on province.code = p.province_code
+left join admin_regions city     on city.code     = p.city_code
+left join admin_regions district on district.code = p.district_code;

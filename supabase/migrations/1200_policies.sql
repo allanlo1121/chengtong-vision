@@ -80,7 +80,7 @@ for select
 using (
   system.is_super_admin()
   OR
-  org_node_id in (
+  organization_id in (
     select system.allowed_org_ids()
   )
 );
@@ -91,7 +91,7 @@ for insert
 with check (
   system.is_super_admin()
   OR
-  org_node_id in (
+  organization_id in (
     select system.allowed_org_ids()
   )
 );
@@ -103,14 +103,14 @@ for update
 using (
   system.is_super_admin()
   OR
-  org_node_id in (
+  organization_id in (
     select system.allowed_org_ids()
   )
 )
 with check (
   system.is_super_admin()
   OR
-  org_node_id in (
+  organization_id in (
     select system.allowed_org_ids()
   )
 );
@@ -121,7 +121,7 @@ for delete
 using (
   system.is_super_admin()
   OR
-  org_node_id in (
+  organization_id in (
     select system.allowed_org_ids()
   )
 );
