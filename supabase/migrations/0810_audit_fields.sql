@@ -241,6 +241,29 @@ alter table public.projects
 add column deleted_by uuid
 references hr.employees(id) on delete set null;
 
+--- Add audit fields to project_attention_types
+alter table public.project_attention_types
+add column created_at timestamptz default now();
+
+alter table public.project_attention_types
+add column updated_at timestamptz;
+
+alter table public.project_attention_types
+add column deleted_at timestamptz;
+
+alter table public.project_attention_types
+add column created_by uuid
+references hr.employees(id) on delete set null;
+
+alter table public.project_attention_types
+add column updated_by uuid
+references hr.employees(id) on delete set null;
+
+alter table public.project_attention_types
+add column deleted_by uuid
+references hr.employees(id) on delete set null;
+
+
 
 --Add audit fields to audit_logs
 alter table audit.logs

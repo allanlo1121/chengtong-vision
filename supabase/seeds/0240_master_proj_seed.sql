@@ -172,6 +172,34 @@ ON CONFLICT (definition_id, code) DO NOTHING;
 
 
 -- ==========================================
+-- 工程子类型 PROJECT_SUB_TYPE
+-- ==========================================
+
+INSERT INTO public.master_definitions (name, code)
+VALUES ('工程子类型', 'PROJECT_SUB_TYPE')
+ON CONFLICT (code) DO NOTHING;
+
+INSERT INTO public.master_data (definition_id, code, name)
+SELECT md.id, v.code, v.name
+FROM public.master_definitions md
+JOIN (
+    VALUES 
+    ('20550001', '高铁'),
+    ('20550002', '客专'),
+    ('20550003', '一般铁路'),
+    ('20550004', '高速公路'),
+    ('20550005', '一般公路'),
+    ('20550006', '轻轨'),
+    ('20550007', '地铁'),
+    ('20550008', '高层房建'),
+    ('20550009', '一般房建')
+) AS v(code, name)
+ON true
+WHERE md.code = 'PROJECT_SUB_TYPE'
+ON CONFLICT (definition_id, code) DO NOTHING;
+
+
+-- ==========================================
 -- 工程性质 ENGINEERING_NATURE
 -- ==========================================
 
@@ -214,6 +242,127 @@ JOIN (
 ON true
 WHERE md.code = 'USE_QUALIFICATION'
 ON CONFLICT (definition_id, code) DO NOTHING;
+
+
+
+-- ==========================================
+-- 风险等级 PROJECT_RISK_LEVEL
+-- ==========================================
+
+INSERT INTO public.master_definitions (name, code)
+VALUES ('风险等级', 'PROJECT_RISK_LEVEL')
+ON CONFLICT (code) DO NOTHING;
+
+INSERT INTO public.master_data (definition_id, code, name)
+SELECT md.id, v.code, v.name
+FROM public.master_definitions md
+JOIN (
+    VALUES 
+    ('20140001', '重大风险项目'),
+    ('20140002', '较大风险项目'),
+    ('20140003', '一般风险项目'),
+    ('20140004', '低风险项目')
+) AS v(code, name)
+ON true
+WHERE md.code = 'PROJECT_RISK_LEVEL'
+ON CONFLICT (definition_id, code) DO NOTHING;
+
+
+-- ==========================================
+-- 项目子状态  PROJECT_SUB_STATUS
+-- ==========================================
+
+INSERT INTO public.master_definitions (name, code)
+VALUES ('项目子状态', 'PROJECT_SUB_STATUS')
+ON CONFLICT (code) DO NOTHING;
+
+INSERT INTO public.master_data (definition_id, code, name)
+SELECT md.id, v.code, v.name
+FROM public.master_definitions md
+JOIN (
+    VALUES 
+    ('20160001', '未开工'),
+    ('20160002', '正常在建'),
+    ('20160003', '冬休'),
+    ('20160004', '停工'),
+    ('20160005', '已完工未竣工'),
+    ('20160006', '已竣工未交付'),
+    ('20160007', '未竣工已交付'),
+    ('20160008', '已竣工已交付')
+) AS v(code, name)
+ON true
+WHERE md.code = 'PROJECT_SUB_STATUS'
+ON CONFLICT (definition_id, code) DO NOTHING;
+
+-- ==========================================
+-- 项目管控级别  PROJECT_CONTROL_LEVEL
+-- ==========================================
+
+INSERT INTO public.master_definitions (name, code)
+VALUES ('项目管控级别', 'PROJECT_CONTROL_LEVEL')
+ON CONFLICT (code) DO NOTHING;
+
+INSERT INTO public.master_data (definition_id, code, name)
+SELECT md.id, v.code, v.name
+FROM public.master_definitions md
+JOIN (
+    VALUES 
+    ('20130001', '一级管控级别'),
+    ('20130002', '二级管控级别'),
+    ('20130003', '三级管控级别'),
+    ('20130004', '无')
+) AS v(code, name)
+ON true
+WHERE md.code = 'PROJECT_CONTROL_LEVEL'
+ON CONFLICT (definition_id, code) DO NOTHING;
+
+
+-- ==========================================
+-- 项目关注类别  PROJECT_ATTENTION_LEVEL
+-- ==========================================
+
+INSERT INTO public.master_definitions (name, code)
+VALUES ('项目关注类别', 'PROJECT_ATTENTION_LEVEL')
+ON CONFLICT (code) DO NOTHING;
+
+INSERT INTO public.master_data (definition_id, code, name)
+SELECT md.id, v.code, v.name
+FROM public.master_definitions md
+JOIN (
+    VALUES 
+    ('20560001', '重点项目'),
+    ('20560002', '关注项目'),
+    ('20560003', '一般项目')
+) AS v(code, name)
+ON true
+WHERE md.code = 'PROJECT_ATTENTION_LEVEL'
+ON CONFLICT (definition_id, code) DO NOTHING;
+
+-- ==========================================
+-- 项目关注类型  PROJECT_ATTENTION_TYPE
+-- ==========================================
+
+INSERT INTO public.master_definitions (name, code)
+VALUES ('项目关注类型', 'PROJECT_ATTENTION_TYPE')
+ON CONFLICT (code) DO NOTHING;
+
+INSERT INTO public.master_data (definition_id, code, name)
+SELECT md.id, v.code, v.name
+FROM public.master_definitions md
+JOIN (
+    VALUES 
+    ('20570001', '安全类型'),
+    ('20570002', '工期类型'),
+    ('20570003', '质量类型'),
+    ('20570004', '技术类型'),
+    ('20570005', '文明施工'),
+    ('20570006', '维稳')
+) AS v(code, name)
+ON true
+WHERE md.code = 'PROJECT_ATTENTION_TYPE'
+ON CONFLICT (definition_id, code) DO NOTHING;
+
+
 
 
 
