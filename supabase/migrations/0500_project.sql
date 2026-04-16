@@ -13,20 +13,14 @@ CREATE TABLE public.projects (
 --工程管理信息
   organization_id              UUID REFERENCES organizations(id), -- 负责该项目的组织机构
   project_management_mode_id   UUID REFERENCES master_data(id),       -- 管理模式（如“自管”、“托管”）
-  project_risk_level_id        UUID REFERENCES master_data(id),       -- 风险等级（如“低风险”、“中风险”）
   project_type_id              UUID REFERENCES master_data(id),       -- 工程类型（如“铁路工程”、“公路工程”）
   project_sub_type_id   UUID REFERENCES master_data(id),             -- 子工程类型（如“高铁”、“客专”）
-  project_status_id            UUID REFERENCES master_data(id),       -- 项目状态（如“在建”、“已竣工”）
-  project_sub_status_id          UUID REFERENCES master_data(id),       -- 项目子状态（如“设计阶段”、“施工阶段”
-  project_attention_level_id   UUID REFERENCES master_data(id),       -- 项目关注类别
-  project_control_level_id     UUID REFERENCES master_data(id),       -- 项目管控级别（如“一级”、“二级”）  
+ 
 
 --进度信息时间
-  plan_start_date        DATE,                                       -- 计划开工日期
   actual_start_date      DATE,                                       -- 实际开工日期
-  plan_end_date          DATE,                                       -- 计划竣工日期
   actual_end_date        DATE,                                       -- 实际竣工日期
-  commissioning_date    DATE,                                       -- 试运行日期
+
 
 
 --位置信息
@@ -51,12 +45,3 @@ CREATE TABLE public.projects (
 );
 
 
-create table project_attention_types (
-  id uuid primary key default gen_random_uuid(),
-
-  project_id uuid not null references projects(id) on delete cascade,
-
-  attention_type_id uuid not null references master_data(id),
-
-  unique (project_id, attention_type_id)
-);

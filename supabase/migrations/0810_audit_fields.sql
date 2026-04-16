@@ -241,29 +241,204 @@ alter table public.projects
 add column deleted_by uuid
 references hr.employees(id) on delete set null;
 
---- Add audit fields to project_attention_types
-alter table public.project_attention_types
+--- Add audit fields to project_status_timeline
+alter table public.project_status_timeline
 add column created_at timestamptz default now();
 
-alter table public.project_attention_types
+alter table public.project_status_timeline
 add column updated_at timestamptz;
 
-alter table public.project_attention_types
+alter table public.project_status_timeline
 add column deleted_at timestamptz;
 
-alter table public.project_attention_types
+alter table public.project_status_timeline
 add column created_by uuid
 references hr.employees(id) on delete set null;
 
-alter table public.project_attention_types
+alter table public.project_status_timeline
 add column updated_by uuid
 references hr.employees(id) on delete set null;
 
-alter table public.project_attention_types
+alter table public.project_status_timeline
+add column deleted_by uuid
+references hr.employees(id) on delete set null;
+
+--add audit fields to project_risk_level_timeline
+alter table public.project_risk_level_timeline
+add column created_at timestamptz default now();
+
+alter table public.project_risk_level_timeline
+add column updated_at timestamptz;
+
+alter table public.project_risk_level_timeline
+add column deleted_at timestamptz;
+
+alter table public.project_risk_level_timeline
+add column created_by uuid
+references hr.employees(id) on delete set null;
+
+alter table public.project_risk_level_timeline
+add column updated_by uuid
+references hr.employees(id) on delete set null;
+
+alter table public.project_risk_level_timeline
+add column deleted_by uuid
+references hr.employees(id) on delete set null;
+
+--add audit fields to project_attention_level_timeline
+alter table public.project_attention_level_timeline
+add column created_at timestamptz default now();
+
+alter table public.project_attention_level_timeline
+add column updated_at timestamptz;
+
+alter table public.project_attention_level_timeline
+add column deleted_at timestamptz;
+
+alter table public.project_attention_level_timeline
+add column created_by uuid
+references hr.employees(id) on delete set null;
+
+alter table public.project_attention_level_timeline
+add column updated_by uuid
+references hr.employees(id) on delete set null;
+
+alter table public.project_attention_level_timeline
+add column deleted_by uuid
+references hr.employees(id) on delete set null;
+
+--add audit fields to project_control_levle_timeline
+alter table public.project_control_level_timeline
+add column created_at timestamptz default now();
+
+alter table public.project_control_level_timeline   
+add column updated_at timestamptz;
+
+alter table public.project_control_level_timeline
+add column deleted_at timestamptz;
+
+alter table public.project_control_level_timeline
+add column created_by uuid
+references hr.employees(id) on delete set null;
+
+alter table public.project_control_level_timeline
+add column updated_by uuid
+references hr.employees(id) on delete set null;
+
+alter table public.project_control_level_timeline
 add column deleted_by uuid
 references hr.employees(id) on delete set null;
 
 
+--add audit fields to project_leader_timeline
+alter table public.project_leader_timeline
+add column created_at timestamptz default now();
+
+alter table public.project_leader_timeline
+add column updated_at timestamptz;
+
+alter table public.project_leader_timeline
+add column deleted_at timestamptz;
+
+alter table public.project_leader_timeline
+add column created_by uuid
+references hr.employees(id) on delete set null;
+
+alter table public.project_leader_timeline
+add column updated_by uuid
+references hr.employees(id) on delete set null;
+
+alter table public.project_leader_timeline
+add column deleted_by uuid
+references hr.employees(id) on delete set null;
+
+--- Add audit fields to project_attention_type_timeline
+alter table public.project_attention_type_timeline
+add column created_at timestamptz default now();
+
+alter table public.project_attention_type_timeline
+add column updated_at timestamptz;
+
+alter table public.project_attention_type_timeline
+add column deleted_at timestamptz;
+
+alter table public.project_attention_type_timeline
+add column created_by uuid
+references hr.employees(id) on delete set null;
+
+alter table public.project_attention_type_timeline
+add column updated_by uuid
+references hr.employees(id) on delete set null;
+
+alter table public.project_attention_type_timeline
+add column deleted_by uuid
+references hr.employees(id) on delete set null;
+
+-- add audit fields to project_contracts
+alter table public.project_contracts
+add column created_at timestamptz default now();
+
+alter table public.project_contracts
+add column updated_at timestamptz;
+
+alter table public.project_contracts
+add column deleted_at timestamptz;
+
+alter table public.project_contracts
+add column created_by uuid
+references hr.employees(id) on delete set null;
+
+alter table public.project_contracts
+add column updated_by uuid
+references hr.employees(id) on delete set null;
+
+alter table public.project_contracts
+add column deleted_by uuid
+references hr.employees(id) on delete set null;
+
+-- add audit fields to project_contract_versions
+alter table public.project_contract_versions
+add column created_at timestamptz default now();
+
+alter table public.project_contract_versions
+add column updated_at timestamptz;
+
+alter table public.project_contract_versions
+add column deleted_at timestamptz;
+
+alter table public.project_contract_versions
+add column created_by uuid
+references hr.employees(id) on delete set null;
+
+alter table public.project_contract_versions
+add column updated_by uuid
+references hr.employees(id) on delete set null;
+
+alter table public.project_contract_versions
+add column deleted_by uuid
+references hr.employees(id) on delete set null;
+
+-- add audit fields to project_schedule_versions
+alter table public.project_schedule_versions
+add column created_at timestamptz default now();
+
+alter table public.project_schedule_versions
+add column updated_at timestamptz;
+
+alter table public.project_schedule_versions
+add column deleted_at timestamptz;
+
+alter table public.project_schedule_versions
+add column created_by uuid
+references hr.employees(id) on delete set null;
+
+alter table public.project_schedule_versions
+add column updated_by uuid
+references hr.employees(id) on delete set null;
+
+alter table public.project_schedule_versions
+add column deleted_by uuid
+references hr.employees(id) on delete set null;
 
 --Add audit fields to audit_logs
 alter table audit.logs

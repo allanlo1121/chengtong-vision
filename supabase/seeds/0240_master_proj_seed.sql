@@ -362,6 +362,31 @@ ON true
 WHERE md.code = 'PROJECT_ATTENTION_TYPE'
 ON CONFLICT (definition_id, code) DO NOTHING;
 
+-- ==========================================
+-- 项目主要领导  PROJECT_LEADERSHIP_TYPE
+-- ==========================================
+
+INSERT INTO public.master_definitions (name, code)
+VALUES ('项目主要领导', 'PROJECT_LEADERSHIP_TYPE')
+ON CONFLICT (code) DO NOTHING;
+
+INSERT INTO public.master_data (definition_id, code, name)
+SELECT md.id, v.code, v.name
+FROM public.master_definitions md
+JOIN (
+    VALUES 
+    ('11190001', '包保领导'),
+    ('11190002', '项目经理'),
+    ('11190003', '项目部书记'),
+    ('11190004', '项目纪检员'),
+    ('11190005', '项目总工程师'),
+    ('11190006', '项目商务经理'),
+    ('11190007', '安全总监')    
+) AS v(code, name)
+ON true
+WHERE md.code = 'PROJECT_LEADERSHIP_TYPE'
+ON CONFLICT (definition_id, code) DO NOTHING;
+
 
 
 
