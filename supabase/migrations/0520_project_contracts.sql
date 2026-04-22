@@ -13,7 +13,7 @@ create table project_contracts (
 
   sign_date date,
 
-  owner_unit text,
+  owner_unit text
 
 );
 

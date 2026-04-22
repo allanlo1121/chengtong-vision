@@ -32,5 +32,5 @@ exclude using gist (
 
 -- schedule
 create index idx_schedule_current
-on project_shedule_versions (project_id)
+on project_schedule_versions (project_id)
 where is_current = true;

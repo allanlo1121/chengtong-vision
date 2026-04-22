@@ -23,21 +23,21 @@ create table project_status_timeline(
 );
 
 alter table project_status_timeline
-add constraint no_overlap
+add constraint no_overlap_status
 exclude using gist (
   project_id with =,
   tstzrange(valid_from, coalesce(valid_to, 'infinity')) with &&
 );
 
-create table project_risk_levle_timeline(
+create table project_risk_level_timeline(
   id uuid primary key default gen_random_uuid(),
 
   -- 🔥 通用对象
   project_id uuid not null,
 
   -- 状态
-  project_risk_levle_id uuid references master_data(id),
-  project_sub_risk_levle_id uuid references master_data(id),
+  project_risk_level_id uuid references master_data(id),
+  project_sub_risk_level_id uuid references master_data(id),
 
   -- ✅ 业务时间（核心）
   valid_from timestamptz not null,
@@ -51,8 +51,8 @@ create table project_risk_levle_timeline(
   remark text
 );
 
-alter table project_risk_levle_timeline
-add constraint no_overlap
+alter table project_risk_level_timeline
+add constraint no_overlap_risk_level
 exclude using gist (
   project_id with =,
   tstzrange(valid_from, coalesce(valid_to, 'infinity')) with &&
@@ -81,7 +81,7 @@ create table project_control_level_timeline(
 );
 
 alter table project_control_level_timeline
-add constraint no_overlap
+add constraint no_overlap_control_level
 exclude using gist (
   project_id with =,
   tstzrange(valid_from, coalesce(valid_to, 'infinity')) with &&
@@ -110,7 +110,7 @@ create table project_attention_level_timeline(
 );
 
 alter table project_attention_level_timeline
-add constraint no_overlap
+add constraint no_overlap_attention_level
 exclude using gist (
   project_id with =,
   tstzrange(valid_from, coalesce(valid_to, 'infinity')) with &&

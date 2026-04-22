@@ -39,8 +39,8 @@ select
   -- ===== 负责人 =====
   e_osp.id as project_oversight_leader_id,
   e_osp.name as project_oversight_leader_name,
-  e_pm.id as project_manager_id,
-  e_pm.name as project_manager_name,
+  e_pa.id as project_manager_id,
+  e_pa.name as project_manager_name,
   e_ce.id as project_chief_engineer_id,
   e_ce.name as project_chief_engineer_name,
 
@@ -85,10 +85,10 @@ left join project_status_timeline ps
  and ps.valid_to is null
 
 left join master_data s
-  on s.id = ps.status_id
+  on s.id = ps.project_status_id
 
 left join master_data ss
-  on ss.id = ps.sub_status_id
+  on ss.id = ps.project_sub_status_id
 
 left join project_attention_level_timeline pal
   on pal.project_id = p.id
@@ -109,14 +109,14 @@ left join project_leader_timeline osl
 
 left join hr.employees e_osp on e_osp.id = osl.employee_id
 
-left join project_leader_timeline pm
-  on pm.project_id = p.id
- and pm.valid_to is null
- and pm.leader_role_id = (
+left join project_leader_timeline plt
+  on plt.project_id = p.id
+ and plt.valid_to is null
+ and plt.leader_role_id = (
    select id from master_data where code = '11190002'
  )
 
-left join hr.employees e_pa on e_pa.id = pm.employee_id
+left join hr.employees e_pa on e_pa.id = plt.employee_id
 
 left join project_leader_timeline ce
   on ce.project_id = p.id
@@ -127,7 +127,7 @@ left join project_leader_timeline ce
 
 left join hr.employees e_ce on e_ce.id = ce.employee_id
 
-left join project_shedule_versions psv
+left join project_schedule_versions psv
   on psv.project_id = p.id
  and psv.is_current = true
 

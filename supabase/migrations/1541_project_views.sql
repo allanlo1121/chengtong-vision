@@ -99,7 +99,7 @@ select
       'schedule_start_date', psv.schedule_start_date,
       'schedule_end_date', psv.schedule_end_date
     )
-    from project_shedule_versions psv
+    from project_schedule_versions psv
     where psv.project_id = p.id
       and psv.is_current = true
     limit 1
@@ -111,11 +111,11 @@ select
       jsonb_build_object(
         'schedule_start_date', psv.schedule_start_date,
         'schedule_end_date', psv.schedule_end_date,
-        'recorded_at', psv.recorded_at
+        'version_no', psv.version_no
       )
-      order by psv.recorded_at
+      order by psv.version_no
     )
-    from project_shedule_versions psv
+    from project_schedule_versions psv
     where psv.project_id = p.id
   ) as schedule_history
 
