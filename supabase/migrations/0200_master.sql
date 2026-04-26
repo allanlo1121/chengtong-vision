@@ -76,20 +76,24 @@ create table hr.post_scopes (
   name text not null
 );
 
-create table org_type_scope_map (
-  org_type_id uuid references publie.master_data(id) primary key,
-  scope_code text not null references hr.post_scopes(code)
-);
+create table hr.org_type_scope_map (
+  org_type_code text primary key
+    references public.master_data(code)
+    on delete cascade,
 
+  scope_code text not null
+    references hr.post_scopes(code)
+    on delete restrict
+);
 alter table hr.org_type_scope_map
 add constraint chk_org_type_only
 check (
   exists (
     select 1
-    from public.master_data md
-    join public.master_definitions def
+    from master_data md
+    join master_definitions def
       on def.id = md.definition_id
-    where md.id = org_type_id
+    where md.code = org_type_code
       and def.code = 'ORG_TYPE'
   )
 );
