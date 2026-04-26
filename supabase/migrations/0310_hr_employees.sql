@@ -1,12 +1,4 @@
 
-create schema if not exists hr;
-
--- 允许 API 访问 schema
-grant usage on schema hr to anon, authenticated, service_role;
-
--- 允许读取表
-grant select on all tables in schema hr
-to anon, authenticated, service_role;
 
 
 create table hr.employees (

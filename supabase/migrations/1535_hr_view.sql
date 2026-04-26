@@ -165,35 +165,6 @@ left join master_data status
   on status.id = e.employment_status_id;
 
 
--- 1. schema
-grant usage on schema hr to anon, authenticated;
-
--- 2. 表
-grant select, insert, update, delete
-on all tables in schema hr
-to anon, authenticated;
-
--- 3. view（批量）
-do $$
-declare r record;
-begin
-  for r in
-    select table_name
-    from information_schema.views
-    where table_schema = 'hr'
-  loop
-    execute format(
-      'grant select on hr.%I to anon, authenticated;',
-      r.table_name
-    );
-  end loop;
-end $$;
-
--- 4. 默认权限（未来）
-alter default privileges in schema hr
-grant select on tables to anon, authenticated;
-
-
 create or replace view hr.v_org_role_assignments as
 select
   ea.id as assignment_id,

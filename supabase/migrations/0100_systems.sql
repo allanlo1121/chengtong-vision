@@ -2,22 +2,7 @@
 -- 0100 SYSTEM TABLES
 -- ==============================
 
-create schema if not exists system;
 
--- =====================================================
--- SYSTEM SCHEMA PERMISSIONS
--- =====================================================
-
--- 允许 API 访问 schema
-grant usage on schema system to anon, authenticated, service_role;
-
--- 允许读取表
-grant select on all tables in schema system
-to anon, authenticated, service_role;
-
--- 未来新表自动授权
-alter default privileges in schema system
-grant select on tables to anon, authenticated, service_role;
 
 create table system.settings (
   id uuid primary key default gen_random_uuid(),

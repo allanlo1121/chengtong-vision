@@ -15,7 +15,7 @@ create table public.master_definitions (
 
 create table public.master_data (
   id uuid primary key default gen_random_uuid(),
-  code text not null,
+  code text not null unique,
   definition_id uuid not null references master_definitions(id) on delete restrict,
   name text not null,
   description text null,
@@ -77,26 +77,15 @@ create table hr.post_scopes (
 );
 
 create table hr.org_type_scope_map (
-  org_type_code text primary key
-    references public.master_data(code)
+  org_type_id uuid primary key
+    references public.master_data(id)
     on delete cascade,
 
   scope_code text not null
     references hr.post_scopes(code)
     on delete restrict
 );
-alter table hr.org_type_scope_map
-add constraint chk_org_type_only
-check (
-  exists (
-    select 1
-    from master_data md
-    join master_definitions def
-      on def.id = md.definition_id
-    where md.code = org_type_code
-      and def.code = 'ORG_TYPE'
-  )
-);
+
 
 create table hr.posts (
   id uuid primary key default gen_random_uuid(),

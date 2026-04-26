@@ -108,6 +108,30 @@ add column deleted_by uuid
 references hr.employees(id) on delete set null;
 
 
+-- Add audit fields to employees
+alter table hr.posts
+add column created_at timestamptz default now();
+
+alter table hr.posts
+add column updated_at timestamptz;
+
+alter table hr.posts
+add column deleted_at timestamptz;
+
+alter table hr.posts
+add column created_by uuid
+references hr.employees(id) on delete set null;
+
+alter table hr.posts
+add column updated_by uuid
+references hr.employees(id) on delete set null;
+
+alter table hr.posts
+add column deleted_by uuid
+references hr.employees(id) on delete set null;
+
+
+
 -- Add audit fields to educations
 alter table hr.educations
 add column created_at timestamptz default now();
@@ -329,28 +353,6 @@ alter table public.project_control_level_timeline
 add column deleted_by uuid
 references hr.employees(id) on delete set null;
 
-
---add audit fields to project_leader_timeline
-alter table public.project_leader_timeline
-add column created_at timestamptz default now();
-
-alter table public.project_leader_timeline
-add column updated_at timestamptz;
-
-alter table public.project_leader_timeline
-add column deleted_at timestamptz;
-
-alter table public.project_leader_timeline
-add column created_by uuid
-references hr.employees(id) on delete set null;
-
-alter table public.project_leader_timeline
-add column updated_by uuid
-references hr.employees(id) on delete set null;
-
-alter table public.project_leader_timeline
-add column deleted_by uuid
-references hr.employees(id) on delete set null;
 
 --- Add audit fields to project_attention_type_timeline
 alter table public.project_attention_type_timeline

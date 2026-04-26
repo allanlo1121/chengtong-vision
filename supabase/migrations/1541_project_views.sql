@@ -48,3 +48,33 @@ select
 from projects p;
 
 
+create or replace view v_project_schedule_module as
+select
+  p.id as project_id,
+
+  -- 当前
+  (
+    select jsonb_build_object(
+      'schedule_start_date', psv.schedule_start_date,
+      'schedule_end_date', psv.schedule_end_date
+    )
+    from project_schedule_versions psv
+    where psv.project_id = p.id
+      and psv.is_current = true
+    limit 1
+  ) as schedule_current,
+
+  -- 历史
+  (
+    select jsonb_agg(
+      jsonb_build_object(
+        'schedule_start_date', psv.schedule_start_date,
+        'schedule_end_date', psv.schedule_end_date
+      )  
+    )
+    from project_schedule_versions psv
+    where psv.project_id = p.id
+  ) as schedule_history
+
+from projects p;
+

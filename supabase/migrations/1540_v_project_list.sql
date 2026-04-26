@@ -37,14 +37,28 @@ select
   pcl_md.name  as project_control_level_name,
 
   -- ===== 负责人 =====
-  v_osp.employee_id as project_oversight_leader_id,
-  v_osp.employee_name as project_oversight_leader_name,
+  v_posl.employee_id as project_oversight_leader_id,
+  v_posl.employee_name as project_oversight_leader_name,
 
   v_pm.employee_id as project_manager_id,
   v_pm.employee_name as project_manager_name,
 
-  v_ce.employee_id as project_chief_engineer_id,
-  v_ce.employee_name as project_chief_engineer_name,
+  v_pps.employee_id as project_party_secretary_id,
+  v_pps.employee_name as project_party_secretary_name,
+
+  v_pce.employee_id as project_chief_engineer_id,
+  v_pce.employee_name as project_chief_engineer_name,
+
+  v_pdi.employee_id as project_discipline_inspection_id,
+  v_pdi.employee_name as project_discipline_inspection_name,
+
+  v_pcm.employee_id as project_commercial_manager_id,
+  v_pcm.employee_name as project_commercial_manager_name,
+
+  v_psd.employee_id as project_safety_director_id,
+  v_psd.employee_name as project_safety_director_name,
+
+
 
   -- ===== 地理信息 ===== 
   country.name  as country_name,  
@@ -102,19 +116,34 @@ left join project_control_level_timeline pcl
  and pcl.valid_to is null
 left join master_data pcl_md on pcl_md.id = pcl.project_control_level_id
 
-lleft join hr.v_org_responsibles v_pm
+left join hr.v_org_responsibles v_posl
+  on v_posl.organization_id = p.organization_id
+ and v_posl.role_type_code = '11190001'
+
+left join hr.v_org_responsibles v_pm
   on v_pm.organization_id = p.organization_id
- and v_pm.role_type_code = 'administrative'
+ and v_pm.role_type_code = '11190002'
 
-left join hr.v_org_responsibles v_ce
-  on v_ce.organization_id = p.organization_id
- and v_ce.role_type_code = 'technical'
+left join hr.v_org_responsibles v_pps
+  on v_pps.organization_id = p.organization_id
+ and v_pps.role_type_code = '11190003'
 
-lleft join hr.v_org_responsibles v_osp
-  on v_osp.organization_id = p.organization_id
- and v_osp.role_type_code = 'oversight'
+left join hr.v_org_responsibles v_pdi
+  on v_pdi.organization_id = p.organization_id
+ and v_pdi.role_type_code = '11190004'
 
-left join hr.employees e_ce on e_ce.id = ce.employee_id
+left join hr.v_org_responsibles v_pce
+  on v_pce.organization_id = p.organization_id
+ and v_pce.role_type_code = '11190005'
+
+left join hr.v_org_responsibles v_pcm
+  on v_pcm.organization_id = p.organization_id
+ and v_pcm.role_type_code = '11190006'
+
+left join hr.v_org_responsibles v_psd
+  on v_psd.organization_id = p.organization_id
+ and v_psd.role_type_code = '11190007'
+
 
 left join project_schedule_versions psv
   on psv.project_id = p.id

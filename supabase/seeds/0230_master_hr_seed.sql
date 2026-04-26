@@ -148,42 +148,51 @@ insert into hr.post_scopes (code, name)
 values
   ('group',       '集团'),
   ('company',     '公司'),
-  ('project_org', '项目部')
+  ('project_org', '项目部'),
   ('department', '部门')
 on conflict (code) do update
 set name = excluded.name;
 
+
 -- ==========================================
--- 岗位 对应 机构类别
+-- 岗位 对应 机构类别（ID版本）
 -- ==========================================
 
-insert into hr.org_type_scope_map (org_type_code, scope_code)
-values
-  ('10230001', 'group'),
+insert into hr.org_type_scope_map (org_type_id, scope_code)
+select
+  md.id,
+  v.scope_code
+from public.master_data md
+join public.master_definitions def
+  on def.id = md.definition_id
+join (
+  values
+    ('10230001', 'group'),
 
-  ('10230002', 'company'),
-  ('10230003', 'company'),
-  ('10230013', 'company'),
+    ('10230002', 'company'),
+    ('10230003', 'company'),    
 
-  ('10230004', 'project_org'),
-  ('10230016', 'project_org'),
+    ('10230004', 'project_org'),
+    ('10230005', 'department'),    
 
-  ('10230006', 'company'),
-  ('10230007', 'company'),
-  ('10230012', 'company'),
-  ('10230017', 'company'),
-  ('10230018', 'company'),
+    ('10230006', 'project_org'),
+    ('10230007', 'project_org'),
+    ('10230008', 'project_org'),
+    ('10230009', 'department'),
+    ('10230010', 'department'),
+    ('10230011', 'project_org'),
+    ('10230012', 'project_org'),
+    ('10230013', 'project_org'),
+    ('10230014', 'project_org'),
+    ('10230015', 'department'),
+    ('10230016', 'project_org'),
+    ('10230017', 'project_org'),
+    ('10230018', 'project_org')
 
-  ('10230005', 'department'),
-  ('10230015', 'department'),
-  ('10230010', 'department'),
-
-  ('10230008', 'company'),
-  ('10230011', 'company'),
-  ('10230014', 'company'),
-
-  ('10230009', 'department')
-on conflict (org_type_code) do update
+) as v(code, scope_code)
+  on md.code = v.code
+where def.code = 'ORG_TYPE'
+on conflict (org_type_id) do update
 set scope_code = excluded.scope_code;
 
 
@@ -192,11 +201,7 @@ set scope_code = excluded.scope_code;
 -- 岗位 POST
 -- ==========================================
 
-
-INSERT INTO hr.posts ( code, name, scope_code,category_code,grade,sort_order)
-SELECT md.id, v.code, v.name
-FROM public.master_definitions md
-JOIN (
+INSERT INTO hr.posts ( code, name, scope_code,category_code,grade)
     VALUES 
     ('10180001', '董事长','company','management','2'),
     ('10180002', '党委书记','company','management','2'),
@@ -313,12 +318,10 @@ JOIN (
     ('10180113', '副指挥长（主持行政工作）','company','management','2'),
     ('10180114', '建设工程安全官','company','management','2'),
     ('10180115', '党工委副书记（主持党工委工作）','company','management','2'),
-    ('10180116', '商务经理','project_org','management','3')
+    ('10180116', '商务经理','project_org','management','3'),
     ('10180117', '总工程师','project_org','management','3')
-) AS v(code, name)
-ON true
-WHERE md.code = 'POST'
-ON CONFLICT (definition_id, code) DO NOTHING;
+ON CONFLICT (code) DO update
+set name = excluded.name;
 
 
 

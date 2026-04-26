@@ -75,6 +75,20 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "educations_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_responsibles";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "educations_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_role_assignments";
+            referencedColumns: ["employee_id"];
+          },
+          {
             foreignKeyName: "educations_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
@@ -94,6 +108,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_employee_list";
             referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "educations_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_responsibles";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "educations_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_role_assignments";
+            referencedColumns: ["employee_id"];
           },
           {
             foreignKeyName: "educations_updated_by_fkey";
@@ -117,6 +145,20 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "educations_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_responsibles";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "educations_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_role_assignments";
+            referencedColumns: ["employee_id"];
+          },
+          {
             foreignKeyName: "fk_education_employee";
             columns: ["employee_id"];
             isOneToOne: false;
@@ -136,6 +178,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_employee_list";
             referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "fk_education_employee";
+            columns: ["employee_id"];
+            isOneToOne: false;
+            referencedRelation: "v_org_responsibles";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "fk_education_employee";
+            columns: ["employee_id"];
+            isOneToOne: false;
+            referencedRelation: "v_org_role_assignments";
+            referencedColumns: ["employee_id"];
           },
         ];
       };
@@ -149,6 +205,7 @@ export type Database = {
           end_date: string | null;
           id: string;
           is_primary: boolean | null;
+          org_role_type_id: string | null;
           organization_id: string;
           post_id: string | null;
           start_date: string | null;
@@ -164,6 +221,7 @@ export type Database = {
           end_date?: string | null;
           id?: string;
           is_primary?: boolean | null;
+          org_role_type_id?: string | null;
           organization_id: string;
           post_id?: string | null;
           start_date?: string | null;
@@ -179,6 +237,7 @@ export type Database = {
           end_date?: string | null;
           id?: string;
           is_primary?: boolean | null;
+          org_role_type_id?: string | null;
           organization_id?: string;
           post_id?: string | null;
           start_date?: string | null;
@@ -208,6 +267,20 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "employee_assignments_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_responsibles";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "employee_assignments_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_role_assignments";
+            referencedColumns: ["employee_id"];
+          },
+          {
             foreignKeyName: "employee_assignments_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
@@ -227,6 +300,48 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_employee_list";
             referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employee_assignments_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_responsibles";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "employee_assignments_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_role_assignments";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "employee_assignments_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "v_org_responsibles";
+            referencedColumns: ["organization_id"];
+          },
+          {
+            foreignKeyName: "employee_assignments_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "v_org_role_assignments";
+            referencedColumns: ["organization_id"];
+          },
+          {
+            foreignKeyName: "employee_assignments_post_id_fkey";
+            columns: ["post_id"];
+            isOneToOne: false;
+            referencedRelation: "posts";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employee_assignments_post_id_fkey";
+            columns: ["post_id"];
+            isOneToOne: false;
+            referencedRelation: "v_org_role_assignments";
+            referencedColumns: ["post_id"];
           },
           {
             foreignKeyName: "employee_assignments_updated_by_fkey";
@@ -250,6 +365,20 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "employee_assignments_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_responsibles";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "employee_assignments_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_role_assignments";
+            referencedColumns: ["employee_id"];
+          },
+          {
             foreignKeyName: "fk_assignment_employee";
             columns: ["employee_id"];
             isOneToOne: false;
@@ -269,6 +398,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_employee_list";
             referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "fk_assignment_employee";
+            columns: ["employee_id"];
+            isOneToOne: false;
+            referencedRelation: "v_org_responsibles";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "fk_assignment_employee";
+            columns: ["employee_id"];
+            isOneToOne: false;
+            referencedRelation: "v_org_role_assignments";
+            referencedColumns: ["employee_id"];
           },
         ];
       };
@@ -332,6 +475,20 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "employee_titles_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_responsibles";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "employee_titles_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_role_assignments";
+            referencedColumns: ["employee_id"];
+          },
+          {
             foreignKeyName: "employee_titles_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
@@ -351,6 +508,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_employee_list";
             referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employee_titles_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_responsibles";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "employee_titles_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_role_assignments";
+            referencedColumns: ["employee_id"];
           },
           {
             foreignKeyName: "employee_titles_updated_by_fkey";
@@ -374,6 +545,20 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "employee_titles_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_responsibles";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "employee_titles_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_role_assignments";
+            referencedColumns: ["employee_id"];
+          },
+          {
             foreignKeyName: "fk_title_employee";
             columns: ["employee_id"];
             isOneToOne: false;
@@ -393,6 +578,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_employee_list";
             referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "fk_title_employee";
+            columns: ["employee_id"];
+            isOneToOne: false;
+            referencedRelation: "v_org_responsibles";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "fk_title_employee";
+            columns: ["employee_id"];
+            isOneToOne: false;
+            referencedRelation: "v_org_role_assignments";
+            referencedColumns: ["employee_id"];
           },
         ];
       };
@@ -498,6 +697,20 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "employees_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_responsibles";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "employees_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_role_assignments";
+            referencedColumns: ["employee_id"];
+          },
+          {
             foreignKeyName: "employees_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
@@ -519,6 +732,20 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "employees_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_responsibles";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "employees_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_role_assignments";
+            referencedColumns: ["employee_id"];
+          },
+          {
             foreignKeyName: "employees_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
@@ -538,6 +765,244 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_employee_list";
             referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "employees_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_responsibles";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "employees_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_role_assignments";
+            referencedColumns: ["employee_id"];
+          },
+        ];
+      };
+      org_type_scope_map: {
+        Row: {
+          org_type_id: string;
+          scope_code: string;
+        };
+        Insert: {
+          org_type_id: string;
+          scope_code: string;
+        };
+        Update: {
+          org_type_id?: string;
+          scope_code?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "org_type_scope_map_scope_code_fkey";
+            columns: ["scope_code"];
+            isOneToOne: false;
+            referencedRelation: "post_scopes";
+            referencedColumns: ["code"];
+          },
+        ];
+      };
+      post_categories: {
+        Row: {
+          code: string;
+          name: string;
+        };
+        Insert: {
+          code: string;
+          name: string;
+        };
+        Update: {
+          code?: string;
+          name?: string;
+        };
+        Relationships: [];
+      };
+      post_scopes: {
+        Row: {
+          code: string;
+          name: string;
+        };
+        Insert: {
+          code: string;
+          name: string;
+        };
+        Update: {
+          code?: string;
+          name?: string;
+        };
+        Relationships: [];
+      };
+      posts: {
+        Row: {
+          category_code: string | null;
+          code: string;
+          created_at: string | null;
+          created_by: string | null;
+          deleted_at: string | null;
+          deleted_by: string | null;
+          grade: number | null;
+          id: string;
+          is_active: boolean | null;
+          name: string;
+          scope_code: string;
+          sort_order: number;
+          updated_at: string | null;
+          updated_by: string | null;
+        };
+        Insert: {
+          category_code?: string | null;
+          code: string;
+          created_at?: string | null;
+          created_by?: string | null;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
+          grade?: number | null;
+          id?: string;
+          is_active?: boolean | null;
+          name: string;
+          scope_code: string;
+          sort_order?: number;
+          updated_at?: string | null;
+          updated_by?: string | null;
+        };
+        Update: {
+          category_code?: string | null;
+          code?: string;
+          created_at?: string | null;
+          created_by?: string | null;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
+          grade?: number | null;
+          id?: string;
+          is_active?: boolean | null;
+          name?: string;
+          scope_code?: string;
+          sort_order?: number;
+          updated_at?: string | null;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "posts_category_code_fkey";
+            columns: ["category_code"];
+            isOneToOne: false;
+            referencedRelation: "post_categories";
+            referencedColumns: ["code"];
+          },
+          {
+            foreignKeyName: "posts_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "employees";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "posts_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_full";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "posts_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "posts_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_responsibles";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "posts_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_role_assignments";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "posts_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "employees";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "posts_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_full";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "posts_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "posts_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_responsibles";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "posts_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_role_assignments";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "posts_scope_code_fkey";
+            columns: ["scope_code"];
+            isOneToOne: false;
+            referencedRelation: "post_scopes";
+            referencedColumns: ["code"];
+          },
+          {
+            foreignKeyName: "posts_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "employees";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "posts_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_full";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "posts_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_employee_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "posts_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_responsibles";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "posts_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_org_role_assignments";
+            referencedColumns: ["employee_id"];
           },
         ];
       };
@@ -574,7 +1039,72 @@ export type Database = {
           post_name: string | null;
           sort_order: number | null;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "employee_assignments_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "v_org_responsibles";
+            referencedColumns: ["organization_id"];
+          },
+          {
+            foreignKeyName: "employee_assignments_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "v_org_role_assignments";
+            referencedColumns: ["organization_id"];
+          },
+        ];
+      };
+      v_org_responsibles: {
+        Row: {
+          employee_id: string | null;
+          employee_name: string | null;
+          organization_id: string | null;
+          organization_name: string | null;
+          role_type_code: string | null;
+          role_type_name: string | null;
+          scope_code: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "org_type_scope_map_scope_code_fkey";
+            columns: ["scope_code"];
+            isOneToOne: false;
+            referencedRelation: "post_scopes";
+            referencedColumns: ["code"];
+          },
+        ];
+      };
+      v_org_role_assignments: {
+        Row: {
+          assignment_id: string | null;
+          employee_id: string | null;
+          employee_name: string | null;
+          end_date: string | null;
+          is_primary: boolean | null;
+          org_role_type_id: string | null;
+          org_type_code: string | null;
+          org_type_id: string | null;
+          org_type_name: string | null;
+          organization_id: string | null;
+          organization_name: string | null;
+          post_id: string | null;
+          post_name: string | null;
+          role_type_code: string | null;
+          role_type_name: string | null;
+          scope_code: string | null;
+          start_date: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "org_type_scope_map_scope_code_fkey";
+            columns: ["scope_code"];
+            isOneToOne: false;
+            referencedRelation: "post_scopes";
+            referencedColumns: ["code"];
+          },
+        ];
       };
     };
     Functions: {
@@ -651,6 +1181,20 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "admin_regions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "admin_regions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -664,8 +1208,36 @@ export type Database = {
             foreignKeyName: "admin_regions_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "admin_regions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "admin_regions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "admin_regions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "admin_regions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "admin_regions_created_by_fkey";
@@ -680,6 +1252,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "admin_regions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "admin_regions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "admin_regions_created_by_fkey";
@@ -707,6 +1293,20 @@ export type Database = {
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "admin_regions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "admin_regions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -720,8 +1320,36 @@ export type Database = {
             foreignKeyName: "admin_regions_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "admin_regions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "admin_regions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "admin_regions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "admin_regions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "admin_regions_updated_by_fkey";
@@ -736,6 +1364,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "admin_regions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "admin_regions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "admin_regions_updated_by_fkey";
@@ -802,6 +1444,20 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "countries_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "countries_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -815,8 +1471,36 @@ export type Database = {
             foreignKeyName: "countries_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "countries_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "countries_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "countries_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "countries_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "countries_created_by_fkey";
@@ -831,6 +1515,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "countries_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "countries_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "countries_created_by_fkey";
@@ -851,6 +1549,20 @@ export type Database = {
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "countries_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "countries_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -864,8 +1576,36 @@ export type Database = {
             foreignKeyName: "countries_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "countries_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "countries_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "countries_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "countries_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "countries_updated_by_fkey";
@@ -880,6 +1620,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "countries_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "countries_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "countries_updated_by_fkey";
@@ -958,6 +1712,20 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "import_batches_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "import_batches_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -971,8 +1739,36 @@ export type Database = {
             foreignKeyName: "import_batches_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "import_batches_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "import_batches_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "import_batches_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "import_batches_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "import_batches_created_by_fkey";
@@ -987,6 +1783,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "import_batches_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "import_batches_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "import_batches_created_by_fkey";
@@ -1007,6 +1817,20 @@ export type Database = {
             columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "import_batches_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "import_batches_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -1020,8 +1844,36 @@ export type Database = {
             foreignKeyName: "import_batches_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "import_batches_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "import_batches_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "import_batches_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "import_batches_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "import_batches_deleted_by_fkey";
@@ -1036,6 +1888,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "import_batches_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "import_batches_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "import_batches_deleted_by_fkey";
@@ -1056,6 +1922,20 @@ export type Database = {
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "import_batches_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "import_batches_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -1069,8 +1949,36 @@ export type Database = {
             foreignKeyName: "import_batches_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "import_batches_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "import_batches_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "import_batches_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "import_batches_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "import_batches_updated_by_fkey";
@@ -1085,6 +1993,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "import_batches_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "import_batches_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "import_batches_updated_by_fkey";
@@ -1164,6 +2086,20 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "import_records_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "import_records_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -1177,8 +2113,36 @@ export type Database = {
             foreignKeyName: "import_records_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "import_records_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "import_records_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "import_records_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "import_records_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "import_records_created_by_fkey";
@@ -1193,6 +2157,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "import_records_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "import_records_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "import_records_created_by_fkey";
@@ -1213,6 +2191,20 @@ export type Database = {
             columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "import_records_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "import_records_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -1226,8 +2218,36 @@ export type Database = {
             foreignKeyName: "import_records_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "import_records_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "import_records_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "import_records_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "import_records_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "import_records_deleted_by_fkey";
@@ -1242,6 +2262,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "import_records_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "import_records_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "import_records_deleted_by_fkey";
@@ -1262,6 +2296,20 @@ export type Database = {
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "import_records_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "import_records_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -1275,8 +2323,36 @@ export type Database = {
             foreignKeyName: "import_records_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "import_records_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "import_records_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "import_records_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "import_records_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "import_records_updated_by_fkey";
@@ -1291,6 +2367,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "import_records_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "import_records_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "import_records_updated_by_fkey";
@@ -1351,6 +2441,20 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "master_data_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "master_data_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -1364,8 +2468,36 @@ export type Database = {
             foreignKeyName: "master_data_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "master_data_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "master_data_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "master_data_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "master_data_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "master_data_created_by_fkey";
@@ -1380,6 +2512,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "master_data_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "master_data_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "master_data_created_by_fkey";
@@ -1414,6 +2560,20 @@ export type Database = {
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "master_data_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "master_data_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -1427,8 +2587,36 @@ export type Database = {
             foreignKeyName: "master_data_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "master_data_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "master_data_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "master_data_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "master_data_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "master_data_updated_by_fkey";
@@ -1443,6 +2631,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "master_data_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "master_data_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "master_data_updated_by_fkey";
@@ -1500,6 +2702,20 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "master_definitions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "master_definitions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -1513,8 +2729,36 @@ export type Database = {
             foreignKeyName: "master_definitions_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "master_definitions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "master_definitions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "master_definitions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "master_definitions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "master_definitions_created_by_fkey";
@@ -1529,6 +2773,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "master_definitions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "master_definitions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "master_definitions_created_by_fkey";
@@ -1549,6 +2807,20 @@ export type Database = {
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "master_definitions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "master_definitions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -1562,8 +2834,36 @@ export type Database = {
             foreignKeyName: "master_definitions_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "master_definitions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "master_definitions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "master_definitions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "master_definitions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "master_definitions_updated_by_fkey";
@@ -1578,6 +2878,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "master_definitions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "master_definitions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "master_definitions_updated_by_fkey";
@@ -1793,6 +3107,20 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "organizations_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "organizations_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -1806,8 +3134,36 @@ export type Database = {
             foreignKeyName: "organizations_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "organizations_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "organizations_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "organizations_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "organizations_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "organizations_created_by_fkey";
@@ -1822,6 +3178,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "organizations_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "organizations_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "organizations_created_by_fkey";
@@ -1842,6 +3212,20 @@ export type Database = {
             columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "organizations_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "organizations_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -1855,8 +3239,36 @@ export type Database = {
             foreignKeyName: "organizations_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "organizations_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "organizations_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "organizations_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "organizations_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "organizations_deleted_by_fkey";
@@ -1871,6 +3283,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "organizations_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "organizations_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "organizations_deleted_by_fkey";
@@ -2101,6 +3527,20 @@ export type Database = {
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "organizations_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "organizations_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -2114,8 +3554,36 @@ export type Database = {
             foreignKeyName: "organizations_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "organizations_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "organizations_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "organizations_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "organizations_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "organizations_updated_by_fkey";
@@ -2130,6 +3598,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "organizations_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "organizations_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "organizations_updated_by_fkey";
@@ -2150,7 +3632,6 @@ export type Database = {
           id: string;
           project_attention_level_id: string | null;
           project_id: string;
-          project_sub_attention_level_id: string | null;
           remark: string | null;
           updated_at: string | null;
           updated_by: string | null;
@@ -2166,7 +3647,6 @@ export type Database = {
           id?: string;
           project_attention_level_id?: string | null;
           project_id: string;
-          project_sub_attention_level_id?: string | null;
           remark?: string | null;
           updated_at?: string | null;
           updated_by?: string | null;
@@ -2182,7 +3662,6 @@ export type Database = {
           id?: string;
           project_attention_level_id?: string | null;
           project_id?: string;
-          project_sub_attention_level_id?: string | null;
           remark?: string | null;
           updated_at?: string | null;
           updated_by?: string | null;
@@ -2191,90 +3670,6 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: "project_attention_level_timel_project_sub_attention_level__fkey";
-            columns: ["project_sub_attention_level_id"];
-            isOneToOne: false;
-            referencedRelation: "master_data";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "project_attention_level_timel_project_sub_attention_level__fkey";
-            columns: ["project_sub_attention_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_master_options";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "project_attention_level_timel_project_sub_attention_level__fkey";
-            columns: ["project_sub_attention_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_management_mode_id"];
-          },
-          {
-            foreignKeyName: "project_attention_level_timel_project_sub_attention_level__fkey";
-            columns: ["project_sub_attention_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_status_id"];
-          },
-          {
-            foreignKeyName: "project_attention_level_timel_project_sub_attention_level__fkey";
-            columns: ["project_sub_attention_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_sub_status_id"];
-          },
-          {
-            foreignKeyName: "project_attention_level_timel_project_sub_attention_level__fkey";
-            columns: ["project_sub_attention_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_sub_type_id"];
-          },
-          {
-            foreignKeyName: "project_attention_level_timel_project_sub_attention_level__fkey";
-            columns: ["project_sub_attention_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_type_id"];
-          },
-          {
-            foreignKeyName: "project_attention_level_timel_project_sub_attention_level__fkey";
-            columns: ["project_sub_attention_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_management_mode_id"];
-          },
-          {
-            foreignKeyName: "project_attention_level_timel_project_sub_attention_level__fkey";
-            columns: ["project_sub_attention_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_status_id"];
-          },
-          {
-            foreignKeyName: "project_attention_level_timel_project_sub_attention_level__fkey";
-            columns: ["project_sub_attention_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_sub_status_id"];
-          },
-          {
-            foreignKeyName: "project_attention_level_timel_project_sub_attention_level__fkey";
-            columns: ["project_sub_attention_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_sub_type_id"];
-          },
-          {
-            foreignKeyName: "project_attention_level_timel_project_sub_attention_level__fkey";
-            columns: ["project_sub_attention_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_type_id"];
-          },
-          {
             foreignKeyName: "project_attention_level_timelin_project_attention_level_id_fkey";
             columns: ["project_attention_level_id"];
             isOneToOne: false;
@@ -2370,6 +3765,20 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -2383,8 +3792,36 @@ export type Database = {
             foreignKeyName: "project_attention_level_timeline_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_attention_level_timeline_created_by_fkey";
@@ -2399,6 +3836,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "project_attention_level_timeline_created_by_fkey";
@@ -2419,6 +3870,20 @@ export type Database = {
             columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -2432,8 +3897,36 @@ export type Database = {
             foreignKeyName: "project_attention_level_timeline_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_attention_level_timeline_deleted_by_fkey";
@@ -2448,6 +3941,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "project_attention_level_timeline_deleted_by_fkey";
@@ -2468,6 +3975,20 @@ export type Database = {
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -2481,8 +4002,36 @@ export type Database = {
             foreignKeyName: "project_attention_level_timeline_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_attention_level_timeline_updated_by_fkey";
@@ -2497,6 +4046,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_attention_level_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "project_attention_level_timeline_updated_by_fkey";
@@ -2650,6 +4213,20 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -2663,8 +4240,36 @@ export type Database = {
             foreignKeyName: "project_attention_type_timeline_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_attention_type_timeline_created_by_fkey";
@@ -2679,6 +4284,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "project_attention_type_timeline_created_by_fkey";
@@ -2699,6 +4318,20 @@ export type Database = {
             columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -2712,8 +4345,36 @@ export type Database = {
             foreignKeyName: "project_attention_type_timeline_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_attention_type_timeline_deleted_by_fkey";
@@ -2728,6 +4389,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "project_attention_type_timeline_deleted_by_fkey";
@@ -2756,13 +4431,6 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_full";
             referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "project_attention_type_timeline_project_id_fkey";
-            columns: ["project_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_leader_module";
-            referencedColumns: ["project_id"];
           },
           {
             foreignKeyName: "project_attention_type_timeline_project_id_fkey";
@@ -2797,6 +4465,20 @@ export type Database = {
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -2810,8 +4492,36 @@ export type Database = {
             foreignKeyName: "project_attention_type_timeline_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_attention_type_timeline_updated_by_fkey";
@@ -2826,6 +4536,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "project_attention_type_timeline_updated_by_fkey";
@@ -2920,6 +4644,20 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -2933,8 +4671,36 @@ export type Database = {
             foreignKeyName: "project_contract_versions_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_contract_versions_created_by_fkey";
@@ -2949,6 +4715,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "project_contract_versions_created_by_fkey";
@@ -2969,6 +4749,20 @@ export type Database = {
             columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -2982,8 +4776,36 @@ export type Database = {
             foreignKeyName: "project_contract_versions_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_contract_versions_deleted_by_fkey";
@@ -2998,6 +4820,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "project_contract_versions_deleted_by_fkey";
@@ -3018,6 +4854,20 @@ export type Database = {
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -3031,8 +4881,36 @@ export type Database = {
             foreignKeyName: "project_contract_versions_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_contract_versions_updated_by_fkey";
@@ -3047,6 +4925,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_contract_versions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "project_contract_versions_updated_by_fkey";
@@ -3116,6 +5008,20 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -3129,8 +5035,36 @@ export type Database = {
             foreignKeyName: "project_contracts_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_contracts_created_by_fkey";
@@ -3145,6 +5079,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "project_contracts_created_by_fkey";
@@ -3165,6 +5113,20 @@ export type Database = {
             columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -3178,8 +5140,36 @@ export type Database = {
             foreignKeyName: "project_contracts_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_contracts_deleted_by_fkey";
@@ -3194,6 +5184,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "project_contracts_deleted_by_fkey";
@@ -3222,13 +5226,6 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_full";
             referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "project_contracts_project_id_fkey";
-            columns: ["project_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_leader_module";
-            referencedColumns: ["project_id"];
           },
           {
             foreignKeyName: "project_contracts_project_id_fkey";
@@ -3263,6 +5260,20 @@ export type Database = {
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -3276,8 +5287,36 @@ export type Database = {
             foreignKeyName: "project_contracts_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_contracts_updated_by_fkey";
@@ -3292,6 +5331,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_contracts_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "project_contracts_updated_by_fkey";
@@ -3312,7 +5365,6 @@ export type Database = {
           id: string;
           project_control_level_id: string | null;
           project_id: string;
-          project_sub_control_level_id: string | null;
           remark: string | null;
           updated_at: string | null;
           updated_by: string | null;
@@ -3328,7 +5380,6 @@ export type Database = {
           id?: string;
           project_control_level_id?: string | null;
           project_id: string;
-          project_sub_control_level_id?: string | null;
           remark?: string | null;
           updated_at?: string | null;
           updated_by?: string | null;
@@ -3344,7 +5395,6 @@ export type Database = {
           id?: string;
           project_control_level_id?: string | null;
           project_id?: string;
-          project_sub_control_level_id?: string | null;
           remark?: string | null;
           updated_at?: string | null;
           updated_by?: string | null;
@@ -3353,195 +5403,223 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: "project_control_level_timelin_project_sub_control_level_id_fkey";
-            columns: ["project_sub_control_level_id"];
+            foreignKeyName: "project_control_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_manager_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_manager_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_runtime_user";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_manager_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_manager_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_runtime_user";
+            referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_project_control_level_id_fkey";
+            columns: ["project_control_level_id"];
             isOneToOne: false;
             referencedRelation: "master_data";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "project_control_level_timelin_project_sub_control_level_id_fkey";
-            columns: ["project_sub_control_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_master_options";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timelin_project_sub_control_level_id_fkey";
-            columns: ["project_sub_control_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_management_mode_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timelin_project_sub_control_level_id_fkey";
-            columns: ["project_sub_control_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_status_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timelin_project_sub_control_level_id_fkey";
-            columns: ["project_sub_control_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_sub_status_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timelin_project_sub_control_level_id_fkey";
-            columns: ["project_sub_control_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_sub_type_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timelin_project_sub_control_level_id_fkey";
-            columns: ["project_sub_control_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_type_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timelin_project_sub_control_level_id_fkey";
-            columns: ["project_sub_control_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_management_mode_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timelin_project_sub_control_level_id_fkey";
-            columns: ["project_sub_control_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_status_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timelin_project_sub_control_level_id_fkey";
-            columns: ["project_sub_control_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_sub_status_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timelin_project_sub_control_level_id_fkey";
-            columns: ["project_sub_control_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_sub_type_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timelin_project_sub_control_level_id_fkey";
-            columns: ["project_sub_control_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_type_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timeline_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_chief_engineer_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timeline_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_manager_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timeline_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_oversight_leader_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timeline_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_chief_engineer_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timeline_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_manager_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timeline_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_oversight_leader_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timeline_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timeline_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_chief_engineer_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timeline_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_manager_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timeline_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_oversight_leader_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timeline_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_chief_engineer_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timeline_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_manager_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timeline_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_oversight_leader_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timeline_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
-          },
-          {
-            foreignKeyName: "project_control_level_timeline_project_control_level_id_fkey";
-            columns: ["project_control_level_id"];
-            isOneToOne: false;
-            referencedRelation: "master_data";
-            referencedColumns: ["id"];
-          },
-          {
             foreignKeyName: "project_control_level_timeline_project_control_level_id_fkey";
             columns: ["project_control_level_id"];
             isOneToOne: false;
@@ -3630,6 +5708,20 @@ export type Database = {
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -3643,8 +5735,36 @@ export type Database = {
             foreignKeyName: "project_control_level_timeline_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_control_level_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_control_level_timeline_updated_by_fkey";
@@ -3664,385 +5784,18 @@ export type Database = {
             foreignKeyName: "project_control_level_timeline_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
-          },
-        ];
-      };
-      project_leader_timeline: {
-        Row: {
-          change_type: string | null;
-          created_at: string | null;
-          created_by: string | null;
-          deleted_at: string | null;
-          deleted_by: string | null;
-          employee_id: string;
-          id: string;
-          leader_role_id: string;
-          project_id: string;
-          source: string | null;
-          updated_at: string | null;
-          updated_by: string | null;
-          valid_from: string;
-          valid_to: string | null;
-        };
-        Insert: {
-          change_type?: string | null;
-          created_at?: string | null;
-          created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
-          employee_id: string;
-          id?: string;
-          leader_role_id: string;
-          project_id: string;
-          source?: string | null;
-          updated_at?: string | null;
-          updated_by?: string | null;
-          valid_from: string;
-          valid_to?: string | null;
-        };
-        Update: {
-          change_type?: string | null;
-          created_at?: string | null;
-          created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
-          employee_id?: string;
-          id?: string;
-          leader_role_id?: string;
-          project_id?: string;
-          source?: string | null;
-          updated_at?: string | null;
-          updated_by?: string | null;
-          valid_from?: string;
-          valid_to?: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "project_leader_timeline_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_chief_engineer_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_manager_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_oversight_leader_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
             referencedRelation: "v_project_list";
-            referencedColumns: ["project_chief_engineer_id"];
+            referencedColumns: ["project_party_secretary_id"];
           },
           {
-            foreignKeyName: "project_leader_timeline_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_manager_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_oversight_leader_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_chief_engineer_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_manager_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_oversight_leader_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_chief_engineer_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_manager_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_oversight_leader_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_deleted_by_fkey";
-            columns: ["deleted_by"];
-            isOneToOne: false;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_employee_id_fkey";
-            columns: ["employee_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_chief_engineer_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_employee_id_fkey";
-            columns: ["employee_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_manager_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_employee_id_fkey";
-            columns: ["employee_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_oversight_leader_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_employee_id_fkey";
-            columns: ["employee_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_chief_engineer_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_employee_id_fkey";
-            columns: ["employee_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_manager_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_employee_id_fkey";
-            columns: ["employee_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_oversight_leader_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_employee_id_fkey";
-            columns: ["employee_id"];
-            isOneToOne: false;
-            referencedRelation: "v_runtime_user";
-            referencedColumns: ["employee_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_leader_role_id_fkey";
-            columns: ["leader_role_id"];
-            isOneToOne: false;
-            referencedRelation: "master_data";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_leader_role_id_fkey";
-            columns: ["leader_role_id"];
-            isOneToOne: false;
-            referencedRelation: "v_master_options";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_leader_role_id_fkey";
-            columns: ["leader_role_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_management_mode_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_leader_role_id_fkey";
-            columns: ["leader_role_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_status_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_leader_role_id_fkey";
-            columns: ["leader_role_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_sub_status_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_leader_role_id_fkey";
-            columns: ["leader_role_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_sub_type_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_leader_role_id_fkey";
-            columns: ["leader_role_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_type_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_leader_role_id_fkey";
-            columns: ["leader_role_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_management_mode_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_leader_role_id_fkey";
-            columns: ["leader_role_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_status_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_leader_role_id_fkey";
-            columns: ["leader_role_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_sub_status_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_leader_role_id_fkey";
-            columns: ["leader_role_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_sub_type_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_leader_role_id_fkey";
-            columns: ["leader_role_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_type_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_project_id_fkey";
-            columns: ["project_id"];
-            isOneToOne: false;
-            referencedRelation: "projects";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_project_id_fkey";
-            columns: ["project_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_contract_module";
-            referencedColumns: ["project_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_project_id_fkey";
-            columns: ["project_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_project_id_fkey";
-            columns: ["project_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_leader_module";
-            referencedColumns: ["project_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_project_id_fkey";
-            columns: ["project_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_project_id_fkey";
-            columns: ["project_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_schedule_module";
-            referencedColumns: ["project_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_project_id_fkey";
-            columns: ["project_id"];
-            isOneToOne: false;
-            referencedRelation: "v_user_favorite_projects";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_updated_by_fkey";
-            columns: ["updated_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_chief_engineer_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_updated_by_fkey";
-            columns: ["updated_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_manager_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_updated_by_fkey";
-            columns: ["updated_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_oversight_leader_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_updated_by_fkey";
+            foreignKeyName: "project_control_level_timeline_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_project_list";
-            referencedColumns: ["project_chief_engineer_id"];
+            referencedColumns: ["project_safety_director_id"];
           },
           {
-            foreignKeyName: "project_leader_timeline_updated_by_fkey";
-            columns: ["updated_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_manager_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_updated_by_fkey";
-            columns: ["updated_by"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_oversight_leader_id"];
-          },
-          {
-            foreignKeyName: "project_leader_timeline_updated_by_fkey";
+            foreignKeyName: "project_control_level_timeline_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_runtime_user";
@@ -4060,7 +5813,6 @@ export type Database = {
           id: string;
           project_id: string;
           project_risk_level_id: string | null;
-          project_sub_risk_level_id: string | null;
           remark: string | null;
           updated_at: string | null;
           updated_by: string | null;
@@ -4076,7 +5828,6 @@ export type Database = {
           id?: string;
           project_id: string;
           project_risk_level_id?: string | null;
-          project_sub_risk_level_id?: string | null;
           remark?: string | null;
           updated_at?: string | null;
           updated_by?: string | null;
@@ -4092,7 +5843,6 @@ export type Database = {
           id?: string;
           project_id?: string;
           project_risk_level_id?: string | null;
-          project_sub_risk_level_id?: string | null;
           remark?: string | null;
           updated_at?: string | null;
           updated_by?: string | null;
@@ -4112,6 +5862,20 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -4125,8 +5889,36 @@ export type Database = {
             foreignKeyName: "project_risk_level_timeline_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_risk_level_timeline_created_by_fkey";
@@ -4141,6 +5933,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "project_risk_level_timeline_created_by_fkey";
@@ -4161,6 +5967,20 @@ export type Database = {
             columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -4174,8 +5994,36 @@ export type Database = {
             foreignKeyName: "project_risk_level_timeline_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_risk_level_timeline_deleted_by_fkey";
@@ -4190,6 +6038,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "project_risk_level_timeline_deleted_by_fkey";
@@ -4283,95 +6145,25 @@ export type Database = {
             referencedColumns: ["project_type_id"];
           },
           {
-            foreignKeyName: "project_risk_level_timeline_project_sub_risk_level_id_fkey";
-            columns: ["project_sub_risk_level_id"];
-            isOneToOne: false;
-            referencedRelation: "master_data";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "project_risk_level_timeline_project_sub_risk_level_id_fkey";
-            columns: ["project_sub_risk_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_master_options";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "project_risk_level_timeline_project_sub_risk_level_id_fkey";
-            columns: ["project_sub_risk_level_id"];
+            foreignKeyName: "project_risk_level_timeline_updated_by_fkey";
+            columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
-            referencedColumns: ["project_management_mode_id"];
-          },
-          {
-            foreignKeyName: "project_risk_level_timeline_project_sub_risk_level_id_fkey";
-            columns: ["project_sub_risk_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_status_id"];
-          },
-          {
-            foreignKeyName: "project_risk_level_timeline_project_sub_risk_level_id_fkey";
-            columns: ["project_sub_risk_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_sub_status_id"];
-          },
-          {
-            foreignKeyName: "project_risk_level_timeline_project_sub_risk_level_id_fkey";
-            columns: ["project_sub_risk_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_sub_type_id"];
-          },
-          {
-            foreignKeyName: "project_risk_level_timeline_project_sub_risk_level_id_fkey";
-            columns: ["project_sub_risk_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_full";
-            referencedColumns: ["project_type_id"];
-          },
-          {
-            foreignKeyName: "project_risk_level_timeline_project_sub_risk_level_id_fkey";
-            columns: ["project_sub_risk_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_management_mode_id"];
-          },
-          {
-            foreignKeyName: "project_risk_level_timeline_project_sub_risk_level_id_fkey";
-            columns: ["project_sub_risk_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_status_id"];
-          },
-          {
-            foreignKeyName: "project_risk_level_timeline_project_sub_risk_level_id_fkey";
-            columns: ["project_sub_risk_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_sub_status_id"];
-          },
-          {
-            foreignKeyName: "project_risk_level_timeline_project_sub_risk_level_id_fkey";
-            columns: ["project_sub_risk_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_sub_type_id"];
-          },
-          {
-            foreignKeyName: "project_risk_level_timeline_project_sub_risk_level_id_fkey";
-            columns: ["project_sub_risk_level_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_list";
-            referencedColumns: ["project_type_id"];
+            referencedColumns: ["project_chief_engineer_id"];
           },
           {
             foreignKeyName: "project_risk_level_timeline_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
-            referencedColumns: ["project_chief_engineer_id"];
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_risk_level_timeline_updated_by_fkey";
@@ -4391,8 +6183,36 @@ export type Database = {
             foreignKeyName: "project_risk_level_timeline_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_risk_level_timeline_updated_by_fkey";
@@ -4407,6 +6227,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "project_risk_level_timeline_updated_by_fkey";
@@ -4491,6 +6325,20 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -4504,8 +6352,36 @@ export type Database = {
             foreignKeyName: "project_schedule_versions_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_schedule_versions_created_by_fkey";
@@ -4520,6 +6396,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "project_schedule_versions_created_by_fkey";
@@ -4540,6 +6430,20 @@ export type Database = {
             columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -4553,8 +6457,36 @@ export type Database = {
             foreignKeyName: "project_schedule_versions_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_schedule_versions_deleted_by_fkey";
@@ -4569,6 +6501,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "project_schedule_versions_deleted_by_fkey";
@@ -4597,13 +6543,6 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_full";
             referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "project_schedule_versions_project_id_fkey";
-            columns: ["project_id"];
-            isOneToOne: false;
-            referencedRelation: "v_project_leader_module";
-            referencedColumns: ["project_id"];
           },
           {
             foreignKeyName: "project_schedule_versions_project_id_fkey";
@@ -4638,6 +6577,20 @@ export type Database = {
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -4651,8 +6604,36 @@ export type Database = {
             foreignKeyName: "project_schedule_versions_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_schedule_versions_updated_by_fkey";
@@ -4667,6 +6648,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_schedule_versions_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "project_schedule_versions_updated_by_fkey";
@@ -4739,6 +6734,20 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -4752,8 +6761,36 @@ export type Database = {
             foreignKeyName: "project_status_timeline_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_status_timeline_created_by_fkey";
@@ -4768,6 +6805,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "project_status_timeline_created_by_fkey";
@@ -4788,6 +6839,20 @@ export type Database = {
             columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -4801,8 +6866,36 @@ export type Database = {
             foreignKeyName: "project_status_timeline_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_status_timeline_deleted_by_fkey";
@@ -4817,6 +6910,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "project_status_timeline_deleted_by_fkey";
@@ -5005,6 +7112,20 @@ export type Database = {
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -5018,8 +7139,36 @@ export type Database = {
             foreignKeyName: "project_status_timeline_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "project_status_timeline_updated_by_fkey";
@@ -5034,6 +7183,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "project_status_timeline_updated_by_fkey";
@@ -5059,7 +7222,7 @@ export type Database = {
           district_code: string | null;
           external_id: string | null;
           external_version: number | null;
-          fullname: string | null;
+          full_name: string | null;
           id: string;
           latitude: number | null;
           longitude: number | null;
@@ -5073,6 +7236,8 @@ export type Database = {
           project_type_id: string | null;
           province_code: string | null;
           region_id: string | null;
+          remark: string | null;
+          sort_order: number | null;
           updated_at: string | null;
           updated_by: string | null;
         };
@@ -5090,7 +7255,7 @@ export type Database = {
           district_code?: string | null;
           external_id?: string | null;
           external_version?: number | null;
-          fullname?: string | null;
+          full_name?: string | null;
           id?: string;
           latitude?: number | null;
           longitude?: number | null;
@@ -5104,6 +7269,8 @@ export type Database = {
           project_type_id?: string | null;
           province_code?: string | null;
           region_id?: string | null;
+          remark?: string | null;
+          sort_order?: number | null;
           updated_at?: string | null;
           updated_by?: string | null;
         };
@@ -5121,7 +7288,7 @@ export type Database = {
           district_code?: string | null;
           external_id?: string | null;
           external_version?: number | null;
-          fullname?: string | null;
+          full_name?: string | null;
           id?: string;
           latitude?: number | null;
           longitude?: number | null;
@@ -5135,6 +7302,8 @@ export type Database = {
           project_type_id?: string | null;
           province_code?: string | null;
           region_id?: string | null;
+          remark?: string | null;
+          sort_order?: number | null;
           updated_at?: string | null;
           updated_by?: string | null;
         };
@@ -5165,6 +7334,20 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "projects_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "projects_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -5178,8 +7361,36 @@ export type Database = {
             foreignKeyName: "projects_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "projects_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "projects_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "projects_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "projects_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "projects_created_by_fkey";
@@ -5194,6 +7405,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "projects_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "projects_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "projects_created_by_fkey";
@@ -5214,6 +7439,20 @@ export type Database = {
             columns: ["deleted_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "projects_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "projects_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -5227,8 +7466,36 @@ export type Database = {
             foreignKeyName: "projects_deleted_by_fkey";
             columns: ["deleted_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "projects_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "projects_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "projects_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "projects_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "projects_deleted_by_fkey";
@@ -5243,6 +7510,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "projects_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "projects_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "projects_deleted_by_fkey";
@@ -5641,6 +7922,20 @@ export type Database = {
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "projects_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "projects_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -5654,8 +7949,36 @@ export type Database = {
             foreignKeyName: "projects_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "projects_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "projects_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "projects_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "projects_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "projects_updated_by_fkey";
@@ -5670,6 +7993,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "projects_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "projects_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "projects_updated_by_fkey";
@@ -5728,13 +8065,6 @@ export type Database = {
             foreignKeyName: "user_favorite_projects_project_id_fkey";
             columns: ["project_id"];
             isOneToOne: false;
-            referencedRelation: "v_project_leader_module";
-            referencedColumns: ["project_id"];
-          },
-          {
-            foreignKeyName: "user_favorite_projects_project_id_fkey";
-            columns: ["project_id"];
-            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["id"];
           },
@@ -5764,6 +8094,20 @@ export type Database = {
             columns: ["user_id"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "user_favorite_projects_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "user_favorite_projects_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -5777,8 +8121,36 @@ export type Database = {
             foreignKeyName: "user_favorite_projects_user_id_fkey";
             columns: ["user_id"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "user_favorite_projects_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "user_favorite_projects_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "user_favorite_projects_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "user_favorite_projects_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "user_favorite_projects_user_id_fkey";
@@ -5793,6 +8165,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "user_favorite_projects_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "user_favorite_projects_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "user_favorite_projects_user_id_fkey";
@@ -5931,8 +8317,6 @@ export type Database = {
           full_name: string | null;
           id: string | null;
           latitude: number | null;
-          leaders_current: Json | null;
-          leaders_history: Json | null;
           longitude: number | null;
           name: string | null;
           organization_id: string | null;
@@ -5941,16 +8325,24 @@ export type Database = {
           project_attention_level_name: string | null;
           project_chief_engineer_id: string | null;
           project_chief_engineer_name: string | null;
+          project_commercial_manager_id: string | null;
+          project_commercial_manager_name: string | null;
           project_control_level_id: string | null;
           project_control_level_name: string | null;
+          project_discipline_inspection_id: string | null;
+          project_discipline_inspection_name: string | null;
           project_management_mode_id: string | null;
           project_management_mode_name: string | null;
           project_manager_id: string | null;
           project_manager_name: string | null;
           project_oversight_leader_id: string | null;
           project_oversight_leader_name: string | null;
+          project_party_secretary_id: string | null;
+          project_party_secretary_name: string | null;
           project_risk_level_id: string | null;
           project_risk_level_name: string | null;
+          project_safety_director_id: string | null;
+          project_safety_director_name: string | null;
           project_status_id: string | null;
           project_status_name: string | null;
           project_sub_status_id: string | null;
@@ -6249,24 +8641,6 @@ export type Database = {
           },
         ];
       };
-      v_project_leader_module: {
-        Row: {
-          leaders_current: Json | null;
-          leaders_history: Json | null;
-          project_id: string | null;
-        };
-        Insert: {
-          leaders_current?: never;
-          leaders_history?: never;
-          project_id?: string | null;
-        };
-        Update: {
-          leaders_current?: never;
-          leaders_history?: never;
-          project_id?: string | null;
-        };
-        Relationships: [];
-      };
       v_project_list: {
         Row: {
           actual_end_date: string | null;
@@ -6293,16 +8667,24 @@ export type Database = {
           project_attention_level_name: string | null;
           project_chief_engineer_id: string | null;
           project_chief_engineer_name: string | null;
+          project_commercial_manager_id: string | null;
+          project_commercial_manager_name: string | null;
           project_control_level_id: string | null;
           project_control_level_name: string | null;
+          project_discipline_inspection_id: string | null;
+          project_discipline_inspection_name: string | null;
           project_management_mode_id: string | null;
           project_management_mode_name: string | null;
           project_manager_id: string | null;
           project_manager_name: string | null;
           project_oversight_leader_id: string | null;
           project_oversight_leader_name: string | null;
+          project_party_secretary_id: string | null;
+          project_party_secretary_name: string | null;
           project_risk_level_id: string | null;
           project_risk_level_name: string | null;
+          project_safety_director_id: string | null;
+          project_safety_director_name: string | null;
           project_status_id: string | null;
           project_status_name: string | null;
           project_sub_status_id: string | null;
@@ -6796,6 +9178,20 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "menus_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "menus_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -6809,8 +9205,36 @@ export type Database = {
             foreignKeyName: "menus_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "menus_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "menus_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "menus_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "menus_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "menus_created_by_fkey";
@@ -6825,6 +9249,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "menus_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "menus_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "menus_created_by_fkey";
@@ -6852,6 +9290,20 @@ export type Database = {
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "v_project_full";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "menus_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_discipline_inspection_id"];
+          },
+          {
+            foreignKeyName: "menus_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
             referencedColumns: ["project_manager_id"];
           },
           {
@@ -6865,8 +9317,36 @@ export type Database = {
             foreignKeyName: "menus_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "menus_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_full";
+            referencedColumns: ["project_safety_director_id"];
+          },
+          {
+            foreignKeyName: "menus_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_chief_engineer_id"];
+          },
+          {
+            foreignKeyName: "menus_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_commercial_manager_id"];
+          },
+          {
+            foreignKeyName: "menus_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_discipline_inspection_id"];
           },
           {
             foreignKeyName: "menus_updated_by_fkey";
@@ -6881,6 +9361,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_oversight_leader_id"];
+          },
+          {
+            foreignKeyName: "menus_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_party_secretary_id"];
+          },
+          {
+            foreignKeyName: "menus_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "v_project_list";
+            referencedColumns: ["project_safety_director_id"];
           },
           {
             foreignKeyName: "menus_updated_by_fkey";
