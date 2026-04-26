@@ -1,9 +1,9 @@
 "use client";
 
-import { useOrganizationQuery } from "../../hooks/use-organization-tree";
+import { useEmployeeQuery } from "../../hooks/use-employee-tree";
 
-export function OrganizationTreeToolbar() {
-  const { query, updateQuery } = useOrganizationQuery();
+export function EmployeeTreeToolbar() {
+  const { query, updateQuery } = useEmployeeQuery();
 
   return (
     <div className="flex items-center gap-4">

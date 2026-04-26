@@ -13,3 +13,8 @@ export function formatDateTime(value: string | Date) {
     hour12: false,
   });
 }
+
+export function toDate(value?: string | null) {
+  if (!value) return null;
+  return value.slice(0, 10);
+}

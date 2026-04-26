@@ -12,7 +12,7 @@ interface Props {
   selectedId?: string | null;
 }
 
-export function OrganizationTreePanel({ data, selectedId }: Props) {
+export function EmployeeTreePanel({ data, selectedId }: Props) {
   const [tree, setTree] = useState<TreeNode[]>(data ?? []);
   const [currentId, setCurrentId] = useState(selectedId);
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
@@ -56,7 +56,7 @@ export function OrganizationTreePanel({ data, selectedId }: Props) {
     setCurrentId(node.id);
 
     // 👉 改 URL（驱动 Server 重新查询）
-    router.push(`?parentId=${node.id}`);
+    router.push(`?organizationId=${node.id}`);
   }
 
   // 🌳 展开（如果你后面做懒加载）

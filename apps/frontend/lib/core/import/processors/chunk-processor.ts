@@ -1,4 +1,3 @@
-import { TableSchemaName } from "@/modules/shared/types/common.types";
 import { repository } from "../repositories";
 import { ImportRow } from "../types";
 import { importRegistry } from "../registry/import.registry";

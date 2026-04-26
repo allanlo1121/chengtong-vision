@@ -1,4 +1,4 @@
-export * from "./employee.lookup";
-export * from "./employee.mapper";
+export * from "./lookup";
+export * from "./mapper";
 
-export * from "./employee.writer";
+export * from "./writer";

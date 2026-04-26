@@ -1,6 +1,4 @@
-import { LookupSource } from "../services/lookup.service";
-
-import { ZodSchemaError } from "@/lib/zod/types";
+import { ZodSchemaError } from "@/lib/utils/zod/types";
 import { ImportInsertInputMap, ImportRowMap } from "./import-row-map.types";
 import { TableEntity } from "@/lib/core/types/entity.types";
 import { LOOKUP_DEFINITIONS } from "../services/lookup.service";
@@ -9,38 +7,6 @@ export type LookupItem = {
   id: string;
   key: string;
 };
-
-// export type LookupType<T extends TableEntity> = Partial<
-//   Record<keyof SchemaRowType<T>, LookupSource>
-// >;
-
-// export type fieldType<T extends TableEntity> = Partial<
-//   Record<keyof ImportRowMap[T], keyof SchemaRowType<T>>
-// >;
-
-// export type ImportRowResult<T extends TableEntity> = {
-//   row: ImportRowMap[T];
-//   success: boolean;
-//   level?: number;
-//   errors?: ZodSchemaError[];
-// };
-
-// export type ImportPreviewResult<T extends TableEntity> = {
-//   raw: ImportRowMap[T];
-//   row: ImportInsertInputMap[T];
-//   success: boolean;
-//   level?: number;
-//   errors?: ZodSchemaError[];
-// };
-
-// export type LookupMaps = Record<LookupSource, Map<string, string>>;
-
-// export type ImportError = {
-//   row: number; // Excel / CSV 行号
-//   field?: string; // 哪个字段
-//   message: string; // 错误信息
-//   value?: any; // 原始值（可选）
-// };
 
 export type ImportPersistResult<T> = {
   errors: ImportError[];

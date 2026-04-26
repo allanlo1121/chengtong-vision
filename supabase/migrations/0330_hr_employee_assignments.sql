@@ -1,6 +1,4 @@
 
-
-
 -- =========================================
 -- 任职关系（employee_assignments）
 -- =========================================
@@ -15,7 +13,9 @@ create table hr.employee_assignments (
 
   -- ✅ 可选：岗位（允许为空，兼容导入）
   post_id uuid
-    references public.master_data(id) on delete set null,
+    references hr.posts(id) on delete set null,
+
+  org_role_type_id uuid references master_data(id) on delete restrict, -- 角色类型（如项目领导、行政负责人等，来自 master_data）
 
   -- ✅ 是否主任职（主岗）
   is_primary boolean default false,
@@ -75,4 +75,11 @@ where end_date is null;
 -- =========================================
 create index idx_employee_assignments_post
 on hr.employee_assignments(post_id)
+where end_date is null;
+
+-- =========================================
+-- 同一组织角色类型唯一（如每个部门只能有一个项目经理）
+-- =========================================
+create unique index uniq_org_role_current
+on hr.employee_assignments (organization_id, org_role_type_id)
 where end_date is null;

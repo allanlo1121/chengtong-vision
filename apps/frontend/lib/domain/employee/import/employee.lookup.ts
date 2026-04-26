@@ -1,7 +1,7 @@
 /// @description: 员工数据查找器
 
 import { EmployeeImportRow } from "../types";
-import { LookupContext } from "@/modules/import/types";
+import { LookupContext } from "@/lib/core/import/types";
 
 export const employeeLookup = async (row: EmployeeImportRow, ctx: LookupContext) => {
   return {

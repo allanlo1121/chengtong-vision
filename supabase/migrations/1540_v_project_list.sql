@@ -5,7 +5,7 @@ select
   -- ===== 基本信息 =====
   p.id,
   p.name,
-  p.fullname,
+  p.full_name,
   p.code,
   p.external_id,
   p.external_version,
@@ -37,12 +37,14 @@ select
   pcl_md.name  as project_control_level_name,
 
   -- ===== 负责人 =====
-  e_osp.id as project_oversight_leader_id,
-  e_osp.name as project_oversight_leader_name,
-  e_pa.id as project_manager_id,
-  e_pa.name as project_manager_name,
-  e_ce.id as project_chief_engineer_id,
-  e_ce.name as project_chief_engineer_name,
+  v_osp.employee_id as project_oversight_leader_id,
+  v_osp.employee_name as project_oversight_leader_name,
+
+  v_pm.employee_id as project_manager_id,
+  v_pm.employee_name as project_manager_name,
+
+  v_ce.employee_id as project_chief_engineer_id,
+  v_ce.employee_name as project_chief_engineer_name,
 
   -- ===== 地理信息 ===== 
   country.name  as country_name,  
@@ -100,30 +102,17 @@ left join project_control_level_timeline pcl
  and pcl.valid_to is null
 left join master_data pcl_md on pcl_md.id = pcl.project_control_level_id
 
-left join project_leader_timeline osl
-  on osl.project_id = p.id
- and osl.valid_to is null
- and osl.leader_role_id = (
-   select id from master_data where code = '11190001'
- )
+lleft join hr.v_org_responsibles v_pm
+  on v_pm.organization_id = p.organization_id
+ and v_pm.role_type_code = 'administrative'
 
-left join hr.employees e_osp on e_osp.id = osl.employee_id
+left join hr.v_org_responsibles v_ce
+  on v_ce.organization_id = p.organization_id
+ and v_ce.role_type_code = 'technical'
 
-left join project_leader_timeline plt
-  on plt.project_id = p.id
- and plt.valid_to is null
- and plt.leader_role_id = (
-   select id from master_data where code = '11190002'
- )
-
-left join hr.employees e_pa on e_pa.id = plt.employee_id
-
-left join project_leader_timeline ce
-  on ce.project_id = p.id
- and ce.valid_to is null
- and ce.leader_role_id = (
-   select id from master_data where code = '11190003'
- )
+lleft join hr.v_org_responsibles v_osp
+  on v_osp.organization_id = p.organization_id
+ and v_osp.role_type_code = 'oversight'
 
 left join hr.employees e_ce on e_ce.id = ce.employee_id
 

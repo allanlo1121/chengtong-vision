@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { createListQuerySchema } from "@/lib/shared/query/query-factory";
 
-export const projectQuery = createListQuerySchema({
+export const employeeQuery = createListQuerySchema({
   sortFields: ["name", "sortOrder", "createdAt"] as const,
 
   map: {
@@ -10,7 +10,7 @@ export const projectQuery = createListQuerySchema({
     createdAt: "created_at",
   },
   extra: {
-    parentId: z.string().optional(),
+    organizationId: z.string().optional(),
 
     includeChildren: z
       .string()
@@ -20,4 +20,4 @@ export const projectQuery = createListQuerySchema({
   defaultSortField: "sortOrder",
 });
 
-export type ProjectQueryType = z.infer<typeof projectQuery.schema>;
+export type EmployeeQueryType = z.infer<typeof employeeQuery.schema>;

@@ -6,19 +6,19 @@ import {
   longitudeSchema,
 } from "@/lib/shared/schema";
 
-import { email, z } from "zod";
+import { z } from "zod";
 
 /**
- * ProjectImport字段规则
+ * Project字段规则
  */
-export const ProjectImportSchema = z.object({
+export const ProjectInsertInputSchema = z.object({
   name: z
     .string()
-    .min(2, { message: "工程名称至少2个字符" })
-    .max(100, { message: "工程名称最多100个字符" })
+    .min(4, { message: "工程简称至少4个字符" })
+    .max(8, { message: "工程简称最多8个字符" })
     .meta({
       table: "projects",
-      label: "工程名称",
+      label: "工程简称",
       field: "name",
       searchable: true, // ⭐
       sortable: true,
@@ -37,8 +37,8 @@ export const ProjectImportSchema = z.object({
       message: "编码只能包含字母、数字、下划线和中划线",
     })
     .meta({
-      table: "projects",
-      label: "工程编码",
+      table: "employees",
+      label: "编码",
       component: "input",
       type: "text",
       section: "基本信息",
@@ -46,150 +46,189 @@ export const ProjectImportSchema = z.object({
       description: "唯一标识，建议使用字母、数字和下划线",
     }),
 
-  organization_id: idSchema.meta({
+  fullName: z.string().max(50, { message: "工程全称最多50个字符" }).meta({
+    table: "projects",
+    label: "工程全称",
+    field: "full_name",
+    searchable: true, // ⭐
+    sortable: true,
+    component: "input",
+    section: "基本信息",
+    type: "text",
+    disabled: false,
+    required: false,
+    readonly: false,
+    colSpan: 1,
+  }),
+
+  projectOverview: z
+    .string()
+    .max(500, { message: "工程概况最多500个字符" })
+    .optional()
+    .nullable()
+    .meta({
+      table: "projects",
+      label: "工程概况",
+      field: "project_overview",
+      searchable: false,
+      sortable: false,
+      component: "textarea",
+      section: "基本信息",
+      type: "text",
+      disabled: false,
+      required: false,
+      readonly: false,
+      colSpan: 2,
+    }),
+
+  projectKeyPoints: z
+    .string()
+    .max(500, { message: "工程要点最多500个字符" })
+    .optional()
+    .nullable()
+    .meta({
+      table: "projects",
+      label: "工程要点",
+      field: "project_key_points",
+      searchable: false,
+      sortable: false,
+      component: "textarea",
+      section: "基本信息",
+      type: "text",
+      disabled: false,
+      required: false,
+      readonly: false,
+      colSpan: 2,
+    }),
+
+  projectScope: z
+    .string()
+    .max(500, { message: "工程范围最多500个字符" })
+    .optional()
+    .nullable()
+    .meta({
+      table: "projects",
+      label: "工程范围",
+      field: "project_scope",
+      searchable: false,
+      sortable: false,
+      component: "textarea",
+      section: "基本信息",
+      type: "text",
+      disabled: false,
+      required: false,
+      readonly: false,
+      colSpan: 2,
+    }),
+
+  organizationId: idSchema.meta({
     table: "projects",
     label: "所属组织",
-    component: "select",
+    field: "organization_id",
+    searchable: true, // ⭐
+    sortable: true,
+    component: "treeSelect",
     section: "基本信息",
+    type: "number",
+    disabled: false,
+    required: true,
+    readonly: false,
     colSpan: 1,
-    option: { source: "api", code: "organizations" },
+    option: { source: "organization_tree", parentId: null },
+  }),
+
+  projectManagementModeId: idSchema.meta({
+    table: "projects",
+    label: "项目管理模式",
+    field: "project_management_mode_id",
+    searchable: true, // ⭐
+    sortable: true,
+    component: "select",
+    section: "项目信息",
+    type: "number",
+    disabled: false,
+    required: false,
+    readonly: false,
+    colSpan: 1,
+    option: { source: "master", code: "PROJECT_MANAGEMENT_MODE" },
   }),
 
   projectTypeId: idSchema.meta({
     table: "projects",
-    label: "工程类型",
+    label: "项目类型",
+    field: "project_type_id",
+    searchable: true, // ⭐
+    sortable: true,
     component: "select",
-    section: "基本信息",
+    section: "项目信息",
+    type: "number",
+    disabled: false,
+    required: false,
+    readonly: false,
     colSpan: 1,
     option: { source: "master", code: "PROJECT_TYPE" },
   }),
 
   projectSubTypeId: idSchema.meta({
     table: "projects",
-    label: "工程子类型",
+    label: "项目子类型",
+    field: "project_sub_type_id",
+    searchable: true, // ⭐
+    sortable: true,
     component: "select",
-    section: "基本信息",
+    section: "项目信息",
+    type: "number",
+    disabled: false,
+    required: false,
+    readonly: false,
     colSpan: 1,
-    option: { source: "master", code: "PROJECT_SUB_TYPE" },
-  }),
-
-  projectStatusId: idSchema.meta({
-    table: "projects",
-    label: "工程状态",
-    component: "select",
-    field: "project_status_id",
-    filterable: false,
-    section: "基本信息",
-    colSpan: 1,
-    option: { source: "master", code: "PROJECT_STATUS" },
-  }),
-
-  projectSubStatusId: idSchema.meta({
-    table: "projects",
-    label: "工程子状态",
-    component: "select",
-    field: "project_sub_status_id",
-    filterable: false,
-    section: "基本信息",
-    colSpan: 1,
-    option: { source: "master", code: "PROJECT_SUB_STATUS" },
-  }),
-
-  projectManagementModeId: idSchema.meta({
-    table: "projects",
-    label: "工程管理模式",
-    component: "select",
-    field: "project_management_mode_id",
-    filterable: false,
-    section: "基本信息",
-    colSpan: 1,
-    option: { source: "master", code: "PROJECT_MANAGEMENT_MODE" },
-  }),
-
-  projectRiskLevelId: idSchema.meta({
-    table: "projects",
-    label: "工程风险等级",
-    component: "select",
-    field: "project_risk_level_id",
-    filterable: false,
-    section: "基本信息",
-    colSpan: 1,
-    option: { source: "master", code: "PROJECT_RISK_LEVEL" },
-  }),
-
-  projectAttentionLevelId: idSchema.meta({
-    table: "projects",
-    label: "工程关注度等级",
-    component: "select",
-    field: "project_attention_level_id",
-    filterable: false,
-    section: "基本信息",
-    colSpan: 1,
-    option: { source: "master", code: "PROJECT_ATTENTION_LEVEL" },
-  }),
-
-  projectAttentionTypeId: idSchema.meta({
-    table: "projects",
-    label: "工程关注类型",
-    component: "select",
-    field: "project_attention_type_id",
-    filterable: false,
-    section: "基本信息",
-    colSpan: 1,
-    option: { source: "master", code: "PROJECT_ATTENTION_TYPE" },
-  }),
-
-  projectControlLevelId: idSchema.meta({
-    table: "projects",
-    label: "工程管控级别",
-    component: "select",
-    field: "project_control_level_id",
-    filterable: false,
-    section: "基本信息",
-    colSpan: 1,
-    option: { source: "master", code: "PROJECT_CONTROL_LEVEL" },
-  }),
-
-  planStartDate: z.string().optional().nullable().meta({
-    table: "projects",
-    label: "计划开工日期",
-    component: "datePicker",
-    section: "基本信息",
-    colSpan: 1,
-  }),
-
-  planEndDate: z.string().optional().nullable().meta({
-    table: "projects",
-    label: "计划竣工日期",
-    component: "datePicker",
-    section: "基本信息",
-    colSpan: 1,
+    option: { source: "master", code: "PROJECT_SUB_TYPE", parentCodeField: "PROJECT_TYPE" },
   }),
 
   actualStartDate: z.string().optional().nullable().meta({
     table: "projects",
     label: "实际开工日期",
+    field: "actual_start_date",
+    searchable: false,
+    sortable: true,
     component: "datePicker",
-    section: "基本信息",
+    section: "项目信息",
+    type: "date",
+    disabled: false,
+    required: false,
+    readonly: false,
     colSpan: 1,
   }),
 
   actualEndDate: z.string().optional().nullable().meta({
     table: "projects",
     label: "实际竣工日期",
+    field: "actual_end_date",
+    searchable: false,
+    sortable: true,
     component: "datePicker",
-    section: "基本信息",
+    section: "项目信息",
+    type: "date",
+    disabled: false,
+    required: false,
+    readonly: false,
     colSpan: 1,
   }),
-
-  commissioningDate: z.string().optional().nullable().meta({
+  regionId: idSchema.meta({
     table: "projects",
-    label: "投产日期",
-    component: "datePicker",
-    section: "基本信息",
+    label: "所在区域",
+    field: "region_id",
+    searchable: true, // ⭐
+    sortable: true,
+    component: "cascader",
+    section: "地理信息",
+    type: "number",
+    disabled: false,
+    required: false,
+    readonly: false,
     colSpan: 1,
+    option: { source: "master", code: "REGION" },
   }),
-
   countryCode: countryCodeSchema.default("CN").meta({
     label: "国家代码",
     component: "select",
@@ -257,12 +296,11 @@ export const ProjectImportSchema = z.object({
     colSpan: 1,
   }),
 
-  sortOrder: z.coerce.number().default(0).meta({
+  remark: z.string().max(500, { message: "备注最多500个字符" }).optional().nullable().meta({
     table: "employees",
-    label: "排序",
+    label: "备注",
     component: "input",
     section: "其他信息",
-    type: "number",
     colSpan: 1,
   }),
 
@@ -283,6 +321,197 @@ export const ProjectImportSchema = z.object({
     colSpan: 1,
     disabled: true,
   }),
+  projectStatusId: idSchema.meta({
+    table: "project_status_timeline",
+    label: "项目状态",
+    field: "project_status_id",
+    searchable: true, // ⭐
+    sortable: true,
+    component: "select",
+    section: "项目信息",
+    type: "number",
+    disabled: false,
+    required: false,
+    readonly: false,
+    colSpan: 1,
+    option: { source: "master", code: "PROJECT_STATUS" },
+  }),
+
+  projectSubStatusId: idSchema.meta({
+    table: "project_status_timeline",
+    label: "项目子状态",
+    field: "project_sub_status_id",
+    searchable: true, // ⭐
+    sortable: true,
+    component: "select",
+    section: "项目信息",
+    type: "number",
+    disabled: false,
+    required: false,
+    readonly: false,
+    colSpan: 1,
+    option: { source: "master", code: "PROJECT_SUB_STATUS" },
+  }),
+
+  projectRiskLevelId: idSchema.meta({
+    table: "project_risk_level_timeline",
+    label: "项目风险等级",
+    field: "project_risk_level_id",
+    searchable: true, // ⭐
+    sortable: true,
+    component: "select",
+    section: "项目信息",
+    type: "number",
+    disabled: false,
+    required: false,
+    readonly: false,
+    colSpan: 1,
+    option: { source: "master", code: "PROJECT_RISK_LEVEL" },
+  }),
+
+  projectControlLevelId: idSchema.meta({
+    table: "project_control_level_timeline",
+    label: "项目管控等级",
+    field: "project_control_level_id",
+    searchable: true, // ⭐
+    sortable: true,
+    component: "select",
+    section: "项目信息",
+    type: "number",
+    disabled: false,
+    required: false,
+    readonly: false,
+    colSpan: 1,
+    option: { source: "master", code: "PROJECT_CONTROL_LEVEL" },
+  }),
+
+  projectAttentionLevelId: idSchema.meta({
+    table: "project_attention_level_timeline",
+    label: "项目关注等级",
+    field: "project_attention_level_id",
+    searchable: true, // ⭐
+    sortable: true,
+    component: "select",
+    section: "项目信息",
+    type: "number",
+    disabled: false,
+    required: false,
+    readonly: false,
+    colSpan: 1,
+    option: { source: "master", code: "PROJECT_ATTENTION_LEVEL" },
+  }),
+
+  projectAttentionTypeId: idSchema.meta({
+    table: "project_attention_type_timeline",
+    label: "项目关注类型",
+    field: "project_attention_type_id",
+    searchable: true, // ⭐
+    sortable: true,
+    component: "select",
+    section: "项目信息",
+    type: "number",
+    disabled: false,
+    required: false,
+    readonly: false,
+    colSpan: 1,
+    option: { source: "master", code: "PROJECT_ATTENTION_TYPE" },
+  }),
+
+  projectChiefEngineerId: idSchema.meta({
+    table: "project_leader_timeline",
+    label: "项目总工",
+    field: "project_chief_engineer_id",
+    searchable: true, // ⭐
+    sortable: true,
+    component: "select",
+    section: "项目信息",
+    type: "number",
+    disabled: false,
+    required: false,
+    readonly: false,
+    colSpan: 1,
+    option: { source: "employees" },
+  }),
+
+  projectManagerId: idSchema.meta({
+    table: "project_leader_timeline",
+    label: "项目经理",
+    field: "project_manager_id",
+    searchable: true, // ⭐
+    sortable: true,
+    component: "select",
+    section: "项目信息",
+    type: "number",
+    disabled: false,
+    required: false,
+    readonly: false,
+    colSpan: 1,
+    option: { source: "employees" },
+  }),
+
+  projectOversightLeaderId: idSchema.meta({
+    table: "project_leader_timeline",
+    label: "公司包保领导",
+    field: "project_oversight_leader_id",
+    searchable: true, // ⭐
+    sortable: true,
+    component: "select",
+    section: "项目信息",
+    type: "number",
+    disabled: false,
+    required: false,
+    readonly: false,
+    colSpan: 1,
+    option: { source: "employees" },
+  }),
+
+  projectPartySecretaryId: idSchema.meta({
+    table: "project_leader_timeline",
+    label: "项目党组织书记",
+    field: "project_party_secretary_id",
+    searchable: true, // ⭐
+    sortable: true,
+    component: "select",
+    section: "项目信息",
+    type: "number",
+    disabled: false,
+    required: false,
+    readonly: false,
+    colSpan: 1,
+    option: { source: "employees" },
+  }),
+
+  projectSafeDirectorId: idSchema.meta({
+    table: "project_leader_timeline",
+    label: "项目安全总监",
+    field: "project_safe_director_id",
+    searchable: true, // ⭐
+    sortable: true,
+    component: "select",
+    section: "项目信息",
+    type: "number",
+    disabled: false,
+    required: false,
+    readonly: false,
+    colSpan: 1,
+    option: { source: "employees" },
+  }),
+
+  projectCommercialManagerId: idSchema.meta({
+    table: "project_leader_timeline",
+    label: "项目商务经理",
+    field: "project_commercial_manager_id",
+    searchable: true, // ⭐
+    sortable: true,
+    component: "select",
+    section: "项目信息",
+    type: "number",
+    disabled: false,
+    required: false,
+    readonly: false,
+    colSpan: 1,
+    option: { source: "employees" },
+  }),
 });
 
 // export const employeeschema = z.object(OrganizationFields);
@@ -299,7 +528,7 @@ export const ProjectImportSchema = z.object({
 //   id: idSchema,
 // });
 
-export type ProjectImportInput = z.infer<typeof ProjectImportSchema>;
+export type ProjectInsertInput = z.infer<typeof ProjectInsertInputSchema>;
 
 // export type EmployeePostInput = z.infer<typeof EmployeePostSchema>;
 
@@ -313,9 +542,9 @@ export type ProjectImportInput = z.infer<typeof ProjectImportSchema>;
 
 // export type UpdatePersonInput = z.infer<typeof Updateemployeeschema>;
 
-// export const UpsertEmployeeResultSchema = z.object({
-//   id: z.uuid(),
-//   action: z.enum(["inserted", "updated", "skipped"]),
-// });
+export const UpsertProjectResultSchema = z.object({
+  id: z.uuid(),
+  action: z.enum(["inserted", "updated", "skipped"]),
+});
 
-// export type UpsertEmployeeResult = z.infer<typeof UpsertEmployeeResultSchema>;
+export type UpsertProjectResult = z.infer<typeof UpsertProjectResultSchema>;

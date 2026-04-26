@@ -1,7 +1,7 @@
 // types/entity.types.ts
 
 import { Database } from "@/lib/core/types/database";
-import { BaseSystemFields, TableName } from "@/lib/core/types/entity.types";
+import { BaseSystemFields } from "@/lib/core/types/entity.types";
 
 export type ImportBatch = {
   id: string;
@@ -14,6 +14,8 @@ export type ImportBatch = {
 };
 
 export type ImportRecordRow = Database["public"]["Tables"]["import_records"]["Row"];
+
+export type ImportBatchRow = Database["public"]["Tables"]["import_batches"]["Row"];
 
 export type ImportRecordInsert = Omit<
   Database["public"]["Tables"]["import_records"]["Insert"],

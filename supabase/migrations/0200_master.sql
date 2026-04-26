@@ -65,3 +65,48 @@ create table public.admin_regions (
   is_active boolean not null default true
 );
 
+
+create table hr.post_categories (
+  code text primary key,
+  name text not null
+);
+
+create table hr.post_scopes (
+  code text primary key,
+  name text not null
+);
+
+create table org_type_scope_map (
+  org_type_id uuid references publie.master_data(id) primary key,
+  scope_code text not null references hr.post_scopes(code)
+);
+
+alter table hr.org_type_scope_map
+add constraint chk_org_type_only
+check (
+  exists (
+    select 1
+    from public.master_data md
+    join public.master_definitions def
+      on def.id = md.definition_id
+    where md.id = org_type_id
+      and def.code = 'ORG_TYPE'
+  )
+);
+
+create table hr.posts (
+  id uuid primary key default gen_random_uuid(),
+
+  code text unique not null,     -- 原 master_data.code
+  name text not null,            -- 原 master_data.name
+  scope_code text not null
+    references hr.post_scopes(code)
+    on delete restrict,       -- 🔥 范围（10230001 集团公司 10230002 子公司 10230004 项目部 等）
+
+  category_code  text  references hr.post_categories(code) on delete restrict,                 -- 可选：岗位类别（管理/技术/安全）
+  grade int,                     -- 可选：级别（用于排序/层级）
+
+  sort_order int not null default 0,   -- 用于自定义排序
+  is_active boolean default true
+
+);

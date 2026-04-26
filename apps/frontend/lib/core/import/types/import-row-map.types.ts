@@ -1,7 +1,7 @@
-import { EmployeeInsertInput } from "@/modules/employee/schemas";
-import { EmployeeImportRow } from "@/modules/employee/types";
-import { CreateOrganizationInput } from "@/modules/organization/schemas";
-import { OrganizationImportRow } from "@/modules/organization/types";
+import { EmployeeInsertInput } from "@/lib/domain/employee/schemas";
+import { EmployeeImportRow } from "@/lib/domain/employee/types";
+import { CreateOrganizationInput } from "@/lib/domain/organization/schemas";
+import { OrganizationImportRow } from "@/lib/domain/organization/types";
 
 export type ImportRowMap = {
   organizations: OrganizationImportRow;

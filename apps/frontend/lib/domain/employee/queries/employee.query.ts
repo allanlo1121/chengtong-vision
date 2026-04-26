@@ -10,7 +10,7 @@ export const employeeQuery = createListQuerySchema({
     createdAt: "created_at",
   },
   extra: {
-    parentId: z.string().optional(),
+    organizationId: z.string().optional(),
 
     includeChildren: z
       .string()

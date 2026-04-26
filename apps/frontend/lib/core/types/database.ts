@@ -5928,7 +5928,7 @@ export type Database = {
           district_name: string | null;
           external_id: string | null;
           external_version: number | null;
-          fullname: string | null;
+          full_name: string | null;
           id: string | null;
           latitude: number | null;
           leaders_current: Json | null;
@@ -6282,7 +6282,7 @@ export type Database = {
           district_name: string | null;
           external_id: string | null;
           external_version: number | null;
-          fullname: string | null;
+          full_name: string | null;
           id: string | null;
           latitude: number | null;
           longitude: number | null;

@@ -6,7 +6,6 @@ import { WriterResult } from "@/lib/core/import/types";
 import {
   EmployeeAssignmentInsertRow,
   EmployeeAssignmentRow,
-  EmployeeAssignmentUpdateRow,
   EmployeeInsertRow,
   EmployeeUpdateRow,
 } from "../types";
@@ -37,6 +36,7 @@ async function syncEmployeeAssignment(
 }
 
 export const employeeWriter = async (data: EmployeeInsertInput): Promise<WriterResult> => {
+  console.log("Upserting employee with data:", data);
   try {
     const currentVersion = data.externalVersion ?? 0;
 

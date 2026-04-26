@@ -3,11 +3,11 @@ import { Suspense } from "react";
 
 import { PageHeader } from "@/components/layout/page-header";
 import { ErrorBlock } from "@/components/common/error-block";
-import { organizationQuery } from "@/lib/domain/organization/queries";
+import { employeeQuery } from "@/lib/domain/employee/queries";
 import { listEmployees } from "@/lib/domain/employee/services";
 import { getTreeNodes } from "@/lib/core/tree/tree.service";
 
-import { OrganizationTreePanel } from "@/lib/domain/organization/ui/organization-tree-panel";
+import { EmployeeTreePanel } from "@/lib/domain/employee/ui/employee-tree-panel";
 import { OrganizationTreeToolbar } from "@/lib/domain/organization/ui/components/organization-tree-toolbar";
 
 import { EmployeeListToolbar } from "@/lib/domain/employee/ui/components/employee-list-toolbar";
@@ -24,7 +24,7 @@ export default async function Page({
 }) {
   const rawParams = await searchParams;
 
-  const raw = organizationQuery.parse(rawParams);
+  const raw = employeeQuery.parse(rawParams);
 
   const params = {
     ...raw,
@@ -34,7 +34,7 @@ export default async function Page({
   // console.log("employees page  params", params);
 
   const result = await listEmployees(params);
-  const tree = await getTreeNodes(params.parentId, "organization");
+  const tree = await getTreeNodes(params.organizationId, "organization");
 
   if (!tree.success) {
     return <ErrorBlock message={tree.message} />;
@@ -46,8 +46,8 @@ export default async function Page({
     return <ErrorBlock message={result.message} />;
   }
 
-  // console.log("employees listOrganizations", result);
-  // console.log("employees treeOrganizations", nodes);
+  // console.log("employees listEmployees", result);
+  // console.log("employees treeEmployees", nodes);
   if (!result.data) {
     return <ErrorBlock message="未查询到数据" />;
   }
@@ -58,7 +58,7 @@ export default async function Page({
     <div className="flex w-full h-full">
       <div className="w-64 border-r">
         <OrganizationTreeToolbar />
-        <OrganizationTreePanel data={nodes} selectedId={params.parentId} />
+        <EmployeeTreePanel data={nodes} selectedId={params.organizationId} />
       </div>
       <div className="flex-1 flex flex-col">
         <PageHeader title="员工管理" />

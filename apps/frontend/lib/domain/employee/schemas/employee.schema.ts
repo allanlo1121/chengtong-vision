@@ -1,12 +1,6 @@
-import {
-  adminRegionCodeSchema,
-  countryCodeSchema,
-  idSchema,
-  latitudeSchema,
-  longitudeSchema,
-} from "@/lib/shared/schema";
+import { idSchema } from "@/lib/shared/schema";
 
-import { email, z } from "zod";
+import { z } from "zod";
 
 /**
  * Employee字段规则

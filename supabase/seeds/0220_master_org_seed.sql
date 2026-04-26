@@ -36,11 +36,11 @@ ON CONFLICT (definition_id, code) DO NOTHING;
 
 
 -- ==========================================
--- 组织领导角色 ORG_LEADER_ROLE
+-- 组织主要领导  ORG_ROLE_TYPE
 -- ==========================================
 
 INSERT INTO public.master_definitions (name, code)
-VALUES ('组织领导角色', 'ORG_LEADER_ROLE')
+VALUES ('组织领导', 'ORG_ROLE_TYPE')
 ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO public.master_data (definition_id, code, name)
@@ -48,13 +48,16 @@ SELECT md.id, v.code, v.name
 FROM public.master_definitions md
 JOIN (
     VALUES 
-    ('11190001', '行政负责人'),
-    ('11190002', '党组织负责人'),
-    ('11190003', '技术负责人'),
-    ('11190004', '安全负责人')
+    ('11190001', '包保领导'),
+    ('11190002', '行政负责人'),
+    ('11190003', '党组织负责人'),
+    ('11190004', '纪检负责人'),
+    ('11190005', '技术负责人'),
+    ('11190006', '商务负责人'),
+    ('11190007', '安全总监')    
 ) AS v(code, name)
 ON true
-WHERE md.code = 'ORG_LEADER_ROLE'
+WHERE md.code = 'ORG_ROLE_TYPE'
 ON CONFLICT (definition_id, code) DO NOTHING;
 
 

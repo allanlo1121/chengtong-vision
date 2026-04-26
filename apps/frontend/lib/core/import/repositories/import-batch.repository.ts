@@ -1,7 +1,7 @@
 import { mapperRegistry } from "@/lib/core/mapper/mapper-registry";
-import { TableRow } from "@/lib/core/types/entity.types";
 import { assertNoError } from "@/lib/infra/repositories/base.repository";
 import { createClient } from "@/lib/infra/supabase/server";
+import { ImportBatchRow } from "../types";
 
 type ImportBatchSummary = {
   inserted: number;
@@ -38,7 +38,7 @@ export class ImportBatchRepository {
 
     assertNoError(error);
 
-    return mapper.fromDb(data as TableRow<"import_batches">);
+    return mapper.fromDb(data as ImportBatchRow);
   }
 
   async finish(id: string, summary: ImportBatchSummary) {

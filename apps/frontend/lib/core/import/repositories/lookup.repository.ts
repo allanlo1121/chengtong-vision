@@ -226,3 +226,18 @@ export async function listParentOrganizations(): Promise<LookupItem[]> {
     key: r.external_id,
   }));
 }
+
+export async function listEmployeeByPost(postName: string): Promise<LookupItem[]> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("v_employee_post")
+    .select("id, name")
+    .islike("post_name", postCode);
+
+  if (error) throw error;
+
+  return (data ?? []).map((r) => ({
+    id: r.id,
+    key: r.name,
+  }));
+}

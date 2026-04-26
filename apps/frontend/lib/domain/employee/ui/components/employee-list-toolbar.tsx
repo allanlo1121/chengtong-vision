@@ -26,7 +26,7 @@ export function EmployeeListToolbar() {
           onClick={() =>
             router.push(
               employeeQuery.buildUrl("/system/employees/create", {
-                parentId: query.parentId,
+                organizationId: query.organizationId,
               })
             )
           }

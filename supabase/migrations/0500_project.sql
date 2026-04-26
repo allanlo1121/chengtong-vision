@@ -4,7 +4,7 @@ CREATE TABLE public.projects (
 
 --基本信息
   name                    TEXT NOT NULL,                 -- 项目全称
-  fullname                TEXT,                          -- 项目简称
+  full_name                TEXT,                          -- 项目简称
   code                    TEXT NOT NULL,          -- 项目编码
   project_overview        TEXT,                          -- 项目描述
   project_key_points      TEXT,                          -- 项目要点
@@ -32,6 +32,9 @@ CREATE TABLE public.projects (
   address               TEXT,                                        -- 详细地址（如“世纪大道100号”）
   longitude             DECIMAL(10, 6),                              -- 经度
   latitude              DECIMAL(10, 6),                              -- 纬度
+
+  sort_order          INT,                                         -- 排序
+  remark               TEXT,                                        -- 备注
 
 
 --外部标识
