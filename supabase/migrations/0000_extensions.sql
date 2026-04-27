@@ -2,8 +2,6 @@
 -- GLOBAL EXTENSIONS
 -- =====================================================
 
-create extension if not exists "pgcrypto";
-create extension if not exists "uuid-ossp";
 create extension if not exists ltree;
 create extension if not exists btree_gist;
 -- =====================================================
@@ -12,7 +10,7 @@ create extension if not exists btree_gist;
 
 alter database postgres set search_path to public;
 
-grant usage on schema public to anon, authenticated service_role;
+grant usage on schema public to anon, authenticated, service_role;
 
 grant insert, update, delete on all tables in schema public to authenticated;
 

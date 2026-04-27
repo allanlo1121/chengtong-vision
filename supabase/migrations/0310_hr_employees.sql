@@ -15,7 +15,8 @@ create table hr.employees (
     id_card text,
     phone text,
     email text,
- 
+    
+    organization_id uuid references public.organizations(id) on delete set null,
     employment_status_id uuid references master_data(id) on delete set null,
     employment_type_id uuid references master_data(id) on delete set null,
 

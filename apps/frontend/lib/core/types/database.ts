@@ -616,6 +616,7 @@ export type Database = {
           id_card: string | null;
           leave_date: string | null;
           name: string;
+          organization_id: string | null;
           phone: string | null;
           remark: string | null;
           sort_order: number | null;
@@ -642,6 +643,7 @@ export type Database = {
           id_card?: string | null;
           leave_date?: string | null;
           name: string;
+          organization_id?: string | null;
           phone?: string | null;
           remark?: string | null;
           sort_order?: number | null;
@@ -668,6 +670,7 @@ export type Database = {
           id_card?: string | null;
           leave_date?: string | null;
           name?: string;
+          organization_id?: string | null;
           phone?: string | null;
           remark?: string | null;
           sort_order?: number | null;
@@ -744,6 +747,20 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_org_role_assignments";
             referencedColumns: ["employee_id"];
+          },
+          {
+            foreignKeyName: "employees_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "v_org_responsibles";
+            referencedColumns: ["organization_id"];
+          },
+          {
+            foreignKeyName: "employees_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "v_org_role_assignments";
+            referencedColumns: ["organization_id"];
           },
           {
             foreignKeyName: "employees_updated_by_fkey";
@@ -9743,6 +9760,7 @@ export type Database = {
     };
     Functions: {
       has_permission: { Args: { p_code: string }; Returns: boolean };
+      is_super_admin: { Args: never; Returns: boolean };
       jwt_permissions: { Args: never; Returns: Json };
     };
     Enums: {
@@ -9922,7 +9940,6 @@ export type Database = {
       bootstrap: { Args: { p_user_id: string }; Returns: undefined };
       current_employee_id: { Args: never; Returns: string };
       current_org_id: { Args: never; Returns: string };
-      is_super_admin: { Args: never; Returns: boolean };
       soft_delete: {
         Args: { p_ids: string[]; p_table: string };
         Returns: number;
