@@ -1,31 +1,5 @@
 
 
-create or replace function system.current_employee_id()
-returns uuid
-language plpgsql
-stable
-security definer
-set search_path = public, hr
-as $$
-declare
-  v_employee_id uuid;
-begin
-  select p.id into v_employee_id
-  from hr.employees p
-  where p.auth_id = auth.uid()
-    and p.deleted_at is null
-  limit 1;
-
-  if v_employee_id is not null then
-    return v_employee_id;
-  end if;
-
-  -- fallback（系统任务）
-  return '00000000-0000-0000-0000-000000000001';
-end;
-$$;
-
-
 create or replace function system.audit_insert()
 returns trigger
 language plpgsql

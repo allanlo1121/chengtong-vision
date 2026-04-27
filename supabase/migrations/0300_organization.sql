@@ -1,5 +1,5 @@
 -- ==============================
--- 0400 ORGANIZATION TABLES
+-- 0300 ORGANIZATION TABLES
 -- ==============================
 
 create table public.organizations (

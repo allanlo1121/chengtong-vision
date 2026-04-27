@@ -43,76 +43,73 @@ alter table hr.employees enable row level security;
 alter table hr.employees force row level security;
 
 
-create policy "employee read policy"
+create policy "employees_select"
 on hr.employees
 for select
+to authenticated
 using (
-  rbac.has_permission('employee.read')
+  access.can_read_employee(organization_id)
 );
 
-create policy "employee write policy"
+create policy "employees_insert"
 on hr.employees
 for insert
+to authenticated
 with check (
-  rbac.has_permission('employee.write')
+  access.can_write_employee(organization_id)
 );
 
-create policy "employee update policy"
+create policy "employees_update"
 on hr.employees
 for update
+to authenticated
 using (
-  rbac.has_permission('employee.write')
+  access.can_write_employee(organization_id)
+)
+with check (
+  access.can_write_employee(organization_id)
 );
 
-create policy "employee delete policy"
+create policy "employees_delete"
 on hr.employees
 for delete
+to authenticated
 using (
-  rbac.has_permission('employee.write')
+  access.can_write_employee(organization_id)
 );
 
 alter table public.projects enable row level security;
 alter table public.projects force row level security;
 
-create policy "project_select_policy"
+create policy "projects_select"
 on public.projects
 for select
+to authenticated
 using (
-  system.is_super_admin()
-  OR
-  organization_id in (
-    select system.allowed_org_ids()
-  )
+  access.can_read_project(organization_id)
 );
 
-create policy "project_insert_policy"
+create policy "projects_insert"
 on public.projects
-for insert
-with check (
-  system.is_super_admin()
-  OR
-  organization_id in (
-    select system.allowed_org_ids()
-  )
-);
-
-
-create policy "project_update_policy"
-on public.projects
-for update
+for all
+to authenticated
 using (
-  system.is_super_admin()
-  OR
-  organization_id in (
-    select system.allowed_org_ids()
-  )
+  access.can_write_project(organization_id)
 )
 with check (
-  system.is_super_admin()
-  OR
-  organization_id in (
-    select system.allowed_org_ids()
-  )
+  access.can_write_project(organization_id)
+);
+
+
+create policy "project_update"
+on public.projects
+for update
+to authenticated
+using (
+  access.can_write_project(organization_id)
+)
+with check (
+  access.can_write_project(organization_id)
 );
 
 create policy "project_delete_policy"

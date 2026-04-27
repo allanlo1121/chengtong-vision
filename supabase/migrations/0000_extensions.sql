@@ -12,6 +12,15 @@ create extension if not exists btree_gist;
 
 alter database postgres set search_path to public;
 
+grant usage on schema public to anon, authenticated service_role;
+
+grant insert, update, delete on all tables in schema public to authenticated;
+
+alter default privileges in schema public
+grant select on tables to anon, authenticated;
+
+alter default privileges in schema public
+grant insert, update, delete on tables to authenticated;
 
 -- =====================================================
 -- 3) SCHEMA
@@ -20,7 +29,7 @@ alter database postgres set search_path to public;
 create schema if not exists system;
 
 -- =====================================================
--- SYSTEM SCHEMA PERMISSIONS
+-- 0100 SYSTEM SCHEMA PERMISSIONS
 -- =====================================================
 
 -- 允许 API 访问 schema
@@ -36,7 +45,7 @@ grant select on tables to anon, authenticated, service_role;
 
 
 -- =====================================================
--- HR SCHEMA PERMISSIONS
+-- 0300 HR SCHEMA PERMISSIONS
 -- =====================================================
 create schema if not exists hr;
 
@@ -69,11 +78,13 @@ alter default privileges in schema hr
 grant select on tables to anon, authenticated;
 
 
-create schema if not exists rbac;
+
 
 -- =====================================================
--- RBAC SCHEMA PERMISSIONS
+-- 0700 RBAC SCHEMA PERMISSIONS
 -- =====================================================
+
+create schema if not exists rbac;
 
 -- 允许 API 访问 schema
 grant usage on schema rbac to anon, authenticated, service_role;
@@ -85,3 +96,36 @@ to anon, authenticated, service_role;
 -- 未来新表自动授权
 alter default privileges in schema rbac
 grant select on tables to anon, authenticated, service_role;
+
+
+-- =====================================================
+-- 0700 ACESS SCHEMA PERMISSIONS
+-- =====================================================
+
+create schema if not exists access;
+
+grant usage on schema  access
+to anon, authenticated;
+
+
+-- ==============================
+-- 0800 AUDIT TABLES
+-- ==============================
+
+create schema if not exists audit;
+
+-- =====================================================
+-- AUDIT SCHEMA PERMISSIONS
+-- =====================================================
+
+-- 允许 API 访问 schema
+grant usage on schema audit to anon, authenticated, service_role;
+
+-- 允许读取表
+grant select on all tables in schema audit
+to anon, authenticated, service_role;
+
+-- 未来新表自动授权
+alter default privileges in schema audit
+grant select on tables to anon, authenticated, service_role;
+

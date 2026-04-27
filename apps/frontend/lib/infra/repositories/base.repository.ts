@@ -1,13 +1,6 @@
 // lib/infra/repositories/base.repository.ts
-import { createClient } from "@/lib/infra/supabase/server";
+
 import { PostgrestError } from "@supabase/supabase-js";
-import {
-  TableName,
-  Entity,
-  TableInsert,
-  InsertEntity,
-  UpdateEntity,
-} from "@/lib/core/types/entity.types";
 
 /* ============================= */
 /* 时间工具                      */
@@ -72,10 +65,3 @@ export function assertNoError(error: PostgrestError | null) {
     throw new Error(error.message);
   }
 }
-
-export type Repository<T extends TableName> = {
-  insert: (data: InsertEntity<T>) => Promise<Entity<T>>;
-  update: (id: string, data: UpdateEntity<T>) => Promise<Entity<T>>;
-  upsert: (data: UpdateEntity<T>) => Promise<Entity<T>>;
-  remove: (id: string) => Promise<void>;
-};
