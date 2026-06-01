@@ -6,7 +6,7 @@ export function extractFields<TSchema extends ZodObject<any>>(
   schema: TSchema
 ): FieldDefinition<z.input<TSchema>>[] {
   const shape = schema.shape;
-  console.log("Extracting fields from schema", { shape });
+  // console.log("Extracting fields from schema", { shape });
 
   const fields: FieldDefinition<z.input<TSchema>>[] = [];
 

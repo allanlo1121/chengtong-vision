@@ -52,7 +52,7 @@ export async function getCurrentUser() {
 
     // 4. 查询角色（employee_roles → roles）
     const { data: roles } = await supabase
-        .from("employee_roles")
+        .from("user_roles")
         .select(
             `
       roles (

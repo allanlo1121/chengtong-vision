@@ -45,6 +45,7 @@ export class ImportBatchRepository {
     const supabase = await createClient();
 
     const { error } = await supabase
+      .schema("public")
       .from("import_batches")
       .update({
         status: "finished",

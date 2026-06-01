@@ -5,9 +5,8 @@ import {
   latitudeSchema,
   longitudeSchema,
 } from "@/lib/shared/schema";
-import { act } from "react";
 
-import { email, z } from "zod";
+import { z } from "zod";
 
 /**
  * Project字段规则
@@ -16,7 +15,7 @@ export const ProjectSchema = z.object({
   name: z
     .string()
     .min(4, { message: "工程简称至少4个字符" })
-    .max(8, { message: "工程简称最多8个字符" })
+    .max(20, { message: "工程简称最多20个字符" })
     .meta({
       table: "projects",
       label: "工程简称",
@@ -47,7 +46,7 @@ export const ProjectSchema = z.object({
       description: "唯一标识，建议使用字母、数字和下划线",
     }),
 
-  fullName: z.string().max(50, { message: "工程全称最多50个字符" }).meta({
+  fullName: z.string().max(100, { message: "工程全称最多100个字符" }).meta({
     table: "projects",
     label: "工程全称",
     field: "full_name",
@@ -64,7 +63,7 @@ export const ProjectSchema = z.object({
 
   projectOverview: z
     .string()
-    .max(500, { message: "工程概况最多500个字符" })
+    .max(1000, { message: "工程概况最多1000个字符" })
     .optional()
     .nullable()
     .meta({
@@ -84,7 +83,7 @@ export const ProjectSchema = z.object({
 
   projectKeyPoints: z
     .string()
-    .max(500, { message: "工程要点最多500个字符" })
+    .max(1000, { message: "工程要点最多1000个字符" })
     .optional()
     .nullable()
     .meta({
@@ -135,7 +134,7 @@ export const ProjectSchema = z.object({
     required: true,
     readonly: false,
     colSpan: 1,
-    option: { source: "organization_tree", parentId: null },
+    optionSource: { source: "organization_tree", parentId: null },
   }),
 
   projectManagementModeId: idSchema.meta({
@@ -151,7 +150,7 @@ export const ProjectSchema = z.object({
     required: false,
     readonly: false,
     colSpan: 1,
-    option: { source: "master", code: "PROJECT_MANAGEMENT_MODE" },
+    optionSource: { source: "master", code: "PROJECT_MANAGEMENT_MODE" },
   }),
 
   projectTypeId: idSchema.meta({
@@ -167,7 +166,7 @@ export const ProjectSchema = z.object({
     required: false,
     readonly: false,
     colSpan: 1,
-    option: { source: "master", code: "PROJECT_TYPE" },
+    optionSource: { source: "master", code: "PROJECT_TYPE" },
   }),
 
   projectSubTypeId: idSchema.meta({
@@ -183,7 +182,7 @@ export const ProjectSchema = z.object({
     required: false,
     readonly: false,
     colSpan: 1,
-    option: { source: "master", code: "PROJECT_SUB_TYPE", parentCodeField: "PROJECT_TYPE" },
+    optionSource: { source: "master", code: "PROJECT_SUB_TYPE", parentCodeField: "PROJECT_TYPE" },
   }),
 
   actualStartDate: z.string().optional().nullable().meta({
@@ -221,7 +220,7 @@ export const ProjectSchema = z.object({
     component: "select",
     section: "地理信息",
     colSpan: 1,
-    option: { source: "countries" },
+    optionSource: { source: "countries" },
   }),
 
   provinceCode: adminRegionCodeSchema.meta({
@@ -229,7 +228,7 @@ export const ProjectSchema = z.object({
     component: "select",
     section: "地理信息",
     colSpan: 1,
-    option: {
+    optionSource: {
       source: "admin_regions",
       level: 1,
     },

@@ -14,27 +14,24 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-import { menuData } from "@/lib/domain/navigation/menu-data";
 import { useMenu } from "@/lib/runtime/menu/useMenu";
-import { useMemo } from "react";
-import { mapMenuToNav } from "@/lib/domain/navigation/adapter";
+import { useAppContext } from "@/lib/runtime/appContext/useAppContext";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const menus = useMenu();
-  const navItems = useMemo(() => mapMenuToNav(menus), [menus]);
-  // console.log("navItems",navItems);
+  const appContext = useAppContext();
 
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={menuData.teams} />
+        <TeamSwitcher teams={appContext.teams} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={navItems} />
-        <NavProjects projects={menuData.projects} />
+        <NavMain items={menus} />
+        <NavProjects projects={appContext.favoriteProjects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={menuData.user} />
+        <NavUser user={appContext.user} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

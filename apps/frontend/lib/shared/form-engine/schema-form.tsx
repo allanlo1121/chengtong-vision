@@ -1,8 +1,8 @@
 // form-engine/schema-form.tsx
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
-import { useForm, useWatch, FieldValues, DefaultValues } from "react-hook-form";
+import { useEffect, useMemo } from "react";
+import { useForm, DefaultValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { FieldRenderer } from "./field-renderer";
@@ -11,12 +11,10 @@ import { useDependencyEngine } from "./hooks/use-dependency-engine";
 import { groupFieldsBySection } from "./engines/section-engine";
 
 import { extractFields } from "./utils/extract-fields";
-import { ActionResult } from "../types";
+import { ActionResult } from "../contracts";
 import { DependencyGraph } from "./types/dependency-graph";
 
-import { z, ZodObject, ZodRawShape, ZodType, ZodSchema } from "zod";
-import { log } from "console";
-import { de } from "zod/v4/locales";
+import { z, ZodObject } from "zod";
 
 type SchemaFormProps<TSchema extends ZodObject<any>> = {
   schema: TSchema;
@@ -62,8 +60,9 @@ export function SchemaForm<TSchema extends ZodObject<any>>({
     const defaults: Record<string, undefined> = {};
     for (const key in shape) {
       const field: any = shape[key];
-      // console.log("Calculating schema default for field", { key, field });
+
       const defaultValue = field._def.defaultValue;
+      //console.log("Calculating schema default for field", { key, defaultValue,field });
       if (defaultValue === undefined) {
         // console.log(`No default value for field ${key}:`);
         continue;
@@ -85,14 +84,14 @@ export function SchemaForm<TSchema extends ZodObject<any>>({
     } as DefaultValues<FormInput>;
   }, [schemaDefaults, initialValues]);
 
-  // console.log("SchemaForm defaultValues", defaultValues);
+  console.log("SchemaForm defaultValues", defaultValues);
 
   const form = useForm<FormInput, any, FormOutput>({
     resolver: zodResolver(schema),
     defaultValues,
   });
 
-  //  console.log("schemaForm form", form);
+  // console.log("schemaForm form", form);
 
   /** ------------------------------------------------
    * 3 initialValues 更新
@@ -121,6 +120,8 @@ export function SchemaForm<TSchema extends ZodObject<any>>({
     if (!action) return;
     const result = await action(data);
 
+    console.log("schema-form action result", result);
+
     if (!result.success) {
       onError?.(result);
       return;
@@ -139,6 +140,13 @@ export function SchemaForm<TSchema extends ZodObject<any>>({
    * 10 render
    * ------------------------------------------------ */
 
+  const colSpanClassMap = {
+    1: "col-span-1",
+    2: "col-span-2",
+    3: "col-span-3",
+    4: "col-span-4",
+  } as const;
+
   return (
     <form
       onSubmit={form.handleSubmit(onSubmit, (errors) => {
@@ -154,7 +162,12 @@ export function SchemaForm<TSchema extends ZodObject<any>>({
 
           <div className="grid grid-cols-2 gap-4">
             {sectionFields.map((field) => (
-              <div key={field.name} className={`col-span-${field.ui.colSpan ?? 1}`}>
+              <div
+                key={field.name}
+                className={
+                  colSpanClassMap[field.ui.colSpan as keyof typeof colSpanClassMap] ?? "col-span-1"
+                }
+              >
                 <FieldRenderer name={field.name} ui={field.ui} form={form} />
               </div>
             ))}

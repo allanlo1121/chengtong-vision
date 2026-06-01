@@ -1,2 +1,3 @@
-export * from "./organization.repository";
-export * from "./organization-create.repository";
+export * from "./repository";
+export * from "./create.repository";
+export * from "./delete.repository";

@@ -100,6 +100,35 @@ export async function listCountries(): Promise<LookupItem[]> {
   return result ?? [];
 }
 
+export async function listPosts(): Promise<LookupItem[]> {
+  const supabase = createClient();
+  let from = 0;
+  let all: any[] = [];
+
+  while (true) {
+    const { data, error } = await supabase
+      .schema("hr")
+      .from("posts")
+      .select("id,code")
+      .range(from, from + BATCH_SIZE - 1);
+
+    assertNoError(error);
+
+    if (!data || data.length === 0) break;
+
+    all = all.concat(data);
+
+    if (data.length < BATCH_SIZE) break;
+
+    from += BATCH_SIZE;
+  }
+  const result = all.map((r) => ({
+    id: r.id,
+    key: r.code,
+  }));
+  return result ?? [];
+}
+
 export async function listAdminRegions(): Promise<LookupItem[]> {
   const supabase = createClient();
 
@@ -130,33 +159,33 @@ export async function listAdminRegions(): Promise<LookupItem[]> {
   return result ?? [];
 }
 
-export async function searchEmployees(search?: string): Promise<LookupItem[]> {
-  const supabase = createClient();
-  let builder = supabase.from("v_employees").select("id, name");
-  if (search) {
-    builder = builder.ilike("name", `%${search}%`);
-  }
-  const { data } = await builder;
-  const result = data?.map((r) => ({
-    id: r.id,
-    key: r.name,
-  }));
-  return result ?? [];
-}
+// export async function searchEmployees(search?: string): Promise<LookupItem[]> {
+//   const supabase = createClient();
+//   let builder = supabase.from("v_employees").select("id, name");
+//   if (search) {
+//     builder = builder.ilike("name", `%${search}%`);
+//   }
+//   const { data } = await builder;
+//   const result = data?.map((r) => ({
+//     id: r.id,
+//     key: r.name,
+//   }));
+//   return result ?? [];
+// }
 
-export async function searchProjects(search?: string): Promise<LookupItem[]> {
-  const supabase = createClient();
-  let builder = supabase.from("v_projects").select("id, name");
-  if (search) {
-    builder = builder.ilike("name", `%${search}%`);
-  }
-  const { data } = await builder;
-  const result = data?.map((r) => ({
-    id: r.id,
-    key: r.name,
-  }));
-  return result ?? [];
-}
+// export async function searchProjects(search?: string): Promise<LookupItem[]> {
+//   const supabase = createClient();
+//   let builder = supabase.from("v_projects").select("id, name");
+//   if (search) {
+//     builder = builder.ilike("name", `%${search}%`);
+//   }
+//   const { data } = await builder;
+//   const result = data?.map((r) => ({
+//     id: r.id,
+//     key: r.name,
+//   }));
+//   return result ?? [];
+// }
 
 export async function listOrganizations(): Promise<LookupItem[]> {
   const supabase = createClient();
@@ -166,6 +195,7 @@ export async function listOrganizations(): Promise<LookupItem[]> {
 
   while (true) {
     const { data, error } = await supabase
+      .schema("hr")
       .from("organizations")
       .select("id, code")
       .order("sort_order", { ascending: true })
@@ -199,6 +229,7 @@ function chunkArray<T>(arr: T[], size: number): T[][] {
 }
 
 export async function listParentOrganizations(): Promise<LookupItem[]> {
+  console.log("===listParentOrganizations===");
   const supabase = createClient();
   const pageSize = 1000;
   let from = 0;
@@ -206,7 +237,54 @@ export async function listParentOrganizations(): Promise<LookupItem[]> {
 
   while (true) {
     const { data, error } = await supabase
+      .schema("hr")
       .from("organizations")
+      .select("id, external_id")
+      .range(from, from + pageSize - 1);
+
+    if (error) throw error;
+    console.log("Fetched parent orgs batch:", data);
+
+    if (!data || data.length === 0) break;
+
+    all = all.concat(data);
+
+    if (data.length < pageSize) break;
+
+    from += pageSize;
+  }
+
+  return all.map((r) => ({
+    id: r.id,
+    key: r.external_id,
+  }));
+}
+
+// export async function listEmployeeByPost(postName: string): Promise<LookupItem[]> {
+//   const supabase = createClient();
+//   const { data, error } = await supabase
+//     .from("v_employee_post")
+//     .select("id, name")
+//     .islike("post_name", postCode);
+
+//   if (error) throw error;
+
+//   return (data ?? []).map((r) => ({
+//     id: r.id,
+//     key: r.name,
+//   }));
+// }
+
+export async function listEmployees(): Promise<LookupItem[]> {
+  const supabase = createClient();
+  const pageSize = 1000;
+  let from = 0;
+  let all: any[] = [];
+
+  while (true) {
+    const { data, error } = await supabase
+      .schema("hr")
+      .from("employees")
       .select("id, external_id")
       .range(from, from + pageSize - 1);
 
@@ -227,14 +305,25 @@ export async function listParentOrganizations(): Promise<LookupItem[]> {
   }));
 }
 
-export async function listEmployeeByPost(postName: string): Promise<LookupItem[]> {
+export async function listCustomers(categoryCode: string): Promise<LookupItem[]> {
   const supabase = createClient();
-  const { data, error } = await supabase
-    .from("v_employee_post")
-    .select("id, name")
-    .islike("post_name", postCode);
+  const { data: customerCatagorydata, error: categoryError } = await supabase
+    .from("master_data")
+    .select("id")
+    .eq("code", categoryCode)
+    .maybeSingle();
 
-  if (error) throw error;
+  assertNoError(categoryError);
+
+  if (!customerCatagorydata) return [];
+
+  const { data, error } = await supabase
+    .schema("hr")
+    .from("customers")
+    .select("id, name")
+    .eq("customer_category_id", customerCatagorydata.id);
+
+  assertNoError(error);
 
   return (data ?? []).map((r) => ({
     id: r.id,

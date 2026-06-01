@@ -1,3 +1,3 @@
-export * from "./employee.schema";
+export * from "./schema";
 // export * from "./query.schema";
-export * from "./employee-insert.schema";
+export * from "./insert.schema";

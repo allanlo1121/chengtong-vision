@@ -1,54 +1,33 @@
 "use server";
 
-import { EmployeeInsertInput } from "../schemas";
+import { ProjectInsertInput } from "../schemas";
 import { WriterResult } from "@/lib/core/import/types";
 
+import { OrganizationRoleAssignmentInsertRow, ProjectInsertRow } from "../types";
 import {
-  EmployeeAssignmentInsertRow,
-  EmployeeAssignmentRow,
-  EmployeeAssignmentUpdateRow,
-  EmployeeInsertRow,
-  EmployeeUpdateRow,
-} from "../types";
-import { employeeRepository, employeeAssignmentsRepository } from "../repositories";
+  projectRepository,
+  employeeAssignmentsRepository,
+  insertProjectStatusTimeline,
+  insertProjectRiskLevelTimeline,
+  insertProjectAttentionLevelTimeline,
+  insertProjectAttentionTypeTimeline,
+  insertProjectControlLevelTimeline,
+  insertOrganizationRoleAssignment,
+} from "../repositories";
 
-async function syncEmployeeAssignment(
-  employeeId: string,
-  data: EmployeeAssignmentInsertRow
-): Promise<EmployeeAssignmentRow | void> {
-  const old = await employeeAssignmentsRepository.getByEmployeeId(employeeId); // 👈 关键
-  console.log("Existing assignment for employee ID", employeeId, ":", old);
-
-  if (!old) {
-    return employeeAssignmentsRepository.insert(data);
-  }
-
-  const changed = old.organization_id !== data.organization_id || old.post_id !== data.post_id;
-
-  console.log("Assignment changed for employee ID", employeeId, ":", changed);
-
-  if (!changed) return;
-
-  console.log("Deactivating existing assignment for employee ID", employeeId);
-  await employeeAssignmentsRepository.deactivateByEmployeeId(employeeId);
-  console.log("Inserting new assignment for employee ID", employeeId, "with data:", data);
-
-  return employeeAssignmentsRepository.insert(data);
-}
-
-export const employeeWriter = async (data: EmployeeInsertInput): Promise<WriterResult> => {
-  console.log("Upserting employee with data:", data);
+export const projectWriter = async (data: ProjectInsertInput): Promise<WriterResult | void> => {
+  console.log("Upserting project with data:", data);
   try {
     const currentVersion = data.externalVersion ?? 0;
 
     // 1️⃣ 查版本
-    const result = await employeeRepository.findByCode(data.code);
+    const result = await projectRepository.findByCode(data.code);
 
     const id = result?.id ?? null;
     const version = result?.external_version ?? null;
 
     console.log(
-      "Employee code:",
+      "project code:",
       data.code,
       "Current version:",
       currentVersion,
@@ -73,10 +52,29 @@ export const employeeWriter = async (data: EmployeeInsertInput): Promise<WriterR
     const baseData = {
       code: data.code,
       name: data.name,
-      phone: data.phone,
-      email: data.email,
-      employment_type_id: data.employmentTypeId,
-      hire_date: data.hireDate,
+      full_name: data.fullName,
+      project_overview: data.projectOverview,
+      project_key_points: data.projectKeyPoints,
+      project_scope: data.projectScope,
+
+      project_type_id: data.projectTypeId,
+      project_sub_type_id: data.projectSubTypeId,
+      project_management_mode_id: data.projectManagementModeId,
+
+      organization_id: data.organizationId,
+      region_id: data.regionId,
+
+      country_code: data.countryCode,
+      province_code: data.provinceCode,
+      city_code: data.cityCode,
+      district_code: data.districtCode,
+      address: data.address,
+      longitude: data.longitude,
+      latitude: data.latitude,
+      actual_start_date: data.actualStartDate,
+      actual_end_date: data.actualEndDate,
+      remark: data.remark,
+
       external_id: data.externalId,
       external_version: currentVersion,
     };
@@ -85,59 +83,138 @@ export const employeeWriter = async (data: EmployeeInsertInput): Promise<WriterR
     // 4️⃣ 不存在 → INSERT
     // ======================
     if (!id) {
-      const insertData: EmployeeInsertRow = baseData;
-      console.log("Inserting new employee with data:", insertData);
+      const insertData: ProjectInsertRow = baseData;
+      console.log("Inserting new project with data:", insertData);
 
-      const res = await employeeRepository.insert(insertData);
+      const res = await projectRepository.insert(insertData);
 
       if (!res?.id) {
-        throw new Error("Failed to insert employee: no id returned");
+        throw new Error("Failed to insert project: no id returned");
       }
 
-      // 👉 插入岗位
-      const assignmentData: EmployeeAssignmentInsertRow = {
-        employee_id: res.id,
+      const hasStatus = data.projectStatusId != null || data.projectSubStatusId != null;
+
+      if (hasStatus) {
+        const now = new Date();
+
+        await insertProjectStatusTimeline({
+          project_id: res.id,
+          project_status_id: data.projectStatusId ?? null,
+          project_sub_status_id: data.projectSubStatusId ?? null,
+          valid_from: now.toISOString(),
+          change_type: "initial",
+        });
+      }
+
+      const hasRiskLevel = data.projectRiskLevelId != null;
+
+      if (hasRiskLevel) {
+        const now = new Date();
+
+        await insertProjectRiskLevelTimeline({
+          project_id: res.id,
+          project_risk_level_id: data.projectRiskLevelId ?? null,
+          valid_from: now.toISOString(),
+          change_type: "initial",
+        });
+      }
+
+      const hasControlLevel = data.projectControlLevelId != null;
+
+      if (hasControlLevel) {
+        const now = new Date();
+
+        await insertProjectControlLevelTimeline({
+          project_id: res.id,
+          project_control_level_id: data.projectControlLevelId ?? null,
+          valid_from: now.toISOString(),
+          change_type: "initial",
+        });
+      }
+
+      const hasAttentionLevel = data.projectAttentionLevelId != null;
+
+      if (hasAttentionLevel) {
+        const now = new Date();
+
+        await insertProjectAttentionLevelTimeline({
+          project_id: res.id,
+          project_attention_level_id: data.projectAttentionLevelId ?? null,
+          valid_from: now.toISOString(),
+          change_type: "initial",
+        });
+      }
+
+      const hasAttentionType =
+        data.projectAttentionTypeId != null && data.projectAttentionTypeId != undefined;
+
+      if (hasAttentionType) {
+        // const now = new Date();
+
+        const attentionTypeId = data.projectAttentionTypeId;
+
+        if (attentionTypeId != null) {
+          await insertProjectAttentionTypeTimeline({
+            project_id: res.id,
+            attention_type_id: attentionTypeId,
+            valid_from: new Date().toISOString(),
+            change_type: "initial",
+          });
+        }
+      }
+
+      // 👉 插入项目经理角色
+      const assignmentManagerData: OrganizationRoleAssignmentInsertRow = {
+        employee_id: data.organizationManagerId!,
         organization_id: data.organizationId,
-        post_id: data.postId,
-        is_primary: true,
+        role_type_id: data.organizationManagerRoleTypeId!,
+        start_date: new Date().toISOString(),
       };
 
-      await employeeAssignmentsRepository.insert(assignmentData);
+      await insertOrganizationRoleAssignment(assignmentManagerData);
 
-      return {
-        success: true,
-        action: "inserted",
-        id: res.id,
+      // 👉 插入项目总工角色
+      const assignmentChiefEngineerData: OrganizationRoleAssignmentInsertRow = {
+        employee_id: data.organizationChiefEngineerId!,
+        organization_id: data.organizationId,
+        role_type_id: data.organizationChiefEngineerRoleTypeId!,
+        start_date: new Date().toISOString(),
       };
+
+      await insertOrganizationRoleAssignment(assignmentChiefEngineerData);
+
+      // 👉 插入包保领导角色
+      const assignmentOversightLeaderData: OrganizationRoleAssignmentInsertRow = {
+        employee_id: data.organizationOversightLeaderId!,
+        organization_id: data.organizationId,
+        role_type_id: data.organizationOversightLeaderRoleTypeId!,
+        start_date: new Date().toISOString(),
+      };
+
+      await insertOrganizationRoleAssignment(assignmentOversightLeaderData);
+
+      // 👉 插入书记角色
+      const assignmentSecretaryData: OrganizationRoleAssignmentInsertRow = {
+        employee_id: data.organizationPartySecretaryId!,
+        organization_id: data.organizationId,
+        role_type_id: data.organizationPartySecretaryRoleTypeId!,
+        start_date: new Date().toISOString(),
+      };
+
+      await insertOrganizationRoleAssignment(assignmentSecretaryData);
+
+      // 👉 插入安全负责人角色
+      const assignmentSafetyDirectorData: OrganizationRoleAssignmentInsertRow = {
+        employee_id: data.organizationSafetyDirectorId!,
+        organization_id: data.organizationId,
+        role_type_id: data.organizationSafetyDirectorRoleTypeId!,
+        start_date: new Date().toISOString(),
+      };
+
+      await insertOrganizationRoleAssignment(assignmentSafetyDirectorData);
     }
-
-    // ======================
-    // 5️⃣ 存在 → UPDATE
-    // ======================
-    const updateData: EmployeeUpdateRow = baseData;
-
-    console.log("Updating existing employee (ID:", id, ") with data:", updateData);
-
-    const updateRes = await employeeRepository.update(id, updateData);
-
-    if (!updateRes?.id) {
-      throw new Error("Failed to update employee: no id returned");
-    }
-
-    await syncEmployeeAssignment(updateRes.id, {
-      employee_id: updateRes.id,
-      organization_id: data.organizationId,
-      post_id: data.postId,
-      is_primary: true,
-    });
-
-    return {
-      success: true,
-      action: "updated",
-      id: updateRes?.id,
-    };
   } catch (err) {
-    console.error("Failed to upsert employee:", err);
+    console.error("Failed to upsert project:", err);
 
     return {
       success: false,

@@ -1,7 +1,7 @@
 // app/api/organizations/tree/rout.ts
 
 import { NextRequest } from "next/server";
-import { getOrganizationTree } from "@/modules/organization/services";
+import { getTreeNodes } from "@/lib/domain/organization/tree";
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
@@ -14,9 +14,11 @@ export async function GET(req: NextRequest) {
   const source = searchParams.get("source");
   const parentId = searchParams.get("parentId");
 
+  console.log("source:", source, "parentId:", parentId); // ⭐
+
   // 👉 可以扩展多树
   if (source === "organization") {
-    const res = await getOrganizationTree(parentId || null);
+    const res = await getTreeNodes(parentId || null);
     return Response.json(res);
   }
 

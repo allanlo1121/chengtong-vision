@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FieldValues, Path, UseFormReturn } from "react-hook-form";
 
-import { SelectOption } from "@/modules/shared/options/types";
+import { SelectOption } from "@/lib/shared/options/types";
 
 export function useAsyncOptions<T extends FieldValues>(
   resolver: any,

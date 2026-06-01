@@ -11,7 +11,7 @@ export const organizationQuery = createListQuerySchema({
   },
 
   extra: {
-    parentId: z.string().optional(),
+    organizationId: z.string().optional(),
 
     includeChildren: z
       .string()

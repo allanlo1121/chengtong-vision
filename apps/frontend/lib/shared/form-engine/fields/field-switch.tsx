@@ -21,25 +21,34 @@ export function FieldSwitch<T extends FieldValues, C = any, O = T>({
   disabled = false,
   required = false,
 }: FieldRendererProps<T, C, O>) {
-  // console.log("FieldSwitch", { name, ui, disabled, required });
+  // console.log("FieldSwitch", { name, ui, disabled, required, form });
+
   return (
     <Controller
       name={name}
       control={form.control}
-      render={({ field }) => (
-        <Field orientation="responsive">
-          <FieldContent>
-            <FieldLabel>{ui.label}</FieldLabel>
-            {/* {ui.description && <FieldDescription>{ui.description}</FieldDescription>} */}
-          </FieldContent>
+      render={({ field }) => {
+        // console.log("switch value", {
+        //   name,
+        //   value: form.getValues(name),
+        //   fieldValue: field.value,
+        //   allValues: form.getValues(),
+        // })
+        return (
+          <Field orientation="responsive">
+            <FieldContent>
+              <FieldLabel>{ui.label}</FieldLabel>
+              {/* {ui.description && <FieldDescription>{ui.description}</FieldDescription>} */}
+            </FieldContent>
 
-          <Switch
-            checked={field.value ?? true}
-            onCheckedChange={field.onChange}
-            disabled={disabled}
-          />
-        </Field>
-      )}
+            <Switch
+              checked={field.value === true}
+              onCheckedChange={field.onChange}
+              disabled={disabled}
+            />
+          </Field>
+        );
+      }}
     />
   );
 }

@@ -18,7 +18,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { SelectOption } from "@/modules/shared/options/types";
+import { SelectOption } from "@/lib/shared/options/types";
 import { useFieldOptions } from "../hooks/use-field-options";
 
 export function FieldSelect<T extends FieldValues, C = any, O = T>({
@@ -28,7 +28,7 @@ export function FieldSelect<T extends FieldValues, C = any, O = T>({
   disabled = false,
   required = false,
 }: FieldRendererProps<T, C, O>) {
-  // console.log("FieldSelect", { name, ui, disabled, required });
+  //console.log("FieldSelect", { name, ui, disabled, required });
   // 只监听依赖字段
   const depValues = useWatch({
     control: form.control,
@@ -39,46 +39,72 @@ export function FieldSelect<T extends FieldValues, C = any, O = T>({
   const disabledByDeps =
     ui.dependsOn && depValues.some((v) => v === undefined || v === null || v === "");
 
-  const { options, loading } = useFieldOptions(ui.option, form, ui.dependsOn);
+  const hasStaticOptions = !!ui.options?.length;
 
-  // console.log("FieldSelect options:", options);
+  const dynamicOptions = useFieldOptions(
+    hasStaticOptions ? undefined : ui.optionSource,
+    form,
+    ui.dependsOn
+  );
+
+  const options = ui.options ?? dynamicOptions.options;
+  const loading = hasStaticOptions ? false : dynamicOptions.loading;
+
+  // if (!options) {
+  //   console.warn(`No options available for field ${name}`);
+  //   return null;
+  // }
+
+  //console.log("FieldSelect options:", options);
   const finalDisabled = disabled || disabledByDeps;
 
   return (
     <Controller
       name={name}
       control={form.control}
-      render={({ field, fieldState }) => (
-        <Field data-invalid={fieldState.invalid}>
-          {ui.label && (
-            <FieldLabel htmlFor={field.name}>
-              {ui.label}
-              {required && <span className="ml-1 text-destructive align-middle">*</span>}
-            </FieldLabel>
-          )}
+      render={({ field, fieldState }) => {
+        // console.log("select value", {
+        //   name,
+        //   value: form.getValues(name),
+        //   fieldValue: field.value,
+        //   allValues: form.getValues(),
+        // })
+        return (
+          <Field data-invalid={fieldState.invalid}>
+            {ui.label && (
+              <FieldLabel htmlFor={field.name}>
+                {ui.label}
+                {required && <span className="ml-1 text-destructive align-middle">*</span>}
+              </FieldLabel>
+            )}
 
-          <Select
-            value={field.value ?? ""}
-            onValueChange={field.onChange}
-            disabled={finalDisabled || loading}
-            required={required}
-          >
-            <SelectTrigger id={field.name}>
-              <SelectValue placeholder={ui.placeholder ?? "请选择"} />
-            </SelectTrigger>
+            <Select
+              value={field.value == null ? "" : String(field.value)}
+              onValueChange={field.onChange}
+              disabled={finalDisabled || loading}
+              required={required}
+            >
+              <SelectTrigger id={field.name}>
+                <SelectValue placeholder={ui.placeholder ?? "请选择"} />
+              </SelectTrigger>
 
-            <SelectContent>
-              {options.map((option: SelectOption) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+              <SelectContent>
+                {options.map((option: SelectOption) => (
+                  <SelectItem
+                    key={String(option.value)}
+                    value={String(option.value)}
+                    disabled={option.disabled}
+                  >
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-          {fieldState.error && <FieldError errors={[fieldState.error]} />}
-        </Field>
-      )}
+            {fieldState.error && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        );
+      }}
     />
   );
 }

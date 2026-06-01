@@ -1,10 +1,7 @@
+// tsconfig.base.json
 {
   "compilerOptions": {
-    "ignoreDeprecations": "6.0",
-    "baseUrl": ".",
-    "paths": {
-      "@chengtong/core/*": ["packages/core/*"],
-      "@chengtong/modules/*": ["packages/modules/*"]
-    }
+    "strict": true,
+    "skipLibCheck": true
   }
 }

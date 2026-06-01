@@ -12,13 +12,11 @@ export const organizationMapper = (row: OrganizationImportRow) =>
     provinceCode: row["org_province"],
     cityCode: row["org_city"],
     districtCode: row["org_county"],
+    isDisabled: false,
     sortOrder: row["org_number"] ? Number(row["org_number"]) : 0,
     externalId: row["org_id"],
 
     externalVersion: row["ctcemti_bltjzz_serial_version"]
       ? Number(row["ctcemti_bltjzz_serial_version"])
       : 0,
-  }) satisfies Omit<
-    CreateOrganizationInput,
-    "orgTypeId" | "orgCategoryId" | "parentId" | "jobTitleId"
-  >;
+  }) satisfies Omit<CreateOrganizationInput, "orgTypeId" | "orgCategoryId" | "parentId">;

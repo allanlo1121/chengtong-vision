@@ -1,29 +1,35 @@
-import { mapTreeNode } from "./map-tree-node";
-import { getTreeRows } from "./tree.repository";
-
+import { getAllTrees, treeRepository } from "./tree.repository";
 import { Result } from "@/lib/shared/contracts";
-import { TreeEntity, TreeNode } from "./types";
-import { buildTreeFromRows } from "./build-tree-from-rows";
+import { buildTree } from "./build-tree";
 
-export async function getTreeNodes(
-  parentId: string | null = null,
-  entity: TreeEntity = "organization"
-): Promise<Result<TreeNode[]>> {
-  try {
-    const rows = await getTreeRows(parentId, entity);
+import { TreeKey, TreeNode } from "./types";
 
-    const items = buildTreeFromRows(rows, mapTreeNode);
+export const treeService = {
+  // =====================================
+  // get tree
+  // =====================================
 
-    // console.log("getTreeNodes", JSON.stringify(items, null, 2));
+  async getTreeNodes(treeKey: TreeKey): Promise<Result<TreeNode[]>> {
+    try {
+      // flat rows
 
-    return {
-      success: true,
-      data: items ?? [],
-    };
-  } catch (error: unknown) {
-    return {
-      success: false,
-      message: (error as Error)?.message ?? "获取树节点失败",
-    };
-  }
-}
+      const rows = await getAllTrees(treeKey);
+
+      // build tree
+
+      const tree = buildTree(rows);
+
+      return {
+        success: true,
+        data: tree,
+      };
+    } catch (error) {
+      console.error("[treeService.getTreeNodes]", error);
+
+      return {
+        success: false,
+        message: error instanceof Error ? error.message : "Failed to load tree",
+      };
+    }
+  },
+};

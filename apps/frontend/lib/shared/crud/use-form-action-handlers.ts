@@ -8,29 +8,54 @@ import { useRouter } from "next/navigation";
 type Router = ReturnType<typeof useRouter>;
 
 export function useFormActionHandlers(router: Router) {
-  const handleSuccess = (result: ActionResult<any>, redirect?: string) => {
-    if (result.message) {
-      toast.success(result.message);
-    } else {
-      toast.success("操作成功");
+  const handleSuccess = <T>(result: ActionResult<T>, redirect?: string) => {
+    if (!result.success) return;
+
+    toast.success(result.message || "操作成功");
+
+    if (result.warnings?.length) {
+      result.warnings.forEach((warning) => {
+        toast.warning(warning);
+      });
     }
 
-    if (redirect) {
-      router.push(redirect);
+    const nextRedirect = result.nextAction?.type === "redirect" ? result.nextAction.href : redirect;
+
+    if (nextRedirect) {
+      router.push(nextRedirect);
     }
   };
 
   const handleError = (result: ActionResult<any>, form?: any) => {
     if (result.success) return;
 
-    result.message && toast.error(result.message);
+    const toastMessage = result.message || "操作失败";
+
+    if (result.errorLevel === "warning") {
+      toast.warning(toastMessage);
+    } else {
+      toast.error(toastMessage);
+    }
 
     if (result.errors && form) {
       Object.entries(result.errors).forEach(([key, value]) => {
+        if (!value?.[0]) return;
+
+        if (key === "form" || key === "_form") {
+          form.setError("root", {
+            message: value[0],
+          });
+          return;
+        }
+
         form.setError(key as any, {
           message: value[0],
         });
       });
+    }
+
+    if (result.nextAction?.type === "redirect" && result.nextAction.href) {
+      router.push(result.nextAction.href);
     }
   };
 

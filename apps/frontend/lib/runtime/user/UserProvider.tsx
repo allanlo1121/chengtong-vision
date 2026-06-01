@@ -2,7 +2,7 @@
 "use client";
 
 import { UserContext } from "./UserContext";
-import type { RuntimeUser } from "./types";
+import type { RuntimeUser } from "../../domain/system/types";
 
 export function UserProvider({
   children,

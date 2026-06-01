@@ -1,35 +1,80 @@
-import { RemoveNull } from "@/lib/utils/remove-nullable";
-import { Database } from "@/lib/core/types/database";
+import { Database } from "@/lib/core/database/types";
 
-export type RawTreeNodeRow = Database["public"]["Views"]["v_tree_nodes"]["Row"];
+export type TreeViewRow = Database["system"]["Views"]["v_tree_nodes"]["Row"];
 
-export type TreeNodeRow = RemoveNull<RawTreeNodeRow> & {
-  parent_id: string | null;
-};
+export type TreeRow = Omit<TreeViewRow, "tree_key" | "entity_type">;
 
-// 🌳 所有树统一实体类型
-export type TreeEntity = "organization" | "project" | "tbm";
+// export const TREE_KEYS = {
+//   organizations: "organizations",
 
-// 🌳 TreeNode（平台级）
+//   project_catalog_std:
+//     "project_catalog_std",
+// } as const;
+
+// export type TreeKey =
+//   keyof typeof TREE_KEYS;
+
 export interface TreeNode {
   id: string;
+
   parentId: string | null;
-  name: string;
 
-  // 🔑 关键字段
-  entity: TreeEntity;
+  nodeKey: string;
 
-  // 🌲 结构
+  path: string;
+
+  level: number;
+
+  sortOrder: number;
+
+  isLeaf: boolean;
+
+  hasChildren: boolean;
+
+  isEnabled: boolean;
+
+  isLoaded?: boolean;
+
+  code?: string | null;
+
+  name?: string | null;
+
+  label?: string | null;
+
   children?: TreeNode[];
+}
 
-  // ⚙️ 扩展
-  level?: number;
-  path?: string;
+export const TREE_QUERY_KEYS = {
+  organizations: "organizationId",
+  project_catalog_std: "projectCatalogStdId",
+} as const;
 
-  // 📊 控制
-  hasChildren?: boolean;
-  loaded?: boolean;
+export type TreeKey = keyof typeof TREE_QUERY_KEYS;
 
-  // 🎯 排序
-  sortOrder?: number;
+export interface TreeProps {
+  data: TreeNode[];
+
+  selectedId?: string;
+
+  expandedIds?: Set<string>;
+
+  loading?: boolean;
+
+  onSelect?: (node: TreeNode) => void;
+
+  onToggleExpand?: (node: TreeNode) => void;
+}
+
+export interface TreeNodeItemProps {
+  node: TreeNode;
+
+  selectedId?: string;
+
+  expandedIds?: Set<string>;
+
+  loading?: boolean;
+
+  onSelect?: (node: TreeNode) => void;
+
+  onToggleExpand?: (node: TreeNode) => void;
 }

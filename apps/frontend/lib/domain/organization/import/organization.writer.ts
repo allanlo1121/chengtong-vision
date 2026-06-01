@@ -1,13 +1,14 @@
 "use server";
 
-import { CreateOrganizationInput, UpdateOrganizationInput } from "../schemas";
+import { CreateOrganizationInput } from "../schemas";
 import { WriterResult } from "@/lib/core/import/types";
 
 import { organizationRepository } from "../repositories";
 import { OrganizationInsertRow, OrganizationUpdateRow } from "../types";
-import { mapOrganization, mapOrganizationToInsert } from "../mappers";
+import { mapOrganizationToInsert } from "../mappers";
 
 export const organizationWriter = async (data: CreateOrganizationInput): Promise<WriterResult> => {
+  console.log("organizationWriter received data:", data);
   try {
     const result = await organizationRepository.findByCode(data.code);
 
@@ -18,6 +19,9 @@ export const organizationWriter = async (data: CreateOrganizationInput): Promise
 
     // skip
     if (version !== null && version >= currentVersion) {
+      console.log(
+        `Skipping organization with code ${data.code} because existing version (${version}) is >= current version (${currentVersion})`
+      );
       return {
         success: true,
         action: "skipped",
@@ -29,6 +33,7 @@ export const organizationWriter = async (data: CreateOrganizationInput): Promise
     const baseData: OrganizationInsertRow = mapOrganizationToInsert(data);
 
     if (!id) {
+      console.log(`Inserting new organization with code ${data.code}`);
       const res = await organizationRepository.insert(baseData);
 
       if (!res.id) {
@@ -43,6 +48,7 @@ export const organizationWriter = async (data: CreateOrganizationInput): Promise
     }
 
     // update
+    console.log(`Updating existing organization with code ${data.code} and id ${id}`);
     const updateRes = await organizationRepository.update(id, baseData as OrganizationUpdateRow);
 
     if (!updateRes.id) {

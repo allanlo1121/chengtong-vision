@@ -1,19 +1,19 @@
 "use client";
 
 import * as React from "react";
+import { usePathname } from "next/navigation";
 import { AppSidebar } from "@/components/app-sidebar";
 
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { Breadcrumbs, BreadcrumbItem } from "../common/bread-crubms";
+import { Breadcrumbs } from "../common/bread-crubms";
 
-export function LayoutContent({
-  children,
-  breadcrumbs,
-}: {
-  children: React.ReactNode;
-  breadcrumbs?: BreadcrumbItem[];
-}) {
+import { generateBreadcrumbs } from "@/lib/core/router/generate-breadcrumbs";
+
+export function LayoutContent({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const breadcrumbs = generateBreadcrumbs(pathname);
+
   return (
     <SidebarProvider className="h-screen flex">
       <AppSidebar />
@@ -24,7 +24,7 @@ export function LayoutContent({
 
           <Separator orientation="vertical" className="h-4" />
 
-          {breadcrumbs && <Breadcrumbs breadcrumbs={breadcrumbs} />}
+          {breadcrumbs.length > 0 && <Breadcrumbs breadcrumbs={breadcrumbs} />}
         </header>
 
         <main className="flex-1 overflow-auto px-4 pt-4">{children}</main>

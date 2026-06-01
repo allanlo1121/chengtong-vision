@@ -1,0 +1,23 @@
+import { z } from "zod";
+import { createListQuerySchema } from "@/lib/shared/query/query-factory";
+
+export const projectQuery = createListQuerySchema({
+  sortFields: ["name", "sortOrder", "createdAt"] as const,
+
+  map: {
+    name: "name",
+    sortOrder: "sort_order",
+    createdAt: "created_at",
+  },
+  extra: {
+    organizationId: z.string().optional(),
+
+    includeChildren: z
+      .string()
+      .transform((v) => v === "true")
+      .optional(),
+  },
+  defaultSortField: "sortOrder",
+});
+
+export type ProjectQueryType = z.infer<typeof projectQuery.schema>;

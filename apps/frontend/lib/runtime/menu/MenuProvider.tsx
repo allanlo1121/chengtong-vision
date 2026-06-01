@@ -2,7 +2,7 @@
 "use client";
 
 import { MenuContext } from "./MenuContext";
-import type { MenuNode } from "./types";
+import type { MenuNode } from "@/lib/domain/system/navigation";
 
 export function MenuProvider({
   children,

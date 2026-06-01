@@ -132,7 +132,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="flex flex-col gap-4 border-0">
+    <div className="flex flex-col  gap-4 border-0">
       {Toolbar && <Toolbar table={table} />}
 
       <div className="overflow-hidden rounded-md border">
@@ -141,7 +141,11 @@ export function DataTable<TData, TValue>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} colSpan={header.colSpan}>
+                  <TableHead
+                    key={header.id}
+                    colSpan={header.colSpan}
+                    className="text-center text-background/70 font-medium"
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(header.column.columnDef.header, header.getContext())}
@@ -156,7 +160,7 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((rowModel) => (
                 <TableRow key={rowModel.id}>
                   {rowModel.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="text-center">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
@@ -164,7 +168,7 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell colSpan={columns.length} className="h-24 text-center text-background/70">
                   No results.
                 </TableCell>
               </TableRow>

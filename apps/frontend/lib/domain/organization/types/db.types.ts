@@ -1,9 +1,9 @@
 import { RemoveNull } from "@/lib/utils/remove-nullable";
-import { Database, Tables, TablesInsert, TablesUpdate } from "@/lib/core/types/database";
+import { AppDatabase, Database } from "@/lib/core/database/types";
 
-import { BaseSystemFields } from "@/lib/core/types";
+import { BaseSystemFields } from "@/lib/core/database/types";
 
-export type RawOrganizationDetailRow = Database["public"]["Views"]["v_organization_detail"]["Row"];
+export type RawOrganizationDetailRow = AppDatabase["hr"]["Views"]["v_organization_detail"]["Row"];
 
 export type OrganizationDetailRow = RemoveNull<RawOrganizationDetailRow> & {
   full_name: string | null;
@@ -19,7 +19,7 @@ export type OrganizationDetailRow = RemoveNull<RawOrganizationDetailRow> & {
   country_name: string | null;
 };
 
-export type RawOrganizationListRow = Database["public"]["Views"]["v_organization_list"]["Row"];
+export type RawOrganizationListRow = Database["hr"]["Views"]["v_organization_list"]["Row"];
 
 // export type OrganizationListRow = {
 //     business_name: string | null;
@@ -52,15 +52,10 @@ export type OrganizationListRow = RemoveNull<RawOrganizationListRow> & {
 //   parent_id: string | null;
 // };
 
-type AutoFileds = "node_key" | "path" | "level";
+export type OrganizationRow = AppDatabase["hr"]["Tables"]["organizations"]["Row"];
+export type RawOrganizationInsertRow = AppDatabase["hr"]["Tables"]["organizations"]["Insert"];
+export type OrganizationInsertRow = Omit<RawOrganizationInsertRow, BaseSystemFields>;
+export type RawOrganizationUpdateRow = AppDatabase["hr"]["Tables"]["organizations"]["Update"];
+export type OrganizationUpdateRow = Omit<RawOrganizationUpdateRow, BaseSystemFields>;
 
-export type OrganizationRow = Tables<"organizations">;
-export type OrganizationInsertRow = Omit<
-  TablesInsert<"organizations">,
-  BaseSystemFields | AutoFileds
->;
-
-export type OrganizationUpdateRow = Omit<
-  TablesUpdate<"organizations">,
-  BaseSystemFields | AutoFileds
->;
+export type OrganizationPickerRow = AppDatabase["hr"]["Views"]["v_organization_picker"]["Row"];

@@ -3,10 +3,10 @@
 import { useTransition, useState } from "react";
 import { toast } from "sonner";
 
-import type { Result } from "@/lib/shared/contracts";
+import type { ActionResult } from "@/lib/shared/contracts";
 
 export interface CrudMutationOptions<TInput, TResult> {
-  action: (input: TInput) => Promise<Result<TResult>>;
+  action: (input: TInput) => Promise<ActionResult<TResult>>;
   successMessage?: string;
   onSuccess?: (data: TResult) => void;
   onError?: (message: string) => void;

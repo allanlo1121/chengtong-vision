@@ -1,18 +1,15 @@
-import { createClient } from "@/lib/core/supabase/server";
+// lib/runtime/services/runtime-user.service.ts
 
-export async function softDelete(table: string, ids: string[]): Promise<number> {
+import { createClient } from "@/lib/infra/supabase/server";
+import { assertNoError } from "@/lib/infra/repositories/base.repository";
+import type { RuntimeUserRow } from "../types";
+
+export async function getRuntimeUser(): Promise<RuntimeUserRow | null> {
   const supabase = await createClient();
 
-  console.log("softDelete", ids);
+  const { data, error } = await supabase.from("v_runtime_user").select("*").single();
 
-  const { data, error } = await supabase.rpc("soft_delete", {
-    p_table: table,
-    p_ids: ids,
-  });
+  assertNoError(error);
 
-  if (error) throw error;
-
-  console.log("softDelete", error);
-
-  return data ?? 0;
+  return data;
 }

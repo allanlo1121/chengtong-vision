@@ -1,4 +1,4 @@
-import { TableEntity } from "@/lib/core/types/entity.types";
+import { TableEntity } from "@/lib/core/database/types/entity.types";
 
 // type WriteResult = {
 //     action: "insert" | "update" | "skip";

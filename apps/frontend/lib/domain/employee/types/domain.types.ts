@@ -1,17 +1,12 @@
-// export type EmployeeListItem = {
-//   id: string;
-//   name: string;
-//   code: string | null;
-//   organizationId: string | null;
-//   organizationName: string | null;
-//   statusName: string | null;
+import { Camelize } from "@/lib/shared/utils/case-converter";
+import { EmployeeRow, EmployeeInsertRow, EmployeeUpdateRow, EmployeeListRow } from "./db.types";
 
-import { RemoveNull } from "@/lib/utils/remove-nullable";
-import { EmployeeListRow } from "./db.types";
-import { Camelize } from "@/lib/utils/case-converter";
+// export type EmployeeDetail = Camelize<EmployeeDetailRow>;
 
-//   sortOrder: number;
-//   createdAt: string;
-// };
+export type Employee = Camelize<EmployeeRow>;
+
+export type EmployeeInsert = Camelize<EmployeeInsertRow>;
+
+export type EmployeeUpdate = Camelize<EmployeeUpdateRow>;
 
 export type EmployeeListItem = Camelize<EmployeeListRow>;

@@ -1,8 +1,15 @@
 // form/types/field.types.ts
 
 import { FieldValues, Path, UseFormReturn } from "react-hook-form";
-import { OptionConfig } from "../../options/types";
+import { OptionConfig, SelectOption } from "../../options/types";
 import { JSX } from "react";
+
+// export interface FieldOption {
+//   label: string;
+//   value: string | number | boolean;
+//   disabled?: boolean;
+//   description?: string;
+// }
 
 export type ValueResolver<T extends FieldValues, R> =
   | R
@@ -19,9 +26,10 @@ export interface FieldUI<T extends FieldValues = FieldValues> {
   required?: ValueResolver<T, boolean>;
   disabled?: ValueResolver<T, boolean>;
   visible?: ValueResolver<T, boolean>;
-  option?: ValueResolver<T, OptionConfig>;
+  optionSource?: ValueResolver<T, OptionConfig>;
+  options?: SelectOption[];
   dependsOn?: Path<T>[];
-  computedValue?: (values: T) => any | Promise<any>;
+  computedValue?: (values: T) => unknown | Promise<unknown>;
 }
 
 export interface FieldDefinition<T extends FieldValues = FieldValues> {
@@ -41,6 +49,6 @@ export type FieldComponentType = <T extends FieldValues, C = any, O = T>(
   props: FieldRendererProps<T, C, O>
 ) => JSX.Element;
 
-export const fieldComponents = ["input", "select", "treeSelect", "cascader", "switch"] as const;
+export const fieldComponents = ["input", "select", "cascader", "switch"] as const;
 
 export type FieldComponent = (typeof fieldComponents)[number];

@@ -14,7 +14,8 @@ import { ImportRow, ImportErrorRow } from "../types";
 import { ImportResultDialog } from "./import-result-dialog";
 import { runImport } from "../import-orchestrator";
 import { handleImportData } from "../engine/handle-import-data";
-import { TableEntity } from "@/lib/core/types/entity.types";
+import { TableEntity } from "@/lib/core/database/types";
+import { routes } from "@/lib/core/router/router";
 
 export default function ImportPage<T extends TableEntity>({ entity }: { entity: T }) {
   const router = useRouter();
@@ -77,7 +78,7 @@ export default function ImportPage<T extends TableEntity>({ entity }: { entity: 
   }
 
   function handleBack() {
-    router.push(`/system/${entity}`);
+    router.push(routes[entity].list);
   }
 
   // async function handleNext() {
@@ -121,7 +122,7 @@ export default function ImportPage<T extends TableEntity>({ entity }: { entity: 
           {loading ? "导入中..." : "导入当前数据"}
         </Button>
         {/* <Button onClick={handleNext}>下一层</Button> */}
-        <Button onClick={() => router.push(`/system/${entity}`)}>返回</Button>
+        <Button onClick={handleBack}>返回</Button>
       </div>
     </div>
   );

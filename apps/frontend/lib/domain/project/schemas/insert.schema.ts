@@ -15,7 +15,7 @@ export const ProjectInsertInputSchema = z.object({
   name: z
     .string()
     .min(4, { message: "工程简称至少4个字符" })
-    .max(8, { message: "工程简称最多8个字符" })
+    .max(20, { message: "工程简称最多20个字符" })
     .meta({
       table: "projects",
       label: "工程简称",
@@ -46,7 +46,7 @@ export const ProjectInsertInputSchema = z.object({
       description: "唯一标识，建议使用字母、数字和下划线",
     }),
 
-  fullName: z.string().max(50, { message: "工程全称最多50个字符" }).meta({
+  fullName: z.string().max(100, { message: "工程全称最多100个字符" }).meta({
     table: "projects",
     label: "工程全称",
     field: "full_name",
@@ -63,7 +63,7 @@ export const ProjectInsertInputSchema = z.object({
 
   projectOverview: z
     .string()
-    .max(500, { message: "工程概况最多500个字符" })
+    .max(1000, { message: "工程概况最多1000个字符" })
     .optional()
     .nullable()
     .meta({
@@ -83,7 +83,7 @@ export const ProjectInsertInputSchema = z.object({
 
   projectKeyPoints: z
     .string()
-    .max(500, { message: "工程要点最多500个字符" })
+    .max(1000, { message: "工程要点最多1000个字符" })
     .optional()
     .nullable()
     .meta({
@@ -134,7 +134,7 @@ export const ProjectInsertInputSchema = z.object({
     required: true,
     readonly: false,
     colSpan: 1,
-    option: { source: "organization_tree", parentId: null },
+    optionSource: { source: "organization_tree", parentId: null },
   }),
 
   projectManagementModeId: idSchema.meta({
@@ -166,7 +166,7 @@ export const ProjectInsertInputSchema = z.object({
     required: false,
     readonly: false,
     colSpan: 1,
-    option: { source: "master", code: "PROJECT_TYPE" },
+    optionSource: { source: "master", code: "PROJECT_TYPE" },
   }),
 
   projectSubTypeId: idSchema.meta({
@@ -182,7 +182,7 @@ export const ProjectInsertInputSchema = z.object({
     required: false,
     readonly: false,
     colSpan: 1,
-    option: { source: "master", code: "PROJECT_SUB_TYPE", parentCodeField: "PROJECT_TYPE" },
+    optionSource: { source: "master", code: "PROJECT_SUB_TYPE", parentCodeField: "PROJECT_TYPE" },
   }),
 
   actualStartDate: z.string().optional().nullable().meta({
@@ -227,14 +227,14 @@ export const ProjectInsertInputSchema = z.object({
     required: false,
     readonly: false,
     colSpan: 1,
-    option: { source: "master", code: "REGION" },
+    optionSource: { source: "master", code: "REGION" },
   }),
   countryCode: countryCodeSchema.default("CN").meta({
     label: "国家代码",
     component: "select",
     section: "地理信息",
     colSpan: 1,
-    option: { source: "countries" },
+    optionSource: { source: "countries" },
   }),
 
   provinceCode: adminRegionCodeSchema.meta({
@@ -242,7 +242,7 @@ export const ProjectInsertInputSchema = z.object({
     component: "select",
     section: "地理信息",
     colSpan: 1,
-    option: {
+    optionSource: {
       source: "admin_regions",
       level: 1,
     },
@@ -254,7 +254,7 @@ export const ProjectInsertInputSchema = z.object({
     section: "地理信息",
     colSpan: 1,
     dependsOn: ["provinceCode"],
-    option: (v: any) => ({
+    optionSource: (v: any) => ({
       source: "admin_regions",
       level: 2,
       parentCode: v.provinceCode,
@@ -266,7 +266,7 @@ export const ProjectInsertInputSchema = z.object({
     component: "select",
     section: "地理信息",
     dependsOn: ["cityCode"],
-    option: (v: any) => ({
+    optionSource: (v: any) => ({
       source: "admin_regions",
       level: 3,
       parentCode: v.cityCode,
@@ -334,7 +334,7 @@ export const ProjectInsertInputSchema = z.object({
     required: false,
     readonly: false,
     colSpan: 1,
-    option: { source: "master", code: "PROJECT_STATUS" },
+    optionSource: { source: "master", code: "PROJECT_STATUS" },
   }),
 
   projectSubStatusId: idSchema.meta({
@@ -350,7 +350,7 @@ export const ProjectInsertInputSchema = z.object({
     required: false,
     readonly: false,
     colSpan: 1,
-    option: { source: "master", code: "PROJECT_SUB_STATUS" },
+    optionSource: { source: "master", code: "PROJECT_SUB_STATUS" },
   }),
 
   projectRiskLevelId: idSchema.meta({
@@ -366,7 +366,7 @@ export const ProjectInsertInputSchema = z.object({
     required: false,
     readonly: false,
     colSpan: 1,
-    option: { source: "master", code: "PROJECT_RISK_LEVEL" },
+    optionSource: { source: "master", code: "PROJECT_RISK_LEVEL" },
   }),
 
   projectControlLevelId: idSchema.meta({
@@ -382,7 +382,7 @@ export const ProjectInsertInputSchema = z.object({
     required: false,
     readonly: false,
     colSpan: 1,
-    option: { source: "master", code: "PROJECT_CONTROL_LEVEL" },
+    optionSource: { source: "master", code: "PROJECT_CONTROL_LEVEL" },
   }),
 
   projectAttentionLevelId: idSchema.meta({
@@ -398,10 +398,10 @@ export const ProjectInsertInputSchema = z.object({
     required: false,
     readonly: false,
     colSpan: 1,
-    option: { source: "master", code: "PROJECT_ATTENTION_LEVEL" },
+    optionSource: { source: "master", code: "PROJECT_ATTENTION_LEVEL" },
   }),
 
-  projectAttentionTypeId: idSchema.meta({
+  projectAttentionTypeId: idSchema.optional().meta({
     table: "project_attention_type_timeline",
     label: "项目关注类型",
     field: "project_attention_type_id",
@@ -414,13 +414,28 @@ export const ProjectInsertInputSchema = z.object({
     required: false,
     readonly: false,
     colSpan: 1,
-    option: { source: "master", code: "PROJECT_ATTENTION_TYPE" },
+    optionSource: { source: "master", code: "PROJECT_ATTENTION_TYPE" },
   }),
 
-  projectChiefEngineerId: idSchema.meta({
+  organizationChiefEngineerId: idSchema.meta({
     table: "project_leader_timeline",
     label: "项目总工",
-    field: "project_chief_engineer_id",
+    field: "organization_chief_engineer_id",
+    searchable: true, // ⭐
+    sortable: true,
+    component: "employeePicker",
+    section: "项目信息",
+    type: "number",
+    disabled: false,
+    required: false,
+    readonly: false,
+    colSpan: 1,
+    optionSource: { source: "employees" },
+  }),
+  organizationChiefEngineerRoleTypeId: idSchema.meta({
+    table: "project_leader_timeline",
+    label: "项目总工角色类型",
+    field: "organization_chief_engineer_role_type_id",
     searchable: true, // ⭐
     sortable: true,
     component: "select",
@@ -430,13 +445,29 @@ export const ProjectInsertInputSchema = z.object({
     required: false,
     readonly: false,
     colSpan: 1,
-    option: { source: "employees" },
+    optionSource: { source: "organizationRoleType" },
   }),
 
-  projectManagerId: idSchema.meta({
+  organizationManagerId: idSchema.meta({
     table: "project_leader_timeline",
     label: "项目经理",
-    field: "project_manager_id",
+    field: "organization_manager_id",
+    searchable: true, // ⭐
+    sortable: true,
+    component: "employeePicker",
+    section: "项目信息",
+    type: "number",
+    disabled: false,
+    required: false,
+    readonly: false,
+    colSpan: 1,
+    optionSource: { source: "employees" },
+  }),
+
+  organizationManagerRoleTypeId: idSchema.meta({
+    table: "project_leader_timeline",
+    label: "项目经理角色类型",
+    field: "organization_manager_role_type_id",
     searchable: true, // ⭐
     sortable: true,
     component: "select",
@@ -446,13 +477,29 @@ export const ProjectInsertInputSchema = z.object({
     required: false,
     readonly: false,
     colSpan: 1,
-    option: { source: "employees" },
+    optionSource: { source: "organizationRoleType" },
   }),
 
-  projectOversightLeaderId: idSchema.meta({
+  organizationOversightLeaderId: idSchema.meta({
     table: "project_leader_timeline",
     label: "公司包保领导",
-    field: "project_oversight_leader_id",
+    field: "organization_oversight_leader_id",
+    searchable: true, // ⭐
+    sortable: true,
+    component: "employeePicker",
+    section: "项目信息",
+    type: "number",
+    disabled: false,
+    required: false,
+    readonly: false,
+    colSpan: 1,
+    optionSource: { source: "employees" },
+  }),
+
+  organizationOversightLeaderRoleTypeId: idSchema.meta({
+    table: "project_leader_timeline",
+    label: "公司包保领导角色类型",
+    field: "organization_oversight_leader_role_type_id",
     searchable: true, // ⭐
     sortable: true,
     component: "select",
@@ -462,13 +509,29 @@ export const ProjectInsertInputSchema = z.object({
     required: false,
     readonly: false,
     colSpan: 1,
-    option: { source: "employees" },
+    optionSource: { source: "organizationRoleType" },
   }),
 
-  projectPartySecretaryId: idSchema.meta({
+  organizationPartySecretaryId: idSchema.meta({
     table: "project_leader_timeline",
     label: "项目党组织书记",
-    field: "project_party_secretary_id",
+    field: "organization_party_secretary_id",
+    searchable: true, // ⭐
+    sortable: true,
+    component: "employeePicker",
+    section: "项目信息",
+    type: "number",
+    disabled: false,
+    required: false,
+    readonly: false,
+    colSpan: 1,
+    optionSource: { source: "employees" },
+  }),
+
+  organizationPartySecretaryRoleTypeId: idSchema.meta({
+    table: "project_leader_timeline",
+    label: "项目党组织书记角色类型",
+    field: "organization_party_secretary_role_type_id",
     searchable: true, // ⭐
     sortable: true,
     component: "select",
@@ -478,29 +541,29 @@ export const ProjectInsertInputSchema = z.object({
     required: false,
     readonly: false,
     colSpan: 1,
-    option: { source: "employees" },
+    optionSource: { source: "organizationRoleType" },
   }),
 
-  projectSafeDirectorId: idSchema.meta({
+  organizationSafetyDirectorId: idSchema.meta({
     table: "project_leader_timeline",
     label: "项目安全总监",
-    field: "project_safe_director_id",
+    field: "organization_safety_director_id",
     searchable: true, // ⭐
     sortable: true,
-    component: "select",
+    component: "employeePicker",
     section: "项目信息",
     type: "number",
     disabled: false,
     required: false,
     readonly: false,
     colSpan: 1,
-    option: { source: "employees" },
+    optionSource: { source: "employees" },
   }),
 
-  projectCommercialManagerId: idSchema.meta({
+  organizationSafetyDirectorRoleTypeId: idSchema.meta({
     table: "project_leader_timeline",
-    label: "项目商务经理",
-    field: "project_commercial_manager_id",
+    label: "项目安全总监角色类型",
+    field: "organization_safety_director_role_type_id",
     searchable: true, // ⭐
     sortable: true,
     component: "select",
@@ -510,7 +573,7 @@ export const ProjectInsertInputSchema = z.object({
     required: false,
     readonly: false,
     colSpan: 1,
-    option: { source: "employees" },
+    optionSource: { source: "organizationRoleType" },
   }),
 });
 

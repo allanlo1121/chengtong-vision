@@ -5,7 +5,7 @@ import { Result } from "@/lib/shared/contracts";
 import { ImportRow, SyncImportResult } from "./types";
 import { chunkArray } from "@/lib/utils/chunk-array";
 import { processChunk } from "./processors/chunk-processor";
-import { TableEntity } from "@/lib/core/types/entity.types";
+import { TableEntity } from "@/lib/core/database/types/entity.types";
 
 export async function runImport<T extends TableEntity>(
   entity: T,

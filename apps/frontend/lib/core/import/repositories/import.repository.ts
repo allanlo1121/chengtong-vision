@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/infra/supabase/server";
 
-import { TableEntity } from "@/lib/core/types/entity.types";
+import { TableEntity } from "@/lib/core/database/types/entity.types";
 
 import { assertNoError } from "@/lib/infra/repositories/base.repository";
 
@@ -19,7 +19,7 @@ async function insertImportRecords<T extends TableEntity>(
     external_version: r.data.externalVersion,
   }));
 
-  const { error } = await supabase.from("import_records").insert(payload);
+  const { error } = await supabase.schema("public").from("import_records").insert(payload);
 
   assertNoError(error);
 }

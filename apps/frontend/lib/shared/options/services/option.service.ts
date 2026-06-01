@@ -2,22 +2,15 @@ import {
   findAdminRegions,
   findMasterOptions,
   listCountries,
-  searchEmployees,
-  searchProjects,
-  getAllTreeRows,
-} from "../repositories/option.repository";
+  findCustomers,
+  listPosts,
+  listTbmSubsystems,
+} from "../repositories/client";
 import { mapCodeOption, mapMasterOption } from "../mappers/option.mapper";
 
-import {
-  SelectOption,
-  OptionConfig,
-  AsyncOptionConfig,
-  TreeOption,
-  TreeOptionConfig,
-} from "../types";
-import { buildTreeOption } from "@/lib/utils/tree";
+import { SelectOption, OptionConfig } from "../types";
 
-export async function getOptions(config: OptionConfig): Promise<SelectOption[]> {
+export async function getOptions(config: OptionConfig): Promise<SelectOption[] | []> {
   if (config.source === "master") {
     const rows = await findMasterOptions(config.code);
     return rows.map(mapMasterOption);
@@ -32,38 +25,19 @@ export async function getOptions(config: OptionConfig): Promise<SelectOption[]> 
     const rows = await findAdminRegions(config.level, config.parentCode);
     return rows.map(mapCodeOption);
   }
-  return [];
-}
 
-export async function getAsyncOptions(
-  config: AsyncOptionConfig,
-  search?: string
-): Promise<SelectOption[]> {
-  // console.log("getAsyncOptions config:", config, "search:", search);
-
-  if (config.source === "employees") {
-    const rows = await searchEmployees(search);
+  if (config.source === "posts") {
+    const rows = await listPosts();
     return rows.map(mapMasterOption);
   }
 
-  if (config.source === "projects") {
-    const rows = await searchProjects(search);
+  if (config.source === "customers") {
+    const rows = await findCustomers(config.categoryCode);
     return rows.map(mapMasterOption);
   }
-  return [];
-}
-
-export async function getTreeOptions(config: TreeOptionConfig): Promise<TreeOption[]> {
-  // console.log("getTreeOptions", config);
-
-  if (config.source === "organization_tree") {
-    const rows = await getAllTreeRows("organization");
-
-    return buildTreeOption(rows, {
-      idKey: "id",
-      parentKey: "parent_id",
-      labelKey: "name",
-    });
+  if (config.source === "tbm_subsystems") {
+    const rows = await listTbmSubsystems();
+    return rows.map(mapMasterOption);
   }
   return [];
 }

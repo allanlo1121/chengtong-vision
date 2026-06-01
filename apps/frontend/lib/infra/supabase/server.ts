@@ -1,6 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
-import { Database } from "@/lib/core/types/database";
+import { Database } from "@/lib/core/database/types";
+import { AppDatabase } from '@/lib/core/database/types';
 
 /**
  * If using Fluid compute: Don't put this client in a global variable. Always create a new client within each
@@ -9,7 +10,7 @@ import { Database } from "@/lib/core/types/database";
 export async function createClient() {
     const cookieStore = await cookies()
 
-    return createServerClient<Database>(
+    return createServerClient<AppDatabase>(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
         {

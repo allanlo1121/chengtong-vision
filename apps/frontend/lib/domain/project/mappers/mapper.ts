@@ -27,6 +27,8 @@ export function mapProjectList(rows: ProjectListRow): ProjectListItem {
     latitude: rows.latitude,
     longitude: rows.longitude,
 
+    sortOrder: rows.sort_order,
+
     scheduleEndDate: rows.schedule_end_date,
     scheduleStartDate: rows.schedule_start_date,
 
@@ -46,15 +48,24 @@ export function mapProjectList(rows: ProjectListRow): ProjectListItem {
     projectControlLevelName: rows.project_control_level_name,
     projectManagementModeId: rows.project_management_mode_id,
     projectManagementModeName: rows.project_management_mode_name,
-    projectManagerId: rows.project_manager_id,
-    projectManagerName: rows.project_manager_name,
-    projectOversightLeaderId: rows.project_oversight_leader_id,
-    projectOversightLeaderName: rows.project_oversight_leader_name,
     projectRiskLevelId: rows.project_risk_level_id,
     projectRiskLevelName: rows.project_risk_level_name,
     projectStatusId: rows.project_status_id,
     projectStatusName: rows.project_status_name,
     projectSubStatusId: rows.project_sub_status_id,
     projectSubStatusName: rows.project_sub_status_name,
+
+    projectManagerId: rows.project_manager_id,
+    projectManagerName: rows.project_manager_name,
+    projectOversightLeaderId: rows.project_oversight_leader_id,
+    projectOversightLeaderName: rows.project_oversight_leader_name,
+    projectCommercialManagerId: rows.project_commercial_manager_id,
+    projectCommercialManagerName: rows.project_commercial_manager_name,
+    projectSafetyDirectorId: rows.project_safety_director_id,
+    projectSafetyDirectorName: rows.project_safety_director_name,
+    projectDisciplineInspectionId: rows.project_discipline_inspection_id,
+    projectDisciplineInspectionName: rows.project_discipline_inspection_name,
+    projectPartySecretaryId: rows.project_party_secretary_id,
+    projectPartySecretaryName: rows.project_party_secretary_name,
   };
 }

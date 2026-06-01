@@ -1,6 +1,6 @@
 import { ZodSchemaError } from "@/lib/utils/zod/types";
 import { ImportInsertInputMap, ImportRowMap } from "./import-row-map.types";
-import { TableEntity } from "@/lib/core/types/entity.types";
+import { TableEntity } from "@/lib/core/database/types/entity.types";
 import { LOOKUP_DEFINITIONS } from "../services/lookup.service";
 
 export type LookupItem = {
