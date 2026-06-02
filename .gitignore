@@ -19,5 +19,14 @@ apps/frontend/.env.local
 apps/backend/.env
 
 # supabase local data
-docker/
-volumes/
+/docker/
+/volumes/
+
+# emqx runtime data
+infra/docker/emqx/data/
+infra/docker/emqx/log/
+
+# supabase temp
+infra/docker/supabase/.temp/
+infra/docker/supabase/.branches/
+infra/docker/supabase/snippets/

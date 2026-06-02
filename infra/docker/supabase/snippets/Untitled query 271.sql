@@ -1,0 +1,399 @@
+insert into system.menus (
+  parent_id,
+  code,
+  name,
+  label,
+  node_key,
+  path_url,
+  icon,
+  menu_scope,
+  sort_order
+)select
+  parent.id,
+  child.code,
+  child.name,
+  child.label,
+  child.node_key,
+  child.path_url,
+  child.icon,
+  'tunnel_workspace',
+  child.sort_order
+from system.menus parent
+cross join (
+  values 
+  ( 
+      'operation.shutdown',
+      'shutdown',
+      '停机申报',
+      'shutdown',
+      '/workspace/tunnel/operation/:id/shutdown',
+      'Tool',
+      0
+  ),
+  (
+      'operation.soilVolume',
+      'soilVolume',
+      '渣土体积',
+      'soilVolume',
+      '/workspace/tunnel/operation/:id/soil-volume',
+      'Tool',
+      1
+  ),
+  (
+      'operation.erector',
+      'erector',
+      '拼装管理',
+      'erector',
+      '/workspace/tunnel/operation/:id/erector',
+      'Tool',
+      2
+  ),
+  (  
+      'operation.material',
+      'material',
+      '材料消耗',
+      'material',
+      '/workspace/tunnel/operation/:id/material',
+      'Tool',
+      3
+  ),
+  (
+      'operation.oil',
+      'oil',
+      '油品消耗',
+      'oil',
+      '/workspace/tunnel/operation/:id/oil',
+      'Tool',
+      4
+  ),
+  (
+      'operation.fault',
+      'fault',
+      '故障管理',
+      'fault',
+      '/workspace/tunnel/operation/:id/fault',
+      'Tool',
+      5
+  )
+  ) as child(
+  code,
+  name,
+  label,
+  node_key,
+  path_url,
+  icon,
+  sort_order
+)
+where parent.code = 'operation';
+
+
+insert into system.menus (
+  parent_id,
+  code,
+  name,
+  label,
+  node_key,
+  path_url,
+  icon,
+  menu_scope,
+  sort_order
+)select
+  parent.id,
+  child.code,
+  child.name,
+  child.label,
+  child.node_key,
+  child.path_url,
+  child.icon,
+  'tunnel_workspace',
+  child.sort_order
+from system.menus parent
+cross join (
+  values 
+  (  
+      'risk.key_parameter',
+      'key_parameter',
+      '关键参数预警',
+      'key_parameter',
+      '/workspace/tunnel/risk/:id/key-parameter',
+      'AlertTriangle',
+      0
+  ),(
+      'risk.geo',
+      'geo',
+      '地质风险源预警',
+      'geo',
+      '/workspace/tunnel/risk/:id/geo',
+      'Map',
+      1
+  ),
+  (
+      'risk.settlement',
+      'settlement',
+      '沉降预警',
+      'settlement',
+      '/workspace/tunnel/risk/:id/settlement',
+      'AlertTriangle',
+      2
+  ),
+  (
+      'risk.equipment',
+      'equipment',
+      '设备报警',
+      'equipment',
+      '/workspace/tunnel/risk/:id/equipment',
+      'AlertTriangle',
+      3
+  )
+  ) as child(
+  code,
+  name,
+  label,
+  node_key,
+  path_url,
+  icon,
+  sort_order
+)
+where parent.code = 'risk';
+
+
+
+insert into system.menus (
+  parent_id,
+  code,
+  name,
+  label,
+  node_key,
+  path_url,
+  icon,
+  menu_scope,
+  sort_order
+)
+select
+  parent.id,
+  child.code,
+  child.name,
+  child.label,
+  child.node_key,
+  child.path_url,
+  child.icon,
+  'tunnel_workspace',
+  child.sort_order
+from system.menus parent
+cross join (
+  values
+    (
+      'health.segment',
+      'segment',
+      '管片质量',
+      'segment',
+      '/workspace/tunnels/:id/health/segment',
+      'HeartPulse',
+      0
+    ),
+    (
+      'health.motor',
+      'motor',
+      '电机异常检测',
+      'motor',
+      '/workspace/tunnels/:id/health/motor',
+      'HeartPulse',
+      1
+    )
+) as child(
+  code,
+  name,
+  label,
+  node_key,
+  path_url,
+  icon,
+  sort_order
+)
+where parent.code = 'health';
+
+
+insert into system.menus (
+  parent_id,
+  code,
+  name,
+  label,
+  node_key,
+  path_url,
+  icon,
+  menu_scope,
+  sort_order
+)
+select
+  parent.id,
+  child.code,
+  child.name,
+  child.label,
+  child.node_key,
+  child.path_url,
+  child.icon,
+  'tunnel_workspace',
+  child.sort_order
+from system.menus parent
+cross join (
+  values
+    (
+      'data.rings',
+      'rings',
+      '数据统计',
+      'rings',
+      '/workspace/tunnels/:id/data/rings',
+      'HeartPulse',
+      0
+    ),
+    (
+      'data.history',
+      'history',
+      '历史数据',
+      'history',
+      '/workspace/tunnels/:id/data/history',
+      'HeartPulse',
+      1
+    ),
+    (
+      'data.ringEfficiency',
+      'ringEfficiency',
+      '环时效分析',
+      'ringEfficiency',
+      '/workspace/tunnels/:id/data/ring-efficiency',
+      'HeartPulse',
+      2
+    )
+) as child(
+  code,
+  name,
+  label,
+  node_key,
+  path_url,
+  icon,
+  sort_order
+)
+where parent.code = 'data';
+
+insert into system.menus (
+  parent_id,
+  code,
+  name,
+  label,
+  node_key,
+  path_url,
+  icon,
+  menu_scope,
+  sort_order
+)
+select
+  parent.id,
+  child.code,
+  child.name,
+  child.label,
+  child.node_key,
+  child.path_url,
+  child.icon,
+  'tunnel_workspace',
+  child.sort_order
+from system.menus parent
+cross join (
+  values
+    (
+      'settings.message',
+      'message',
+      '系统推送设置',
+      'message',
+      '/workspace/tunnel/settings/:id/message',
+      'Settings',
+      0
+    ),
+    (
+      'settings.project',
+      'project',
+      '项目配置',
+      'project',
+      '/workspace/tunnel/settings/:id/project',
+      'Settings',
+      1
+    ),
+    (
+      'settings.equipment',
+      'equipment',
+      '设备配置',
+      'equipment',
+      '/workspace/tunnel/settings/:id/equipment',
+      'Settings',
+      2
+    ),
+    (
+      'settings.tunnel',
+      'tunnel',
+      '区间管理',
+      'tunnel',
+      '/workspace/tunnel/settings/:id/tunnel',
+      'Settings',
+      3
+    )
+) as child(
+  code,
+  name,
+  label,
+  node_key,
+  path_url,
+  icon,
+  sort_order
+)
+where parent.code = 'settings';
+
+insert into system.menus (
+  parent_id,
+  code,
+  name,
+  label,
+  node_key,
+  path_url,
+  icon,
+  menu_scope,
+  sort_order
+)
+select
+  parent.id,
+  child.code,
+  child.name,
+  child.label,
+  child.node_key,
+  child.path_url,
+  child.icon,
+  'tunnel_workspace',
+  child.sort_order
+from system.menus parent
+cross join (
+  values
+    (
+      'material.tbmAllot',
+      'tbmAllot',
+      '设备履历',
+      'tbmAllot',
+      '/workspace/tunnels/:id/material/tbm-allot',
+      'HeartPulse',
+      0
+    ),
+    (
+      'material.documents',
+      'documents',
+      '文档管理',
+      'documents',
+      '/workspace/tunnels/:id/material/documents',
+      'HeartPulse',
+      1
+    )
+) as child(
+  code,
+  name,
+  label,
+  node_key,
+  path_url,
+  icon,
+  sort_order
+)
+where parent.code = 'material';
