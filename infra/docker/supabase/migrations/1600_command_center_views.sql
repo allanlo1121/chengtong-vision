@@ -91,7 +91,7 @@ select
 alter publication supabase_realtime add table eqp.tbm_connection_status;
 alter publication supabase_realtime add table eqp.tbm_phase_active;
 alter publication supabase_realtime add table eqp.tbm_assignments;
-alter publication supabase_realtime add table warning.warning_events;
+-- alter publication supabase_realtime add table warning.warning_events;
 
 
 create or replace view public.v_command_center_tunnel as
@@ -164,7 +164,6 @@ left join eqp.tbms tbm
 
 left join eqp.tbm_phase_active phase
   on phase.tbm_id = tbm.id
- and phase.tunnel_id = tn.id
 
 left join eqp.tbm_connection_status conn
   on conn.tbm_id = tbm.id
@@ -222,9 +221,10 @@ periods as (
   from bounds
 ),
 
+-- 🔥 现在按 TBM 统计
 progress_base as (
   select
-    tdp.tunnel_id,
+    tdp.tbm_id,
     tdp.work_date,
     tdp.ring_end,
     tdp.chainage_end,
@@ -233,7 +233,7 @@ progress_base as (
       tdp.ring_end
       - coalesce(
           lag(tdp.ring_end) over (
-            partition by tdp.tunnel_id
+            partition by tdp.tbm_id
             order by tdp.work_date
           ),
           tdp.ring_end
@@ -245,19 +245,19 @@ progress_base as (
       tdp.chainage_end
       - coalesce(
           lag(tdp.chainage_end) over (
-            partition by tdp.tunnel_id
+            partition by tdp.tbm_id
             order by tdp.work_date
           ),
           tdp.chainage_end
         )
     ) as daily_advance_meter
 
-  from public.tunnel_daily_progress tdp
+  from eqp.tbm_daily_progress tdp
 ),
 
 progress as (
   select
-    pb.tunnel_id,
+    pb.tbm_id,
     max(pb.ring_end) as total_ring_end,
 
     coalesce(sum(pb.daily_ring_count) filter (
@@ -293,31 +293,17 @@ progress as (
 
   from progress_base pb
   cross join periods p
-  group by pb.tunnel_id
+  group by pb.tbm_id
 ),
 
-current_tunnel_status as (
-  select distinct on (tst.tunnel_id)
-    tst.tunnel_id,
-    tst.tunnel_status_id,
-    md.code as tunnel_status_code,
-    md.name as tunnel_status_name
-  from proj.tunnel_status_timeline tst
-  left join public.master_data md
-    on md.id = tst.tunnel_status_id
-  where tst.valid_to is null
-  order by tst.tunnel_id, tst.valid_from desc
-),
-
+-- 🔥 通过 assignment 绑定当前 tunnel
 active_assignments as (
-  select distinct on (ta.tunnel_id)
-    ta.tunnel_id,
+  select
     ta.tbm_id,
-    ta.start_date,
-    ta.end_date
+    ta.tunnel_id
   from eqp.tbm_assignments ta
-  where ta.end_date is null
-  order by ta.tunnel_id, ta.start_date desc
+  where current_date >= ta.start_date
+    and (ta.end_date is null or current_date <= ta.end_date)
 )
 
 select
@@ -326,10 +312,6 @@ select
 
   tn.id as tunnel_id,
   tn.name as tunnel_name,
-
-  cts.tunnel_status_id,
-  cts.tunnel_status_code,
-  cts.tunnel_status_name,
 
   tbm.id as tbm_id,
   tbm.name as tbm_name,
@@ -348,7 +330,6 @@ select
   coalesce(pg.month_advance_meter, 0) as month_advance_meter,
   coalesce(pg.total_advance_meter, 0) as total_advance_meter,
 
-
   pds.current_work_date,
   pds.week_start_work_date,
   pds.month_start_work_date,
@@ -356,24 +337,14 @@ select
   tn.sort_order,
   now() as refreshed_at
 
-from proj.tunnels tn
-join proj.projects p
+from eqp.tbms tbm
+left join active_assignments aa
+  on aa.tbm_id = tbm.id
+left join proj.tunnels tn
+  on tn.id = aa.tunnel_id
+left join proj.projects p
   on p.id = tn.project_id
 cross join periods pds
-left join current_tunnel_status cts
-  on cts.tunnel_id = tn.id
-left join active_assignments aa
-  on aa.tunnel_id = tn.id
-left join eqp.tbms tbm
-  on tbm.id = aa.tbm_id
- and tbm.deleted_at is null
 left join progress pg
-  on pg.tunnel_id = tn.id
-where tn.deleted_at is null
-  and p.deleted_at is null
-  and coalesce(cts.tunnel_status_code, '') not in (
-    '20160005',
-    '20160006',
-    '20160007',
-    '20160008'
-  );
+  on pg.tbm_id = tbm.id
+where tbm.deleted_at is null;

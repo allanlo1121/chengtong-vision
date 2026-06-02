@@ -496,6 +496,7 @@ add column updated_by uuid
 references hr.employees(id) on delete set null;
 
 
+
 -- add audit fields to tunnel_schedule_versions
 alter table proj.tunnel_schedule_versions
 add column created_at timestamptz default now();
@@ -585,6 +586,27 @@ alter table eqp.tbm_assignments
 add column deleted_by uuid
 references hr.employees(id) on delete set null;
 
+--add audit fields to eqp.tbm_daily_progress
+alter table eqp.tbm_daily_progress
+add column created_at timestamptz default now();
+
+alter table eqp.tbm_daily_progress
+add column updated_at timestamptz;
+
+alter table eqp.tbm_daily_progress
+add column deleted_at timestamptz;
+
+alter table eqp.tbm_daily_progress
+add column created_by uuid
+references hr.employees(id) on delete set null;
+
+alter table eqp.tbm_daily_progress
+add column updated_by uuid
+references hr.employees(id) on delete set null;
+
+alter table eqp.tbm_daily_progress
+add column deleted_by uuid
+references hr.employees(id) on delete set null;
 
 
 --Add audit fields to audit_logs

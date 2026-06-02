@@ -1,7 +1,7 @@
 
 --查询盾构机(本区间)实时数据的时间范围和环号范围
-create or replace function eqp.fn_get_tunnel_realdata_limits(
-  p_tunnel_id uuid
+create or replace function eqp.fn_get_tbm_realdata_limits(
+  p_tbm_id uuid
 )
 returns table (
   min_time timestamptz,
@@ -21,12 +21,12 @@ begin
   into v_tbm_code
   from eqp.tbm_assignments a
   join eqp.tbms t on t.id = a.tbm_id
-  where a.tunnel_id = p_tunnel_id
+  where a.tbm_id = p_tbm_id
     and a.end_date is null
   limit 1;
 
   if v_tbm_code is null then
-    raise exception 'TBM assignment not found for tunnel: %', p_tunnel_id;
+    raise exception 'TBM assignment not found for TBM: %', p_tbm_id;
   end if;
 
   v_tbm_code := regexp_replace(v_tbm_code, '[^a-z0-9_]', '_', 'g');
@@ -40,58 +40,20 @@ begin
       min(s100100008)::integer as min_ring,
       max(s100100008)::integer as max_ring
     from eqp.%I
-    where tunnel_id = $1
+    where tbm_id = $1
       and s100100008 is not null
     ',
     v_table_name
   )
-  using p_tunnel_id;
+  using p_tbm_id;
 end;
 $$;
 
 
-select *
-from eqp.fn_get_tunnel_realdata_limits(
-  '43fe7946-591a-4571-a240-907987359ec0'
-);
-
-
-select *
-from eqp.fn_get_tunnel_tbm_param_history(
-  p_tunnel_id := '43fe7946-591a-4571-a240-907987359ec0',
-  p_from := '2026-05-27 06:31:09.71+00',
-  p_to := '2026-05-27 06:46:09.71+00',
-  p_fields := array[
-    's100100008',
-    's050109001'
-  ],
-  p_work_mode := 'advance'
-);
-
-select
-  recorded_at,
-  tunnel_id,
-  s100100008,
-  s050109001,
-  b000000001
-from eqp.shield_realdata_xre423
-where tunnel_id = '43fe7946-591a-4571-a240-907987359ec0'
-  and recorded_at >= '2026-05-27 04:31:09.71+00'
-  and recorded_at <= '2026-05-27 05:46:09.71+00'
-  and b000000001 = true
-order by recorded_at asc
-limit 20;
-
-select count(*)
-from eqp.shield_realdata_xre423
-where tunnel_id = '43fe7946-591a-4571-a240-907987359ec0'
-  and recorded_at >= '2026-05-27 04:31:09.71+00'
-  and recorded_at <= '2026-05-27 05:46:09.71+00';
-
 
 -- 查询盾构机参数历史数据，按环号(所工作时间)查询，适用于需要展示环号范围内数据的场景
-create or replace function eqp.fn_get_tunnel_tbm_param_history_by_ring(
-  p_tunnel_id uuid,
+create or replace function eqp.fn_get_tbm_param_history_by_ring(
+  p_tbm_id uuid,
   p_from_ring integer,
   p_to_ring integer,
   p_fields text[],
@@ -128,7 +90,7 @@ begin
   into v_tbm_code
   from eqp.tbm_assignments a
   join eqp.tbms t on t.id = a.tbm_id
-  where a.tunnel_id = p_tunnel_id
+  where a.tbm_id = p_tbm_id
     and a.end_date is null
   limit 1;
 
@@ -180,7 +142,7 @@ begin
       s100100008::integer as ring,
       jsonb_build_object(%s) as data
     from eqp.%I
-    where tunnel_id = $1
+    where tbm_id = $1
       and s100100008 is not null
       and s100100008 >= $2
       and s100100008 <= $3
@@ -191,7 +153,7 @@ begin
     v_table_name,
     v_work_mode_sql
   )
-  using p_tunnel_id, p_from_ring, p_to_ring;
+  using p_tbm_id, p_from_ring, p_to_ring;
 end;
 $$;
 
@@ -199,8 +161,8 @@ $$;
 
 
 -- 查询盾构机参数历史数据，按时间查询，适用于需要展示时间范围内数据的场景
-create or replace function eqp.fn_get_tunnel_tbm_param_history_by_time(
-  p_tunnel_id uuid,
+create or replace function eqp.fn_get_tbm_param_history_by_time(
+  p_tbm_id uuid,
   p_from timestamptz,
   p_to timestamptz,
   p_fields text[],
@@ -237,7 +199,7 @@ begin
   into v_tbm_code
   from eqp.tbm_assignments a
   join eqp.tbms t on t.id = a.tbm_id
-  where a.tunnel_id = p_tunnel_id
+  where a.tbm_id = p_tbm_id
     and a.end_date is null
   limit 1;
 
@@ -289,7 +251,7 @@ begin
       s100100008::integer as ring,
       jsonb_build_object(%s) as data
     from eqp.%I
-    where tunnel_id = $1
+    where tbm_id = $1
       and recorded_at >= $2
       and recorded_at <= $3
       %s
@@ -299,14 +261,14 @@ begin
     v_table_name,
     v_work_mode_sql
   )
-  using p_tunnel_id, p_from, p_to;
+  using p_tbm_id, p_from, p_to;
 end;
 $$;
 
 
 -- 查询时间段内的掘进机工作状态变化和环号变化，状态包括：advance、assembly、stop、offline（掉线）。环号变化单独成一段，类型为ring。掉线由两种情况触发：1）状态断点：相邻两条记录的时间差超过p_offline_gap_minutes；2）数据缺失：查询时间段内没有任何记录，或第一条记录距离查询开始时间超过p_offline_gap_minutes，或最后一条记录距离查询结束时间超过p_offline_gap_minutes。
-create or replace function eqp.fn_get_tunnel_work_timeline(
-  p_tunnel_id uuid,
+create or replace function eqp.fn_get_tbm_work_timeline(
+  p_tbm_id uuid,
   p_start_at timestamptz,
   p_end_at timestamptz,
   p_offline_gap_minutes integer default 5
@@ -342,8 +304,8 @@ declare
 
   v_gap interval := make_interval(mins => p_offline_gap_minutes);
 begin
-  if p_tunnel_id is null then
-    raise exception 'p_tunnel_id cannot be null';
+  if p_tbm_id is null then
+    raise exception 'p_tbm_id cannot be null';
   end if;
 
   if p_start_at is null or p_end_at is null then
@@ -358,7 +320,7 @@ begin
   into v_tbm_code
   from eqp.tbm_assignments a
   join eqp.tbms t on t.id = a.tbm_id
-  where a.tunnel_id = p_tunnel_id
+  where a.tbm_id = p_tbm_id
     and a.end_date is null
   order by a.start_date desc nulls last
   limit 1;

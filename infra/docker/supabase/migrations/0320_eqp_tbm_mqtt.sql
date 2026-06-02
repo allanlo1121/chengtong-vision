@@ -292,26 +292,36 @@ group by
     last_session.disconnect_reason;
 
 
-create table public.tbm_heartbeat_status (
-  tbm_id uuid primary key,
-  tunnel_id uuid,
+
+
+create table eqp.tbm_connection_status (
+  tbm_id uuid not null references eqp.tbms(id),
+
+  type text not null check (
+    type in ('heartbeat', 'realdata')
+  ),
 
   last_seen_at timestamptz not null,
+
   is_online boolean not null default false,
 
-  online_started_at timestamptz,
-  offline_started_at timestamptz,
+  updated_at timestamptz not null default now(),
 
-  updated_at timestamptz not null default now()
+  primary key (tbm_id, type)
 );
 
-create table public.tbm_heartbeat_status_history (
+create table eqp.tbm_connection_status_history (
   id uuid primary key default gen_random_uuid(),
 
-  tbm_id uuid not null,
-  tunnel_id uuid,
+  tbm_id uuid not null references eqp.tbms(id),
 
-  status text not null check (status in ('online', 'offline')),
+  type text not null check (
+    type in ('heartbeat', 'realdata')
+  ),
+
+  status text not null check (
+    status in ('online', 'offline')
+  ),
 
   start_at timestamptz not null,
   end_at timestamptz,
@@ -321,42 +331,12 @@ create table public.tbm_heartbeat_status_history (
 
   created_at timestamptz not null default now(),
 
-  constraint tbm_heartbeat_status_history_time_check
-    check (end_at is null or end_at > start_at)
+  constraint tbm_connection_status_history_time_check
+    check (
+      end_at is null
+      or end_at > start_at
+    )
 );
 
-
-create table public.tbm_realdata_status (
-  tbm_id uuid primary key,
-  tunnel_id uuid,
-
-  last_seen_at timestamptz not null,
-  is_online boolean not null default false,
-
-  online_started_at timestamptz,
-  offline_started_at timestamptz,
-
-  updated_at timestamptz not null default now()
-);
-
-create table public.tbm_realdata_status_history (
-  id uuid primary key default gen_random_uuid(),
-
-  tbm_id uuid not null,
-  tunnel_id uuid,
-
-  status text not null check (status in ('online', 'offline')),
-
-  start_at timestamptz not null,
-  end_at timestamptz,
-
-  source text not null default 'auto',
-  remark text,
-
-  created_at timestamptz not null default now(),
-
-  constraint tbm_realdata_status_history_time_check
-    check (end_at is null or end_at > start_at)
-);
 
 

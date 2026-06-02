@@ -26,6 +26,7 @@ select system.attach_audit_triggers('proj.tunnels');
 select system.attach_audit_triggers('proj.tunnel_status_timeline');
 select system.attach_audit_triggers('proj.tunnel_schedule_versions');
 select system.attach_audit_triggers('proj.project_catalog_std');
+select system.attach_audit_triggers('eqp.tbm_daily_progress');
 select system.attach_audit_triggers('eqp.tbms');
 select system.attach_audit_triggers('eqp.tbm_assignments');
 select system.attach_audit_triggers('rbac.roles');

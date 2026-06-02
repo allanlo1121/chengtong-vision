@@ -116,31 +116,8 @@ execute function eqp.validate_tbm_operation_mode();
 
 
 
-create table eqp.tbm_daily_progress (
 
-    id uuid primary key default gen_random_uuid(),
-
-    operation_id uuid
-        references eqp.tbm_operations(id),
-    tbm_id uuid not null
-        references eqp.tbms(id),
-    tunnel_id uuid not null
-        references proj.tunnels(id),
-
-    progress_at date not null,
-    ring_start integer,
-    ring_end integer,
-
-    op_num_start double precision,
-    op_num_end double precision,
-
-    plan_ring_count integer,
-    actual_ring_count integer generated always as (
-        ring_end - ring_start
-    ) stored
-
-);
-
+create extension if not exists btree_gist;
 
 create table eqp.tbm_assignments (
 
@@ -153,20 +130,23 @@ create table eqp.tbm_assignments (
         references proj.tunnels(id),
 
     start_date date not null,
-     end_date date,
+    end_date date,
 
-    remark text
+    remark text,
 
-
+    constraint chk_date_range
+      check (end_date is null or end_date >= start_date)
 );
 
-
-create index idx_tbm_assignments_tbm
-on eqp.tbm_assignments(tbm_id);
-
-create index idx_tbm_assignments_tunnel
-on eqp.tbm_assignments(tunnel_id);
-
-create index idx_tbm_assignments_current
+-- 当前唯一
+create unique index uq_tbm_assignments_current
 on eqp.tbm_assignments(tbm_id)
 where end_date is null;
+
+-- 防止时间重叠
+alter table eqp.tbm_assignments
+add constraint uq_tbm_assignments_no_overlap
+exclude using gist (
+  tbm_id with =,
+  daterange(start_date, coalesce(end_date, 'infinity')) with &&
+);

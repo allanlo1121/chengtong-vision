@@ -478,8 +478,7 @@ begin
       create table %I.%I (
         id bigint generated always as identity primary key,
         recorded_at timestamptz not null,
-        tbm_id uuid not null,
-        tunnel_id uuid
+        tbm_id uuid not null
       )
       $sql$,
       v_table_schema,
@@ -504,11 +503,6 @@ begin
       v_table_name
     );
 
-    execute format(
-      'alter table %I.%I add column if not exists tunnel_id uuid',
-      v_table_schema,
-      v_table_name
-    );
   end if;
 
   for r in
@@ -547,13 +541,6 @@ begin
   execute format(
     'create index if not exists %I on %I.%I(tbm_id, recorded_at desc)',
     'idx_' || v_tbm_code || '_tbm_time',
-    v_table_schema,
-    v_table_name
-  );
-
-  execute format(
-    'create index if not exists %I on %I.%I(tunnel_id, recorded_at desc)',
-    'idx_' || v_tbm_code || '_tunnel_time',
     v_table_schema,
     v_table_name
   );

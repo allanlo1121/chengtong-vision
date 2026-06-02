@@ -102,67 +102,7 @@ create table proj.tunnel_schedule_versions (
   unique (tunnel_id, version_no)
 );
 
-create table public.tunnel_daily_progress (
-  id uuid primary key default gen_random_uuid(),
 
-  tunnel_id uuid not null references proj.tunnels(id),
-  tbm_id uuid references eqp.tbms(id),
-
-  progress_date date not null,
-
-  ring_end integer not null,
-  op_num_end numeric,
-
-  plan_ring_count integer,
-
-
-  unique (tunnel_id, progress_date)
-);
-
-create or replace view public.v_tunnel_daily_progress as
-select
-  p.id,
-  p.tunnel_id,
-  p.tbm_id,
-  p.progress_date,
-
-  lag(p.ring_end) over (
-    partition by p.tunnel_id
-    order by p.progress_date
-  ) as ring_start,
-
-  p.ring_end,
-
-  p.ring_end
-    - coalesce(
-        lag(p.ring_end) over (
-          partition by p.tunnel_id
-          order by p.progress_date
-        ),
-        p.ring_end
-      ) as completed_ring_count,
-
-  p.op_num_end,
-
-  lag(p.op_num_end) over (
-    partition by p.tunnel_id
-    order by p.progress_date
-  ) as op_num_start,
-
-  p.op_num_end
-    - coalesce(
-        lag(p.op_num_end) over (
-          partition by p.tunnel_id
-          order by p.progress_date
-        ),
-        p.op_num_end
-      ) as completed_length,
-
-  p.plan_ring_count,
-  p.created_at,
-  p.updated_at,
-  p.modified_by
-from public.tunnel_daily_progress p;
 
 
 
