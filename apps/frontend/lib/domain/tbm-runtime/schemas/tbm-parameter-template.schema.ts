@@ -6,20 +6,6 @@ import { z } from "zod";
  * TBM参数模板字段规则
  */
 export const TbmParameterTemplateFormSchema = z.object({
-  id: z.coerce.number().optional().meta({
-    table: "tbm_parameter_templates",
-    label: "ID",
-    field: "id",
-    searchable: false,
-    sortable: true,
-    component: "input",
-    section: "基本信息",
-    type: "number",
-    disabled: true,
-    required: false,
-    readonly: true,
-    colSpan: 1,
-  }),
   name: z.string().max(50, { message: "名称最多50个字符" }).meta({
     table: "tbm_parameter_templates",
     label: "模版名称",
@@ -135,17 +121,13 @@ export const TbmParameterTemplateFormSchema = z.object({
   }),
 });
 
-export const CreateTbmParameterTemplateFormSchema = TbmParameterTemplateFormSchema.omit({
-  id: true,
+export const CreateTbmParameterTemplateSchema = TbmParameterTemplateFormSchema;
+
+export const UpdateTbmParameterTemplateSchema = TbmParameterTemplateFormSchema.extend({
+  id: z.coerce.number(),
 });
 
-export const UpdateTbmParameterTemplateFormSchema = TbmParameterTemplateFormSchema;
-
-export type CreateTbmParameterTemplateFormInput = z.infer<
-  typeof CreateTbmParameterTemplateFormSchema
->;
-export type UpdateTbmParameterTemplateFormInput = z.infer<
-  typeof UpdateTbmParameterTemplateFormSchema
->;
+export type CreateTbmParameterTemplateInput = z.infer<typeof CreateTbmParameterTemplateSchema>;
+export type UpdateTbmParameterTemplateInput = z.infer<typeof UpdateTbmParameterTemplateSchema>;
 
 export type TbmParameterTemplateFormFields = keyof z.infer<typeof TbmParameterTemplateFormSchema>;

@@ -1,49 +1,60 @@
 import { createClient } from "@/lib/infra/supabase/server";
 import {
-  TbmParameterBindingRow,
   TbmParameterBindingUpdateRow,
   TbmParameterBindingInsertRow,
   TbmParameterBindingGroup,
   TbmBoundParametersRow,
+  TbmParameterBinding,
 } from "../types";
-import { applyPagination, assertNoError } from "@/lib/infra/repositories/base.repository";
-import { parameterQuery, ParameterQueryType, ParameterBindingQueryType } from "../queries";
-import { PageData } from "@/lib/shared/contracts/paginated-result";
+import { assertNoError } from "@/lib/infra/repositories/base.repository";
+
 import { appErrors } from "@/lib/shared/contracts";
+import {
+  mapTbmParameterBinding,
+  mapTbmParameterBindingInsertRow,
+  mapTbmParameterBindingUpdateRow,
+} from "../mappers";
+import { CreateTbmParameterBindingInput, UpdateTbmParameterBindingInput } from "../schemas";
 
 export const tpbRepository = {
-  insert: async (input: TbmParameterBindingInsertRow): Promise<TbmParameterBindingRow | null> => {
+  insert: async (input: CreateTbmParameterBindingInput): Promise<TbmParameterBinding> => {
     const supabase = await createClient();
-
+    const payload = mapTbmParameterBindingInsertRow(input);
     const { data, error } = await supabase
       .schema("eqp")
       .from("tbm_parameter_bindings")
-      .insert(input)
+      .insert(payload)
       .select()
       .single();
 
     assertNoError(error);
-    return data;
+    if (!data) {
+      throw appErrors.internal("插入TBM参数绑定记录失败");
+    }
+    return mapTbmParameterBinding(data);
   },
-  update: async (
-    id: number,
-    input: TbmParameterBindingUpdateRow
-  ): Promise<TbmParameterBindingRow | null> => {
+  update: async (input: UpdateTbmParameterBindingInput): Promise<TbmParameterBinding> => {
     const supabase = await createClient();
+
+    const payload = mapTbmParameterBindingUpdateRow(input);
 
     const { data, error } = await supabase
       .schema("eqp")
       .from("tbm_parameter_bindings")
-      .update(input)
-      .eq("id", id)
+      .update(payload)
+      .eq("id", input.id)
       .select()
       .single();
 
     assertNoError(error);
 
-    return data;
+    if (!data) {
+      throw appErrors.internal("更新TBM参数绑定记录失败");
+    }
+
+    return mapTbmParameterBinding(data);
   },
-  findById: async (id: number): Promise<TbmParameterBindingRow | null> => {
+  findById: async (id: number): Promise<TbmParameterBinding | null> => {
     const supabase = await createClient();
 
     const { data, error } = await supabase
@@ -55,41 +66,23 @@ export const tpbRepository = {
 
     assertNoError(error);
 
-    return data;
+    return data ? mapTbmParameterBinding(data) : null;
   },
   syncTbmRealdataTable,
-  // list: async (): Promise<TbmParameterBindingListRow[]> => {
-  //     const supabase = await createClient();
-  //     const { data, error } = await supabase
-  //         .schema("eqp")
-  //         .from("v_tbm_parameter_bindings_list")
-  //         .select("*");
-  //     assertNoError(error);
-  //     return data as TbmParameterBindingListRow[];
-  // },
-  // addParametersToBinding,
-  // replaceBindingParametersBySubsystem,
   findParameterBindingGroups,
   replaceBindingParameters,
   getTbmBoundParameters,
 };
 
-async function syncTbmRealdataTable(tbmId: string): Promise<{ success: boolean; message: string }> {
+async function syncTbmRealdataTable(tbmId: string): Promise<void> {
   const supabase = await createClient();
   console.log("Syncing TBM realdata table for TBM ID", tbmId);
-  const { data, error } = await supabase.schema("eqp").rpc("sync_tbm_realdata_table", {
+  const { error } = await supabase.schema("eqp").rpc("sync_tbm_realdata_table", {
     p_tbm_id: tbmId,
   });
-  console.log("Sync result", { data, error });
-  assertNoError(error);
 
-  if (!data) {
-    return {
-      success: false,
-      message: "同步TBM实时数据失败",
-    };
-  }
-  return { success: true, message: "同步TBM实时数据成功" };
+  console.log("Sync result", { error });
+  assertNoError(error);
 }
 
 async function findParameterBindingGroups(tbmId: string): Promise<TbmParameterBindingGroup[]> {
@@ -179,7 +172,10 @@ async function findParameterBindingGroups(tbmId: string): Promise<TbmParameterBi
   );
 }
 
-async function replaceBindingParameters(input: { tbmId: string; parameterIds: number[] }) {
+async function replaceBindingParameters(input: {
+  tbmId: string;
+  parameterIds: number[];
+}): Promise<number> {
   const supabase = await createClient();
 
   const { error: deleteError } = await supabase
@@ -191,9 +187,7 @@ async function replaceBindingParameters(input: { tbmId: string; parameterIds: nu
   assertNoError(deleteError);
 
   if (input.parameterIds.length === 0) {
-    return {
-      count: 0,
-    };
+    return 0;
   }
 
   const rows = input.parameterIds.map((parameterId, index) => ({
@@ -209,9 +203,7 @@ async function replaceBindingParameters(input: { tbmId: string; parameterIds: nu
 
   assertNoError(error);
 
-  return {
-    count: data?.length ?? 0,
-  };
+  return data?.length ?? 0;
 }
 
 async function getTbmBoundParameters(tbmId: string): Promise<TbmBoundParametersRow[]> {

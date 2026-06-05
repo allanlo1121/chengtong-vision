@@ -1,6 +1,7 @@
 import {
   Employee,
-  EmployeeAssignmentInsertRow,
+  EmployeeDetail,
+  EmployeeDetailRow,
   EmployeeInsertRow,
   EmployeeListItem,
   EmployeeListRow,
@@ -49,6 +50,8 @@ export function mapEmployee(row: EmployeeRow): Employee {
     employmentStatusId: row.employment_status_id,
     employmentTypeId: row.employment_type_id,
 
+    isDisabled: row.is_disabled,
+
     sortOrder: row.sort_order,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
@@ -87,21 +90,6 @@ export function mapEmployeeToInsert(input: CreateEmployeeInput): EmployeeInsertR
   };
 }
 
-export function mapEmployeeAssignmentToInsert({
-  id,
-  input,
-}: {
-  id: string;
-  input: CreateEmployeeInput;
-}): EmployeeAssignmentInsertRow {
-  return {
-    employee_id: id!,
-    organization_id: input.organizationId,
-    post_id: input.postId,
-    is_primary: input.isPrimary,
-  };
-}
-
 export function mapEmployeeToUpdate(input: UpdateEmployeeInput): EmployeeUpdateRow {
   return {
     name: input.name,
@@ -124,5 +112,42 @@ export function mapEmployeeToUpdate(input: UpdateEmployeeInput): EmployeeUpdateR
 
     remark: input.remark,
     sort_order: input.sortOrder,
+  };
+}
+
+export function mapEmployeeDetail(row: EmployeeDetailRow): EmployeeDetail {
+  return {
+    id: row.id,
+    name: row.name,
+    code: row.code,
+    organizationId: row.organization_id ?? "",
+    organizationName: row.organization_name ?? "",
+
+    employmentStatusName: row.employment_status_name ?? "",
+    employmentTypeName: row.employment_type_name ?? "",
+
+    primaryPostId: row.primary_post_id,
+    primaryPostName: row.primary_post_name,
+
+    genderId: row.gender_id,
+    educations: row.educations,
+    titles: row.titles,
+
+    employmentStatusId: row.employment_status_id,
+    employmentTypeId: row.employment_type_id,
+  };
+}
+
+export function mapEmployeeListItem(row: EmployeeListRow): EmployeeListItem {
+  return {
+    id: row.id,
+    name: row.name,
+    code: row.code,
+    organizationId: row.organization_id,
+    organizationName: row.organization_name,
+    postName: row.post_name,
+    employmentStatusName: row.employment_status_name,
+    sortOrder: row.sort_order,
+    createdAt: row.created_at,
   };
 }

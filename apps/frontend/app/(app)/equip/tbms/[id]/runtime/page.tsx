@@ -1,8 +1,4 @@
-// app/(system)/resource-center/tbms/[id]/runtime/page.tsx
-
-import { notFound } from "next/navigation";
-
-import { getTbmById } from "@/lib/domain/tbm/services";
+import { fetchTbmById } from "@/lib/domain/tbm/services";
 // import { getTbmRuntimeOverview } from "@/lib/domain/tbm-runtime/services";
 
 import { TbmHeaderCard } from "./_components/cards/TbmHeaderCard";
@@ -10,7 +6,7 @@ import { TbmHeaderCard } from "./_components/cards/TbmHeaderCard";
 import TbmMqttTab from "./_components/tabs/TbmMqttTab";
 import TbmParameterTab from "./_components/tabs/TbmParameterTab";
 import { TbmTabs } from "./_components/TbmTabs";
-import { TbmAssignmentCard } from "./_components/cards/TbmAssignmentCard";
+import { ErrorBlock } from "@/components/common/error-block";
 
 interface PageProps {
   params: Promise<{
@@ -25,10 +21,12 @@ export default async function TbmRuntimePage({ params }: PageProps) {
   // TBM
   // =========================================
 
-  const result = await getTbmById(id);
-
-  if (!result || !result.success || !result.data) {
-    notFound();
+  let tbm;
+  try {
+    tbm = await fetchTbmById(id);
+  } catch (error) {
+    console.error("Error fetching TBM:", error);
+    return <ErrorBlock message={error instanceof Error ? error.message : "查询失败"} />;
   }
 
   // =========================================
@@ -39,14 +37,13 @@ export default async function TbmRuntimePage({ params }: PageProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      <TbmHeaderCard tbm={result.data} manufacturerName={"中国中铁"} />
+      <TbmHeaderCard tbm={tbm} manufacturerName={"中国中铁"} />
 
       <div className="flex  border-1 border-green-500">
         <TbmTabs
-          tbm={result.data}
-          mqttTab={<TbmMqttTab tbm={result.data} />}
-          parameterTab={<TbmParameterTab tbm={result.data} />}
-          assignmentTab={<TbmAssignmentCard tbm={result.data} />}
+          tbm={tbm}
+          mqttTab={<TbmMqttTab tbm={tbm} />}
+          parameterTab={<TbmParameterTab tbm={tbm} />}
         />
       </div>
     </div>

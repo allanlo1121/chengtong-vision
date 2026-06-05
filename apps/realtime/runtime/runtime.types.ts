@@ -9,6 +9,5 @@ export interface TbmRuntimeData {
 export type TbmRuntimeContext = {
   tbmId: string;
   tbmCode: string;
-  tunnelId: string | null;
   assignmentId: string | null;
 };

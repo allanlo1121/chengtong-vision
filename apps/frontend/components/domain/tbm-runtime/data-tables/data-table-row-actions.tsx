@@ -9,19 +9,14 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 import { useCrudMutation } from "@/lib/ui/crud/hooks/useCrudMutation";
-import { deleteTunnelDailyProgressAction } from "@/lib/domain/tbm-runtime/actions";
+import { deleteTbmDailyProgressAction } from "@/lib/domain/tbm-runtime/actions";
 import { routes } from "@/lib/core/router/router";
-import { TunnelDailyProgressItem } from "@/lib/domain/tbm-runtime/types/tunnel-daily-progress.types";
+import { TbmDailyProgressListItem } from "@/lib/domain/tbm-runtime/types/tbm-daily-progress.types";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -31,12 +26,12 @@ interface DataTableRowActionsProps<TData> {
 
 export function DataTableRowActions<TData>({
   row,
-}: DataTableRowActionsProps<TunnelDailyProgressItem>) {
-  const tunnelDailyProgress = row.original as unknown as TunnelDailyProgressItem;
+}: DataTableRowActionsProps<TbmDailyProgressListItem>) {
+  const tbmDailyProgress = row.original as unknown as TbmDailyProgressListItem;
   const router = useRouter();
 
   const deleteMutation = useCrudMutation<string, number>({
-    action: deleteTunnelDailyProgressAction,
+    action: deleteTbmDailyProgressAction,
     successMessage: "删除成功",
     onSuccess: () => router.refresh(),
   });
@@ -45,7 +40,7 @@ export function DataTableRowActions<TData>({
     if (!confirm("确认删除该TBM吗？")) return;
 
     console.log("deleteMutation", deleteMutation);
-    deleteMutation.mutate(tunnelDailyProgress.id);
+    deleteMutation.mutate(tbmDailyProgress.id);
   };
 
   return (
@@ -58,13 +53,13 @@ export function DataTableRowActions<TData>({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-[180px]">
-        <DropdownMenuItem onClick={() => router.push(routes.tbms.edit(tunnelDailyProgress.id))}>
+        <DropdownMenuItem onClick={() => router.push(routes.tbms.edit(tbmDailyProgress.id))}>
           编辑TBM
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem onClick={() => router.push(routes.tbms.runtime(tunnelDailyProgress.id))}>
+        <DropdownMenuItem onClick={() => router.push(routes.tbms.runtime(tbmDailyProgress.id))}>
           TBM配置
         </DropdownMenuItem>
 

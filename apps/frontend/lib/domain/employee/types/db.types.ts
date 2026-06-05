@@ -3,14 +3,14 @@ import { AppDatabase } from "@/lib/core/database/types";
 
 import { BaseSystemFields } from "@/lib/core/database/types";
 
-export type EmployeeDetailRow = AppDatabase["hr"]["Views"]["v_employee_full"]["Row"];
+export type EmployeeDetailRow = AppDatabase["hr"]["Views"]["v_employee_detail"]["Row"];
 
-export type RawEmployeeListRow = AppDatabase["hr"]["Views"]["v_employee_list"]["Row"];
+export type EmployeeListRow = AppDatabase["hr"]["Views"]["v_employee_list"]["Row"];
 
-export type EmployeeListRow = RemoveNull<RawEmployeeListRow> & {
-  post_name: string | null;
-  employment_status_name: string | null;
-};
+// export type EmployeeListRow = RemoveNull<RawEmployeeListRow> & {
+//   post_name: string | null;
+//   employment_status_name: string | null;
+// };
 
 export type EmployeePickerRow = AppDatabase["hr"]["Views"]["v_employee_picker"]["Row"];
 

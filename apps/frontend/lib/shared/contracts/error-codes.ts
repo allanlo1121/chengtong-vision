@@ -90,7 +90,7 @@ export const appErrors = {
     });
   },
 
-  duplicate(message = "数据已存在") {
+  conflict(message = "数据已存在") {
     return new AppError({
       message,
       code: ERROR_CODES.DUPLICATE_KEY,

@@ -3,15 +3,15 @@
 import { ActionResult } from "@/lib/shared/contracts";
 import { deleteOrganization } from "../services";
 
-export async function deleteOrganizationAction(id: string): Promise<ActionResult<number>> {
+export async function deleteOrganizationAction(id: string): Promise<ActionResult<void>> {
   console.log("===deleteOrganizationAction===", id);
 
   try {
-    const result = await deleteOrganization(id);
+    await deleteOrganization(id);
 
     return {
       success: true,
-      data: 1,
+      data: undefined,
       message: "删除成功",
     };
   } catch (error) {

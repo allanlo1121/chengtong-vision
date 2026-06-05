@@ -6,26 +6,31 @@ import {
   getTbmParameterBindingGroups,
   findParameterTemplateOptions,
 } from "@/lib/domain/tbm-runtime/services";
+import { TbmParameterBindingGroup } from "@/lib/domain/tbm-runtime/types/tbm-parameter-binding.types";
+import { ErrorBlock } from "@/components/common/error-block";
+import { TemplateOption } from "@/lib/domain/tbm-runtime/types";
 
 export default async function TbmParameterTab({ tbm }: { tbm: Tbm }) {
-  const result = await getTbmParameterBindingGroups(tbm.id);
-  const templateOptionsResult = await findParameterTemplateOptions();
+  let tbmParameterBindingGroups: TbmParameterBindingGroup[] = [];
+  let templateOptions: TemplateOption[] = [];
 
-  if (!result.success) {
+  try {
+    tbmParameterBindingGroups = await getTbmParameterBindingGroups(tbm.id);
+    templateOptions = await findParameterTemplateOptions();
+  } catch (error) {
+    console.error("Error fetching TBM parameter binding groups or template options:", error);
     return (
-      <div className="flex h-full min-h-0 overflow-hidden items-center justify-center text-sm text-destructive">
-        加载参数绑定数据失败：{result.message}
-      </div>
+      <ErrorBlock
+        message={error instanceof Error ? error.message : "加载参数绑定信息失败，请稍后再试。"}
+      />
     );
   }
-
-  const templateOptions = templateOptionsResult.success ? templateOptionsResult.data : [];
 
   return (
     <div>
       <ParameterBindingTabsEditor
         tbmId={tbm.id}
-        groups={result.data}
+        groups={tbmParameterBindingGroups}
         templateOptions={templateOptions}
       />
     </div>

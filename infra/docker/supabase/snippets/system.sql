@@ -224,3 +224,97 @@ create table system.stat_period_settings (
 
     unique(code, effective_from)
 );
+
+
+select column_default
+from information_schema.columns
+where table_schema='eqp' 
+  and table_name='tbm_runtime_parameters'
+  and column_name='is_chartable';
+
+
+UPDATE eqp.tbm_runtime_parameters
+SET is_chartable = true
+WHERE code LIKE 's%';
+
+
+
+insert into system.menus (
+  code,
+  name,
+  label,
+  node_key,
+  path_url,
+  icon,
+  sort_order
+)
+values
+(
+  'workspace',
+  'WorkspaceManagement',
+  '工作区管理',
+  'workspace',
+  '/workspace',
+  'HardHat',
+  4
+);
+
+insert into system.menus (
+  parent_id,
+  code,
+  name,
+  label,
+  node_key,
+  path_url,
+  icon,
+  sort_order
+)
+select
+  parent.id,
+  child.code,
+  child.name,
+  child.label,
+  child.node_key,
+  child.path_url,
+  child.icon,
+  child.sort_order
+from system.menus parent
+cross join (
+  values
+    (
+  'workspace.command_center',
+  'command_center',
+  '指挥中心',
+  'command_center',
+  '/workspace/command-center',
+  'Building2',
+  1
+  ),
+   (
+  'workspace.tunnels',
+  'tunnels',
+  '隧道工作台',
+  'tunnels',
+  '/workspace/tunnels',
+  'Building2',
+  1
+  ),
+  (
+  'workspace.tbms',
+  'tbms',
+  '盾构机工作台',
+  'tbms',
+  '/workspace/tbms',
+  'Building2',
+  1
+  )
+  ) as child(
+  code,
+  name,
+  label,
+  node_key,
+  path_url,
+  icon,
+  sort_order
+  )
+where parent.code = 'workspace';

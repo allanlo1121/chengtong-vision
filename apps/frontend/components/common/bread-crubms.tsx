@@ -10,11 +10,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-export interface BreadcrumbItem {
-  label: string;
-  href?: string;
-  active?: boolean;
-}
+import { BreadcrumbItem } from "@/lib/domain/system/breadcrumb/types";
 
 interface Props {
   breadcrumbs: BreadcrumbItem[];

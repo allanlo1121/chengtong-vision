@@ -24,6 +24,7 @@ export function UpdateTbm({
       initialValues={initialValues}
       action={updateTbmAction}
       redirect={routes.tbms.list}
+      meta={{}}
     />
   );
 }

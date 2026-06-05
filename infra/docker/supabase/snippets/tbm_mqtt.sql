@@ -124,40 +124,6 @@ from pg_roles
 where rolname = 'emqx_user';
 
 
-create table public.tbm_heartbeat_status (
-  tbm_id uuid primary key,
-  tunnel_id uuid,
-
-  last_seen_at timestamptz not null,
-  is_online boolean not null default false,
-
-  online_started_at timestamptz,
-  offline_started_at timestamptz,
-
-  updated_at timestamptz not null default now()
-);
-
-create table public.tbm_heartbeat_status_history (
-  id uuid primary key default gen_random_uuid(),
-
-  tbm_id uuid not null,
-  tunnel_id uuid,
-
-  status text not null check (status in ('online', 'offline')),
-
-  start_at timestamptz not null,
-  end_at timestamptz,
-
-  source text not null default 'auto',
-  remark text,
-
-  created_at timestamptz not null default now(),
-
-  constraint tbm_heartbeat_status_history_time_check
-    check (end_at is null or end_at > start_at)
-);
-
-
 
 
 

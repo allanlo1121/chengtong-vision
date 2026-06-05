@@ -1,29 +1,25 @@
 import { appErrors } from "@/lib/shared/contracts";
-
-import {
-  mapRealdataHistoryRowsToRuntimeSeriesPoint,
-  mapWorkTimelineRowsToSegments,
-} from "@/lib/domain/tbm-runtime/mappers/realdata.mapper";
 import {
   RuntimeSeriesValue,
   WorkPhaseSegment,
-} from "@/lib/domain/tbm-runtime/types/realdata.types";
+  RuntimeWorkMode,
+  RuntimeSeriesQueryParams,
+} from "@/lib/domain/tbm-runtime/types";
 import {
   getRealdataHistoryByRing,
   getRealdataHistoryByTime,
-  getTunnelWorkTimeline,
-} from "../../repositories/client/realdata.repository";
-import { RuntimeWorkMode } from "@/app/workspace/tunnels/[id]/_components/RuntimeQueryToolbar";
+  getTbmWorkTimeline,
+} from "../../repositories/client";
 
 export async function fetchTbmRuntimeSeriesPointsByTime(params: {
-  tunnelId: string;
+  tbmId: string;
   from: string;
   to: string;
   fields: string[];
   workMode?: RuntimeWorkMode;
 }): Promise<RuntimeSeriesValue[]> {
   const insert = {
-    tunnelId: params.tunnelId,
+    tbmId: params.tbmId,
     from: new Date(params.from).toISOString(),
     to: new Date(params.to).toISOString(),
     fields: params.fields,
@@ -32,13 +28,13 @@ export async function fetchTbmRuntimeSeriesPointsByTime(params: {
 
   const data = await getRealdataHistoryByTime(insert);
   if (!data) {
-    throw appErrors.notFound("Realdata history not found for tunnel ID: " + params.tunnelId);
+    throw appErrors.notFound("Realdata history not found for TBM ID: " + params.tbmId);
   }
-  return mapRealdataHistoryRowsToRuntimeSeriesPoint(data);
+  return data;
 }
 
 export async function fetchTbmRuntimeSeriesPointsByRing(params: {
-  tunnelId: string;
+  tbmId: string;
   from: number;
   to: number;
   fields: string[];
@@ -46,29 +42,54 @@ export async function fetchTbmRuntimeSeriesPointsByRing(params: {
 }): Promise<RuntimeSeriesValue[]> {
   const data = await getRealdataHistoryByRing(params);
   if (!data) {
-    throw appErrors.notFound("Realdata history not found for tunnel ID: " + params.tunnelId);
+    throw appErrors.notFound("Realdata history not found for TBM ID: " + params.tbmId);
   }
-  return mapRealdataHistoryRowsToRuntimeSeriesPoint(data);
+  return data;
 }
 
-export async function fetchTunnelWorkTimeline(params: {
-  tunnelId: string;
+export async function fetchTbmWorkTimeline(params: {
+  tbmId: string;
   startAt: string;
   endAt: string;
   offlineGapMinutes?: number;
 }): Promise<WorkPhaseSegment[]> {
-  const { tunnelId } = params;
+  const { tbmId } = params;
 
-  const data = await getTunnelWorkTimeline({
-    tunnelId,
+  const data = await getTbmWorkTimeline({
+    tbmId,
     startAt: params.startAt,
     endAt: params.endAt,
     offlineGapMinutes: params.offlineGapMinutes ?? 5,
   });
 
   if (!data) {
-    throw appErrors.notFound("Tunnel work timeline not found for tunnel ID: " + tunnelId);
+    throw appErrors.notFound("TBM work timeline not found for TBM ID: " + tbmId);
   }
 
-  return mapWorkTimelineRowsToSegments(data);
+  return data;
+}
+
+export async function fetchTbmRuntimeSeriesPoints(
+  query: RuntimeSeriesQueryParams
+): Promise<RuntimeSeriesValue[]> {
+  console.log("fetchTbmRuntimeSeriesPoints query", query);
+  if (query.mode === "ring") {
+    // 数字环号查询
+    return getRealdataHistoryByRing({
+      tbmId: query.tbmId,
+      from: query.from,
+      to: query.to,
+      fields: query.fields,
+      workMode: query.workMode,
+    });
+  } else {
+    // 时间区间查询
+    return getRealdataHistoryByTime({
+      tbmId: query.tbmId,
+      from: new Date(query.from).toISOString(),
+      to: new Date(query.to).toISOString(),
+      fields: query.fields,
+      workMode: query.workMode,
+    });
+  }
 }

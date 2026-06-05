@@ -10,9 +10,7 @@ import {
 } from "../types";
 import { WorkPhaseSegment, WorkPhaseType, PhaseDuration } from "../types";
 
-export function mapRealdataLimitsRowToRuntimeQueryLimits(
-  row: RealdataLimitsRow
-): RuntimeQueryLimits {
+export function mapRuntimeQueryLimits(row: RealdataLimitsRow): RuntimeQueryLimits {
   return {
     minTime: toDatetimeLocalValue(row.min_time ?? undefined),
     maxTime: toDatetimeLocalValue(row.max_time ?? undefined),
@@ -21,7 +19,7 @@ export function mapRealdataLimitsRowToRuntimeQueryLimits(
   };
 }
 
-export function mapRealdataHistoryRowsToRuntimeSeriesPoint(
+export function mapRuntimeSeriesPoint(
   rows: RealdataHistoryByRingRows | RealdataHistoryByTimeRows
 ): RuntimeSeriesValue[] {
   return (rows ?? []).map((row) => ({
@@ -40,7 +38,7 @@ export function mapRealdataHistoryRowsToRuntimeSeriesPoint(
 //     }));
 // }
 
-export function mapRealdataHistoryByTimeRowsToRuntimeSeriesPoint(
+export function mapRuntimeSeriesPointHistory(
   rows: RealdataHistoryByTimeRows
 ): RuntimeSeriesValue[] {
   return (rows ?? []).map((row) => ({
@@ -49,7 +47,7 @@ export function mapRealdataHistoryByTimeRowsToRuntimeSeriesPoint(
     values: (row.data as Record<string, number | null>) ?? {},
   }));
 }
-export function mapWorkTimelineRowsToRings(rows: TbmWorkTimelineRows): RingSegment[] {
+export function mapRingSegments(rows: TbmWorkTimelineRows): RingSegment[] {
   return rows
     .filter((row) => row.type === "ring")
     .map((row) => ({
@@ -60,7 +58,7 @@ export function mapWorkTimelineRowsToRings(rows: TbmWorkTimelineRows): RingSegme
     }));
 }
 
-export function mapWorkTimelineRowsToSegments(rows: TbmWorkTimelineRows): WorkPhaseSegment[] {
+export function mapWorkPhaseSegments(rows: TbmWorkTimelineRows): WorkPhaseSegment[] {
   return rows
     .filter((row) => row.type !== "ring")
     .map((row) => ({
@@ -94,7 +92,7 @@ function mapWorkPhaseType(type: string): WorkPhaseType {
 
 const PHASE_ORDER: WorkPhaseType[] = ["advance", "assembly", "stop", "offline"];
 
-export function mapPhaseSegmentsToDurations(rows: TbmWorkTimelineRows): PhaseDuration[] {
+export function mapPhaseDurations(rows: TbmWorkTimelineRows): PhaseDuration[] {
   const totals = new Map<WorkPhaseType, number>();
 
   // 初始化
@@ -103,7 +101,7 @@ export function mapPhaseSegmentsToDurations(rows: TbmWorkTimelineRows): PhaseDur
   }
 
   // 聚合时长
-  const segments = mapWorkTimelineRowsToSegments(rows);
+  const segments = mapWorkPhaseSegments(rows);
   for (const segment of segments) {
     const start = new Date(segment.start).getTime();
     const end = new Date(segment.end).getTime();

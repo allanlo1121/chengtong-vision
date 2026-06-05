@@ -2,7 +2,7 @@ import { PaginatedResult, Result } from "@/lib/shared/contracts";
 
 import { ProjectPickerItem, ProjectPickerQuery } from "../types";
 
-import { searchProjectPicker } from "../repositories/project-picker.repository";
+import { searchProjectPicker } from "../repositories/picker.repository";
 import { mapProjectPicker } from "../mappers/picker.mapper";
 
 export async function listProjectPicker(

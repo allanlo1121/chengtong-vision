@@ -1,58 +1,67 @@
 import { createClient } from "@/lib/infra/supabase/server";
 
 import { employeeQuery, EmployeeQueryType } from "../queries";
-import { PageData } from "@/lib/shared/contracts";
+import { appErrors, PaginatedResult } from "@/lib/shared/contracts";
 import { applyPagination, assertNoError } from "@/lib/infra/repositories/base.repository";
 
 import {
   EmployeeDetailRow,
+  EmployeeDetail,
   EmployeeInsertRow,
   EmployeeListRow,
+  EmployeeListItem,
   EmployeeRow,
   EmployeeUpdateRow,
+  Employee,
 } from "../types";
+import {
+  mapEmployee,
+  mapEmployeeDetail,
+  mapEmployeeListItem,
+  mapEmployeeToInsert,
+  mapEmployeeToUpdate,
+} from "../mappers";
+import { map } from "zod";
+import { CreateEmployeeInput, UpdateEmployeeInput } from "../schemas";
 
-export async function findDetailById(id: string): Promise<EmployeeDetailRow> {
+export async function findDetailById(id: string): Promise<EmployeeDetail | null> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
     .schema("hr")
-    .from("v_employee_full")
+    .from("v_employee_detail")
     .select("*")
     .eq("id", id)
     .single();
 
   assertNoError(error);
-  if (!data) {
-    throw new Error("Employee not found");
-  }
 
-  return data as EmployeeDetailRow;
+  return data ? mapEmployeeDetail(data) : null;
 }
 
-export async function getAllEmployeeList(): Promise<EmployeeListRow[]> {
-  const supabase = await createClient();
+// export async function getAllEmployeeList(): Promise<EmployeeListRow[]> {
+//   const supabase = await createClient();
 
-  const { data, error } = await supabase.schema("hr").from("v_employee_list").select("*");
+//   const { data, error } = await supabase.schema("hr").from("v_employee_list").select("*");
 
-  assertNoError(error);
+//   assertNoError(error);
 
-  return data as EmployeeListRow[];
-}
+//   return data as EmployeeListRow[];
+// }
 
-async function softDeleteManyEmployee(ids: string[]) {
-  const supabase = await createClient();
+// async function softDeleteManyEmployee(ids: string[]) {
+//   const supabase = await createClient();
 
-  const { data, error } = await supabase.schema("system").rpc("soft_delete", {
-    p_table: "employees",
-    p_ids: ids,
-  });
+//   const { data, error } = await supabase.schema("system").rpc("soft_delete", {
+//     p_table: "employees",
+//     p_ids: ids,
+//   });
 
-  assertNoError(error);
-  return data ?? 0;
-}
+//   assertNoError(error);
+//   return data ?? 0;
+// }
 
-async function paginate(query: EmployeeQueryType): Promise<PageData<EmployeeListRow>> {
+async function paginate(query: EmployeeQueryType): Promise<PaginatedResult<EmployeeListItem>> {
   const supabase = await createClient();
 
   // console.log("org list query", query);
@@ -87,14 +96,18 @@ async function paginate(query: EmployeeQueryType): Promise<PageData<EmployeeList
   assertNoError(error);
 
   return {
-    items: data as EmployeeListRow[],
+    items: (data ?? []).map(mapEmployeeListItem),
     total: count ?? 0,
+    page: query.page,
+    pageSize: query.pageSize,
   };
 }
 
 export const employeeRepository = {
-  insert: async (input: EmployeeInsertRow): Promise<EmployeeRow> => {
+  insert: async (input: CreateEmployeeInput): Promise<Employee> => {
     console.log("Inserting employee with input:", input);
+
+    const payload = mapEmployeeToInsert(input);
     const supabase = await createClient();
 
     // const { data: debugAuth } = await supabase.rpc('debug_auth');
@@ -103,7 +116,7 @@ export const employeeRepository = {
     const { data, error } = await supabase
       .schema("hr")
       .from("employees")
-      .insert(input)
+      .insert(payload)
       .select("*")
       .single();
 
@@ -112,31 +125,43 @@ export const employeeRepository = {
     assertNoError(error);
 
     if (!data) {
-      throw new Error(`Insert failed: no data returned for table "employees"`);
+      throw appErrors.internal("employeeRepository.insert", "创建员工失败");
     }
 
-    return data as EmployeeRow;
+    return mapEmployee(data);
   },
-  update: async (id: string, input: EmployeeUpdateRow): Promise<EmployeeRow> => {
+  update: async (input: UpdateEmployeeInput): Promise<Employee> => {
+    const payload = mapEmployeeToUpdate(input);
     const supabase = await createClient();
 
     const { data, error } = await supabase
       .schema("hr")
       .from("employees")
-      .update(input)
-      .eq("id", id)
+      .update(payload)
+      .eq("id", input.id)
       .select("*")
       .single();
 
     assertNoError(error);
 
     if (!data) {
-      throw new Error(`Update failed: no data returned for table "employees"`);
+      throw appErrors.internal("employeeRepository.update", "更新员工失败");
     }
 
-    return data as EmployeeRow;
+    return mapEmployee(data);
   },
-  findByCode: async (code: string): Promise<EmployeeRow | null> => {
+  deleteById: async (id: string): Promise<void> => {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+      .schema("hr")
+      .from("employees")
+      .update({ deleted_at: new Date().toISOString() })
+      .eq("id", id);
+
+    assertNoError(error);
+  },
+  findByCode: async (code: string): Promise<Employee | null> => {
     const supabase = await createClient();
 
     const { data, error } = await supabase
@@ -148,9 +173,9 @@ export const employeeRepository = {
 
     assertNoError(error);
 
-    return data as EmployeeRow | null;
+    return data ? mapEmployee(data) : null;
   },
-  findById: async (id: string): Promise<EmployeeRow | null> => {
+  findById: async (id: string): Promise<Employee | null> => {
     const supabase = await createClient();
 
     const { data, error } = await supabase
@@ -162,10 +187,8 @@ export const employeeRepository = {
 
     assertNoError(error);
 
-    return data as EmployeeRow | null;
+    return data ? mapEmployee(data) : null;
   },
   findDetailById,
-  getAllList: getAllEmployeeList,
   paginate,
-  softDeleteMany: softDeleteManyEmployee,
 };

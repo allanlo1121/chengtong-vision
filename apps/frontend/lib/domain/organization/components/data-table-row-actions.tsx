@@ -15,9 +15,9 @@ import {
 
 import { OrganizationListItem } from "../types";
 
-import { useCrudMutation } from "@/lib/ui/crud/hooks/useCrudMutation";
 import { deleteOrganizationAction } from "../actions";
 import { routes } from "@/lib/core/router/router";
+import { toast } from "sonner";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -29,18 +29,24 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps<Organizati
   const org = row.original as unknown as OrganizationListItem;
   const router = useRouter();
 
-  const deleteMutation = useCrudMutation<string, number>({
-    action: deleteOrganizationAction,
-    successMessage: "删除成功",
-    onSuccess: () => router.refresh(),
-  });
-
-  const handleDelete = () => {
+  async function handleDelete() {
     if (!confirm("确认删除该组织吗？")) return;
 
-    console.log("deleteMutation", deleteMutation);
-    deleteMutation.mutate(org.id);
-  };
+    try {
+      const result = await deleteOrganizationAction(org.id);
+
+      if (!result.success) {
+        toast.error(result.message ?? "删除失败");
+        return;
+      }
+
+      toast.success(result.message ?? "删除成功");
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+      toast.error("删除失败");
+    }
+  }
 
   return (
     <DropdownMenu>

@@ -129,128 +129,9 @@ begin
     execute format(
       $sql$
       create table %I.%I (
-        recorded_at timestamptz not null,
-        tunnel_id uuid not null,
-        primary key (recorded_at, tunnel_id)
-      )
-      $sql$,
-      v_table_schema,
-      v_table_name
-    );
-  end if;
-
-  for r in
-    select
-      p.code,
-      case p.data_type
-        when 'boolean' then 'boolean'
-        when 'integer' then 'integer'
-        when 'double' then 'double precision'
-        when 'text' then 'text'
-        else 'text'
-      end as sql_type
-    from eqp.tbm_parameter_bindings tp
-    join eqp.tbm_runtime_parameters p
-      on p.id = tp.parameter_id
-    where tp.tbm_id = p_tbm_id
-      and coalesce(p.is_disabled, false) = false
-    order by p.sort_order, p.code
-  loop
-    execute format(
-      'alter table %I.%I add column if not exists %I %s',
-      v_table_schema,
-      v_table_name,
-      r.code,
-      r.sql_type
-    );
-  end loop;
-
-  execute format(
-    'create index if not exists %I on %I.%I(recorded_at desc)',
-    'idx_' || v_tbm_code || '_time',
-    v_table_schema,
-    v_table_name
-  );
-
-  execute format(
-    'create index if not exists %I on %I.%I(tunnel_id, recorded_at desc)',
-    'idx_' || v_tbm_code || '_tunnel_time',
-    v_table_schema,
-    v_table_name
-  );
-
-  if exists (
-    select 1
-    from information_schema.columns
-    where table_schema = v_table_schema
-      and table_name = v_table_name
-      and column_name = 's100100008'
-  ) then
-    execute format(
-      'create index if not exists %I on %I.%I(tunnel_id, s100100008)',
-      'idx_' || v_tbm_code || '_tunnel_ring',
-      v_table_schema,
-      v_table_name
-    );
-  end if;
-
-  execute format(
-    'grant insert, select on %I.%I to tbm_writer',
-    v_table_schema,
-    v_table_name
-  );
-
-  return v_table_schema || '.' || v_table_name;
-end;
-$$;
-
-create role tbm_writer;
-
-create role tbm_writer with login password 'Luo112781@';
-
-grant usage on schema eqp to tbm_writer;
-
-
-
-create or replace function eqp.sync_tbm_realdata_table(p_tbm_id uuid)
-returns text
-language plpgsql
-security definer
-set search_path = eqp, public
-as $$
-declare
-  v_table_schema text := 'eqp';
-  v_table_name text;
-  v_table_regclass regclass;
-  v_tbm_code text;
-  r record;
-begin
-  if p_tbm_id is null then
-    raise exception 'p_tbm_id cannot be null';
-  end if;
-
-  select lower(code)
-  into v_tbm_code
-  from eqp.tbms
-  where id = p_tbm_id;
-
-  if v_tbm_code is null then
-    raise exception 'TBM not found: %', p_tbm_id;
-  end if;
-
-  v_tbm_code := regexp_replace(v_tbm_code, '[^a-z0-9_]', '_', 'g');
-  v_table_name := 'shield_realdata_' || v_tbm_code;
-
-  v_table_regclass := to_regclass(format('%I.%I', v_table_schema, v_table_name));
-
-  if v_table_regclass is null then
-    execute format(
-      $sql$
-      create table %I.%I (
         id bigint generated always as identity primary key,
         recorded_at timestamptz not null,
-        tbm_id uuid not null,
-        tunnel_id uuid
+        tbm_id uuid not null
       )
       $sql$,
       v_table_schema,
@@ -275,11 +156,6 @@ begin
       v_table_name
     );
 
-    execute format(
-      'alter table %I.%I add column if not exists tunnel_id uuid',
-      v_table_schema,
-      v_table_name
-    );
   end if;
 
   for r in
@@ -322,13 +198,6 @@ begin
     v_table_name
   );
 
-  execute format(
-    'create index if not exists %I on %I.%I(tunnel_id, recorded_at desc)',
-    'idx_' || v_tbm_code || '_tunnel_time',
-    v_table_schema,
-    v_table_name
-  );
-
   if exists (
     select 1
     from information_schema.columns
@@ -337,8 +206,8 @@ begin
       and column_name = 's100100008'
   ) then
     execute format(
-      'create index if not exists %I on %I.%I(tunnel_id, s100100008)',
-      'idx_' || v_tbm_code || '_tunnel_ring',
+      'create index if not exists %I on %I.%I(tbm_id, s100100008)',
+      'idx_' || v_tbm_code || '_tbm_ring',
       v_table_schema,
       v_table_name
     );
@@ -358,7 +227,6 @@ begin
   return v_table_schema || '.' || v_table_name;
 end;
 $$;
-
 
 drop view eqp.v_tbm_bound_parameters cascade;
 

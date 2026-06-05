@@ -1,39 +1,27 @@
 import { createClient } from "@/lib/infra/supabase/server";
 
-import { PageData } from "@/lib/shared/contracts";
+import { appErrors, PaginatedResult } from "@/lib/shared/contracts";
 import { applyPagination, assertNoError } from "@/lib/infra/repositories/base.repository";
 
 import { tunnelQuery, TunnelQueryType } from "../queries";
+import { Tunnel, TunnelDetail, TunnelListItem, TunnelListRow } from "../types";
+
 import {
-  TunnelInsertRow,
-  TunnelListRow,
-  TunnelRow,
-  TunnelScheduleVersionInsertRow,
-  TunnelScheduleVersionRow,
-  TunnelStatusTimelineInsertRow,
-  TunnelStatusTimelineRow,
-  TunnelUpdateRow,
-  TunnelWorkspaceDetailRow,
-} from "../types";
-// import { Tunnel } from "../../organization/types";
-
-// export async function findEmployeeDetailById(id: string): Promise<EmployeeDetailRow> {
-//   const supabase = await createClient();
-
-//   const { data, error } = await supabase
-//     .schema("hr")
-//     .from("v_employee_full")
-//     .select("*")
-//     .eq("id", id)
-//     .single();
-
-//   assertNoError(error);
-//   if (!data) {
-//     throw new Error("Employee not found");
-//   }
-
-//   return data as EmployeeDetailRow;
-// }
+  mapTunnel,
+  mapTunnelInsert,
+  mapTunnelUpdate,
+  mapTunnelListItem,
+  mapTunnelWorkspaceScope,
+  mapTunnelDetail,
+} from "../mappers";
+import { CreateTunnelInput, UpdateTunnelInput } from "../schemas";
+import { TunnelWorkspaceScope } from "@/providers/workspace/TunnelWorkspaceProvider";
+import {
+  insertTunnelScheduleVersion,
+  insertTunnelStatusTimeline,
+  updateTunnelScheduleVersion,
+  updateTunnelStatusTimeline,
+} from "./assignment.repository";
 
 export async function getAllTunnelList(): Promise<TunnelListRow[]> {
   const supabase = await createClient();
@@ -57,7 +45,7 @@ async function softDeleteManyTunnel(ids: string[]) {
   return data ?? 0;
 }
 
-async function paginate(query: TunnelQueryType): Promise<PageData<TunnelListRow>> {
+async function paginate(query: TunnelQueryType): Promise<PaginatedResult<TunnelListItem>> {
   const supabase = await createClient();
 
   // console.log("org list query", query);
@@ -92,57 +80,70 @@ async function paginate(query: TunnelQueryType): Promise<PageData<TunnelListRow>
   assertNoError(error);
 
   return {
-    items: data as TunnelListRow[],
+    items: (data ?? []).map(mapTunnelListItem),
     total: count ?? 0,
+    page: query.page,
+    pageSize: query.pageSize,
   };
 }
 
 export const tunnelRepository = {
-  insert: async (input: TunnelInsertRow): Promise<TunnelRow | null> => {
+  insert: async (input: CreateTunnelInput): Promise<Tunnel> => {
     console.log("Inserting tunnel with input:", input);
+
+    const payload = mapTunnelInsert(input);
     const supabase = await createClient();
 
     const { data, error } = await supabase
       .schema("proj")
       .from("tunnels")
-      .insert(input)
+      .insert(payload)
       .select("*")
       .single();
 
     // console.log("Insert tunnel result:", { data, error });
     assertNoError(error);
 
-    return data;
+    if (!data) {
+      throw appErrors.internal("tunnelRepository.insert", "创建隧道失败");
+    }
+
+    return mapTunnel(data);
   },
-  update: async (id: string, input: TunnelUpdateRow): Promise<TunnelRow | null> => {
+  update: async (input: UpdateTunnelInput): Promise<Tunnel> => {
+    const payload = mapTunnelUpdate(input);
+
     const supabase = await createClient();
 
     const { data, error } = await supabase
       .schema("proj")
       .from("tunnels")
-      .update(input)
-      .eq("id", id)
+      .update(payload)
+      .eq("id", input.id)
       .select("*")
       .single();
 
     assertNoError(error);
 
-    return data;
+    if (!data) {
+      throw appErrors.internal("tunnelRepository.update", "更新隧道失败");
+    }
+
+    return mapTunnel(data);
   },
-  delete: async (id: string): Promise<TunnelRow | null> => {
+  deleteById: async (id: string): Promise<void> => {
     const supabase = await createClient();
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .schema("proj")
       .from("tunnels")
       .update({ deleted_at: new Date().toISOString() })
       .eq("id", id);
 
     assertNoError(error);
-    return data;
   },
 
-  findById: async (id: string): Promise<TunnelRow | null> => {
+  findById: async (id: string): Promise<Tunnel | null> => {
     const supabase = await createClient();
 
     const { data, error } = await supabase
@@ -154,50 +155,34 @@ export const tunnelRepository = {
 
     assertNoError(error);
 
-    return data;
+    return data ? mapTunnel(data) : null;
   },
+  getTunnelDetailById,
   getAllList: getAllTunnelList,
   paginate,
   softDeleteMany: softDeleteManyTunnel,
+  insertTunnelStatusTimeline,
+  updateTunnelStatusTimeline,
+  insertTunnelScheduleVersion,
+  updateTunnelScheduleVersion,
 };
 
-export async function insertTunnelStatusTimeline(
-  data: TunnelStatusTimelineInsertRow
-): Promise<TunnelStatusTimelineRow | null> {
+async function getTunnelDetailById(id: string): Promise<TunnelDetail | null> {
   const supabase = await createClient();
 
-  const { data: result, error } = await supabase
+  const { data, error } = await supabase
     .schema("proj")
-    .from("tunnel_status_timeline")
-    .insert(data)
+    .from("v_tunnel_detail")
     .select("*")
+    .eq("id", id)
     .single();
 
   assertNoError(error);
 
-  return result as TunnelStatusTimelineRow;
+  return data ? mapTunnelDetail(data) : null;
 }
 
-export const insertTunnelScheduleVersion = async (
-  data: TunnelScheduleVersionInsertRow
-): Promise<TunnelScheduleVersionRow | null> => {
-  const supabase = await createClient();
-
-  const { data: result, error } = await supabase
-    .schema("proj")
-    .from("tunnel_schedule_versions")
-    .insert(data)
-    .select("*")
-    .single();
-
-  assertNoError(error);
-
-  return result;
-};
-
-export async function getTunnelWorkspaceDetail(
-  id: string
-): Promise<TunnelWorkspaceDetailRow | null> {
+export async function getTunnelWorkspaceDetail(id: string): Promise<TunnelWorkspaceScope | null> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -209,5 +194,21 @@ export async function getTunnelWorkspaceDetail(
 
   assertNoError(error);
 
-  return data;
+  return data ? mapTunnelWorkspaceScope(data) : null;
+}
+
+export async function searchTunnelWorkspaceScopesByOrganizations(
+  organizationIds: string[]
+): Promise<TunnelWorkspaceScope[]> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .schema("proj")
+    .from("v_tunnel_workspace_detail")
+    .select("*")
+    .in("organization_id", organizationIds);
+
+  assertNoError(error);
+
+  return (data ?? []).map(mapTunnelWorkspaceScope);
 }

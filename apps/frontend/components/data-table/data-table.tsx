@@ -144,7 +144,7 @@ export function DataTable<TData, TValue>({
                   <TableHead
                     key={header.id}
                     colSpan={header.colSpan}
-                    className="text-center text-background/70 font-medium"
+                    className="text-center  font-medium"
                   >
                     {header.isPlaceholder
                       ? null

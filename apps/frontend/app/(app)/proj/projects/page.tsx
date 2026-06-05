@@ -29,18 +29,15 @@ export default async function Page({
 
   // console.log("employees page  params", params);
 
-  const result = await listProjects(params);
+  let result;
 
-  if (!result.success) {
-    return <ErrorBlock message={result.message} />;
+  try {
+    result = await listProjects(params);
+  } catch (error: unknown) {
+    return <ErrorBlock message={(error as Error)?.message ?? "查询失败"} />;
   }
 
-  // console.log("projects listProjects", result);
-  // console.log("projects treeProjects", nodes);
-  if (!result.data) {
-    return <ErrorBlock message="未查询到数据" />;
-  }
-  const { items, total, page, pageSize } = result.data;
+  const { items, total, page, pageSize } = result;
   const { sortBy, sortDirection } = params;
 
   return (

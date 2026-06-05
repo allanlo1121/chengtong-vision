@@ -13,7 +13,7 @@ import { ImportConfig } from "../types";
 import { TableEntity } from "@/lib/core/database/types/entity.types";
 import { ProjectInsertInputSchema } from "@/lib/domain/project/schemas";
 import { projectLookup, projectMapper, projectWriter } from "@/lib/domain/project/import";
-import { TbmSchema } from "@/lib/domain/tbm/schemas/schema";
+import { TbmFormSchema } from "@/lib/domain/tbm/schemas/schema";
 
 type ImportRegistry = {
   [K in TableEntity]: ImportConfig<K>;
@@ -69,7 +69,7 @@ export const importRegistry: ImportRegistry = {
     },
   },
   tbms: {
-    schema: TbmSchema,
+    schema: TbmFormSchema,
     mapper: tbmMapper,
     lookups: tbmLookup,
     requiredLookups: ["tbmType", "manufacturer"],

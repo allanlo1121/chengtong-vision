@@ -12,7 +12,7 @@ export type TbmBoundParametersRow = Database["eqp"]["Views"]["v_tbm_bound_parame
 // export type TbmParameterBindingPickerRow = Database["eqp"]["Views"]["v_tbm_parameter_bindings_picker"]["Row"];
 
 export type TbmParameterBinding = {
-  id: string;
+  id: number;
   tbmId: string;
   parameterId: number;
   customName: string | null;

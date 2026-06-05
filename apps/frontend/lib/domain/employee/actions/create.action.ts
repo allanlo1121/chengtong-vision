@@ -1,51 +1,37 @@
 "use server";
 
 import { z } from "zod";
-import { createEmloyee } from "../services";
-import { CreateEmployeeInput, CreateEmployeeSchema } from "../schemas";
-import { ActionState } from "@/modules/shared/types/action-state";
+import { createEmployeeWithAssignment } from "../services";
+import { CreateEmployeeWithAssignmentSchema, CreateEmployeeWithAssignmentInput } from "../schemas";
+import { ActionResult, toActionError } from "@/lib/shared/contracts";
 
-export type EmployeeFormState = ActionState<{
-  name?: string[];
-  code?: string[];
-  fullName?: string[];
-  parentId?: string[];
-  description?: string[];
-  orgTypeId?: string[];
-  businessId?: string[];
-  regionId?: string[];
-  countryCode?: string[];
-  provinceCode?: string[];
-  cityCode?: string[];
-  districtCode?: string[];
-  address?: string[];
-  latitude?: string[];
-  longitude?: string[];
-  isActive?: string[];
-}>;
+import { Employee } from "../types";
 
-export async function createEmployeeAction(data: CreateEmployeeInput) {
+export async function createEmployeeAction(
+  data: CreateEmployeeWithAssignmentInput
+): Promise<ActionResult<Employee>> {
   console.log("SERVER ACTION RUNNING");
   console.log("create employee formData", data);
 
-  const parsed = CreateEmployeeSchema.safeParse(data);
+  const parsed = CreateEmployeeWithAssignmentSchema.safeParse(data);
 
   if (!parsed.success) {
     return {
       success: false,
+      message: "表单验证失败",
       errors: z.flattenError(parsed.error).fieldErrors,
     };
   }
-  const result = await createEmployee(parsed.data);
 
-  if (!result.success) {
+  try {
+    const result = await createEmployeeWithAssignment(parsed.data);
+
     return {
-      success: false,
-      errors: {
-        form: [result.message || "创建失败"],
-      },
+      success: true,
+      data: result,
+      message: "创建成功",
     };
+  } catch (error) {
+    return toActionError(error);
   }
-
-  return result;
 }

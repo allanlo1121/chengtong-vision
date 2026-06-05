@@ -5,7 +5,7 @@ import { z } from "zod";
 /**
  * Tbm字段规则
  */
-export const TbmSchema = z.object({
+export const TbmFormSchema = z.object({
   code: z.string().max(20, { message: "TBM编号最多20个字符" }).meta({
     table: "tbms",
     label: "TBM编号",
@@ -146,7 +146,7 @@ export const TbmSchema = z.object({
     colSpan: 1,
   }),
 
-  sortOrder: z.number().default(0).meta({
+  sortOrder: z.coerce.number().default(0).meta({
     table: "tbms",
     label: "排序",
     field: "sort_order",
@@ -205,13 +205,13 @@ export const TbmSchema = z.object({
   }),
 });
 
-export const CreateTbmSchema = TbmSchema;
+export const CreateTbmSchema = TbmFormSchema;
 
 export type CreateTbmInput = z.infer<typeof CreateTbmSchema>;
 
-export type TbmFields = keyof z.infer<typeof TbmSchema>;
+export type TbmFields = keyof z.infer<typeof TbmFormSchema>;
 
-export const UpdateTbmSchema = TbmSchema.extend({
+export const UpdateTbmSchema = TbmFormSchema.extend({
   id: idSchema,
 });
 

@@ -2,15 +2,15 @@
 "use client";
 
 import * as React from "react";
-import { TunnelDailyProgressItem } from "@/lib/domain/tbm-runtime/types";
+import { TbmDailyProgressListItem } from "@/lib/domain/tbm-runtime/types";
 import { DataTable } from "@/components/data-table/data-table";
 import { getTunnelDailyProgressColumns, EditableProgressDraft } from "./get-columns";
 
-import { updateTunnelDailyProgressAction } from "@/lib/domain/tbm-runtime/actions";
+import { updateTbmDailyProgressAction } from "@/lib/domain/tbm-runtime/actions";
 import { useRouter } from "next/navigation";
 
 interface TunnelDailyProgressTableProps {
-  data: TunnelDailyProgressItem[];
+  data: TbmDailyProgressListItem[];
 }
 
 export function TunnelDailyProgressTable({ data }: TunnelDailyProgressTableProps) {
@@ -59,9 +59,8 @@ export function TunnelDailyProgressTable({ data }: TunnelDailyProgressTableProps
 
           if (!draft) return;
 
-          await updateTunnelDailyProgressAction({
+          await updateTbmDailyProgressAction({
             id: row.id,
-            tunnelId: row.tunnelId,
             tbmId: row.tbmId,
             workDate: row.workDate,
             ringEnd: draft.ringEnd,

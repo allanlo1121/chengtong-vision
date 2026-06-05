@@ -9,19 +9,17 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { useCrudMutation } from "@/lib/ui/crud/hooks/useCrudMutation";
 import { deleteTunnelAction } from "../actions";
-import { Tunnel, TunnelListItem } from "../types";
+import { TunnelListItem } from "../types";
 import { routes } from "@/lib/core/router/router";
+import { toast } from "sonner";
+import { useState } from "react";
+import { TunnelScheduleDrawer } from "./TunnelScheduleDrawer";
+import { TunnelStatusTimelineDrawer } from "./TunnelStatusTimelineDrawer";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -33,49 +31,104 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<Tun
   const tunnel = row.original as unknown as TunnelListItem;
   const router = useRouter();
 
-  const deleteMutation = useCrudMutation<string, Tunnel>({
-    action: deleteTunnelAction,
-    successMessage: "删除成功",
-    onSuccess: () => router.refresh(),
-  });
+  const [statusTimelineOpen, setStatusTimelineOpen] = useState(false);
+  const [scheduleOpen, setScheduleOpen] = useState(false);
 
-  const handleDelete = () => {
+  async function handleDelete() {
     if (!confirm("确认删除该隧道吗？")) return;
 
-    console.log("deleteMutation", deleteMutation);
-    deleteMutation.mutate(tunnel.id);
-  };
+    try {
+      const result = await deleteTunnelAction(tunnel.id!);
+
+      if (!result.success) {
+        toast.error(result.message ?? "删除失败");
+        return;
+      }
+
+      toast.success(result.message ?? "删除成功");
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+      toast.error("删除失败");
+    }
+  }
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="size-8 data-[state=open]:bg-muted">
-          <MoreHorizontal />
-          <span className="sr-only">打开操作菜单</span>
-        </Button>
-      </DropdownMenuTrigger>
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon" className="size-8 data-[state=open]:bg-muted">
+            <MoreHorizontal />
+            <span className="sr-only">打开操作菜单</span>
+          </Button>
+        </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="w-[180px]">
-        <DropdownMenuItem onClick={() => router.push(routes.tunnels.edit(tunnel.id))}>
-          编辑隧道
-        </DropdownMenuItem>
+        <DropdownMenuContent align="end" className="w-[180px]">
+          <DropdownMenuItem onClick={() => router.push(routes.tunnels.edit(tunnel.id!))}>
+            编辑隧道
+          </DropdownMenuItem>
 
-        <DropdownMenuSeparator />
+          <DropdownMenuSeparator />
 
-        {/* ===== 所属片区切换 ===== */}
+          <DropdownMenuItem
+            onSelect={(e) => {
+              e.preventDefault();
+              setStatusTimelineOpen(true);
+            }}
+          >
+            修改施工状态
+          </DropdownMenuItem>
 
-        <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onSelect={(e) => {
+              e.preventDefault();
+              setScheduleOpen(true);
+            }}
+          >
+            调整计划日期
+          </DropdownMenuItem>
 
-        <DropdownMenuItem
-          variant="destructive"
-          onSelect={(e) => {
-            e.preventDefault();
-            handleDelete();
-          }}
-        >
-          删除隧道
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          <DropdownMenuSeparator />
+
+          {/* ===== 所属片区切换 ===== */}
+
+          <DropdownMenuSeparator />
+
+          <DropdownMenuItem
+            variant="destructive"
+            onSelect={(e) => {
+              e.preventDefault();
+              handleDelete();
+            }}
+          >
+            删除隧道
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <TunnelStatusTimelineDrawer
+        open={statusTimelineOpen}
+        onOpenChange={setStatusTimelineOpen}
+        tunnelId={tunnel.id!}
+        tunnelName={tunnel.name!}
+        initialValue={{
+          tunnelStatusId: tunnel.tunnelStatusId,
+          validFrom: tunnel.validFrom,
+          validTo: tunnel.validTo,
+          changeType: "manual",
+        }}
+      />
+
+      <TunnelScheduleDrawer
+        open={scheduleOpen}
+        onOpenChange={setScheduleOpen}
+        tunnelId={tunnel.id!}
+        tunnelName={tunnel.name!}
+        initialValue={{
+          scheduleStartDate: tunnel.scheduleStartDate,
+          scheduleEndDate: tunnel.scheduleEndDate,
+          versionNo: tunnel.versionNo,
+        }}
+      />
+    </>
   );
 }

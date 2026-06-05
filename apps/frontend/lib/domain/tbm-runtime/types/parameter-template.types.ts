@@ -23,23 +23,6 @@ export type TbmParameterTemplate = {
   remark: string | null;
 };
 
-// export type TbmParameterTemplateListRow = {
-//     id: number;
-//     name: string;
-//     code: string;
-//     tbm_type_id: string;
-//     is_default: boolean;
-//     sort_order: number;
-//     diameter: number | null;
-//     remark: string | null;
-//     tbm_type: {
-//         id: string;
-//         name: string;
-//         code: string;
-//     }
-
-// }
-
 export type TbmParameterTemplateListItem = {
   id: number;
   name: string;

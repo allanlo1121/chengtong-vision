@@ -1,6 +1,6 @@
 "use server";
 
-import { ActionResult } from "@/lib/shared/contracts/action-result";
+import { ActionResult, toActionError } from "@/lib/shared/contracts/action-result";
 import { replaceTbmBindingParameters } from "../services";
 
 export async function replaceTbmParametersAction(input: {
@@ -9,25 +9,16 @@ export async function replaceTbmParametersAction(input: {
 }): Promise<ActionResult<{ count: number }>> {
   console.log("===replaceTbmParametersAction===", input);
 
-  const result = await replaceTbmBindingParameters(input);
+  try {
+    const result = await replaceTbmBindingParameters(input);
 
-  if (!result.success) {
     return {
-      ...result,
-      errors: {
-        ...result.errors,
-        form: result.errors?.form ?? [result.message || "创建失败"],
-      },
-      errorLevel: "error",
+      success: true,
+      data: result,
+      message: "替换参数成功",
     };
+  } catch (error) {
+    console.error("Error replacing TBM parameters:", error);
+    return toActionError(error);
   }
-
-  return {
-    ...result,
-    nextAction: {
-      type: "redirect",
-      label: "返回参数模板列表",
-      href: "/system/tbm/parameter-templates",
-    },
-  };
 }

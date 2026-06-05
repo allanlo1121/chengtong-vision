@@ -1,10 +1,14 @@
-import { RemoveNull } from "@/lib/utils/remove-nullable";
 import { Database } from "@/lib/core/database/types";
 import { Camelize } from "@/lib/shared/utils/case-converter";
 
-export type ProjectDetailRow = Database["proj"]["Views"]["v_project_detail"]["Row"];
-
 export type TunnelListRow = Database["proj"]["Views"]["v_tunnel_list"]["Row"];
+
+export type TunnelListItem = Camelize<TunnelListRow>;
+
+export type TunnelDetailRow = Database["proj"]["Views"]["v_tunnel_detail"]["Row"];
+
+export type TunnelDetail = Camelize<TunnelDetailRow>;
+
 export type TunnelPickerRow = Database["proj"]["Views"]["v_tunnel_picker"]["Row"];
 export type TunnelWorkspaceDetailRow =
   Database["proj"]["Views"]["v_tunnel_workspace_detail"]["Row"];

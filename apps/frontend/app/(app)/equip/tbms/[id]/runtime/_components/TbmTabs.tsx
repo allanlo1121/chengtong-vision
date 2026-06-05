@@ -9,12 +9,10 @@ export function TbmTabs({
   tbm,
   mqttTab,
   parameterTab,
-  assignmentTab,
 }: {
   tbm: Tbm;
   mqttTab: React.ReactNode;
   parameterTab: React.ReactNode;
-  assignmentTab: React.ReactNode;
 }) {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -35,7 +33,7 @@ export function TbmTabs({
         <TabsTrigger value="overview">总览</TabsTrigger>
         <TabsTrigger value="mqtt">MQTT</TabsTrigger>
         <TabsTrigger value="parameter">参数</TabsTrigger>
-        <TabsTrigger value="assignment">任务分配</TabsTrigger>
+
         <TabsTrigger value="settings">设置</TabsTrigger>
       </TabsList>
 
@@ -44,7 +42,6 @@ export function TbmTabs({
       <TabsContent value="mqtt">{mqttTab}</TabsContent>
 
       <TabsContent value="parameter">{parameterTab}</TabsContent>
-      <TabsContent value="assignment">{assignmentTab}</TabsContent>
     </Tabs>
   );
 }

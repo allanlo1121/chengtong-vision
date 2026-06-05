@@ -29,20 +29,19 @@ export default async function Page({
 
   // console.log("employees page  params", params);
 
-  const result = await listTbms(params);
-  const tbmTypesResult = await getTbmTypeOptions();
-  const tbmManufacturersResult = await getTbmManufacturerOptions();
+  let result;
+  let tbmTypesResult;
+  let tbmManufacturersResult;
 
-  if (!result.success) {
-    return <ErrorBlock message={result.message} />;
+  try {
+    result = await listTbms(params);
+    tbmTypesResult = await getTbmTypeOptions();
+    tbmManufacturersResult = await getTbmManufacturerOptions();
+  } catch (error) {
+    console.error("Error fetching tbms:", error);
+    return <ErrorBlock message={error instanceof Error ? error.message : "查询失败"} />;
   }
-
-  // console.log("tbms listTbms", result);
-  // console.log("tbms treeTbms", nodes);
-  if (!result.data) {
-    return <ErrorBlock message="未查询到数据" />;
-  }
-  const { items, total, page, pageSize } = result.data;
+  const { items, total, page, pageSize } = result;
   const { sortBy, sortDirection } = params;
 
   return (

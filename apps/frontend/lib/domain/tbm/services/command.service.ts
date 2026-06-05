@@ -1,38 +1,39 @@
-import { mapTbm, mapTbmRowFromTbmFormInput } from "../mappers";
 import { tbmRepository } from "../repositories";
 import { CreateTbmInput, UpdateTbmInput } from "../schemas";
-import { Tbm, TbmInsertRow } from "../types";
+import { Tbm } from "../types";
 import { appErrors } from "@/lib/shared/contracts/error-codes";
 
 export async function createTbm(input: CreateTbmInput): Promise<Tbm> {
   console.log("Creating TBM with input", input);
 
-  const insertTTbmData: TbmInsertRow = mapTbmRowFromTbmFormInput(input);
-  const result = await tbmRepository.insert(insertTTbmData);
-  if (!result) {
-    throw appErrors.internal("创建组织失败：数据库未返回数据");
+  const exits = await tbmRepository.findByCode(input.code);
+
+  if (exits) {
+    throw appErrors.conflict("TBM编码已存在");
   }
-  return mapTbm(result);
+  return await tbmRepository.insert(input);
 }
 
-export async function updateTbm(id: string, input: UpdateTbmInput): Promise<Tbm> {
-  console.log("Updating TBM with id and input", { id, input });
+export async function updateTbm(input: UpdateTbmInput): Promise<Tbm> {
+  console.log("Updating TBM with id and input", { input });
 
-  const updateTbmData: TbmInsertRow = mapTbmRowFromTbmFormInput(input);
-  const result = await tbmRepository.update(id, updateTbmData);
-  if (!result) {
-    throw appErrors.internal("更新TBM失败：数据库未返回数据");
+  const exits = await tbmRepository.findById(input.id);
+
+  if (!exits) {
+    throw appErrors.notFound("TBM不存在，无法更新");
   }
-  return mapTbm(result);
+
+  return await tbmRepository.update(input);
 }
 
-export async function deleteTbm(id: string): Promise<number> {
+export async function deleteTbm(id: string): Promise<void> {
   console.log("Deleting TBM with id", id);
 
-  const result = await tbmRepository.softDelete(id);
-  if (!result) {
-    throw appErrors.notFound("TBM not found or already deleted");
+  const exits = await tbmRepository.findById(id);
+
+  if (!exits) {
+    throw appErrors.notFound("TBM不存在，无法删除");
   }
 
-  return result;
+  await tbmRepository.deleteById(id);
 }

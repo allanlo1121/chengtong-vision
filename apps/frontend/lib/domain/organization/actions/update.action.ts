@@ -3,8 +3,8 @@
 import { z } from "zod";
 import { OrganizationFields, UpdateOrganizationInput, UpdateOrganizationSchema } from "../schemas";
 import { ActionState } from "@/lib/shared/actions/types";
-import { ActionResult } from "@/lib/shared/contracts/action-result";
-import { updateOrganization } from "../services/update.service";
+import { ActionResult, toActionError } from "@/lib/shared/contracts/action-result";
+import { updateOrganization } from "../services";
 
 export type OrganizationFormState = ActionState<OrganizationFields>;
 
@@ -19,20 +19,20 @@ export async function updateOrganizationAction(
   if (!parsed.success) {
     return {
       success: false,
+      message: "表单验证失败",
       errors: z.flattenError(parsed.error).fieldErrors,
     };
   }
-  const { id } = parsed.data;
-  const result = await updateOrganization(id, parsed.data);
 
-  if (!result.success) {
+  try {
+    const result = await updateOrganization(parsed.data);
+
     return {
-      success: false,
-      errors: {
-        form: [result.message || "更新失败"],
-      },
+      success: true,
+      data: result,
+      message: "更新成功",
     };
+  } catch (error: unknown) {
+    return toActionError(error);
   }
-
-  return result;
 }

@@ -1,18 +1,13 @@
 import { resolveRingEfficiencyToolQuery } from "./_components/tool-query";
-import { fetchTunnelWorkTimeline } from "@/lib/domain/tbm-runtime/services";
+import { fetchTbmWorkTimeline } from "@/lib/domain/tbm-runtime/services";
 
 import TimelineVis from "@/components/domain/tbm-runtime/timeline/TimelineVis";
 import { RingEfficiencyToolbar } from "./_components/RingEfficiencyToolbar";
 import { PhaseEfficiencyPieChart } from "@/components/domain/tbm-runtime/charts/PhaseEfficiencyPieChart";
 import TbmStatsCards from "./_components/TbmStatsCardGroup";
 
-function getStringParam(value: string | string[] | undefined): string | undefined {
-  if (Array.isArray(value)) {
-    return value[0];
-  }
-
-  return value;
-}
+import { fetchTbmAssignmentByTunnelId } from "@/lib/domain/tbm-assignment/services/query.service";
+import { ErrorBlock } from "@/components/common/error-block";
 
 export default async function RingEfficiencyPage({
   params,
@@ -30,9 +25,16 @@ export default async function RingEfficiencyPage({
   if (!tunnelId) {
     throw new Error("Missing tunnel id");
   }
+  let tbmAssignment;
+  try {
+    tbmAssignment = await fetchTbmAssignmentByTunnelId(tunnelId);
+  } catch (error: unknown) {
+    console.error("Failed to fetch TBM assignment for tunnel", { tunnelId, error: error });
+    return <ErrorBlock message={error instanceof Error ? error.message : "匹配Tbm失败"} />;
+  }
 
-  const { phases, rings, durations } = await fetchTunnelWorkTimeline({
-    tunnelId,
+  const { phases, rings, durations } = await fetchTbmWorkTimeline({
+    tbmId: tbmAssignment.tbmId,
     startAt: query.startAt,
     endAt: query.endAt,
   });

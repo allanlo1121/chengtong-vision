@@ -107,3 +107,34 @@ join eqp.tbm_runtime_parameters p
   on p.id = b.parameter_id
 join eqp.tbm_subsystems s
   on s.id = p.subsystem_id;
+
+
+create view eqp.v_tbm_assignment_list as
+select
+    a.id,
+
+    a.tbm_id,
+    tbm.name as tbm_name,
+    tbm.code as tbm_code,
+
+    a.tunnel_id,
+    t.name as tunnel_name,
+
+    p.id as project_id,
+    p.name as project_name,    
+
+    a.start_date,
+    a.end_date,
+
+    a.remark
+
+from eqp.tbm_assignments a
+
+join eqp.tbms tbm
+    on tbm.id = a.tbm_id
+
+join proj.tunnels t
+    on t.id = a.tunnel_id
+
+left join proj.projects p
+    on p.id = t.project_id;

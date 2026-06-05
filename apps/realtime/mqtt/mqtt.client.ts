@@ -70,7 +70,6 @@ client.on("message", async (topic, payload) => {
         await markConnectionOnline({
           type: "realdata",
           tbmId: context.tbmId,
-          tunnelId: context.tunnelId,
           seenAt: recordedAt,
         });
 
@@ -79,7 +78,6 @@ client.on("message", async (topic, payload) => {
         await processRuntimeRingIfNeeded({
           data,
           tbmId: context.tbmId,
-          tunnelId: context.tunnelId ?? "",
         });
 
         //     await processRuntimeRingIfNeeded({
@@ -95,7 +93,6 @@ client.on("message", async (topic, payload) => {
         await markConnectionOnline({
           type: "heartbeat",
           tbmId: context.tbmId,
-          tunnelId: context.tunnelId,
           seenAt: recordedAt,
         });
 

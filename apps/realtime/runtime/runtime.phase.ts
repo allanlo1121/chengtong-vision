@@ -7,7 +7,6 @@ export async function processRuntimePhaseIfNeeded(data: TbmRuntimeData) {
 
   if (!context?.tbmId) return;
 
-  const tunnelId = context.tunnelId;
   const tbmId = context.tbmId;
 
   const recordedAt = new Date(data.recordedAt).toISOString();
@@ -27,7 +26,6 @@ export async function processRuntimePhaseIfNeeded(data: TbmRuntimeData) {
 
   await handleTbmPhase({
     tbmId,
-    tunnelId,
     ringNo,
     phaseType: "advance",
     isActive: isAdvance,
@@ -36,7 +34,6 @@ export async function processRuntimePhaseIfNeeded(data: TbmRuntimeData) {
 
   await handleTbmPhase({
     tbmId,
-    tunnelId,
     ringNo,
     phaseType: "assembly",
     isActive: isAssembly,
@@ -45,7 +42,6 @@ export async function processRuntimePhaseIfNeeded(data: TbmRuntimeData) {
 
   await handleTbmPhase({
     tbmId,
-    tunnelId,
     ringNo,
     phaseType: "stop",
     isActive: isStop,
@@ -66,7 +62,6 @@ type PhaseType = "advance" | "assembly" | "stop" | "fault";
 
 interface HandlePhaseInput {
   tbmId: string;
-  tunnelId?: string | null;
   ringNo: number;
   phaseType: PhaseType;
   isActive: boolean;
@@ -74,12 +69,11 @@ interface HandlePhaseInput {
 }
 
 export async function handleTbmPhase(input: HandlePhaseInput) {
-  const { tbmId, tunnelId, ringNo, phaseType, isActive, recordedAt } = input;
+  const { tbmId, ringNo, phaseType, isActive, recordedAt } = input;
 
   if (isActive) {
     await openPhase({
       tbmId,
-      tunnelId,
       ringNo,
       phaseType,
       startAt: recordedAt,
@@ -95,7 +89,6 @@ export async function handleTbmPhase(input: HandlePhaseInput) {
 
 async function openPhase(input: {
   tbmId: string;
-  tunnelId?: string | null;
   ringNo: number;
   phaseType: PhaseType;
   startAt: string;
@@ -104,17 +97,16 @@ async function openPhase(input: {
     `
     insert into eqp.tbm_phase_active (
       tbm_id,
-      tunnel_id,      
       ring_no,
       phase_type,
       start_at,
       source
     )
-    values ($1, $2, $3, $4, $5, 'auto')
+    values ($1, $2, $3, $4, 'auto')
     on conflict (tbm_id, phase_type)
     do nothing
     `,
-    [input.tbmId, input.tunnelId ?? null, input.ringNo, input.phaseType, input.startAt]
+    [input.tbmId, input.ringNo, input.phaseType, input.startAt]
   );
 }
 
@@ -129,7 +121,6 @@ async function closePhase(input: { tbmId: string; phaseType: PhaseType; endAt: s
     )
     insert into eqp.tbm_phase_records (
       tbm_id,
-      tunnel_id,      
       ring_no,
       phase_type,
       start_at,
@@ -139,7 +130,6 @@ async function closePhase(input: { tbmId: string; phaseType: PhaseType; endAt: s
     )
     select
       tbm_id,
-      tunnel_id,      
       ring_no,
       phase_type,
       start_at,

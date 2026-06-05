@@ -7,6 +7,8 @@ import { Metadata } from "next";
 import { OrganizationListToolbar } from "@/lib/domain/organization/components/list-toolbar";
 import { Suspense } from "react";
 import { OrganizationTableClient } from "@/lib/domain/organization/pages/organization-table-client";
+import { OrganizationListItem } from "@/lib/domain/organization/types/domain.types";
+import { PaginatedResult } from "@/lib/shared/contracts/paginated-result";
 
 export const metadata: Metadata = {
   title: "组织管理",
@@ -25,28 +27,15 @@ export default async function Page({
     ...raw,
     sortBy: raw.sortBy ?? "sortOrder",
   };
+  let result: PaginatedResult<OrganizationListItem>;
 
-  // console.log("organizations page  params", params);
-
-  const result = await listOrganizations(params);
-  // const tree = await getTreeNodes(params.parentId);
-
-  // if (!tree.success) {
-  //   return <ErrorBlock message={tree.message} />;
-  // }
-
-  // const nodes = tree.data ?? [];
-
-  if (!result.success) {
-    return <ErrorBlock message={result.message} />;
+  try {
+    result = await listOrganizations(params);
+  } catch (error) {
+    return <ErrorBlock message={error instanceof Error ? error.message : "查询失败"} />;
   }
 
-  // console.log("organization listOrganizations", result);
-  // console.log("organization treeOrganizations", nodes);
-  if (!result.data) {
-    return <ErrorBlock message="未查询到数据" />;
-  }
-  const { items, total, page, pageSize } = result.data;
+  const { items, total, page, pageSize } = result;
   const { sortBy, sortDirection } = params;
 
   return (

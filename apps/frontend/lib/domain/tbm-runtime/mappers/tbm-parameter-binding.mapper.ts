@@ -1,40 +1,15 @@
+import { CreateTbmParameterBindingInput, UpdateTbmParameterBindingInput } from "../schemas";
 import {
-  CreateTbmParameterBindingFormInput,
-  CreateTbmParameterTemplateFormInput,
-  CreateTbmRuntimeParameterFormInput,
-} from "../schemas";
-import {
-  TbmParameterTemplateListRow,
-  TbmParameterTemplateListItem,
-  TbmParameterTemplateInsertRow,
-  ParameterTemplateNodeRow,
   TbmParameterBinding,
   TbmParameterBindingRow,
   TbmParameterBindingInsertRow,
   TbmBoundParametersRow,
   ParameterGroup,
+  TbmParameterBindingUpdateRow,
 } from "../types";
 
-// export function mapParameterTemplateRowToParameterTemplatetem(row: TbmParameterTemplateRow): TbmParameterTemplate {
-//     if (!row.id) throw new Error("Row id is missing");
-
-//     if (!row.name) throw new Error("Row name is missing");
-
-//     if (!row.code) throw new Error("Row code is missing");
-//     return {
-//         id: row.id,
-//         name: row.name,
-//         code: row.code,
-//
-//         isDisabled: row.is_disabled ?? false,
-//         sortOrder: row.sort_order ?? 0,
-//         diameter: row.diameter ?? null,
-
-//     }
-// }
-
-export function mapParameterBindingInputToInsertRow(
-  input: CreateTbmParameterBindingFormInput
+export function mapTbmParameterBindingInsertRow(
+  input: CreateTbmParameterBindingInput
 ): TbmParameterBindingInsertRow {
   return {
     tbm_id: input.tbmId,
@@ -45,9 +20,20 @@ export function mapParameterBindingInputToInsertRow(
   };
 }
 
-export function mapParameterBindingRowToParameterBinding(
-  row: TbmParameterBindingRow
-): TbmParameterBinding {
+export function mapTbmParameterBindingUpdateRow(
+  input: UpdateTbmParameterBindingInput
+): TbmParameterBindingUpdateRow {
+  return {
+    id: input.id,
+    tbm_id: input.tbmId,
+    parameter_id: input.parameterId,
+    custom_name: input.customName,
+    custom_unit: input.customUnit,
+    is_disabled: input.isDisabled,
+  };
+}
+
+export function mapTbmParameterBinding(row: TbmParameterBindingRow): TbmParameterBinding {
   if (!row.id) throw new Error("Row id is missing");
 
   if (!row.tbm_id) throw new Error("Row tbm_id is missing");
@@ -65,38 +51,6 @@ export function mapParameterBindingRowToParameterBinding(
     remark: row.remark,
   };
 }
-
-// export function mapTbmParameterBindingListItem(
-//     row: TbmParameterBindingRow
-// ): TbmParameterBinding {
-//     if (!row.id) throw new Error("Row id is missing");
-
-//     if (!row.tbm_id) throw new Error("Row tbm_id is missing");
-
-//     if (!row.parameter_id) throw new Error("Row parameter_id is missing");
-//     return {
-//         id: row.id,
-//         tbmId: row.tbm_id,
-//         tbmName: row.tbm_name ?? "",
-//         parameterId: row.parameter_id,
-//         parameterName: row.parameter_name ?? "",
-//         customName: row.custom_name,
-//         customUnit: row.custom_unit,
-//         isDisabled: row.is_disabled ?? false,
-//         remark: row.remark ?? null,
-
-//     };
-// }
-
-// export function mapParameterTemplateNodeRowToNode(row: ParameterTemplateNodeRow): ParameterTemplateNode {
-//     return {
-//         id: row.id,
-//         code: row.code,
-//         name: row.name,
-//         sortOrder: row.sort_order,
-//         parameterCount: row.parameter_count,
-//     };
-// }
 
 export function buildParameterGroups(rows: TbmBoundParametersRow[]): ParameterGroup[] {
   const map = new Map<string, ParameterGroup>();

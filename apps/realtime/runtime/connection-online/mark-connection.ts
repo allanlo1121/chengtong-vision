@@ -25,21 +25,19 @@ export async function markConnectionOnline(input: MarkOnlineInput) {
       `
       insert into eqp.tbm_connection_status (
         tbm_id,
-        tunnel_id,
         type,
         last_seen_at,
         is_online,
         updated_at
       )
-      values ($1, $2, $3, $4, true, now())
+      values ($1, $2, $3, true, now())
       on conflict (tbm_id, type)
       do update set
-        tunnel_id = excluded.tunnel_id,
         last_seen_at = excluded.last_seen_at,
         is_online = true,
         updated_at = now()
       `,
-      [input.tbmId, input.tunnelId ?? null, input.type, input.seenAt]
+      [input.tbmId, input.type, input.seenAt]
     );
 
     if (!existed || !wasOnline) {
@@ -58,15 +56,14 @@ export async function markConnectionOnline(input: MarkOnlineInput) {
         `
         insert into eqp.tbm_connection_status_history (
           tbm_id,
-          tunnel_id,
           type,
           status,
           start_at,
           source
         )
-        values ($1, $2, $3, 'online', $4, 'auto')
+        values ($1, $2, 'online', $3, 'auto')
         `,
-        [input.tbmId, input.tunnelId ?? null, input.type, input.seenAt]
+        [input.tbmId, input.type, input.seenAt]
       );
     }
 
@@ -87,7 +84,7 @@ export async function markConnectionOffline(input: MarkOfflineInput) {
 
     const currentResult = await client.query(
       `
-      select tunnel_id, is_online
+      select is_online
       from eqp.tbm_connection_status
       where tbm_id = $1
         and type = $2
@@ -130,15 +127,14 @@ export async function markConnectionOffline(input: MarkOfflineInput) {
       `
       insert into eqp.tbm_connection_status_history (
         tbm_id,
-        tunnel_id,
         type,
         status,
         start_at,
         source
       )
-      values ($1, $2, $3, 'offline', $4, 'auto')
+      values ($1, $2, 'offline', $3, 'auto')
       `,
-      [input.tbmId, current.tunnel_id ?? null, input.type, input.offlineAt]
+      [input.tbmId, input.type, input.offlineAt]
     );
 
     await client.query("commit");

@@ -23,6 +23,8 @@ import { TbmListItem } from "@/lib/domain/tbm/types";
 import { useCrudMutation } from "@/lib/ui/crud/hooks/useCrudMutation";
 import { deleteTbmAction } from "../actions";
 import { routes } from "@/lib/core/router/router";
+import { toast } from "sonner";
+import { assign } from "next/dist/shared/lib/router/utils/querystring";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -34,17 +36,23 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<Tbm
   const tbm = row.original as unknown as TbmListItem;
   const router = useRouter();
 
-  const deleteMutation = useCrudMutation<string, number>({
-    action: deleteTbmAction,
-    successMessage: "删除成功",
-    onSuccess: () => router.refresh(),
-  });
+  const handleDelete = async () => {
+    if (!confirm("确认删除该隧道吗？")) return;
 
-  const handleDelete = () => {
-    if (!confirm("确认删除该TBM吗？")) return;
+    try {
+      const result = await deleteTbmAction(tbm.id!);
 
-    console.log("deleteMutation", deleteMutation);
-    deleteMutation.mutate(tbm.id);
+      if (!result.success) {
+        toast.error(result.message ?? "删除失败");
+        return;
+      }
+
+      toast.success(result.message ?? "删除成功");
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+      toast.error("删除失败");
+    }
   };
 
   return (
@@ -57,13 +65,19 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<Tbm
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-[180px]">
-        <DropdownMenuItem onClick={() => router.push(routes.tbms.edit(tbm.id))}>
+        <DropdownMenuItem onClick={() => router.push(routes.tbms.edit(tbm.id!))}>
           编辑TBM
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem onClick={() => router.push(routes.tbms.runtime(tbm.id))}>
+        <DropdownMenuItem onClick={() => router.push(`/equip/tbms/${tbm.id}/assignment`)}>
+          TBM绑定
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator />
+
+        <DropdownMenuItem onClick={() => router.push(routes.tbms.runtime(tbm.id!))}>
           TBM配置
         </DropdownMenuItem>
 

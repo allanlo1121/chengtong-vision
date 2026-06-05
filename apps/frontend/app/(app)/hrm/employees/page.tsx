@@ -8,6 +8,8 @@ import { listEmployees } from "@/lib/domain/employee/services";
 
 import { EmployeeListToolbar } from "@/lib/domain/employee/components/employee-list-toolbar";
 import { EmployeeTableClient } from "@/lib/domain/employee/pages/employee-table-client";
+import { PaginatedResult } from "@/lib/shared/contracts";
+import { EmployeeListItem } from "@/lib/domain/employee/types/domain.types";
 
 export const metadata: Metadata = {
   title: "员工管理",
@@ -29,18 +31,15 @@ export default async function Page({
 
   // console.log("employees page  params", params);
 
-  const result = await listEmployees(params);
+  let result: PaginatedResult<EmployeeListItem>;
 
-  if (!result.success) {
-    return <ErrorBlock message={result.message} />;
-  }
-
-  // console.log("employees listEmployees", result);
-  // console.log("employees treeEmployees", nodes);
-  if (!result.data) {
+  try {
+    result = await listEmployees(params);
+  } catch (error) {
     return <ErrorBlock message="未查询到数据" />;
   }
-  const { items, total, page, pageSize } = result.data;
+
+  const { items, total, page, pageSize } = result;
   const { sortBy, sortDirection } = params;
 
   return (

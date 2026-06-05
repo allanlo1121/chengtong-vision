@@ -7,6 +7,7 @@ import {
 } from "@/lib/shared/schema";
 
 import { z } from "zod";
+import { is } from "zod/v4/locales/index.js";
 
 /**
  * Project字段规则
@@ -234,6 +235,22 @@ export const ProjectSchema = z.object({
     },
   }),
 
+  regionId: idSchema.meta({
+    table: "projects",
+    label: "所在区域",
+    field: "region_id",
+    searchable: true, // ⭐
+    sortable: true,
+    component: "cascader",
+    section: "地理信息",
+    type: "number",
+    disabled: false,
+    required: false,
+    readonly: false,
+    colSpan: 1,
+    optionSource: { source: "master", code: "REGION" },
+  }),
+
   cityCode: adminRegionCodeSchema.meta({
     label: "市",
     component: "select",
@@ -290,6 +307,14 @@ export const ProjectSchema = z.object({
     colSpan: 1,
   }),
 
+  isDisabled: z.boolean().default(false).meta({
+    table: "employees",
+    label: "是否禁用",
+    component: "switch",
+    section: "其他信息",
+    colSpan: 1,
+  }),
+
   sortOrder: z.coerce.number().default(0).meta({
     table: "employees",
     label: "排序",
@@ -318,30 +343,12 @@ export const ProjectSchema = z.object({
   }),
 });
 
-// export const employeeschema = z.object(OrganizationFields);
-
-// export const Createemployeeschema = employeeschema;
-
-// export const Updateemployeeschema = employeeschema.extend({
-//   id: idSchema,
-// });
-
 export const CreateProjectSchema = ProjectSchema;
 
-// export const UpdateEmployeeSchema = EmployeeSchema.extend({
-//   id: idSchema,
-// });
+export type CreateProjectInput = z.infer<typeof CreateProjectSchema>;
 
-// export type EmployeeInput = z.infer<typeof EmployeeSchema>;
+export const UpdateProjectSchema = ProjectSchema.extend({
+  id: idSchema,
+});
 
-// export type EmployeePostInput = z.infer<typeof EmployeePostSchema>;
-
-// export type EmployeeTitleInput = z.infer<typeof EmployeeTitleSchema>;
-
-// export type CreatePersonInput = z.infer<typeof Createemployeeschema>;
-
-// export const Updateemployeeschema = employeeschema.extend({
-//   id: idSchema,
-// });
-
-// export type UpdatePersonInput = z.infer<typeof Updateemployeeschema>;
+export type UpdateProjectInput = z.infer<typeof UpdateProjectSchema>;

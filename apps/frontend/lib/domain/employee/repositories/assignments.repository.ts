@@ -1,56 +1,71 @@
 import { createClient } from "@/lib/infra/supabase/server";
 
-import {
-  EmployeeAssignmentInsertRow,
-  EmployeeAssignmentRow,
-  EmployeeAssignmentUpdateRow,
-} from "../types";
+import { EmployeeAssignmentRow, EmployeeAssignmentUpdateRow, EmployeeAssignment } from "../types";
 
 import { assertNoError } from "@/lib/infra/repositories/base.repository";
-import { de } from "zod/v4/locales";
+
+import {
+  mapEmployeeAssignmentToInsert,
+  mapEmployeeAssignment,
+  mapEmployeeAssignmentToUpdate,
+} from "../mappers";
+import {
+  CreateEmployeeAssignmentInput,
+  UpdateEmployeeAssignmentInput,
+} from "../schemas/assignment.schema";
+import { appErrors } from "@/lib/shared/contracts/error-codes";
 
 export const employeeAssignmentsRepository = {
-  insert: async (input: EmployeeAssignmentInsertRow): Promise<EmployeeAssignmentRow> => {
+  insert: async (input: CreateEmployeeAssignmentInput): Promise<EmployeeAssignment> => {
+    const payload = mapEmployeeAssignmentToInsert(input);
     const supabase = await createClient();
 
     const { data, error } = await supabase
       .schema("hr")
       .from("employee_assignments")
-      .insert(input)
+      .insert(payload)
       .select("*")
       .single();
 
     assertNoError(error);
-
     if (!data) {
-      throw new Error(`Insert failed: no data returned for table "employee_assignments"`);
+      throw appErrors.internal("employeeAssignmentsRepository.insert", "创建员工分配失败");
     }
-
-    return data as EmployeeAssignmentRow;
+    return mapEmployeeAssignment(data);
   },
-  update: async (
-    id: string,
-    input: EmployeeAssignmentUpdateRow
-  ): Promise<EmployeeAssignmentRow> => {
+  update: async (input: UpdateEmployeeAssignmentInput): Promise<EmployeeAssignment> => {
+    const payload: EmployeeAssignmentUpdateRow = mapEmployeeAssignmentToUpdate(input);
     const supabase = await createClient();
 
     const { data, error } = await supabase
       .schema("hr")
       .from("employee_assignments")
-      .update(input)
-      .eq("id", id)
+      .update(payload)
+      .eq("id", input.id)
       .select("*")
       .single();
 
     assertNoError(error);
 
+    assertNoError(error);
     if (!data) {
-      throw new Error(`Update failed: no data returned for table "employee_assignments"`);
+      throw appErrors.internal("employeeAssignmentsRepository.update", "更新员工分配失败");
     }
 
-    return data as EmployeeAssignmentRow;
+    return mapEmployeeAssignment(data);
   },
-  getByEmployeeId: async (id: string): Promise<EmployeeAssignmentRow | null> => {
+  deleteById: async (id: string): Promise<void> => {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+      .schema("hr")
+      .from("employee_assignments")
+      .update({ deleted_at: new Date().toISOString() })
+      .eq("id", id);
+
+    assertNoError(error);
+  },
+  getByEmployeeId: async (id: string): Promise<EmployeeAssignment | null> => {
     const supabase = await createClient();
 
     const { data, error } = await supabase
@@ -64,7 +79,7 @@ export const employeeAssignmentsRepository = {
 
     console.log("Queried assignment for employee ID", id, ":", data);
 
-    return data as EmployeeAssignmentRow | null;
+    return data ? mapEmployeeAssignment(data) : null;
   },
   deactivateByEmployeeId: async (employeeId: string): Promise<void> => {
     const supabase = await createClient();

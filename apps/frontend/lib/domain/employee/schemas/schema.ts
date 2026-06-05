@@ -1,6 +1,7 @@
 import { idSchema } from "@/lib/shared/schema";
 
 import { z } from "zod";
+import { EmployeeAssignmentSchema } from "./assignment.schema";
 
 /**
  * Employee字段规则
@@ -203,3 +204,14 @@ export const UpdateEmployeeSchema = EmployeeSchema.extend({
 export type UpdateEmployeeInput = z.infer<typeof UpdateEmployeeSchema>;
 
 export type EmployeeFields = keyof z.infer<typeof EmployeeSchema>;
+
+export const CreateEmployeeWithAssignmentSchema = z.object({
+  ...EmployeeSchema.shape,
+  ...EmployeeAssignmentSchema.shape,
+});
+
+export type CreateEmployeeWithAssignmentInput = z.infer<typeof CreateEmployeeWithAssignmentSchema>;
+
+export const UpdateEmployeeWithAssignmentSchema = CreateEmployeeWithAssignmentSchema.extend({
+  id: idSchema,
+});

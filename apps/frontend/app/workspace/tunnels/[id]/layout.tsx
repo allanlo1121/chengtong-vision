@@ -8,6 +8,17 @@ import { BreadcrumbProvider } from "@/components/layout/breadcrumb-context";
 import { notFound } from "next/dist/client/components/not-found";
 import { queryRuntimeUser } from "@/lib/domain/system/services/query";
 import { AppContextType } from "@/lib/domain/system/appContext/types";
+import {
+  fetchBreadcrumbLabelMaps,
+  fetchEntityNameByPath,
+} from "@/lib/domain/system/breadcrumb/service";
+import { BreadcrumbLabelMap } from "@/lib/domain/system/breadcrumb/types";
+import { TunnelWorkspaceProvider } from "@/providers/workspace/TunnelWorkspaceProvider";
+import {
+  fetchTunnelWorkspaceDetail,
+  listAccessibleTunnelScopes,
+  listTunnelWorkspaceScopesByOrganizations,
+} from "@/lib/domain/tunnel/services/query.service";
 
 export default async function TunnelWorkspaceLayout({
   children,
@@ -45,12 +56,29 @@ export default async function TunnelWorkspaceLayout({
 
     // Menus
     const menus = await fetchMenusByCode("tunnel_workspace");
+    const breadcrumbLabelMap = await fetchBreadcrumbLabelMaps();
+
+    const entityLabelMap = await fetchEntityNameByPath("tunnels", id);
+
+    const breadcrumbMap: BreadcrumbLabelMap = {
+      ...breadcrumbLabelMap,
+      ...entityLabelMap,
+    };
+
+    const scope = await fetchTunnelWorkspaceDetail(id);
+
+    const tunnelOptions = await listAccessibleTunnelScopes(runtimeUser.organizationIds);
+
+    console.log("Tunnel Workspace Scope:", scope);
+    console.log("Accessible Tunnel Scopes:", tunnelOptions);
 
     return (
       <Providers runtimeUser={runtimeUser} appContext={appContext} menus={menus}>
-        <BreadcrumbProvider>
-          <LayoutContent>{children}</LayoutContent>
-        </BreadcrumbProvider>
+        <TunnelWorkspaceProvider scope={scope} tunnelOptions={tunnelOptions}>
+          <BreadcrumbProvider breadcrumbMap={breadcrumbMap}>
+            <LayoutContent>{children}</LayoutContent>
+          </BreadcrumbProvider>
+        </TunnelWorkspaceProvider>
       </Providers>
     );
   } catch (error) {

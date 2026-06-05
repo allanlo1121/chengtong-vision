@@ -1,31 +1,15 @@
 import { createClient } from "@/lib/infra/supabase/server";
 
-import { PageData } from "@/lib/shared/contracts";
+import { PaginatedResult } from "@/lib/shared/contracts";
 import { applyPagination, assertNoError } from "@/lib/infra/repositories/base.repository";
 import { appErrors } from "@/lib/shared/contracts";
 import { tbmQuery, TbmQueryType } from "../queries";
 
-import {
-  Tbm,
-  TbmInsertRow,
-  TbmListRow,
-  TbmRow,
-  TbmUpdateRow,
-  TbmPickerQuery,
-  TbmPickerResult,
-} from "../types";
+import { Tbm, TbmPickerQuery, TbmPickerResult, TbmListItem, TbmDetail } from "../types";
+import { mapTbm, mapTbmInsert, mapTbmListItem, mapTbmUpdate, mapTbmDetail } from "../mappers";
+import { CreateTbmInput, UpdateTbmInput } from "../schemas";
 
-export async function getAllList(): Promise<TbmListRow[]> {
-  const supabase = await createClient();
-
-  const { data, error } = await supabase.schema("eqp").from("v_tbm_list").select("*");
-
-  assertNoError(error);
-
-  return data as TbmListRow[];
-}
-
-async function paginate(query: TbmQueryType): Promise<PageData<TbmListRow>> {
+async function paginate(query: TbmQueryType): Promise<PaginatedResult<TbmListItem>> {
   const supabase = await createClient();
 
   // console.log("org list query", query);
@@ -64,52 +48,61 @@ async function paginate(query: TbmQueryType): Promise<PageData<TbmListRow>> {
   assertNoError(error);
 
   return {
-    items: data as TbmListRow[],
+    items: (data ?? []).map(mapTbmListItem),
     total: count ?? 0,
+    page: query.page,
+    pageSize: query.pageSize,
   };
 }
 
 export const tbmRepository = {
-  insert: async (input: TbmInsertRow): Promise<TbmRow | null> => {
+  insert: async (input: CreateTbmInput): Promise<Tbm> => {
     // console.log("Inserting TBM with input:", input);
+
+    const payload = mapTbmInsert(input);
     const supabase = await createClient();
 
     const { data, error } = await supabase
       .schema("eqp")
       .from("tbms")
-      .insert(input)
+      .insert(payload)
       .select("*")
       .single();
 
     // console.log("Insert TBM result:", { data, error });
     assertNoError(error);
 
-    return data;
+    if (!data) {
+      throw appErrors.internal("tbmRepository.insert", "创建盾构机失败");
+    }
+
+    return mapTbm(data);
   },
-  update: async (id: string, input: TbmUpdateRow): Promise<TbmRow> => {
+  update: async (input: UpdateTbmInput): Promise<Tbm> => {
+    const payload = mapTbmUpdate(input);
     const supabase = await createClient();
 
     const { data, error } = await supabase
       .schema("eqp")
       .from("tbms")
-      .update(input)
-      .eq("id", id)
+      .update(payload)
+      .eq("id", input.id)
       .select("*")
       .single();
 
     assertNoError(error);
 
     if (!data) {
-      throw new Error(`Update failed: no data returned for table "tbms"`);
+      throw appErrors.internal("tbmRepository.update", "更新盾构机失败");
     }
 
-    return data as TbmRow;
+    return mapTbm(data);
   },
 
-  softDelete: async (id: string): Promise<number> => {
+  deleteById: async (id: string): Promise<void> => {
     const supabase = await createClient();
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .schema("eqp")
       .from("tbms")
       .update({
@@ -121,11 +114,9 @@ export const tbmRepository = {
       .single();
 
     assertNoError(error);
-
-    return data ? 1 : 0;
   },
 
-  findById: async (id: string): Promise<TbmRow | null> => {
+  findById: async (id: string): Promise<Tbm | null> => {
     const supabase = await createClient();
 
     const { data, error } = await supabase
@@ -137,9 +128,9 @@ export const tbmRepository = {
 
     assertNoError(error);
 
-    return data as TbmRow | null;
+    return data ? mapTbm(data) : null;
   },
-  findByCode: async (code: string): Promise<TbmRow | null> => {
+  findByCode: async (code: string): Promise<Tbm | null> => {
     const supabase = await createClient();
 
     const { data, error } = await supabase
@@ -151,10 +142,11 @@ export const tbmRepository = {
 
     assertNoError(error);
 
-    return data as TbmRow | null;
+    return data ? mapTbm(data) : null;
   },
-  getAllList,
+  // getAllList,
   paginate,
+  getTbmDetailById,
   searchTbmPicker,
   // softDeleteMany,
 };
@@ -198,4 +190,19 @@ async function searchTbmPicker(query: TbmPickerQuery): Promise<TbmPickerResult> 
     data: data ?? [],
     count: count ?? 0,
   };
+}
+
+async function getTbmDetailById(id: string): Promise<TbmDetail | null> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .schema("eqp")
+    .from("v_tbm_detail")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  assertNoError(error);
+
+  return data ? mapTbmDetail(data) : null;
 }

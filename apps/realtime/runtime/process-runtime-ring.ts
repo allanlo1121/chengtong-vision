@@ -2,17 +2,16 @@ import { pgPool } from "../db/pg.pool";
 import { toDateString } from "../utils/date";
 import type { TbmRuntimeData } from "./runtime.types";
 import { createSystemAlarm } from "./alarm/create-system-alarm";
-import { getTunnelProgressCache, setTunnelProgressCache } from "./tunnel-progress-cache";
+import { getTbmProgressCache, setTbmProgressCache } from "./tbm-progress-cache";
 import { getWorkDate } from "./stat-period";
 
 interface ProcessRuntimeRingInput {
   data: TbmRuntimeData;
   tbmId: string;
-  tunnelId: string;
 }
 
 export async function processRuntimeRingIfNeeded(input: ProcessRuntimeRingInput) {
-  const { data, tbmId, tunnelId } = input;
+  const { data, tbmId } = input;
 
   const recordedAt = new Date(data.recordedAt).toISOString();
 
@@ -28,7 +27,6 @@ export async function processRuntimeRingIfNeeded(input: ProcessRuntimeRingInput)
 
   await processRingProgress({
     tbmId,
-    tunnelId,
     ringNo,
     chainage: Number.isFinite(chainage) ? chainage : null,
     recordedAt,
@@ -37,15 +35,14 @@ export async function processRuntimeRingIfNeeded(input: ProcessRuntimeRingInput)
 
 async function processRingProgress(input: {
   tbmId: string;
-  tunnelId: string;
   ringNo: number;
   chainage: number | null;
   recordedAt: string;
 }) {
-  const previous = getTunnelProgressCache(input.tunnelId);
+  const previous = getTbmProgressCache(input.tbmId);
 
   console.log("Processing ring progress", {
-    tunnelId: input.tunnelId,
+    tbmId: input.tbmId,
     ringNo: input.ringNo,
     chainage: input.chainage,
     recordedAt: input.recordedAt,
@@ -59,15 +56,14 @@ async function processRingProgress(input: {
   });
 
   if (!previous) {
-    await upsertTunnelDailyProgress({
-      tunnelId: input.tunnelId,
+    await upsertTbmDailyProgress({
       tbmId: input.tbmId,
       workDate,
       ringEnd: input.ringNo,
       chainageEnd: input.chainage,
     });
 
-    setTunnelProgressCache(input.tunnelId, {
+    setTbmProgressCache(input.tbmId, {
       ringEnd: input.ringNo,
       chainageEnd: input.chainage,
       workDate,
@@ -81,7 +77,6 @@ async function processRingProgress(input: {
   if (deltaRing < 0) {
     await createSystemAlarm(pgPool, {
       tbmId: input.tbmId,
-      tunnelId: input.tunnelId,
       alarmType: "ring_decrease",
       level: "critical",
       title: "环号异常减少",
@@ -100,7 +95,6 @@ async function processRingProgress(input: {
   if (deltaRing > 5) {
     await createSystemAlarm(pgPool, {
       tbmId: input.tbmId,
-      tunnelId: input.tunnelId,
       alarmType: "ring_jump",
       level: "warning",
       title: "环号跳变异常",
@@ -117,15 +111,14 @@ async function processRingProgress(input: {
   }
 
   if (deltaRing > 0 || input.chainage !== previous.chainageEnd) {
-    await upsertTunnelDailyProgress({
-      tunnelId: input.tunnelId,
+    await upsertTbmDailyProgress({
       tbmId: input.tbmId,
       workDate,
       ringEnd: input.ringNo,
       chainageEnd: input.chainage,
     });
 
-    setTunnelProgressCache(input.tunnelId, {
+    setTbmProgressCache(input.tbmId, {
       ringEnd: input.ringNo,
       chainageEnd: input.chainage,
       workDate,
@@ -133,8 +126,7 @@ async function processRingProgress(input: {
   }
 }
 
-async function upsertTunnelDailyProgress(input: {
-  tunnelId: string;
+async function upsertTbmDailyProgress(input: {
   tbmId: string;
   workDate: string;
   ringEnd: number;
@@ -142,28 +134,27 @@ async function upsertTunnelDailyProgress(input: {
 }) {
   await pgPool.query(
     `
-    insert into public.tunnel_daily_progress (
-      tunnel_id,
+    insert into eqp.tbm_daily_progress (
       tbm_id,
       work_date,
       ring_end,
       chainage_end,
       updated_at
     )
-    values ($1, $2, $3, $4, $5, now())
-    on conflict (tunnel_id, work_date)
+    values ($1, $2, $3, $4, now())
+    on conflict (tbm_id, work_date)
     do update set
       tbm_id = excluded.tbm_id,
       ring_end = greatest(
-        public.tunnel_daily_progress.ring_end,
+        eqp.tbm_daily_progress.ring_end,
         excluded.ring_end
       ),
       chainage_end = coalesce(
         excluded.chainage_end,
-        public.tunnel_daily_progress.chainage_end
+        eqp.tbm_daily_progress.chainage_end
       ),
       updated_at = now()
     `,
-    [input.tunnelId, input.tbmId, input.workDate, input.ringEnd, input.chainageEnd]
+    [input.tbmId, input.workDate, input.ringEnd, input.chainageEnd]
   );
 }

@@ -5,7 +5,21 @@ import { z } from "zod";
 /**
  * TunnelStatusTimeline字段规则
  */
-export const TunnelStatusTimelineSchema = z.object({
+export const TunnelStatusTimelineFormSchema = z.object({
+  tunnelId: idSchema.meta({
+    table: "tunnel_status_timeline",
+    label: "隧道ID",
+    field: "tunnel_id",
+    searchable: false,
+    sortable: true,
+    component: "tunnelPicker",
+    section: "基本信息",
+    type: "number",
+    disabled: true,
+    required: true,
+    readonly: true,
+    colSpan: 1,
+  }),
   tunnelStatusId: idSchema
     .optional()
     .nullable()
@@ -91,32 +105,18 @@ export const TunnelStatusTimelineSchema = z.object({
   }),
 });
 
-// export const employeeschema = z.object(OrganizationFields);
+export type TunnelStatusTimelineFormInput = z.infer<typeof TunnelStatusTimelineFormSchema>;
 
-// export const Createemployeeschema = employeeschema;
-
-// export const Updateemployeeschema = employeeschema.extend({
-//   id: idSchema,
-// });
-
-export const CreateTunnelStatusTimelineSchema = TunnelStatusTimelineSchema;
-
-// export const UpdateTunnelSchema = TunnelSchema.extend({
-//   id: idSchema,
-// });
-
-// export type TunnelInput = z.infer<typeof TunnelSchema>;
-
-// export type TunnelPostInput = z.infer<typeof TunnelPostSchema>;
-
-// export type TunnelTitleInput = z.infer<typeof TunnelTitleSchema>;
+export const CreateTunnelStatusTimelineSchema = TunnelStatusTimelineFormSchema.omit({
+  tunnelId: true,
+});
 
 export type CreateTunnelStatusTimelineInput = z.infer<typeof CreateTunnelStatusTimelineSchema>;
 
-export type TunnelStatusTimelineFields = keyof z.infer<typeof TunnelStatusTimelineSchema>;
+export type TunnelStatusTimelineFields = keyof z.infer<typeof TunnelStatusTimelineFormSchema>;
 
-// export const UpdateTunnelSchema = TunnelSchema.extend({
-//   id: idSchema,
-// });
+export const UpdateTunnelStatusTimelineSchema = TunnelStatusTimelineFormSchema.extend({
+  id: idSchema,
+});
 
-// export type UpdateTunnelInput = z.infer<typeof UpdateTunnelSchema>;
+export type UpdateTunnelStatusTimelineInput = z.infer<typeof UpdateTunnelStatusTimelineSchema>;

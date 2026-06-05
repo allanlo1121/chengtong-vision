@@ -1,10 +1,9 @@
 "use server";
 
-import { ActionResult } from "@/lib/shared/contracts";
+import { ActionResult, toActionError } from "@/lib/shared/contracts";
 import { deleteTbm } from "../services";
-import { Tbm } from "../types";
 
-export async function deleteTbmAction(id: string): Promise<ActionResult<number>> {
+export async function deleteTbmAction(id: string): Promise<ActionResult<void>> {
   console.log("===deleteTbm===", id);
 
   try {
@@ -13,12 +12,10 @@ export async function deleteTbmAction(id: string): Promise<ActionResult<number>>
     return {
       success: true,
       message: "删除成功",
-      data: 1,
+      data: result,
     };
   } catch (error) {
-    return {
-      success: false,
-      message: error instanceof Error ? error.message : "删除失败",
-    };
+    console.error("Error deleting tunnel:", error);
+    return toActionError(error);
   }
 }

@@ -215,129 +215,6 @@ export type Database = {
           },
         ];
       };
-      shield_realdata_xre423: {
-        Row: {
-          b000000001: boolean | null;
-          b000000002: boolean | null;
-          id: number;
-          recorded_at: string;
-          s010102004: number | null;
-          s010109001: number | null;
-          s020901001: number | null;
-          s020901002: number | null;
-          s020901003: number | null;
-          s020901004: number | null;
-          s020901005: number | null;
-          s020901006: number | null;
-          s050001001: number | null;
-          s050001019: number | null;
-          s050001020: number | null;
-          s050001021: number | null;
-          s050001022: number | null;
-          s050006005: number | null;
-          s050006006: number | null;
-          s050006007: number | null;
-          s050006008: number | null;
-          s050009003: number | null;
-          s050109001: number | null;
-          s070102001: number | null;
-          s070109001: number | null;
-          s070301001: number | null;
-          s070606001: number | null;
-          s070606002: number | null;
-          s100100005: number | null;
-          s100100008: number | null;
-          s100111009: number | null;
-          s100111010: number | null;
-          s100206003: number | null;
-          s100206004: number | null;
-          s100206006: number | null;
-          s100206007: number | null;
-          tbm_id: string;
-          tunnel_id: string | null;
-        };
-        Insert: {
-          b000000001?: boolean | null;
-          b000000002?: boolean | null;
-          id?: never;
-          recorded_at: string;
-          s010102004?: number | null;
-          s010109001?: number | null;
-          s020901001?: number | null;
-          s020901002?: number | null;
-          s020901003?: number | null;
-          s020901004?: number | null;
-          s020901005?: number | null;
-          s020901006?: number | null;
-          s050001001?: number | null;
-          s050001019?: number | null;
-          s050001020?: number | null;
-          s050001021?: number | null;
-          s050001022?: number | null;
-          s050006005?: number | null;
-          s050006006?: number | null;
-          s050006007?: number | null;
-          s050006008?: number | null;
-          s050009003?: number | null;
-          s050109001?: number | null;
-          s070102001?: number | null;
-          s070109001?: number | null;
-          s070301001?: number | null;
-          s070606001?: number | null;
-          s070606002?: number | null;
-          s100100005?: number | null;
-          s100100008?: number | null;
-          s100111009?: number | null;
-          s100111010?: number | null;
-          s100206003?: number | null;
-          s100206004?: number | null;
-          s100206006?: number | null;
-          s100206007?: number | null;
-          tbm_id: string;
-          tunnel_id?: string | null;
-        };
-        Update: {
-          b000000001?: boolean | null;
-          b000000002?: boolean | null;
-          id?: never;
-          recorded_at?: string;
-          s010102004?: number | null;
-          s010109001?: number | null;
-          s020901001?: number | null;
-          s020901002?: number | null;
-          s020901003?: number | null;
-          s020901004?: number | null;
-          s020901005?: number | null;
-          s020901006?: number | null;
-          s050001001?: number | null;
-          s050001019?: number | null;
-          s050001020?: number | null;
-          s050001021?: number | null;
-          s050001022?: number | null;
-          s050006005?: number | null;
-          s050006006?: number | null;
-          s050006007?: number | null;
-          s050006008?: number | null;
-          s050009003?: number | null;
-          s050109001?: number | null;
-          s070102001?: number | null;
-          s070109001?: number | null;
-          s070301001?: number | null;
-          s070606001?: number | null;
-          s070606002?: number | null;
-          s100100005?: number | null;
-          s100100008?: number | null;
-          s100111009?: number | null;
-          s100111010?: number | null;
-          s100206003?: number | null;
-          s100206004?: number | null;
-          s100206006?: number | null;
-          s100206007?: number | null;
-          tbm_id?: string;
-          tunnel_id?: string | null;
-        };
-        Relationships: [];
-      };
       tbm_assignments: {
         Row: {
           created_at: string | null;
@@ -417,7 +294,6 @@ export type Database = {
           is_online: boolean;
           last_seen_at: string;
           tbm_id: string;
-          tunnel_id: string | null;
           type: string;
           updated_at: string;
         };
@@ -425,7 +301,6 @@ export type Database = {
           is_online?: boolean;
           last_seen_at: string;
           tbm_id: string;
-          tunnel_id?: string | null;
           type: string;
           updated_at?: string;
         };
@@ -433,7 +308,6 @@ export type Database = {
           is_online?: boolean;
           last_seen_at?: string;
           tbm_id?: string;
-          tunnel_id?: string | null;
           type?: string;
           updated_at?: string;
         };
@@ -478,7 +352,6 @@ export type Database = {
           start_at: string;
           status: string;
           tbm_id: string;
-          tunnel_id: string | null;
           type: string;
         };
         Insert: {
@@ -490,7 +363,6 @@ export type Database = {
           start_at: string;
           status: string;
           tbm_id: string;
-          tunnel_id?: string | null;
           type: string;
         };
         Update: {
@@ -502,7 +374,6 @@ export type Database = {
           start_at?: string;
           status?: string;
           tbm_id?: string;
-          tunnel_id?: string | null;
           type?: string;
         };
         Relationships: [
@@ -538,52 +409,48 @@ export type Database = {
       };
       tbm_daily_progress: {
         Row: {
-          actual_ring_count: number | null;
+          chainage_end: number | null;
+          created_at: string | null;
+          created_by: string | null;
+          deleted_at: string | null;
+          deleted_by: string | null;
           id: string;
-          op_num_end: number | null;
-          op_num_start: number | null;
-          operation_id: string | null;
           plan_ring_count: number | null;
-          progress_at: string;
-          ring_end: number | null;
-          ring_start: number | null;
+          ring_end: number;
           tbm_id: string;
-          tunnel_id: string;
+          updated_at: string | null;
+          updated_by: string | null;
+          work_date: string;
         };
         Insert: {
-          actual_ring_count?: number | null;
+          chainage_end?: number | null;
+          created_at?: string | null;
+          created_by?: string | null;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
           id?: string;
-          op_num_end?: number | null;
-          op_num_start?: number | null;
-          operation_id?: string | null;
           plan_ring_count?: number | null;
-          progress_at: string;
-          ring_end?: number | null;
-          ring_start?: number | null;
+          ring_end: number;
           tbm_id: string;
-          tunnel_id: string;
+          updated_at?: string | null;
+          updated_by?: string | null;
+          work_date: string;
         };
         Update: {
-          actual_ring_count?: number | null;
+          chainage_end?: number | null;
+          created_at?: string | null;
+          created_by?: string | null;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
           id?: string;
-          op_num_end?: number | null;
-          op_num_start?: number | null;
-          operation_id?: string | null;
           plan_ring_count?: number | null;
-          progress_at?: string;
-          ring_end?: number | null;
-          ring_start?: number | null;
+          ring_end?: number;
           tbm_id?: string;
-          tunnel_id?: string;
+          updated_at?: string | null;
+          updated_by?: string | null;
+          work_date?: string;
         };
         Relationships: [
-          {
-            foreignKeyName: "tbm_daily_progress_operation_id_fkey";
-            columns: ["operation_id"];
-            isOneToOne: false;
-            referencedRelation: "tbm_operations";
-            referencedColumns: ["id"];
-          },
           {
             foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
             columns: ["tbm_id"];
@@ -1049,7 +916,6 @@ export type Database = {
           source: string;
           start_at: string;
           tbm_id: string;
-          tunnel_id: string | null;
         };
         Insert: {
           id?: string;
@@ -1059,7 +925,6 @@ export type Database = {
           source?: string;
           start_at: string;
           tbm_id: string;
-          tunnel_id?: string | null;
         };
         Update: {
           id?: string;
@@ -1069,7 +934,6 @@ export type Database = {
           source?: string;
           start_at?: string;
           tbm_id?: string;
-          tunnel_id?: string | null;
         };
         Relationships: [
           {
@@ -1112,7 +976,6 @@ export type Database = {
           source: string;
           start_at: string;
           tbm_id: string;
-          tunnel_id: string | null;
         };
         Insert: {
           end_at: string;
@@ -1123,7 +986,6 @@ export type Database = {
           source?: string;
           start_at: string;
           tbm_id: string;
-          tunnel_id?: string | null;
         };
         Update: {
           end_at?: string;
@@ -1134,9 +996,37 @@ export type Database = {
           source?: string;
           start_at?: string;
           tbm_id?: string;
-          tunnel_id?: string | null;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "tbm_phase_records_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "tbms";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_phase_records_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_detail";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_phase_records_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_phase_records_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_picker";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       tbm_runtime_parameters: {
         Row: {
@@ -1405,6 +1295,51 @@ export type Database = {
           },
         ];
       };
+      v_tbm_assignment_list: {
+        Row: {
+          end_date: string | null;
+          id: string | null;
+          project_id: string | null;
+          project_name: string | null;
+          remark: string | null;
+          start_date: string | null;
+          tbm_code: string | null;
+          tbm_id: string | null;
+          tbm_name: string | null;
+          tunnel_id: string | null;
+          tunnel_name: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tbm_assignments_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "tbms";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_assignments_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_detail";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_assignments_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_assignments_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_picker";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       v_tbm_bound_parameters: {
         Row: {
           binding_id: number | null;
@@ -1469,6 +1404,50 @@ export type Database = {
           },
           {
             foreignKeyName: "tbm_parameter_bindings_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_picker";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      v_tbm_daily_progress: {
+        Row: {
+          chainage_end: number | null;
+          chainage_start: number | null;
+          completed_length: number | null;
+          completed_ring_count: number | null;
+          id: string | null;
+          plan_ring_count: number | null;
+          ring_end: number | null;
+          ring_start: number | null;
+          tbm_id: string | null;
+          work_date: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "tbms";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_detail";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
             columns: ["tbm_id"];
             isOneToOne: false;
             referencedRelation: "v_tbm_picker";
@@ -1564,6 +1543,7 @@ export type Database = {
           digits: number | null;
           id: number | null;
           is_alarm: boolean | null;
+          is_chartable: boolean | null;
           is_disabled: boolean | null;
           name: string | null;
           sort_order: number | null;
@@ -1593,6 +1573,7 @@ export type Database = {
         Row: {
           code: string | null;
           id: number | null;
+          is_chartable: boolean | null;
           name: string | null;
           subsystem_code: string | null;
           subsystem_name: string | null;
@@ -1612,6 +1593,34 @@ export type Database = {
         Args: { p_tbm_id: string };
         Returns: undefined;
       };
+      fn_get_tbm_param_history_by_ring: {
+        Args: {
+          p_fields: string[];
+          p_from_ring: number;
+          p_tbm_id: string;
+          p_to_ring: number;
+          p_work_mode?: string;
+        };
+        Returns: {
+          data: Json;
+          ring: number;
+          ts: string;
+        }[];
+      };
+      fn_get_tbm_param_history_by_time: {
+        Args: {
+          p_fields: string[];
+          p_from: string;
+          p_tbm_id: string;
+          p_to: string;
+          p_work_mode?: string;
+        };
+        Returns: {
+          data: Json;
+          ring: number;
+          ts: string;
+        }[];
+      };
       fn_get_tbm_realdata_limits: {
         Args: { p_tbm_id: string };
         Returns: {
@@ -1621,62 +1630,12 @@ export type Database = {
           min_time: string;
         }[];
       };
-      fn_get_tunnel_realdata_limits: {
-        Args: { p_tunnel_id: string };
-        Returns: {
-          max_ring: number;
-          max_time: string;
-          min_ring: number;
-          min_time: string;
-        }[];
-      };
-      fn_get_tunnel_tbm_param_history: {
-        Args: {
-          p_fields: string[];
-          p_from: string;
-          p_to: string;
-          p_tunnel_id: string;
-          p_work_mode?: string;
-        };
-        Returns: {
-          data: Json;
-          ts: string;
-        }[];
-      };
-      fn_get_tunnel_tbm_param_history_by_ring: {
-        Args: {
-          p_fields: string[];
-          p_from_ring: number;
-          p_to_ring: number;
-          p_tunnel_id: string;
-          p_work_mode?: string;
-        };
-        Returns: {
-          data: Json;
-          ring: number;
-          ts: string;
-        }[];
-      };
-      fn_get_tunnel_tbm_param_history_by_time: {
-        Args: {
-          p_fields: string[];
-          p_from: string;
-          p_to: string;
-          p_tunnel_id: string;
-          p_work_mode?: string;
-        };
-        Returns: {
-          data: Json;
-          ring: number;
-          ts: string;
-        }[];
-      };
-      fn_get_tunnel_work_timeline: {
+      fn_get_tbm_work_timeline: {
         Args: {
           p_end_at: string;
           p_offline_gap_minutes?: number;
           p_start_at: string;
-          p_tunnel_id: string;
+          p_tbm_id: string;
         };
         Returns: {
           duration_seconds: number;
@@ -1687,36 +1646,6 @@ export type Database = {
           value: string;
         }[];
       };
-      get_tunnel_work_timeline:
-        | {
-            Args: {
-              p_day: string;
-              p_offline_gap_minutes?: number;
-              p_tunnel_id: string;
-            };
-            Returns: {
-              duration_seconds: number;
-              end_at: string;
-              id: string;
-              start_at: string;
-              type: string;
-            }[];
-          }
-        | {
-            Args: {
-              p_end_at: string;
-              p_offline_gap_minutes?: number;
-              p_start_at: string;
-              p_tunnel_id: string;
-            };
-            Returns: {
-              duration_seconds: number;
-              end_at: string;
-              id: string;
-              start_at: string;
-              type: string;
-            }[];
-          };
       sync_tbm_realdata_table: { Args: { p_tbm_id: string }; Returns: string };
     };
     Enums: {
@@ -10486,6 +10415,9 @@ export type Database = {
           start_ring: number | null;
           tunnel_status_id: string | null;
           tunnel_status_name: string | null;
+          valid_from: string | null;
+          valid_to: string | null;
+          version_no: number | null;
         };
         Relationships: [
           {
@@ -10837,57 +10769,6 @@ export type Database = {
           },
         ];
       };
-      command_center_summary: {
-        Row: {
-          advancing_count: number;
-          assembly_count: number;
-          fault_count: number;
-          id: string;
-          project_count: number;
-          stopped_count: number;
-          tbm_count: number;
-          today_advance_meter: number;
-          today_ring_count: number;
-          tunnel_count: number;
-          updated_at: string;
-          warning_high_count: number;
-          warning_low_count: number;
-          warning_medium_count: number;
-        };
-        Insert: {
-          advancing_count?: number;
-          assembly_count?: number;
-          fault_count?: number;
-          id?: string;
-          project_count?: number;
-          stopped_count?: number;
-          tbm_count?: number;
-          today_advance_meter?: number;
-          today_ring_count?: number;
-          tunnel_count?: number;
-          updated_at?: string;
-          warning_high_count?: number;
-          warning_low_count?: number;
-          warning_medium_count?: number;
-        };
-        Update: {
-          advancing_count?: number;
-          assembly_count?: number;
-          fault_count?: number;
-          id?: string;
-          project_count?: number;
-          stopped_count?: number;
-          tbm_count?: number;
-          today_advance_meter?: number;
-          today_ring_count?: number;
-          tunnel_count?: number;
-          updated_at?: string;
-          warning_high_count?: number;
-          warning_low_count?: number;
-          warning_medium_count?: number;
-        };
-        Relationships: [];
-      };
       countries: {
         Row: {
           alpha3_code: string | null;
@@ -11226,407 +11107,6 @@ export type Database = {
           },
         ];
       };
-      tbm_connection_status: {
-        Row: {
-          is_online: boolean;
-          last_seen_at: string;
-          tbm_id: string;
-          tunnel_id: string | null;
-          type: string;
-          updated_at: string;
-        };
-        Insert: {
-          is_online?: boolean;
-          last_seen_at: string;
-          tbm_id: string;
-          tunnel_id?: string | null;
-          type: string;
-          updated_at?: string;
-        };
-        Update: {
-          is_online?: boolean;
-          last_seen_at?: string;
-          tbm_id?: string;
-          tunnel_id?: string | null;
-          type?: string;
-          updated_at?: string;
-        };
-        Relationships: [];
-      };
-      tbm_connection_status_history: {
-        Row: {
-          created_at: string;
-          end_at: string | null;
-          id: string;
-          remark: string | null;
-          source: string;
-          start_at: string;
-          status: string;
-          tbm_id: string;
-          tunnel_id: string | null;
-          type: string;
-        };
-        Insert: {
-          created_at?: string;
-          end_at?: string | null;
-          id?: string;
-          remark?: string | null;
-          source?: string;
-          start_at: string;
-          status: string;
-          tbm_id: string;
-          tunnel_id?: string | null;
-          type: string;
-        };
-        Update: {
-          created_at?: string;
-          end_at?: string | null;
-          id?: string;
-          remark?: string | null;
-          source?: string;
-          start_at?: string;
-          status?: string;
-          tbm_id?: string;
-          tunnel_id?: string | null;
-          type?: string;
-        };
-        Relationships: [];
-      };
-      tbm_heartbeat_status: {
-        Row: {
-          is_online: boolean;
-          last_seen_at: string;
-          offline_started_at: string | null;
-          online_started_at: string | null;
-          tbm_id: string;
-          tunnel_id: string | null;
-          updated_at: string;
-        };
-        Insert: {
-          is_online?: boolean;
-          last_seen_at: string;
-          offline_started_at?: string | null;
-          online_started_at?: string | null;
-          tbm_id: string;
-          tunnel_id?: string | null;
-          updated_at?: string;
-        };
-        Update: {
-          is_online?: boolean;
-          last_seen_at?: string;
-          offline_started_at?: string | null;
-          online_started_at?: string | null;
-          tbm_id?: string;
-          tunnel_id?: string | null;
-          updated_at?: string;
-        };
-        Relationships: [];
-      };
-      tbm_heartbeat_status_history: {
-        Row: {
-          created_at: string;
-          end_at: string | null;
-          id: string;
-          remark: string | null;
-          source: string;
-          start_at: string;
-          status: string;
-          tbm_id: string;
-          tunnel_id: string | null;
-        };
-        Insert: {
-          created_at?: string;
-          end_at?: string | null;
-          id?: string;
-          remark?: string | null;
-          source?: string;
-          start_at: string;
-          status: string;
-          tbm_id: string;
-          tunnel_id?: string | null;
-        };
-        Update: {
-          created_at?: string;
-          end_at?: string | null;
-          id?: string;
-          remark?: string | null;
-          source?: string;
-          start_at?: string;
-          status?: string;
-          tbm_id?: string;
-          tunnel_id?: string | null;
-        };
-        Relationships: [];
-      };
-      tbm_realdata_status: {
-        Row: {
-          is_online: boolean;
-          last_seen_at: string;
-          offline_started_at: string | null;
-          online_started_at: string | null;
-          tbm_id: string;
-          tunnel_id: string | null;
-          updated_at: string;
-        };
-        Insert: {
-          is_online?: boolean;
-          last_seen_at: string;
-          offline_started_at?: string | null;
-          online_started_at?: string | null;
-          tbm_id: string;
-          tunnel_id?: string | null;
-          updated_at?: string;
-        };
-        Update: {
-          is_online?: boolean;
-          last_seen_at?: string;
-          offline_started_at?: string | null;
-          online_started_at?: string | null;
-          tbm_id?: string;
-          tunnel_id?: string | null;
-          updated_at?: string;
-        };
-        Relationships: [];
-      };
-      tbm_realdata_status_history: {
-        Row: {
-          created_at: string;
-          end_at: string | null;
-          id: string;
-          remark: string | null;
-          source: string;
-          start_at: string;
-          status: string;
-          tbm_id: string;
-          tunnel_id: string | null;
-        };
-        Insert: {
-          created_at?: string;
-          end_at?: string | null;
-          id?: string;
-          remark?: string | null;
-          source?: string;
-          start_at: string;
-          status: string;
-          tbm_id: string;
-          tunnel_id?: string | null;
-        };
-        Update: {
-          created_at?: string;
-          end_at?: string | null;
-          id?: string;
-          remark?: string | null;
-          source?: string;
-          start_at?: string;
-          status?: string;
-          tbm_id?: string;
-          tunnel_id?: string | null;
-        };
-        Relationships: [];
-      };
-      tbm_system_alarm_events: {
-        Row: {
-          alarm_type: string;
-          created_at: string | null;
-          delta_value: number | null;
-          id: string;
-          level: string;
-          message: string | null;
-          metadata: Json | null;
-          new_value: number | null;
-          occurred_at: string;
-          old_value: number | null;
-          tbm_id: string;
-          title: string;
-          tunnel_id: string | null;
-        };
-        Insert: {
-          alarm_type: string;
-          created_at?: string | null;
-          delta_value?: number | null;
-          id?: string;
-          level: string;
-          message?: string | null;
-          metadata?: Json | null;
-          new_value?: number | null;
-          occurred_at: string;
-          old_value?: number | null;
-          tbm_id: string;
-          title: string;
-          tunnel_id?: string | null;
-        };
-        Update: {
-          alarm_type?: string;
-          created_at?: string | null;
-          delta_value?: number | null;
-          id?: string;
-          level?: string;
-          message?: string | null;
-          metadata?: Json | null;
-          new_value?: number | null;
-          occurred_at?: string;
-          old_value?: number | null;
-          tbm_id?: string;
-          title?: string;
-          tunnel_id?: string | null;
-        };
-        Relationships: [];
-      };
-      tunnel_daily_progress: {
-        Row: {
-          chainage_end: number | null;
-          id: string;
-          plan_ring_count: number | null;
-          remark: string | null;
-          ring_end: number;
-          tbm_id: string | null;
-          tunnel_id: string;
-          updated_at: string | null;
-          work_date: string;
-        };
-        Insert: {
-          chainage_end?: number | null;
-          id?: string;
-          plan_ring_count?: number | null;
-          remark?: string | null;
-          ring_end: number;
-          tbm_id?: string | null;
-          tunnel_id: string;
-          updated_at?: string | null;
-          work_date: string;
-        };
-        Update: {
-          chainage_end?: number | null;
-          id?: string;
-          plan_ring_count?: number | null;
-          remark?: string | null;
-          ring_end?: number;
-          tbm_id?: string | null;
-          tunnel_id?: string;
-          updated_at?: string | null;
-          work_date?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tunnel_daily_progress_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_command_center_tunnel";
-            referencedColumns: ["tbm_id"];
-          },
-          {
-            foreignKeyName: "tunnel_daily_progress_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_command_center_tunnel_overview";
-            referencedColumns: ["tbm_id"];
-          },
-          {
-            foreignKeyName: "tunnel_daily_progress_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tunnel_progress_overview";
-            referencedColumns: ["tbm_id"];
-          },
-          {
-            foreignKeyName: "tunnel_daily_progress_tunnel_id_fkey";
-            columns: ["tunnel_id"];
-            isOneToOne: false;
-            referencedRelation: "v_command_center_tunnel";
-            referencedColumns: ["tunnel_id"];
-          },
-          {
-            foreignKeyName: "tunnel_daily_progress_tunnel_id_fkey";
-            columns: ["tunnel_id"];
-            isOneToOne: false;
-            referencedRelation: "v_command_center_tunnel_overview";
-            referencedColumns: ["tunnel_id"];
-          },
-          {
-            foreignKeyName: "tunnel_daily_progress_tunnel_id_fkey";
-            columns: ["tunnel_id"];
-            isOneToOne: false;
-            referencedRelation: "v_command_center_tunnel_scope";
-            referencedColumns: ["tunnel_id"];
-          },
-          {
-            foreignKeyName: "tunnel_daily_progress_tunnel_id_fkey";
-            columns: ["tunnel_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tunnel_progress_overview";
-            referencedColumns: ["tunnel_id"];
-          },
-        ];
-      };
-      tunnel_ring_phase_active: {
-        Row: {
-          id: string;
-          phase_type: string;
-          remark: string | null;
-          ring_no: number;
-          source: string;
-          start_at: string;
-          tbm_id: string | null;
-          tunnel_id: string;
-        };
-        Insert: {
-          id?: string;
-          phase_type: string;
-          remark?: string | null;
-          ring_no: number;
-          source?: string;
-          start_at: string;
-          tbm_id?: string | null;
-          tunnel_id: string;
-        };
-        Update: {
-          id?: string;
-          phase_type?: string;
-          remark?: string | null;
-          ring_no?: number;
-          source?: string;
-          start_at?: string;
-          tbm_id?: string | null;
-          tunnel_id?: string;
-        };
-        Relationships: [];
-      };
-      tunnel_ring_phase_records: {
-        Row: {
-          end_at: string;
-          id: string;
-          phase_type: string;
-          remark: string | null;
-          ring_no: number;
-          source: string;
-          start_at: string;
-          tbm_id: string | null;
-          tunnel_id: string;
-        };
-        Insert: {
-          end_at: string;
-          id?: string;
-          phase_type: string;
-          remark?: string | null;
-          ring_no: number;
-          source?: string;
-          start_at: string;
-          tbm_id?: string | null;
-          tunnel_id: string;
-        };
-        Update: {
-          end_at?: string;
-          id?: string;
-          phase_type?: string;
-          remark?: string | null;
-          ring_no?: number;
-          source?: string;
-          start_at?: string;
-          tbm_id?: string | null;
-          tunnel_id?: string;
-        };
-        Relationships: [];
-      };
     };
     Views: {
       v_command_center_summary: {
@@ -11685,53 +11165,6 @@ export type Database = {
           },
         ];
       };
-      v_command_center_tunnel_overview: {
-        Row: {
-          actual_end_date: string | null;
-          actual_start_date: string | null;
-          connection_last_seen_at: string | null;
-          current_ring: number | null;
-          is_online: boolean | null;
-          phase_start_at: string | null;
-          phase_type: string | null;
-          project_id: string | null;
-          project_name: string | null;
-          ring_no: number | null;
-          schedule_end_date: string | null;
-          schedule_start_date: string | null;
-          tbm_code: string | null;
-          tbm_id: string | null;
-          tbm_name: string | null;
-          total_ring_count: number | null;
-          tunnel_id: string | null;
-          tunnel_name: string | null;
-          tunnel_status_code: string | null;
-          tunnel_status_id: string | null;
-          tunnel_status_name: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tunnel_status_timeline_tunnel_status_id_fkey";
-            columns: ["tunnel_status_id"];
-            isOneToOne: false;
-            referencedRelation: "master_data";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tunnel_status_timeline_tunnel_status_id_fkey";
-            columns: ["tunnel_status_id"];
-            isOneToOne: false;
-            referencedRelation: "v_master_options";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      v_command_center_tunnel_scope: {
-        Row: {
-          tunnel_id: string | null;
-        };
-        Relationships: [];
-      };
       v_master_options: {
         Row: {
           code: string | null;
@@ -11758,70 +11191,6 @@ export type Database = {
         };
         Relationships: [];
       };
-      v_tunnel_daily_progress: {
-        Row: {
-          chainage_end: number | null;
-          chainage_start: number | null;
-          id: string | null;
-          plan_ring_count: number | null;
-          ring_end: number | null;
-          ring_start: number | null;
-          tbm_id: string | null;
-          tunnel_id: string | null;
-          work_date: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tunnel_daily_progress_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_command_center_tunnel";
-            referencedColumns: ["tbm_id"];
-          },
-          {
-            foreignKeyName: "tunnel_daily_progress_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_command_center_tunnel_overview";
-            referencedColumns: ["tbm_id"];
-          },
-          {
-            foreignKeyName: "tunnel_daily_progress_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tunnel_progress_overview";
-            referencedColumns: ["tbm_id"];
-          },
-          {
-            foreignKeyName: "tunnel_daily_progress_tunnel_id_fkey";
-            columns: ["tunnel_id"];
-            isOneToOne: false;
-            referencedRelation: "v_command_center_tunnel";
-            referencedColumns: ["tunnel_id"];
-          },
-          {
-            foreignKeyName: "tunnel_daily_progress_tunnel_id_fkey";
-            columns: ["tunnel_id"];
-            isOneToOne: false;
-            referencedRelation: "v_command_center_tunnel_overview";
-            referencedColumns: ["tunnel_id"];
-          },
-          {
-            foreignKeyName: "tunnel_daily_progress_tunnel_id_fkey";
-            columns: ["tunnel_id"];
-            isOneToOne: false;
-            referencedRelation: "v_command_center_tunnel_scope";
-            referencedColumns: ["tunnel_id"];
-          },
-          {
-            foreignKeyName: "tunnel_daily_progress_tunnel_id_fkey";
-            columns: ["tunnel_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tunnel_progress_overview";
-            referencedColumns: ["tunnel_id"];
-          },
-        ];
-      };
       v_tunnel_progress_overview: {
         Row: {
           current_work_date: string | null;
@@ -11843,29 +11212,11 @@ export type Database = {
           total_ring_count: number | null;
           tunnel_id: string | null;
           tunnel_name: string | null;
-          tunnel_status_code: string | null;
-          tunnel_status_id: string | null;
-          tunnel_status_name: string | null;
           week_advance_meter: number | null;
           week_ring_count: number | null;
           week_start_work_date: string | null;
         };
-        Relationships: [
-          {
-            foreignKeyName: "tunnel_status_timeline_tunnel_status_id_fkey";
-            columns: ["tunnel_status_id"];
-            isOneToOne: false;
-            referencedRelation: "master_data";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tunnel_status_timeline_tunnel_status_id_fkey";
-            columns: ["tunnel_status_id"];
-            isOneToOne: false;
-            referencedRelation: "v_master_options";
-            referencedColumns: ["id"];
-          },
-        ];
+        Relationships: [];
       };
       v_user_favorite_projects: {
         Row: {

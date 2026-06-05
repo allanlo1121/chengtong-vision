@@ -15,24 +15,27 @@ import { ActionResult } from "../contracts";
 import { DependencyGraph } from "./types/dependency-graph";
 
 import { z, ZodObject } from "zod";
+import { FormMeta } from "./types/field.types";
 
-type SchemaFormProps<TSchema extends ZodObject<any>> = {
+type SchemaFormProps<TSchema extends ZodObject<any>, TMeta extends FormMeta = FormMeta> = {
   schema: TSchema;
   initialValues?: DefaultValues<z.input<TSchema>>;
   action?: (data: z.output<TSchema>) => Promise<ActionResult<any>>;
   onSuccess?: (result: ActionResult<z.output<TSchema>>) => void;
   onError?: (result: ActionResult<z.output<TSchema>>) => void;
   onCancel?: () => void;
+  meta?: TMeta;
 };
 
-export function SchemaForm<TSchema extends ZodObject<any>>({
+export function SchemaForm<TSchema extends ZodObject<any>, TMeta extends FormMeta = FormMeta>({
   schema,
   initialValues,
   action,
   onSuccess,
   onError,
   onCancel,
-}: SchemaFormProps<TSchema>) {
+  meta,
+}: SchemaFormProps<TSchema, TMeta>) {
   // console.log("SchemaForm props", {
   //   schema,
   //   initialValues,
@@ -40,6 +43,7 @@ export function SchemaForm<TSchema extends ZodObject<any>>({
   //   onSuccess,
   //   onError,
   //   onCancel,
+  //   meta,
   // });
   /** ------------------------------------------------
    * 1 提取字段
@@ -168,7 +172,7 @@ export function SchemaForm<TSchema extends ZodObject<any>>({
                   colSpanClassMap[field.ui.colSpan as keyof typeof colSpanClassMap] ?? "col-span-1"
                 }
               >
-                <FieldRenderer name={field.name} ui={field.ui} form={form} />
+                <FieldRenderer name={field.name} ui={field.ui} form={form} meta={meta} />
               </div>
             ))}
           </div>

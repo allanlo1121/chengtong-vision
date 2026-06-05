@@ -5,7 +5,21 @@ import { z } from "zod";
 /**
  * TunnelScheduleVersion字段规则
  */
-export const TunnelScheduleVersionSchema = z.object({
+export const TunnelScheduleVersionFormSchema = z.object({
+  tunnelId: idSchema.meta({
+    table: "tunnel_schedule_versions",
+    label: "隧道ID",
+    field: "tunnel_id",
+    searchable: false,
+    sortable: true,
+    component: "tunnelPicker",
+    section: "基本信息",
+    type: "number",
+    disabled: true,
+    required: true,
+    readonly: true,
+    colSpan: 1,
+  }),
   versionNo: z.coerce.number().optional().nullable().meta({
     table: "tunnel_schedule_versions",
     label: "版本号",
@@ -97,32 +111,18 @@ export const TunnelScheduleVersionSchema = z.object({
   }),
 });
 
-// export const employeeschema = z.object(OrganizationFields);
+export const CreateTunnelScheduleVersionSchema = TunnelScheduleVersionFormSchema.omit({
+  tunnelId: true,
+});
 
-// export const Createemployeeschema = employeeschema;
+export const UpdateTunnelScheduleVersionSchema = TunnelScheduleVersionFormSchema.extend({
+  id: idSchema,
+});
 
-// export const Updateemployeeschema = employeeschema.extend({
-//   id: idSchema,
-// });
-
-export const CreateTunnelScheduleVersionSchema = TunnelScheduleVersionSchema;
-
-// export const UpdateTunnelSchema = TunnelSchema.extend({
-//   id: idSchema,
-// });
-
-// export type TunnelInput = z.infer<typeof TunnelSchema>;
-
-// export type TunnelPostInput = z.infer<typeof TunnelPostSchema>;
-
-// export type TunnelTitleInput = z.infer<typeof TunnelTitleSchema>;
+export type TunnelScheduleVersionFormInput = z.infer<typeof TunnelScheduleVersionFormSchema>;
 
 export type CreateTunnelScheduleVersionInput = z.infer<typeof CreateTunnelScheduleVersionSchema>;
 
-export type TunnelScheduleVersionFields = keyof z.infer<typeof TunnelScheduleVersionSchema>;
+export type UpdateTunnelScheduleVersionInput = z.infer<typeof UpdateTunnelScheduleVersionSchema>;
 
-// export const UpdateTunnelSchema = TunnelSchema.extend({
-//   id: idSchema,
-// });
-
-// export type UpdateTunnelInput = z.infer<typeof UpdateTunnelSchema>;
+export type TunnelScheduleVersionFields = keyof z.infer<typeof TunnelScheduleVersionFormSchema>;

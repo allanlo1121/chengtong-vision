@@ -1,55 +1,19 @@
-import { PaginatedResult, Result, ServiceResult } from "@/lib/shared/contracts";
-import { mapTbmList } from "../mappers";
-
-import { TbmListItem } from "../types";
-
+import { appErrors, PaginatedResult, ServiceResult } from "@/lib/shared/contracts";
+import { Tbm, TbmDetail, TbmListItem } from "../types";
 import { TbmQueryType } from "../queries";
-
 import { tbmRepository } from "../repositories";
-import { mapTbm } from "../mappers";
-import { Tbm } from "../types";
 
-export async function getTbmById(id: string): Promise<Result<Tbm>> {
-  try {
-    console.log("===getTbmById===");
+export async function fetchTbmById(id: string): Promise<Tbm> {
+  const tbm = await tbmRepository.findById(id);
 
-    const row = await tbmRepository.findById(id);
-
-    if (!row) return { success: false, message: "未查询到TBM" };
-
-    return {
-      success: true,
-      data: mapTbm(row),
-    };
-  } catch (error: unknown) {
-    return {
-      success: false,
-      message: (error as Error)?.message ?? "查询失败",
-    };
+  if (!tbm) {
+    throw appErrors.notFound("未查询到TBM");
   }
+  return tbm;
 }
 
-export async function listTbms(query: TbmQueryType): Promise<Result<PaginatedResult<TbmListItem>>> {
-  try {
-    const data = await tbmRepository.paginate(query);
-
-    console.log("Mapped TBM list data:", data);
-
-    return {
-      success: true,
-      data: {
-        ...data,
-        items: data.items.map(mapTbmList),
-        page: query.page,
-        pageSize: query.pageSize,
-      },
-    };
-  } catch (error: unknown) {
-    return {
-      success: false,
-      message: (error as Error)?.message ?? "查询失败",
-    };
-  }
+export async function listTbms(query: TbmQueryType): Promise<PaginatedResult<TbmListItem>> {
+  return await tbmRepository.paginate(query);
 }
 
 import { TbmPickerItem, TbmPickerQuery } from "../types";
@@ -85,17 +49,11 @@ export async function listTbmPicker(
   }
 }
 
-// export async function getTbmPickerItemById(id: string): Promise<TbmPickerItem | null> {
-//     try {
-//         const data = await tbmRepository.getPickerItemById(id);
+export async function getTbmDetailById(id: string): Promise<TbmDetail> {
+  const tbm = await tbmRepository.getTbmDetailById(id);
 
-//         if (data) {
-//             return mapTbmPicker(data);
-//         }
-
-//         return null;
-//     } catch (error: unknown) {
-//         console.error("Error fetching TBM picker item by ID:", error);
-//         return null;
-//     }
-// }
+  if (!tbm) {
+    throw appErrors.notFound("未查询到TBM详情");
+  }
+  return tbm;
+}

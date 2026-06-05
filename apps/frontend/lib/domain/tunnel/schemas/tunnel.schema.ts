@@ -6,7 +6,7 @@ import { z } from "zod";
 /**
  * Tunnel字段规则
  */
-export const TunnelSchema = z.object({
+export const TunnelFormSchema = z.object({
   name: z
     .string()
     .min(4, { message: "隧道简称至少4个字符" })
@@ -201,7 +201,7 @@ export const TunnelSchema = z.object({
     colSpan: 1,
   }),
 
-  sortOrder: z.number().default(0).meta({
+  sortOrder: z.coerce.number().default(0).meta({
     table: "tunnels",
     label: "排序",
     field: "sort_order",
@@ -245,31 +245,13 @@ export const TunnelSchema = z.object({
   }),
 });
 
-// export const employeeschema = z.object(OrganizationFields);
-
-// export const Createemployeeschema = employeeschema;
-
-// export const Updateemployeeschema = employeeschema.extend({
-//   id: idSchema,
-// });
-
-export const CreateTunnelSchema = TunnelSchema;
-
-// export const UpdateTunnelSchema = TunnelSchema.extend({
-//   id: idSchema,
-// });
-
-// export type TunnelInput = z.infer<typeof TunnelSchema>;
-
-// export type TunnelPostInput = z.infer<typeof TunnelPostSchema>;
-
-// export type TunnelTitleInput = z.infer<typeof TunnelTitleSchema>;
+export const CreateTunnelSchema = TunnelFormSchema;
 
 export type CreateTunnelInput = z.infer<typeof CreateTunnelSchema>;
 
-export type TunnelFields = keyof z.infer<typeof TunnelSchema>;
+export type TunnelFields = keyof z.infer<typeof TunnelFormSchema>;
 
-export const UpdateTunnelSchema = TunnelSchema.extend({
+export const UpdateTunnelSchema = TunnelFormSchema.extend({
   id: idSchema,
 });
 

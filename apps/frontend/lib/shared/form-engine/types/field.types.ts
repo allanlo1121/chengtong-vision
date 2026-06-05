@@ -37,18 +37,33 @@ export interface FieldDefinition<T extends FieldValues = FieldValues> {
   ui: FieldUI<T>;
 }
 
-export interface FieldRendererProps<T extends FieldValues, C = any, O = T> {
+export interface FieldRendererProps<
+  T extends FieldValues,
+  C = any,
+  O = T,
+  M extends FormMeta = FormMeta,
+> {
   name: Path<T>;
   ui: FieldUI<T>;
   form: UseFormReturn<T, C, O>;
+  meta?: M;
   disabled?: boolean;
   required?: boolean;
 }
 
-export type FieldComponentType = <T extends FieldValues, C = any, O = T>(
-  props: FieldRendererProps<T, C, O>
+export type FieldComponentType = <
+  T extends FieldValues,
+  C = any,
+  O = T,
+  M extends FormMeta = FormMeta,
+>(
+  props: FieldRendererProps<T, C, O, M>
 ) => JSX.Element;
 
 export const fieldComponents = ["input", "select", "cascader", "switch"] as const;
 
 export type FieldComponent = (typeof fieldComponents)[number];
+
+export interface FormMeta {
+  entities?: Partial<Record<string, unknown>>;
+}

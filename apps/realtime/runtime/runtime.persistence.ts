@@ -23,8 +23,7 @@ export async function getTbmRuntimeContextByCode(tbmCode: string): Promise<TbmRu
     select
       t.id as "tbmId",
       t.code as "tbmCode",
-      a.id as "assignmentId",
-      a.tunnel_id as "tunnelId"
+      a.id as "assignmentId"
     from eqp.tbms t
     left join eqp.tbm_assignments a
       on a.tbm_id = t.id
@@ -86,7 +85,6 @@ async function insertShieldRealdata(data: TbmRuntimeData) {
   const context = await getTbmRuntimeContextByCode(data.tbmCode);
 
   const tbmId = context.tbmId;
-  const tunnelId = context.tunnelId;
 
   const allowedCodes = await getAllowedParameterCodes(tbmId);
 
@@ -94,12 +92,7 @@ async function insertShieldRealdata(data: TbmRuntimeData) {
     .filter(([code]) => allowedCodes.has(code))
     .filter(([, value]) => value !== undefined);
 
-  const columns = [
-    "tbm_id",
-    "tunnel_id",
-    "recorded_at",
-    ...entries.map(([code]) => quoteIdent(code)),
-  ];
+  const columns = ["tbm_id", "recorded_at", ...entries.map(([code]) => quoteIdent(code))];
 
   const placeholders = columns.map((_, index) => `$${index + 1}`);
 
@@ -112,7 +105,7 @@ async function insertShieldRealdata(data: TbmRuntimeData) {
     )
   `;
 
-  const params = [tbmId, tunnelId, new Date(data.recordedAt), ...entries.map(([, value]) => value)];
+  const params = [tbmId, new Date(data.recordedAt), ...entries.map(([, value]) => value)];
 
   await pgPool.query(sql, params);
 }

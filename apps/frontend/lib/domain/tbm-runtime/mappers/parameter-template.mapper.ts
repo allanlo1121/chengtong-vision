@@ -1,11 +1,9 @@
-import {
-  CreateTbmParameterTemplateFormInput,
-  CreateTbmRuntimeParameterFormInput,
-} from "../schemas";
+import { CreateTbmParameterTemplateInput, UpdateTbmParameterTemplateInput } from "../schemas";
 import {
   TbmParameterTemplateListRow,
   TbmParameterTemplateListItem,
   TbmParameterTemplateInsertRow,
+  TbmParameterTemplateUpdateRow,
   ParameterTemplateNodeRow,
 } from "../types";
 import {
@@ -14,26 +12,8 @@ import {
   TbmParameterTemplateRow,
 } from "../types/parameter-template.types";
 
-// export function mapParameterTemplateRowToParameterTemplatetem(row: TbmParameterTemplateRow): TbmParameterTemplate {
-//     if (!row.id) throw new Error("Row id is missing");
-
-//     if (!row.name) throw new Error("Row name is missing");
-
-//     if (!row.code) throw new Error("Row code is missing");
-//     return {
-//         id: row.id,
-//         name: row.name,
-//         code: row.code,
-//
-//         isDisabled: row.is_disabled ?? false,
-//         sortOrder: row.sort_order ?? 0,
-//         diameter: row.diameter ?? null,
-
-//     }
-// }
-
-export function mapParameterTemplateInputToInsertRow(
-  input: CreateTbmParameterTemplateFormInput
+export function mapParameterTemplateInsertRow(
+  input: CreateTbmParameterTemplateInput
 ): TbmParameterTemplateInsertRow {
   return {
     name: input.name,
@@ -44,6 +24,35 @@ export function mapParameterTemplateInputToInsertRow(
     sort_order: input.sortOrder,
     remark: input.remark,
     diameter: input.diameter,
+  };
+}
+
+export function mapParameterTemplateUpdateRow(
+  input: UpdateTbmParameterTemplateInput
+): TbmParameterTemplateUpdateRow {
+  return {
+    name: input.name,
+    code: input.code,
+    tbm_type_id: input.tbmTypeId,
+    is_default: input.isDefault,
+    is_disabled: input.isDisabled,
+    sort_order: input.sortOrder,
+    remark: input.remark,
+    diameter: input.diameter,
+  };
+}
+
+export function mapParameterTemplate(row: TbmParameterTemplateRow): TbmParameterTemplate {
+  return {
+    id: row.id,
+    name: row.name,
+    code: row.code,
+    tbmTypeId: row.tbm_type_id,
+    isDefault: row.is_default ?? false,
+    isDisabled: row.is_disabled ?? false,
+    sortOrder: row.sort_order ?? 0,
+    remark: row.remark,
+    diameter: row.diameter,
   };
 }
 

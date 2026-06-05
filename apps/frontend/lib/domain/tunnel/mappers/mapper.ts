@@ -1,17 +1,13 @@
-import {
-  CreateTunnelFullInput,
-  CreateTunnelInput,
-  CreateTunnelScheduleVersionInput,
-  CreateTunnelStatusTimelineInput,
-} from "../schemas";
+import { CreateTunnelFullInput, CreateTunnelInput, UpdateTunnelInput } from "../schemas";
 import {
   Tunnel,
+  TunnelDetail,
+  TunnelDetailRow,
   TunnelInsertRow,
   TunnelListItem,
   TunnelListRow,
   TunnelRow,
-  TunnelScheduleVersionInsertRow,
-  TunnelStatusTimelineInsertRow,
+  TunnelUpdateRow,
 } from "../types";
 
 export function mapTunnelList(row: TunnelListRow): TunnelListItem {
@@ -46,34 +42,45 @@ export function mapTunnelList(row: TunnelListRow): TunnelListItem {
 
     tunnelStatusId: row.tunnel_status_id,
     tunnelStatusName: row.tunnel_status_name,
+    validFrom: row.valid_from,
+    validTo: row.valid_to,
+    versionNo: row.version_no,
   };
 }
 
-// export function mapTunnelRow(row: TunnelInsertItem): TunnelInsertRow {
-//   return {
-//     name: row.name,
-//     full_name: row.fullName,
+export function mapTunnelListItem(row: TunnelListRow): TunnelListItem {
+  return {
+    id: row.id!,
+    name: row.name!,
+    fullName: row.full_name,
+    tunnelStatusId: row.tunnel_status_id,
+    tunnelStatusName: row.tunnel_status_name,
+    validFrom: row.valid_from,
+    validTo: row.valid_to,
+    organizationId: row.organization_id,
+    organizationName: row.organization_name,
+    projectId: row.project_id,
+    projectName: row.project_name,
+    prefix: row.prefix,
+    startRing: row.start_ring,
+    endRing: row.end_ring,
+    startChainage: row.start_chainage,
+    endChainage: row.end_chainage,
 
-//     project_id: row.projectId,
-//     prefix: row.prefix,
-//     start_stake: row.startStake,
-//     end_stake: row.endStake,
-//     start_ring: row.startRing,
-//     end_ring: row.endRing,
-//     start_chainage: row.startChainage,
-//     end_chainage: row.endChainage,
+    actualEndDate: row.actual_end_date,
+    actualStartDate: row.actual_start_date,
+    versionNo: row.version_no,
+    scheduleEndDate: row.schedule_end_date,
+    scheduleStartDate: row.schedule_start_date,
 
-//     actual_end_date: row.actualEndDate,
-//     actual_start_date: row.actualStartDate,
+    geology: row.geology,
+    latitude: row.latitude,
+    longitude: row.longitude,
 
-//     geology: row.geology,
-//     latitude: row.latitude,
-//     longitude: row.longitude,
-
-//     sort_order: row.sortOrder,
-//     remark: row.remark
-//   };
-// }
+    sortOrder: row.sort_order,
+    remark: row.remark,
+  };
+}
 
 export function mapTunnel(row: TunnelRow): Tunnel {
   return {
@@ -108,8 +115,9 @@ export function mapTunnel(row: TunnelRow): Tunnel {
   };
 }
 
-export function mapTunnelRowFromTunnelInput(input: CreateTunnelInput): TunnelInsertRow {
+export function mapTunnelUpdate(input: UpdateTunnelInput): TunnelUpdateRow {
   return {
+    id: input.id,
     name: input.name,
     full_name: input.fullName,
 
@@ -133,7 +141,7 @@ export function mapTunnelRowFromTunnelInput(input: CreateTunnelInput): TunnelIns
   };
 }
 
-export function mapTunnelInsertRowFromInput(input: CreateTunnelInput): TunnelInsertRow {
+export function mapTunnelInsert(input: CreateTunnelInput): TunnelInsertRow {
   return {
     name: input.name,
     full_name: input.fullName,
@@ -185,56 +193,34 @@ export function mapCreateTunnelInputFromTunnelFullInput(
   };
 }
 
-export function mapCreateTunnelStatusInputFromTunnelFullInput(
-  input: CreateTunnelFullInput
-): CreateTunnelStatusTimelineInput {
+export function mapTunnelDetail(row: TunnelDetailRow): TunnelDetail {
   return {
-    tunnelStatusId: input.tunnelStatusId ?? undefined,
-    validFrom: input.validFrom ?? new Date().toISOString(), // 如果前端没有传入 validFrom，就使用当前时间
-    validTo: input.validTo ?? null,
-    changeType: input.changeType ?? "manual", // 变更类型默认为 "manual"
-    remark: input.remark ?? null, // 变更备注
-  };
-}
+    id: row.id,
+    name: row.name,
+    tunnelStatusName: row.tunnel_status_name,
+    projectName: row.project_name,
+    organizationName: row.organization_name,
+    prefix: row.prefix,
+    startRing: row.start_ring,
+    endRing: row.end_ring,
+    startChainage: row.start_chainage,
+    endChainage: row.end_chainage,
 
-export function mapCreateTunnelScheduleVersionInputFromTunnelFullInput(
-  input: CreateTunnelFullInput
-): CreateTunnelScheduleVersionInput {
-  return {
-    versionNo: 1, // 新增时版本号默认为1
-    scheduleStartDate: input.scheduleStartDate ?? null,
-    scheduleEndDate: input.scheduleEndDate ?? null,
-    changeReason: input.changeReason ?? null, // 变更原因
-    source: input.source ?? null, // 数据来源
-    remark: input.remark ?? null, // 变更备注
-  };
-}
+    actualEndDate: row.actual_end_date,
+    actualStartDate: row.actual_start_date,
+    scheduleEndDate: row.schedule_end_date,
+    scheduleStartDate: row.schedule_start_date,
 
-export function mapTunnelStatusInsertRowFromInput(
-  input: CreateTunnelStatusTimelineInput,
-  tunnelId: string
-): TunnelStatusTimelineInsertRow {
-  return {
-    tunnel_id: tunnelId,
-    tunnel_status_id: input.tunnelStatusId ?? undefined,
-    valid_from: input.validFrom ?? new Date().toISOString(),
-    valid_to: input.validTo ?? null,
-    change_type: input.changeType ?? "manual",
-    remark: input.remark ?? null, // 变更备注
-  };
-}
+    geology: row.geology,
+    latitude: row.latitude,
+    longitude: row.longitude,
 
-export function mapTunnelScheduleVersionRowFromInput(
-  input: CreateTunnelScheduleVersionInput,
-  tunnelId: string
-): TunnelScheduleVersionInsertRow {
-  return {
-    tunnel_id: tunnelId,
-    version_no: 1, // 新增时版本号默认为1，后续可以根据实际情况进行调整
-    schedule_start_date: input.scheduleStartDate ?? null,
-    schedule_end_date: input.scheduleEndDate ?? null,
-    change_reason: input.changeReason ?? null, // 变更原因
-    source: input.source ?? null, // 数据来源
-    remark: input.remark ?? null, // 变更备注
+    sortOrder: row.sort_order,
+
+    remark: row.remark,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+    createdBy: row.created_by,
+    updatedBy: row.updated_by,
   };
 }

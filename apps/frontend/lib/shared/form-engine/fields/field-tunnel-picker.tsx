@@ -1,39 +1,31 @@
 "use client";
 
+import React from "react";
+
 import { Controller, FieldValues, Path, PathValue } from "react-hook-form";
 
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 
-import type { FieldRendererProps } from "../types/field.types";
+import type { FieldRendererProps, FormMeta } from "../types/field.types";
 import { TunnelPicker } from "@/lib/domain/tunnel/components/tunnel-picker/tunnel-picker";
+import { TunnelPickerItem } from "@/lib/domain/tunnel/types";
 
-export function FieldTunnelPicker<T extends FieldValues, C = any, O = T>({
-  name,
-  ui,
-  form,
-  disabled = false,
-  required = false,
-}: FieldRendererProps<T, C, O>) {
+export function FieldTunnelPicker<
+  T extends FieldValues,
+  C = any,
+  O = T,
+  M extends FormMeta = FormMeta,
+>({ name, ui, form, meta, disabled = false, required = false }: FieldRendererProps<T, C, O, M>) {
   console.log("FieldTunnelPicker", { name, ui, disabled, required });
   return (
     <Controller
       name={name}
       control={form.control}
       render={({ field, fieldState }) => {
-        console.log("FieldTunnelPicker value", {
-          name,
-          value: form.getValues(name),
-          fieldValue: field.value,
-          allValues: form.getValues(),
-        });
-        const values = form.getValues();
-
-        const selectedTunnel = field.value
-          ? {
-              id: field.value,
-              name: values.tunnelLabel ?? "",
-            }
-          : null;
+        const initialSelected = meta?.entities?.[String(name)] as
+          | TunnelPickerItem
+          | null
+          | undefined;
         return (
           <Field data-invalid={fieldState.invalid}>
             {ui.label && (
@@ -44,20 +36,54 @@ export function FieldTunnelPicker<T extends FieldValues, C = any, O = T>({
               </FieldLabel>
             )}
 
-            <TunnelPicker
-              selected={selectedTunnel}
+            <TunnelPickerFieldInner
+              value={field.value}
+              initialSelected={initialSelected ?? null}
+              disabled={disabled}
               onChange={(tunnel) => {
                 field.onChange(tunnel?.id ?? null);
-                form.setValue(
-                  "tunnelLabel" as Path<T>,
-                  (tunnel?.name ?? "") as PathValue<T, Path<T>>
-                );
               }}
             />
 
             {fieldState.error && <FieldError errors={[fieldState.error]} />}
           </Field>
         );
+      }}
+    />
+  );
+}
+
+function TunnelPickerFieldInner({
+  value,
+  initialSelected,
+  disabled,
+  onChange,
+}: {
+  value?: string | null;
+  initialSelected?: TunnelPickerItem | null;
+  disabled?: boolean;
+  onChange: (item: TunnelPickerItem | null) => void;
+}) {
+  const [selected, setSelected] = React.useState<TunnelPickerItem | null>(initialSelected ?? null);
+
+  React.useEffect(() => {
+    if (!value) {
+      setSelected(null);
+      return;
+    }
+
+    if (initialSelected?.id === value) {
+      setSelected(initialSelected);
+    }
+  }, [value, initialSelected]);
+
+  return (
+    <TunnelPicker
+      selected={selected}
+      disabled={disabled}
+      onChange={(item) => {
+        setSelected(item);
+        onChange(item);
       }}
     />
   );

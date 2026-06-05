@@ -7,45 +7,61 @@ import {
   ParameterTemplateNodeRow,
   TbmRuntimeParameterListRow,
   TemplateOption,
+  TbmParameterTemplate,
+  TbmRuntimeParameterListItem,
+  ParameterTemplateNode,
 } from "../types";
 import { applyPagination, assertNoError } from "@/lib/infra/repositories/base.repository";
 import { ParameterTemplateQueryType } from "../queries";
-import { PageData } from "@/lib/shared/contracts/paginated-result";
+import { PaginatedResult } from "@/lib/shared/contracts";
 import { appErrors } from "@/lib/shared/contracts";
+import {
+  mapParameterTemplate,
+  mapParameterTemplateInsertRow,
+  mapParameterTemplateUpdateRow,
+} from "../mappers";
+import { CreateTbmParameterTemplateInput, UpdateTbmParameterTemplateInput } from "../schemas";
 
 export const tptRepository = {
-  insert: async (input: TbmParameterTemplateInsertRow): Promise<TbmParameterTemplateRow | null> => {
+  insert: async (input: CreateTbmParameterTemplateInput): Promise<TbmParameterTemplate> => {
     const supabase = await createClient();
+
+    const payload = mapParameterTemplateInsertRow(input);
 
     const { data, error } = await supabase
       .schema("eqp")
       .from("tbm_parameter_templates")
-      .insert(input)
-      .select()
+      .insert(payload)
+      .select("*")
       .single();
 
     assertNoError(error);
-    return data;
+    if (!data) {
+      throw appErrors.internal("插入参数模板失败");
+    }
+    return mapParameterTemplate(data);
   },
-  update: async (
-    id: number,
-    input: TbmParameterTemplateUpdateRow
-  ): Promise<TbmParameterTemplateRow | null> => {
+  update: async (input: UpdateTbmParameterTemplateInput): Promise<TbmParameterTemplate> => {
     const supabase = await createClient();
+    const payload = mapParameterTemplateUpdateRow(input);
 
     const { data, error } = await supabase
       .schema("eqp")
       .from("tbm_parameter_templates")
-      .update(input)
-      .eq("id", id)
-      .select()
+      .update(payload)
+      .eq("id", input.id)
+      .select("*")
       .single();
 
     assertNoError(error);
 
-    return data;
+    if (!data) {
+      throw appErrors.internal("更新参数模板失败");
+    }
+
+    return mapParameterTemplate(data);
   },
-  findById: async (id: number): Promise<TbmParameterTemplateRow | null> => {
+  findById: async (id: number): Promise<TbmParameterTemplate | null> => {
     const supabase = await createClient();
 
     const { data, error } = await supabase
@@ -57,7 +73,7 @@ export const tptRepository = {
 
     assertNoError(error);
 
-    return data;
+    return data ? mapParameterTemplate(data) : null;
   },
   list: async (): Promise<TbmParameterTemplateListRow[]> => {
     const supabase = await createClient();
@@ -75,7 +91,7 @@ export const tptRepository = {
   findParameterTemplateOptions,
 };
 
-export async function searchTbmParameterTemplates(): Promise<ParameterTemplateNodeRow[]> {
+export async function searchTbmParameterTemplates(): Promise<ParameterTemplateNode[]> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -99,16 +115,16 @@ export async function searchTbmParameterTemplates(): Promise<ParameterTemplateNo
       id: item.id,
       code: item.code,
       name: item.name,
-      sort_order: item.sort_order,
+      sortOrder: item.sort_order,
 
-      parameter_count: item.tbm_parameter_template_parameters?.[0]?.count ?? 0,
+      parameterCount: item.tbm_parameter_template_parameters?.[0]?.count ?? 0,
     })) ?? []
   );
 }
 
 export async function findParametersByTemplateId(
   query: ParameterTemplateQueryType
-): Promise<PageData<TbmRuntimeParameterListRow>> {
+): Promise<PaginatedResult<TbmRuntimeParameterListItem>> {
   if (!query.parameterTemplateId) {
     throw appErrors.required("parameterTemplateId", "请选择参数模板");
   }
@@ -154,18 +170,30 @@ export async function findParametersByTemplateId(
         const { subsystem, ...parameter } = item.parameter;
 
         return {
-          ...parameter,
-
-          subsystem_name: subsystem?.name ?? null,
-
-          subsystem_code: subsystem?.code ?? null,
+          id: parameter.id,
+          code: parameter.code,
+          name: parameter.name,
+          dataType: parameter.data_type,
+          unit: parameter.unit,
+          digits: parameter.digits,
+          isAlarm: parameter.is_alarm,
+          sortOrder: parameter.sort_order,
+          isDisabled: parameter.is_disabled,
+          subsystemId: parameter.subsystem_id,
+          subsystemName: subsystem?.name ?? null,
+          subsystemCode: subsystem?.code ?? null,
         };
       }) ?? [],
     total: data?.length ?? 0,
+    page: query.page,
+    pageSize: query.pageSize,
   };
 }
 
-async function addParametersToTemplate(input: { templateId: number; parameterIds: number[] }) {
+async function addParametersToTemplate(input: {
+  templateId: number;
+  parameterIds: number[];
+}): Promise<number> {
   const supabase = await createClient();
 
   const rows = input.parameterIds.map((parameterId, index) => ({
@@ -186,17 +214,14 @@ async function addParametersToTemplate(input: { templateId: number; parameterIds
 
   assertNoError(error);
 
-  return {
-    insertedCount: data?.length ?? 0,
-    items: data ?? [],
-  };
+  return data?.length ?? 0;
 }
 
 async function replaceTemplateParametersBySubsystem(input: {
   templateId: number;
   subsystemId: number;
   parameterIds: number[];
-}) {
+}): Promise<number> {
   const supabase = await createClient();
 
   const { data: subsystemParameters, error: parameterError } = await supabase
@@ -221,9 +246,7 @@ async function replaceTemplateParametersBySubsystem(input: {
   }
 
   if (input.parameterIds.length === 0) {
-    return {
-      count: 0,
-    };
+    return 0;
   }
 
   const rows = input.parameterIds.map((parameterId, index) => ({
@@ -241,9 +264,7 @@ async function replaceTemplateParametersBySubsystem(input: {
 
   assertNoError(error);
 
-  return {
-    count: data?.length ?? 0,
-  };
+  return data?.length ?? 0;
 }
 
 async function findParameterTemplateGroups(templateId: number) {
@@ -333,7 +354,10 @@ async function findParameterTemplateGroups(templateId: number) {
   );
 }
 
-async function replaceTemplateParameters(input: { templateId: number; parameterIds: number[] }) {
+async function replaceTemplateParameters(input: {
+  templateId: number;
+  parameterIds: number[];
+}): Promise<number> {
   const supabase = await createClient();
 
   const { error: deleteError } = await supabase
@@ -345,9 +369,7 @@ async function replaceTemplateParameters(input: { templateId: number; parameterI
   assertNoError(deleteError);
 
   if (input.parameterIds.length === 0) {
-    return {
-      count: 0,
-    };
+    return 0;
   }
 
   const rows = input.parameterIds.map((parameterId, index) => ({
@@ -365,9 +387,7 @@ async function replaceTemplateParameters(input: { templateId: number; parameterI
 
   assertNoError(error);
 
-  return {
-    count: data?.length ?? 0,
-  };
+  return data?.length ?? 0;
 }
 
 async function findParameterTemplateOptions(): Promise<TemplateOption[]> {

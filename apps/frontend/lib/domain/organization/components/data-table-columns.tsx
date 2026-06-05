@@ -54,13 +54,7 @@ export const organizationColumns: ColumnDef<OrganizationListItem>[] = [
     enableSorting: false,
     enableHiding: true,
   },
-  {
-    accessorKey: "businessName",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="业务板块" />,
-    cell: ({ row }) => <div className="w-[120px]">{row.getValue("businessName")}</div>,
-    enableSorting: false,
-    enableHiding: true,
-  },
+
   {
     accessorKey: "countryName",
     header: ({ column }) => <DataTableColumnHeader column={column} title="所属国家" />,
@@ -91,9 +85,9 @@ export const organizationColumns: ColumnDef<OrganizationListItem>[] = [
     enableHiding: true,
   },
   {
-    accessorKey: "isActive",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="是否激活" />,
-    cell: ({ row }) => <div className="w-[120px]">{row.getValue("isActive") ? "是" : "否"}</div>,
+    accessorKey: "businessName",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="业务板块" />,
+    cell: ({ row }) => <div className="w-[120px]">{row.getValue("businessName")}</div>,
     enableSorting: false,
     enableHiding: true,
   },

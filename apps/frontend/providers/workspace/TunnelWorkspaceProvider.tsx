@@ -3,9 +3,9 @@
 
 import { createContext, useContext, useMemo, type ReactNode } from "react";
 
-export interface TunnelWorkspaceTunnel {
-  id: string;
-  name: string;
+export interface TunnelWorkspaceScope {
+  tunnelId: string;
+  tunnelName: string;
 
   projectId?: string | null;
   projectName?: string | null;
@@ -20,28 +20,29 @@ export interface TunnelWorkspaceTunnel {
 }
 
 interface TunnelWorkspaceContextValue {
-  tunnel: TunnelWorkspaceTunnel;
-  tunnelId: string;
-  projectId?: string | null;
-  tbmId?: string | null;
+  scope: TunnelWorkspaceScope;
+  tunnelOptions: TunnelWorkspaceScope[];
 }
 
 const TunnelWorkspaceContext = createContext<TunnelWorkspaceContextValue | null>(null);
 
 interface TunnelWorkspaceProviderProps {
   children: ReactNode;
-  tunnel: TunnelWorkspaceTunnel;
+  scope: TunnelWorkspaceScope;
+  tunnelOptions?: TunnelWorkspaceScope[];
 }
 
-export function TunnelWorkspaceProvider({ children, tunnel }: TunnelWorkspaceProviderProps) {
+export function TunnelWorkspaceProvider({
+  children,
+  scope,
+  tunnelOptions,
+}: TunnelWorkspaceProviderProps) {
   const value = useMemo<TunnelWorkspaceContextValue>(
     () => ({
-      tunnel,
-      tunnelId: tunnel.id,
-      projectId: tunnel.projectId,
-      tbmId: tunnel.tbmId,
+      scope,
+      tunnelOptions: tunnelOptions || [],
     }),
-    [tunnel]
+    [scope, tunnelOptions]
   );
 
   return (

@@ -35,12 +35,12 @@ export const employeeColumns: ColumnDef<EmployeeListItem>[] = [
   },
   {
     accessorKey: "name",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="组织简称" />,
+    header: ({ column }) => <DataTableColumnHeader column={column} title="员工姓名" />,
     cell: ({ row }) => {
-      const org = row.original;
+      const employee = row.original;
       return (
-        <Link href={routes.organizations.edit(org.id)} className="w-[80px]">
-          {org.name}
+        <Link href={routes.employees.edit(employee.id!)} className="w-[80px]">
+          {employee.name}
         </Link>
       );
     },

@@ -2,7 +2,6 @@ export async function createSystemAlarm(
   client: any,
   input: {
     tbmId: string;
-    tunnelId?: string | null;
     alarmType: string;
     level: "info" | "warning" | "critical";
     title: string;
@@ -18,7 +17,6 @@ export async function createSystemAlarm(
     `
     insert into public.tbm_system_alarm_events (
       tbm_id,
-      tunnel_id,
       alarm_type,
       level,
       title,
@@ -29,11 +27,10 @@ export async function createSystemAlarm(
       occurred_at,
       metadata
     )
-    values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+    values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
     `,
     [
       input.tbmId,
-      input.tunnelId ?? null,
       input.alarmType,
       input.level,
       input.title,

@@ -1,5 +1,5 @@
 import { Breadcrumbs } from "@/components/common/bread-crubms";
-import CreateTunnel from "@/lib/domain/tunnel/pages/create-tunnel";
+import CreateTunnel from "@/lib/domain/tunnel/components/forms/create";
 
 export default async function Page() {
   return (

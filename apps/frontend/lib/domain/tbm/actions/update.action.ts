@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { UpdateTbmInput, UpdateTbmSchema } from "../schemas";
-import { ActionResult, toActionError } from "@/lib/shared/contracts/action-result";
+import { ActionResult, toActionError } from "@/lib/shared/contracts";
 import { updateTbm } from "../services";
 import { Tbm } from "../types";
 
@@ -21,8 +21,7 @@ export async function updateTbmAction(data: UpdateTbmInput): Promise<ActionResul
   }
 
   try {
-    const { id } = parsed.data;
-    const result = await updateTbm(id, parsed.data);
+    const result = await updateTbm(parsed.data);
 
     if (!result) {
       return {

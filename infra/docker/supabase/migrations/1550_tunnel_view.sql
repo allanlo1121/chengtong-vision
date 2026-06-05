@@ -22,6 +22,8 @@ select
 
   tsv.schedule_start_date,
   tsv.schedule_end_date,
+  tsv.version_no,
+
   t.geology,
   t.longitude,
   t.latitude,
@@ -29,7 +31,9 @@ select
   t.remark,
 
   ps.tunnel_status_id,
-  s.name as tunnel_status_name
+  s.name as tunnel_status_name,
+  ps.valid_from,
+  ps.valid_to
 
 from proj.tunnels t
 
@@ -132,6 +136,7 @@ select
 
   tsv.schedule_start_date,
   tsv.schedule_end_date, 
+  tsv.version_no,
   t.sort_order,
 
 

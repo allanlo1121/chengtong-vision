@@ -1,12 +1,10 @@
 import { TunnelWorkspaceDetailRow } from "../types/db.types";
-import { TunnelWorkspaceTunnel } from "@/providers/workspace/TunnelWorkspaceProvider";
+import { TunnelWorkspaceScope } from "@/providers/workspace/TunnelWorkspaceProvider";
 
-export function mapTunnelWorkspaceDetailRowToTunnelWorkspaceTunnel(
-  row: TunnelWorkspaceDetailRow
-): TunnelWorkspaceTunnel {
+export function mapTunnelWorkspaceScope(row: TunnelWorkspaceDetailRow): TunnelWorkspaceScope {
   return {
-    id: row.id!,
-    name: row.name!,
+    tunnelId: row.id!,
+    tunnelName: row.name!,
     projectId: row.project_id,
     projectName: row.project_name,
     tbmId: row.tbm_id,

@@ -39,7 +39,7 @@ export const columns: ColumnDef<TbmListItem>[] = [
     cell: ({ row }) => {
       const tbm = row.original;
       return (
-        <Link href={routes.tbms.detail(tbm.id)} className="w-[80px]">
+        <Link href={routes.tbms.detail(tbm.id!)} className="w-[80px]">
           {tbm.name}
         </Link>
       );

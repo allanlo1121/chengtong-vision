@@ -6,20 +6,6 @@ import { z } from "zod";
  * TBM参数绑定字段规则
  */
 export const TbmParameterBindingFormSchema = z.object({
-  id: idSchema.meta({
-    table: "tbm_parameter_bindings",
-    label: "ID",
-    field: "id",
-    searchable: false,
-    sortable: true,
-    component: "input",
-    section: "基本信息",
-    type: "number",
-    disabled: true,
-    required: false,
-    readonly: true,
-    colSpan: 1,
-  }),
   tbmId: idSchema.meta({
     table: "tbm_parameter_bindings",
     label: "TBM",
@@ -107,17 +93,13 @@ export const TbmParameterBindingFormSchema = z.object({
   }),
 });
 
-export const CreateTbmParameterBindingFormSchema = TbmParameterBindingFormSchema.omit({
-  id: true,
+export const CreateTbmParameterBindingSchema = TbmParameterBindingFormSchema;
+
+export const UpdateTbmParameterBindingSchema = TbmParameterBindingFormSchema.extend({
+  id: z.coerce.number(),
 });
 
-export const UpdateTbmParameterBindingFormSchema = TbmParameterBindingFormSchema;
-
-export type CreateTbmParameterBindingFormInput = z.infer<
-  typeof CreateTbmParameterBindingFormSchema
->;
-export type UpdateTbmParameterBindingFormInput = z.infer<
-  typeof UpdateTbmParameterBindingFormSchema
->;
+export type CreateTbmParameterBindingInput = z.infer<typeof CreateTbmParameterBindingSchema>;
+export type UpdateTbmParameterBindingInput = z.infer<typeof UpdateTbmParameterBindingSchema>;
 
 export type TbmParameterBindingFormFields = keyof z.infer<typeof TbmParameterBindingFormSchema>;

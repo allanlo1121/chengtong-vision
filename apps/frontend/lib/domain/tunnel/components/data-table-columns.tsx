@@ -6,7 +6,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { type TunnelListItem } from "../types";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
-import { formatDateTime } from "@/lib/utils";
+import { formatDateCN, formatDateTime } from "@/lib/utils";
+import { routes } from "@/lib/core/router/router";
 
 export const tunnelColumns: ColumnDef<TunnelListItem>[] = [
   {
@@ -38,7 +39,7 @@ export const tunnelColumns: ColumnDef<TunnelListItem>[] = [
     cell: ({ row }) => {
       const tunnel = row.original;
       return (
-        <Link href={`/system/tunnels/${tunnel.id}`} className="w-[80px]">
+        <Link href={routes.tunnels.detail(tunnel.id!)} className="w-[80px]">
           {tunnel.name}
         </Link>
       );
@@ -113,7 +114,7 @@ export const tunnelColumns: ColumnDef<TunnelListItem>[] = [
     accessorKey: "scheduleStartDate",
     header: ({ column }) => <DataTableColumnHeader column={column} title="计划开工日期" />,
     cell: ({ row }) => (
-      <div className="w-[120px]">{formatDateTime(row.getValue("scheduleStartDate") as string)}</div>
+      <div className="w-[120px]">{formatDateCN(row.getValue("scheduleStartDate") as string)}</div>
     ),
     enableSorting: false,
     enableHiding: true,
@@ -122,7 +123,7 @@ export const tunnelColumns: ColumnDef<TunnelListItem>[] = [
     accessorKey: "scheduleEndDate",
     header: ({ column }) => <DataTableColumnHeader column={column} title="计划竣工日期" />,
     cell: ({ row }) => (
-      <div className="w-[120px]">{formatDateTime(row.getValue("scheduleEndDate") as string)}</div>
+      <div className="w-[120px]">{formatDateCN(row.getValue("scheduleEndDate") as string)}</div>
     ),
     enableSorting: false,
     enableHiding: true,
@@ -138,7 +139,7 @@ export const tunnelColumns: ColumnDef<TunnelListItem>[] = [
     accessorKey: "createdAt",
     header: ({ column }) => <DataTableColumnHeader column={column} title="创建时间" />,
     cell: ({ row }) => (
-      <div className="w-[120px]">{formatDateTime(row.getValue("createdAt") as string)}</div>
+      <div className="w-[120px]">{formatDateCN(row.getValue("createdAt") as string)}</div>
     ),
     enableSorting: false,
     enableHiding: true,

@@ -2,8 +2,8 @@
 
 import { z } from "zod";
 import { createOrganization } from "../services";
-import { CreateOrganizationInput, CreateOrganizationSchema, OrganizationFields } from "../schemas";
-import { ActionState } from "@/lib/shared/actions/types";
+import { CreateOrganizationInput, CreateOrganizationSchema } from "../schemas";
+
 import { ActionResult, toActionError } from "@/lib/shared/contracts";
 import { Organization } from "../types";
 

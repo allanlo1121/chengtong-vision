@@ -9,20 +9,17 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 import { EmployeeListItem } from "@/lib/domain/employee/types";
 
 import { useCrudMutation } from "@/lib/ui/crud/hooks/useCrudMutation";
-import { deleteEmployeeAction } from "../actions/delete.action";
+// import { deleteEmployeeAction } from "../actions/delete.action";
 import { routes } from "@/lib/core/router/router";
+import { toast } from "sonner";
+import { deleteEmployeeAction } from "../actions";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -34,18 +31,24 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<Emp
   const employee = row.original as unknown as EmployeeListItem;
   const router = useRouter();
 
-  const deleteMutation = useCrudMutation<string, number>({
-    action: deleteEmployeeAction,
-    successMessage: "删除成功",
-    onSuccess: () => router.refresh(),
-  });
-
-  const handleDelete = () => {
+  async function handleDelete() {
     if (!confirm("确认删除该员工吗？")) return;
 
-    console.log("deleteMutation", deleteMutation);
-    deleteMutation.mutate(employee.id);
-  };
+    try {
+      const result = await deleteEmployeeAction(employee.id!);
+
+      if (!result.success) {
+        toast.error(result.message ?? "删除失败");
+        return;
+      }
+
+      toast.success(result.message ?? "删除成功");
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+      toast.error("删除失败");
+    }
+  }
 
   return (
     <DropdownMenu>
@@ -57,7 +60,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<Emp
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-[180px]">
-        <DropdownMenuItem onClick={() => router.push(routes.employees.edit(employee.id))}>
+        <DropdownMenuItem onClick={() => router.push(routes.employees.edit(employee.id!))}>
           编辑员工
         </DropdownMenuItem>
 

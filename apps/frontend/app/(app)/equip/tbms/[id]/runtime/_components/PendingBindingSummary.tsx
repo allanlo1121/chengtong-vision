@@ -19,10 +19,7 @@ import {
 } from "@/components/ui/accordion";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-import type {
-  ParameterTemplateGroup,
-  TbmParameterBindingGroup,
-} from "@/lib/domain/tbm-runtime/types";
+import type { TbmParameterBindingGroup } from "@/lib/domain/tbm-runtime/types";
 
 interface TemplateOption {
   id: number;

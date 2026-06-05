@@ -57,7 +57,7 @@ export function ParameterSelector({
   }
 
   return (
-    <div className="h-full w-full space-y-2 overflow-y-auto rounded-md border p-3">
+    <div className="h-full w-80 space-y-2 overflow-y-auto rounded-md border p-3">
       <div className="space-y-1 px-2">
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-medium">选择参数列表</h2>

@@ -1,44 +1,69 @@
 import { appErrors, PaginatedResult } from "@/lib/shared/contracts";
-import { getTunnelWorkspaceDetail, tunnelRepository } from "../repositories";
-import { Tunnel, TunnelListItem } from "../types";
+import {
+  getTunnelWorkspaceDetail,
+  searchTunnelWorkspaceScopesByOrganizations,
+  tunnelRepository,
+} from "../repositories";
+import { Tunnel, TunnelDetail, TunnelListItem } from "../types";
 import { TunnelQueryType } from "../queries";
-import { mapTunnel, mapTunnelList } from "../mappers/mapper";
-import { mapTunnelWorkspaceDetailRowToTunnelWorkspaceTunnel } from "../mappers/workspace.mapper";
-import { TunnelWorkspaceTunnel } from "@/providers/workspace/TunnelWorkspaceProvider";
+import { TunnelWorkspaceScope } from "@/providers/workspace/TunnelWorkspaceProvider";
+import { expandOrganizationIds } from "../../organization/services";
 
-export async function getTunnelById(id: string): Promise<Tunnel> {
-  console.log("===getTunnelById===");
+export async function fetchTunnelById(id: string): Promise<Tunnel> {
+  console.log("===fetchTunnelById===");
 
-  const row = await tunnelRepository.findById(id);
+  const tunnel = await tunnelRepository.findById(id);
 
-  if (!row) {
+  if (!tunnel) {
     throw appErrors.notFound("未查询到隧道");
   }
 
-  return mapTunnel(row);
+  return tunnel;
+}
+
+export async function fetchTunnelDetailById(id: string): Promise<TunnelDetail> {
+  console.log("===fetchTunnelDetailById===");
+  const tunnelDetail = await tunnelRepository.getTunnelDetailById(id);
+
+  if (!tunnelDetail) {
+    throw appErrors.notFound("未查询到隧道详情");
+  }
+
+  return tunnelDetail;
 }
 
 export async function listTunnels(
   query: TunnelQueryType
 ): Promise<PaginatedResult<TunnelListItem>> {
-  const data = await tunnelRepository.paginate(query);
-
-  console.log("Mapped Tunnel list data:", data);
-
-  return {
-    ...data,
-    items: data.items.map(mapTunnelList),
-    page: query.page,
-    pageSize: query.pageSize,
-  };
+  return await tunnelRepository.paginate(query);
 }
 
-export async function fetchTunnelWorkspaceDetail(tunnelId: string): Promise<TunnelWorkspaceTunnel> {
-  const row = await getTunnelWorkspaceDetail(tunnelId);
+export async function fetchTunnelWorkspaceDetail(tunnelId: string): Promise<TunnelWorkspaceScope> {
+  const result = await getTunnelWorkspaceDetail(tunnelId);
 
-  if (!row) {
+  if (!result) {
     throw appErrors.notFound("未查询到隧道工作区详情");
   }
 
-  return mapTunnelWorkspaceDetailRowToTunnelWorkspaceTunnel(row);
+  return result;
+}
+
+export async function listTunnelWorkspaceScopesByOrganizations(
+  organizationIds: string[]
+): Promise<TunnelWorkspaceScope[]> {
+  const tunnels = await searchTunnelWorkspaceScopesByOrganizations(organizationIds);
+
+  if (!tunnels || tunnels.length === 0) {
+    throw appErrors.notFound("未查询到隧道工作区详情");
+  }
+
+  return tunnels;
+}
+
+export async function listAccessibleTunnelScopes(
+  organizationIds: string[]
+): Promise<TunnelWorkspaceScope[]> {
+  const expandedOrganizationIds = await expandOrganizationIds(organizationIds);
+
+  return listTunnelWorkspaceScopesByOrganizations(expandedOrganizationIds);
 }

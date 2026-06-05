@@ -1,18 +1,20 @@
 import { createClient } from "@/lib/infra/supabase/server";
 
 import { OrganizationQueryType, organizationQuery } from "../queries";
-import { PageData } from "@/lib/shared/contracts";
+import { appErrors, PaginatedResult } from "@/lib/shared/contracts";
 import { applyPagination, assertNoError } from "@/lib/infra/repositories/base.repository";
 
+import { Organization, OrganizationListItem, OrganizationDetail } from "../types";
 import {
-  OrganizationDetailRow,
-  OrganizationInsertRow,
-  OrganizationListRow,
-  OrganizationRow,
-  OrganizationUpdateRow,
-} from "../types";
+  mapOrganization,
+  mapOrganizationDetail,
+  mapOrganizationListItem,
+  mapOrganizationToInsert,
+  mapOrganizationToUpdate,
+} from "../mappers";
+import { CreateOrganizationInput, UpdateOrganizationInput } from "../schemas";
 
-export async function findDetailById(id: string): Promise<OrganizationDetailRow> {
+export async function findDetailById(id: string): Promise<OrganizationDetail | null> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -23,36 +25,23 @@ export async function findDetailById(id: string): Promise<OrganizationDetailRow>
     .single();
 
   assertNoError(error);
-  if (!data) {
-    throw new Error("Organization not found");
-  }
 
-  return data as OrganizationDetailRow;
+  return data ? mapOrganizationDetail(data) : null;
 }
 
-export async function getAllOrganizationList(): Promise<OrganizationListRow[]> {
+async function list(): Promise<OrganizationListItem[]> {
   const supabase = await createClient();
 
   const { data, error } = await supabase.schema("hr").from("v_organization_list").select("*");
 
   assertNoError(error);
 
-  return data as OrganizationListRow[];
+  return (data ?? []).map(mapOrganizationListItem);
 }
 
-async function softDeleteMany(ids: string[]) {
-  const supabase = await createClient();
-
-  const { data, error } = await supabase.schema("system").rpc("soft_delete", {
-    p_table: "hr.organizations",
-    p_ids: ids,
-  });
-
-  assertNoError(error);
-  return data ?? 0;
-}
-
-async function paginate(query: OrganizationQueryType): Promise<PageData<OrganizationListRow>> {
+async function paginate(
+  query: OrganizationQueryType
+): Promise<PaginatedResult<OrganizationListItem>> {
   const supabase = await createClient();
 
   const { from, to } = applyPagination(query.page, query.pageSize);
@@ -83,20 +72,24 @@ async function paginate(query: OrganizationQueryType): Promise<PageData<Organiza
   assertNoError(error);
 
   return {
-    items: (data ?? []) as OrganizationListRow[],
+    items: (data ?? []).map(mapOrganizationListItem),
     total: count ?? 0,
+    page: query.page,
+    pageSize: query.pageSize,
   };
 }
 
 export const organizationRepository = {
-  insert: async (input: OrganizationInsertRow): Promise<OrganizationRow> => {
+  insert: async (input: CreateOrganizationInput): Promise<Organization> => {
     console.log("Inserting organization with input:", input);
+
+    const payload = mapOrganizationToInsert(input);
     const supabase = await createClient();
 
     const { data, error } = await supabase
       .schema("hr")
       .from("organizations")
-      .insert([input])
+      .insert([payload])
       .select("*")
       .single();
 
@@ -104,31 +97,43 @@ export const organizationRepository = {
     assertNoError(error);
 
     if (!data) {
-      throw new Error(`Insert failed: no data returned for table "organizations"`);
+      throw appErrors.internal("organizationRepository.create", "创建组织失败");
     }
 
-    return data as OrganizationRow;
+    return mapOrganization(data);
   },
-  update: async (id: string, input: OrganizationUpdateRow): Promise<OrganizationRow> => {
+  update: async (input: UpdateOrganizationInput): Promise<Organization> => {
+    const payload = mapOrganizationToUpdate(input);
     const supabase = await createClient();
 
     const { data, error } = await supabase
       .schema("hr")
       .from("organizations")
-      .update(input)
-      .eq("id", id)
+      .update(payload)
+      .eq("id", input.id)
       .select("*")
       .single();
 
     assertNoError(error);
 
     if (!data) {
-      throw new Error(`Update failed: no data returned for table "organizations"`);
+      throw appErrors.internal("organizationRepository.update", "更新组织失败");
     }
 
-    return data as OrganizationRow;
+    return mapOrganization(data);
   },
-  findByCode: async (code: string): Promise<OrganizationRow | null> => {
+  deleteById: async (id: string): Promise<void> => {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+      .schema("hr")
+      .from("organizations")
+      .update({ deleted_at: new Date().toISOString() })
+      .eq("id", id);
+
+    assertNoError(error);
+  },
+  findByCode: async (code: string): Promise<Organization | null> => {
     const supabase = await createClient();
 
     const { data, error } = await supabase
@@ -140,10 +145,10 @@ export const organizationRepository = {
 
     assertNoError(error);
 
-    return data as OrganizationRow | null;
+    return data ? mapOrganization(data) : null;
   },
 
-  findById: async (id: string): Promise<OrganizationRow | null> => {
+  findById: async (id: string): Promise<Organization | null> => {
     const supabase = await createClient();
 
     const { data, error } = await supabase
@@ -155,10 +160,9 @@ export const organizationRepository = {
 
     assertNoError(error);
 
-    return data as OrganizationRow | null;
+    return data ? mapOrganization(data) : null;
   },
   findDetailById,
-  getAllList: getAllOrganizationList,
   paginate,
-  softDeleteMany,
+  list,
 };

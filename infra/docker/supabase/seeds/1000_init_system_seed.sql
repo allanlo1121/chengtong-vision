@@ -52,7 +52,7 @@ values
   'project',
   null,
   'FolderKanban',
-  1,
+  2,
   'proj.read'
 ),
 (
@@ -62,8 +62,18 @@ values
   'equip',
   null,
   'FolderKanban',
-  1,
+  3,
   'equip.read'
+),
+(
+  'workspace',
+  'WorkspaceManagement',
+  '工作区管理',
+  'workspace',
+  null,
+  'HardHat',
+  4,
+  'workspace.read'
 ),
 (
   'system',
@@ -72,7 +82,7 @@ values
   'system',
   null,
   'Settings',
-  2,
+  5,
   'system.read'
 );
 
@@ -463,6 +473,67 @@ where code = 'system.tbm';
 -- TUNNEL WORKSPACE
 -- =========================================
 
+
+insert into system.menus (
+  parent_id,
+  code,
+  name,
+  label,
+  node_key,
+  path_url,
+  icon,
+  sort_order
+)
+select
+  parent.id,
+  child.code,
+  child.name,
+  child.label,
+  child.node_key,
+  child.path_url,
+  child.icon,
+  child.sort_order
+from system.menus parent
+cross join (
+  values
+    (
+  'workspace.command_center',
+  'command_center',
+  '指挥中心',
+  'command_center',
+  '/workspace/command-center',
+  'Building2',
+  0
+  ),
+   (
+  'workspace.tunnels',
+  'tunnels',
+  '隧道工作台',
+  'tunnels',
+  '/workspace/tunnels',
+  'Building2',
+  1
+  ),
+  (
+  'workspace.tbms',
+  'tbms',
+  '盾构机工作台',
+  'tbms',
+  '/workspace/tbms',
+  'Building2',
+  2
+  )
+  ) as child(
+  code,
+  name,
+  label,
+  node_key,
+  path_url,
+  icon,
+  sort_order
+  )
+where parent.code = 'workspace';
+
 insert into system.menus (
   code,
   name,
@@ -479,7 +550,7 @@ values
   'engineering',
   '隧道管理',
   'engineering',
-  'workspace/tunnel/engineering/:id',
+  'engineering',
   'LayoutDashboard',
   'tunnel_workspace',
   0
@@ -489,7 +560,7 @@ values
   'monitor',
   '远程监控',
   'monitor',
-  'workspace/tunnel/monitor/:id',
+  'monitor',
   'TrainFrontTunnel',
   'tunnel_workspace',
   1
@@ -499,7 +570,7 @@ values
   'operation',
   '运维管理',
   'operation',
-  'workspace/tunnel/operation/:id',
+  'operation',
   'Settings',
   'tunnel_workspace',
   2
@@ -509,7 +580,7 @@ values
   'risk',
   '风险预警',
   'risk',
-  'workspace/tunnel/risk/:id',
+  'risk',
   'AlertTriangle',
   'tunnel_workspace',
   3
@@ -519,7 +590,7 @@ values
   'health',
   '健康诊断',
   'health',
-  'workspace/tunnel/health/:id',
+  'health',
   'HeartPulse',
   'tunnel_workspace',
   4
@@ -529,7 +600,7 @@ values
   'data',
   '数据中心',
   'data',
-  'workspace/tunnel/data/:id',
+  'data',
   'Database',
   'tunnel_workspace',
   5
@@ -539,7 +610,7 @@ values
   'material',
   '资料中心',
   'material',
-  'workspace/tunnel/material/:id',
+  'material',
   'BookOpen',
   'tunnel_workspace',
   6
@@ -549,7 +620,7 @@ values
   'settings',
   '系统设置',
   'settings',
-  'workspace/tunnel/settings/:id',
+  'settings',
   'Settings',
   'tunnel_workspace',
   7

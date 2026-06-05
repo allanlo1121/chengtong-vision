@@ -58,7 +58,7 @@ create table eqp.tbm_runtime_parameters (
     is_group boolean not null default false,
     is_trendable boolean not null default true,
     is_reportable boolean not null default true,
-    is_chartable boolean not null default false,
+    is_chartable boolean not null default true,
     is_disabled boolean not null default false,
     sort_order integer not null default 0,
 
@@ -553,8 +553,8 @@ begin
       and column_name = 's100100008'
   ) then
     execute format(
-      'create index if not exists %I on %I.%I(tunnel_id, s100100008)',
-      'idx_' || v_tbm_code || '_tunnel_ring',
+      'create index if not exists %I on %I.%I(tbm_id, s100100008)',
+      'idx_' || v_tbm_code || '_tbm_ring',
       v_table_schema,
       v_table_name
     );

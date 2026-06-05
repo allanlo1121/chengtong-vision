@@ -1,31 +1,49 @@
 import { Breadcrumbs } from "@/components/common/bread-crubms";
-import { getOrganizationById } from "@/modules/organization/services";
-import { notFound } from "next/navigation";
-import UpdateOrganization from "@/modules/organization/ui/forms/update-organization";
+import { fetchTunnelById } from "@/lib/domain/tunnel/services";
+import { fetchProjectById } from "@/lib/domain/project/services";
+import { getErrorMessage } from "@/lib/shared/contracts/error-codes";
+import { ErrorBlock } from "@/components/common/error-block";
+import { UpdateTunnel } from "@/lib/domain/tunnel/components/forms";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
-  console.log("===organization page ===");
+  console.log("===tunnel page ===");
 
   const { id } = await params;
-
-  const organization = await getOrganizationById(id);
-
-  if (!organization?.success) notFound();
-  console.log("organization page", organization);
+  let tunnel;
+  let project;
+  try {
+    tunnel = await fetchTunnelById(id);
+    project = await fetchProjectById(tunnel.projectId);
+  } catch (error) {
+    console.error("Error fetching tunnel:", error);
+    return <ErrorBlock message={getErrorMessage(error)} />;
+  }
 
   return (
     <main>
       <Breadcrumbs
         breadcrumbs={[
           { label: "系统设置", href: "/system" },
-          { label: "组织", href: "/system/organizations" },
+          { label: "隧道", href: "/system/tunnels" },
           {
-            label: "编辑组织",
+            label: "编辑隧道",
             active: true,
           },
         ]}
       />
-      <UpdateOrganization title="编辑组织" description="org" initialValues={organization.data} />
+      <UpdateTunnel
+        title="编辑隧道"
+        description="隧道"
+        initialValues={tunnel}
+        meta={{
+          entities: {
+            projectId: {
+              id: project.id,
+              name: project.name,
+            },
+          },
+        }}
+      />
     </main>
   );
 }

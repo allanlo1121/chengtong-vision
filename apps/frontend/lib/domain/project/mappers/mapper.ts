@@ -1,6 +1,14 @@
-import { ProjectListItem, ProjectListRow } from "../types";
+import { CreateProjectInput, UpdateProjectInput } from "../schemas";
+import {
+  Project,
+  ProjectInsertRow,
+  ProjectListItem,
+  ProjectListRow,
+  ProjectRow,
+  ProjectUpdateRow,
+} from "../types";
 
-export function mapProjectList(rows: ProjectListRow): ProjectListItem {
+export function mapProjectListItem(rows: ProjectListRow): ProjectListItem {
   return {
     id: rows.id,
     name: rows.name,
@@ -67,5 +75,129 @@ export function mapProjectList(rows: ProjectListRow): ProjectListItem {
     projectDisciplineInspectionName: rows.project_discipline_inspection_name,
     projectPartySecretaryId: rows.project_party_secretary_id,
     projectPartySecretaryName: rows.project_party_secretary_name,
+  };
+}
+
+export function mapProject(row: ProjectRow): Project {
+  return {
+    id: row.id,
+    name: row.name,
+    fullName: row.full_name,
+    code: row.code,
+
+    projectKeyPoints: row.project_key_points,
+    projectOverview: row.project_overview,
+    projectScope: row.project_scope,
+
+    projectTypeId: row.project_type_id,
+    projectSubTypeId: row.project_sub_type_id,
+
+    organizationId: row.organization_id,
+    projectManagementModeId: row.project_management_mode_id,
+
+    actualEndDate: row.actual_end_date,
+    actualStartDate: row.actual_start_date,
+
+    countryCode: row.country_code,
+    regionId: row.region_id,
+    provinceCode: row.province_code,
+    cityCode: row.city_code,
+    districtCode: row.district_code,
+    address: row.address,
+    latitude: row.latitude,
+    longitude: row.longitude,
+
+    sortOrder: row.sort_order,
+    isDisabled: row.is_disabled,
+    remark: row.remark,
+
+    externalId: row.external_id,
+    externalVersion: row.external_version,
+
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+    deletedAt: row.deleted_at,
+    createdBy: row.created_by,
+    updatedBy: row.updated_by,
+    deletedBy: row.deleted_by,
+  };
+}
+
+export function mapProjectToInsert(
+  input: CreateProjectInput
+): Omit<ProjectInsertRow, "id" | "createdAt" | "updatedAt" | "deletedAt"> {
+  return {
+    name: input.name,
+    full_name: input.fullName,
+    code: input.code,
+
+    project_key_points: input.projectKeyPoints,
+    project_overview: input.projectOverview,
+    project_scope: input.projectScope,
+
+    project_type_id: input.projectTypeId,
+    project_sub_type_id: input.projectSubTypeId,
+
+    organization_id: input.organizationId,
+    project_management_mode_id: input.projectManagementModeId,
+
+    actual_end_date: input.actualEndDate,
+    actual_start_date: input.actualStartDate,
+
+    country_code: input.countryCode,
+    region_id: input.regionId,
+    province_code: input.provinceCode,
+    city_code: input.cityCode,
+    district_code: input.districtCode,
+    address: input.address,
+    latitude: input.latitude,
+    longitude: input.longitude,
+
+    sort_order: input.sortOrder,
+    is_disabled: input.isDisabled,
+    remark: input.remark,
+
+    external_id: input.externalId,
+    external_version: input.externalVersion,
+  };
+}
+
+export function mapProjectToUpdate(
+  input: UpdateProjectInput
+): Omit<ProjectUpdateRow, "createdAt" | "updatedAt" | "deletedAt"> {
+  return {
+    id: input.id,
+    name: input.name,
+    full_name: input.fullName,
+    code: input.code,
+
+    project_key_points: input.projectKeyPoints,
+    project_overview: input.projectOverview,
+    project_scope: input.projectScope,
+
+    project_type_id: input.projectTypeId,
+    project_sub_type_id: input.projectSubTypeId,
+
+    organization_id: input.organizationId,
+    project_management_mode_id: input.projectManagementModeId,
+
+    actual_end_date: input.actualEndDate,
+    actual_start_date: input.actualStartDate,
+
+    country_code: input.countryCode,
+    region_id: input.regionId,
+    province_code: input.provinceCode,
+    city_code: input.cityCode,
+    district_code: input.districtCode,
+    address: input.address,
+    latitude: input.latitude,
+    longitude: input.longitude,
+
+    sort_order: input.sortOrder,
+    is_disabled: input.isDisabled,
+    remark: input.remark,
+
+    external_id: input.externalId,
+    external_version: input.externalVersion,
   };
 }

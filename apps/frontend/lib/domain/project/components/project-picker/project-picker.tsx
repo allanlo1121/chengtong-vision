@@ -1,32 +1,43 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 import { PickerDrawer } from "./picker-drawer";
 
 import type { ProjectPickerItem } from "../../types/picker.types";
 
 type Props = {
-  value?: string | null;
-
-  label?: string | null;
-
-  onChange?: (value: string | null) => void;
+  selected?: ProjectPickerItem | null;
+  disabled?: boolean;
+  onChange?: (item: ProjectPickerItem | null) => void;
 };
 
-export function ProjectPicker({ value, label, onChange }: Props) {
+export function ProjectPicker({
+  selected: selectedProp = null,
+  disabled = false,
+  onChange,
+}: Props) {
   const [open, setOpen] = useState(false);
 
-  const [selected, setSelected] = useState<ProjectPickerItem | null>(
-    value
-      ? {
-          id: value,
-          name: label ?? "",
-        }
-      : null
-  );
+  const [selected, setSelected] = useState<ProjectPickerItem | null>(selectedProp);
+
+  useEffect(() => {
+    setSelected(selectedProp);
+  }, [selectedProp]);
+
+  function handleSelect(project: ProjectPickerItem) {
+    setSelected(project);
+    setOpen(false);
+    onChange?.(project);
+  }
+
+  function handleClear() {
+    setSelected(null);
+    onChange?.(null);
+  }
 
   return (
     <>
@@ -34,19 +45,21 @@ export function ProjectPicker({ value, label, onChange }: Props) {
         <Input
           placeholder="选择项目"
           value={selected?.name ?? ""}
-          onClick={() => setOpen(true)}
+          onClick={() => {
+            if (!disabled) setOpen(true);
+          }}
           readOnly
+          disabled={disabled}
         />
-      </div>
-      <PickerDrawer
-        open={open}
-        onOpenChange={setOpen}
-        onSelect={(project) => {
-          setSelected(project);
 
-          onChange?.(project.id);
-        }}
-      />
+        {selected && !disabled && (
+          <Button type="button" variant="outline" onClick={handleClear}>
+            清除
+          </Button>
+        )}
+      </div>
+
+      <PickerDrawer open={open} onOpenChange={setOpen} onSelect={handleSelect} />
     </>
   );
 }

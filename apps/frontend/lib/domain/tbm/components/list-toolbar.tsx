@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { X } from "lucide-react";
 import { Search } from "@/components/common/search-input";
 import { Button } from "@/components/ui/button";
-import { tbmQuery } from "@/lib/domain/tbm/queries";
+import { tbmQuery } from "../queries";
 import { useRouter, useSearchParams } from "next/navigation";
 import { routes } from "@/lib/core/router/router";
 

@@ -1,7 +1,17 @@
-import { CreateTbmInput } from "../schemas";
-import { TbmInsertItem, TbmInsertRow, TbmListItem, TbmListRow, TbmRow, Tbm } from "../types";
+import { CreateTbmInput, UpdateTbmInput } from "../schemas";
+import {
+  TbmInsertItem,
+  TbmInsertRow,
+  TbmListItem,
+  TbmListRow,
+  TbmRow,
+  Tbm,
+  TbmUpdateRow,
+  TbmDetailRow,
+  TbmDetail,
+} from "../types";
 
-export function mapTbmList(row: TbmListRow): TbmListItem {
+export function mapTbmListItem(row: TbmListRow): TbmListItem {
   if (!row.id) {
     throw new Error("Missing required field 'id' in TBM list row");
   }
@@ -23,7 +33,7 @@ export function mapTbmList(row: TbmListRow): TbmListItem {
   };
 }
 
-export function mapTbmRow(row: TbmInsertItem): TbmInsertRow {
+export function mapTbmInsert(row: CreateTbmInput): TbmInsertRow {
   return {
     name: row.name,
     code: row.code,
@@ -71,8 +81,9 @@ export function mapTbm(row: TbmRow): Tbm {
   };
 }
 
-export function mapTbmRowFromTbmFormInput(input: CreateTbmInput): TbmInsertRow {
+export function mapTbmUpdate(input: UpdateTbmInput): TbmUpdateRow {
   return {
+    id: input.id,
     name: input.name,
     code: input.code,
     manage_code: input.manageCode,
@@ -85,5 +96,36 @@ export function mapTbmRowFromTbmFormInput(input: CreateTbmInput): TbmInsertRow {
     is_disabled: input.isDisabled,
     sort_order: input.sortOrder,
     remark: input.remark,
+  };
+}
+
+export function mapTbmDetail(row: TbmDetailRow): TbmDetail {
+  return {
+    id: row.id,
+    name: row.name,
+
+    code: row.code,
+    manageCode: row.manage_code,
+    model: row.model,
+    tbmTypeId: row.tbm_type_id,
+    tbmTypeName: row.tbm_type_name,
+
+    manufacturerName: row.manufacturer_name,
+    serialNo: row.serial_no,
+    diameter: row.diameter,
+    power: row.power,
+
+    sortOrder: row.sort_order,
+    isDisabled: row.is_disabled,
+    remark: row.remark,
+    externalId: row.external_id,
+    externalVersion: row.external_version,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+    deletedAt: row.deleted_at,
+
+    createdBy: row.created_by,
+    updatedBy: row.updated_by,
+    deletedBy: row.deleted_by,
   };
 }

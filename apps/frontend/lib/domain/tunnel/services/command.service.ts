@@ -1,96 +1,111 @@
-import {
-  mapCreateTunnelStatusInputFromTunnelFullInput,
-  mapTunnel,
-  mapTunnelInsertRowFromInput,
-  mapTunnelScheduleVersionRowFromInput,
-  mapTunnelStatusInsertRowFromInput,
-  mapCreateTunnelScheduleVersionInputFromTunnelFullInput,
-} from "../mappers";
-import {
-  insertTunnelScheduleVersion,
-  insertTunnelStatusTimeline,
-  tunnelRepository,
-} from "../repositories";
+import { tunnelRepository } from "../repositories";
 import {
   CreateTunnelFullInput,
   CreateTunnelInput,
   CreateTunnelStatusTimelineInput,
   CreateTunnelScheduleVersionInput,
   UpdateTunnelInput,
+  CreateTunnelSchema,
+  CreateTunnelStatusTimelineSchema,
+  CreateTunnelScheduleVersionSchema,
+  UpdateTunnelScheduleVersionInput,
+  UpdateTunnelStatusTimelineInput,
 } from "../schemas";
-import { Tunnel, TunnelScheduleVersionRow, TunnelStatusTimelineRow } from "../types";
+import { Tunnel, TunnelScheduleVersion, TunnelStatusTimeline } from "../types";
 import { appErrors } from "@/lib/shared/contracts/error-codes";
 
 export async function createTunnelFull(input: CreateTunnelFullInput): Promise<Tunnel> {
-  const tunnel = await createTunnel(input);
+  const tunnelData = CreateTunnelSchema.parse(input);
+  const tunnel = await createTunnel(tunnelData);
 
-  const statusInput = mapCreateTunnelStatusInputFromTunnelFullInput(input);
+  const statusInput = CreateTunnelStatusTimelineSchema.parse(input);
 
-  await createTunnelStatusTimeline(statusInput, tunnel.id);
+  await tunnelRepository.insertTunnelStatusTimeline({
+    ...statusInput,
+    tunnelId: tunnel.id,
+  });
 
-  const scheduleInput = mapCreateTunnelScheduleVersionInputFromTunnelFullInput(input);
+  const scheduleInput = CreateTunnelScheduleVersionSchema.parse(input);
 
-  await createTunnelScheduleVersion(scheduleInput, tunnel.id);
+  await tunnelRepository.insertTunnelScheduleVersion({
+    ...scheduleInput,
+    tunnelId: tunnel.id,
+  });
 
   return tunnel;
 }
 
 export async function createTunnel(input: CreateTunnelInput): Promise<Tunnel> {
-  const row = await tunnelRepository.insert(mapTunnelInsertRowFromInput(input));
+  return await tunnelRepository.insert(input);
+}
 
-  if (!row?.id) {
-    throw appErrors.internal("创建隧道失败：数据库未返回数据");
+export async function updateTunnel(input: UpdateTunnelInput): Promise<Tunnel> {
+  const exits = await tunnelRepository.findById(input.id);
+
+  if (!exits) {
+    throw appErrors.notFound("隧道不存在，无法更新");
   }
 
-  return mapTunnel(row);
+  return await tunnelRepository.update(input);
+}
+
+export async function deleteTunnel(id: string): Promise<void> {
+  console.log("Deleting Tunnel with id", id);
+
+  await tunnelRepository.deleteById(id);
 }
 
 export async function createTunnelStatusTimeline(
   input: CreateTunnelStatusTimelineInput,
   tunnelId: string
-): Promise<TunnelStatusTimelineRow> {
-  const row = await insertTunnelStatusTimeline(mapTunnelStatusInsertRowFromInput(input, tunnelId));
+): Promise<TunnelStatusTimeline> {
+  const exits = await tunnelRepository.findById(tunnelId);
 
-  if (!row?.id) {
-    throw appErrors.internal("创建隧道状态时间线记录失败：数据库未返回数据");
+  if (!exits) {
+    throw appErrors.notFound("隧道不存在，无法创建状态时间线记录");
+  }
+  return await tunnelRepository.insertTunnelStatusTimeline({
+    ...input,
+    tunnelId: tunnelId,
+  });
+}
+
+export async function updateTunnelStatusTimeline(
+  input: UpdateTunnelStatusTimelineInput
+): Promise<TunnelStatusTimeline> {
+  const exits = await tunnelRepository.findById(input.tunnelId);
+
+  if (!exits) {
+    throw appErrors.notFound("隧道不存在，无法更新状态时间线记录");
   }
 
-  return row;
+  return await tunnelRepository.updateTunnelStatusTimeline(input);
 }
 
 export async function createTunnelScheduleVersion(
   input: CreateTunnelScheduleVersionInput,
   tunnelId: string
-): Promise<TunnelScheduleVersionRow> {
-  const row = await insertTunnelScheduleVersion(
-    mapTunnelScheduleVersionRowFromInput(input, tunnelId)
-  );
+): Promise<TunnelScheduleVersion> {
+  console.log("Creating Tunnel Schedule Version with input", input, "and tunnelId", tunnelId);
 
-  if (!row?.id) {
-    throw appErrors.internal("创建隧道进度版本记录失败：数据库未返回数据");
+  const exits = await tunnelRepository.findById(tunnelId);
+  if (!exits) {
+    throw appErrors.notFound("隧道不存在，无法创建进度版本记录");
   }
-
-  return row;
+  return await tunnelRepository.insertTunnelScheduleVersion({
+    ...input,
+    tunnelId: tunnelId,
+  });
 }
 
-export async function updateTunnel(id: string, input: UpdateTunnelInput): Promise<Tunnel> {
-  console.log("Updating Tunnel with id and input", { id, input });
+export async function updateTunnelScheduleVersion(
+  input: UpdateTunnelScheduleVersionInput
+): Promise<TunnelScheduleVersion> {
+  const exits = await tunnelRepository.findById(input.tunnelId);
 
-  const updateTunnelData = mapTunnelInsertRowFromInput(input);
-  const result = await tunnelRepository.update(id, updateTunnelData);
-  if (!result) {
-    throw appErrors.internal("更新Tunnel失败：数据库未返回数据");
-  }
-  return mapTunnel(result);
-}
-
-export async function deleteTunnel(id: string): Promise<Tunnel> {
-  console.log("Deleting Tunnel with id", id);
-
-  const result = await tunnelRepository.delete(id);
-  if (!result) {
-    throw appErrors.notFound("Tunnel not found or already deleted");
+  if (!exits) {
+    throw appErrors.notFound("隧道不存在，无法更新进度版本记录");
   }
 
-  return mapTunnel(result);
+  return await tunnelRepository.updateTunnelScheduleVersion(input);
 }

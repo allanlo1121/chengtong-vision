@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 export function formatDateTime(value: string | Date) {
   const date = new Date(value);
 
@@ -12,6 +14,12 @@ export function formatDateTime(value: string | Date) {
     second: "2-digit",
     hour12: false,
   });
+}
+
+export function formatDateCN(date: string | Date | null | undefined) {
+  if (!date) return "-";
+
+  return format(new Date(date), "yyyy年MM月dd日");
 }
 
 export function toDate(value?: string | null) {

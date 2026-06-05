@@ -1,9 +1,11 @@
 import { format, subDays } from "date-fns";
 import { ProgressToolbar } from "./_components/ProgressToolBar";
-import { listTunnelDailyProgressByTunnelIdAndDateRange } from "@/lib/domain/tbm-runtime/services/tunnel-daily-progress.service";
-import { parseDateString, toDateString } from "@/lib/utils/date";
+import { listTbmDailyProgressByTbmIdAndDateRange } from "@/lib/domain/tbm-runtime/services/";
+import { parseDateString } from "@/lib/utils/date";
 import { TunnelDailyProgressTable } from "@/components/domain/tbm-runtime/data-tables/tunnel-daily-progress-table";
 import { TunnelDailyProgressChart } from "@/components/domain/tbm-runtime/charts/TunnelDailyProgressChart";
+import { ErrorBlock } from "@/components/common/error-block";
+import { fetchTbmAssignmentByTunnelId } from "@/lib/domain/tbm-assignment/services/query.service";
 
 function getStringParam(value: string | string[] | undefined): string | undefined {
   if (Array.isArray(value)) {
@@ -36,18 +38,27 @@ export default async function TunnelDailyProgressPage({
 
   const from = parseDateString(getStringParam(sp.from) || format(subDays(today, 30), "yyyy-MM-dd"));
 
-  const result = await listTunnelDailyProgressByTunnelIdAndDateRange(tunnelId, from, to);
+  let progress;
+  let tbmAssignment;
 
-  console.log("Tunnel Daily Progress:", result);
+  try {
+    tbmAssignment = await fetchTbmAssignmentByTunnelId(tunnelId);
+    progress = await listTbmDailyProgressByTbmIdAndDateRange(tbmAssignment.tbmId, from, to);
+  } catch (error: unknown) {
+    console.error("Failed to fetch TBM daily progress for tunnel", { tunnelId, error });
+    return <ErrorBlock message={error instanceof Error ? error.message : "查询失败"} />;
+  }
+
+  console.log("Tunnel Daily Progress:", progress);
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <ProgressToolbar from={from} to={to} />
       <div className="min-h-0 flex-1 p-4">
         {view === "table" ? (
-          <TunnelDailyProgressTable data={result} />
+          <TunnelDailyProgressTable data={progress} />
         ) : (
-          <TunnelDailyProgressChart data={result} />
+          <TunnelDailyProgressChart data={progress} />
         )}
       </div>
     </div>

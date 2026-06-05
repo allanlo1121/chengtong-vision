@@ -9,7 +9,7 @@ import { createSocketServer } from "../socket/socket.server";
 import "../mqtt/mqtt.client";
 import { checkConnectionTimeouts } from "../runtime/connection-online/check-connection-timeouts";
 
-import { loadTunnelProgressCache } from "../runtime/tunnel-progress-cache";
+import { loadTbmProgressCache } from "../runtime/tbm-progress-cache";
 import { loadStatSettings } from "../runtime/stat-period";
 
 async function bootstrap() {
@@ -26,7 +26,7 @@ async function bootstrap() {
   });
 
   await loadStatSettings();
-  await loadTunnelProgressCache();
+  await loadTbmProgressCache();
 
   setInterval(() => {
     checkConnectionTimeouts().catch((error) => {

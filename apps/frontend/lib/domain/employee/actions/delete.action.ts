@@ -1,15 +1,19 @@
 "use server";
 
-import { Result } from "@/lib/shared/contracts";
+import { ActionResult } from "@/lib/shared/contracts";
 import { deleteEmployee } from "../services";
 
-export async function deleteEmployeeAction(id: string): Promise<Result<number>> {
-  console.log("===deleteEmployee===", id);
+export async function deleteEmployeeAction(id: string): Promise<ActionResult<void>> {
+  console.log("===deleteEmployeeAction===", id);
 
   try {
-    const result = await deleteEmployee(id);
+    await deleteEmployee(id);
 
-    return result;
+    return {
+      success: true,
+      data: undefined,
+      message: "删除成功",
+    };
   } catch (error) {
     return {
       success: false,
