@@ -34,12 +34,15 @@ export async function handleImportData<T extends TableEntity>(
     try {
       // 2.1 字段映射（raw → schema data）
       const mapped = config.mapper(raw);
+      console.log("===handleImportData mapped===");
+      console.log("mapped", mapped);
+      console.log("raw", raw);
 
       // 2️⃣ lookup
       const enriched = config.lookups ? { ...mapped, ...(await config.lookups(raw, ctx)) } : mapped;
 
-      // console.log("===handleImportData enriched===");
-      // console.log("enriched", enriched);
+      console.log("===handleImportData enriched===");
+      console.log("enriched", enriched);
       // 2.2 schema 校验（建议 safeParse）
       const parsed = config.schema.safeParse(enriched);
 

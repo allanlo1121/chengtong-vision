@@ -42,7 +42,7 @@ export async function fetchTunnelWorkspaceDetail(tunnelId: string): Promise<Tunn
   const result = await getTunnelWorkspaceDetail(tunnelId);
 
   if (!result) {
-    throw appErrors.notFound("未查询到隧道工作区详情");
+    throw appErrors.notFound(`未查询到隧道工作区详情 tunnelId: ${tunnelId}`);
   }
 
   return result;
