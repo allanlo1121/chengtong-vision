@@ -1,10 +1,7 @@
 import { parameterTemplateQuery } from "@/lib/domain/tbm-runtime/queries";
 
-// import { findTbmRuntimeParameters } from "@/lib/domain/tbm-runtime/services";
 import { ParameterPageShell } from "./_components/ParameterPageShell";
-// import { ParameterList } from "./_components/ParameterList";
-// import { ParameterToolbar } from "./_components/ParameterToolbar";
-// import { ParameterListError } from "./_components/ParameterListError";
+
 import { ParameterTemplateTabsEditor } from "./_components/ParameterTemplateTabsEditor";
 import {
   getParameterTemplateGroups,
@@ -18,6 +15,19 @@ interface PageProps {
 export default async function ParameterTemplatePage({ searchParams }: PageProps) {
   const params = await searchParams;
   const query = parameterTemplateQuery.parse(params);
+  if (!query.parameterTemplateId) {
+    return (
+      <ParameterPageShell
+        parameterTemplates={[]}
+        parameterTemplatesError={"缺少参数模板ID"}
+        selectedParameterTemplateId={undefined}
+      >
+        <div className="flex h-full min-h-0 overflow-hidden items-center justify-center text-sm text-destructive">
+          缺少参数模板ID
+        </div>
+      </ParameterPageShell>
+    );
+  }
 
   const [parameterTemplates, groups] = await Promise.all([
     listTbmParameterTemplates(),
@@ -26,15 +36,15 @@ export default async function ParameterTemplatePage({ searchParams }: PageProps)
 
   return (
     <ParameterPageShell
-      parameterTemplates={parameterTemplates.success ? parameterTemplates.data : []}
-      parameterTemplatesError={parameterTemplates.success ? undefined : parameterTemplates.message}
+      parameterTemplates={parameterTemplates}
+      parameterTemplatesError={"加载参数模板失败"}
       selectedParameterTemplateId={query.parameterTemplateId}
     >
-      {groups.success ? (
-        <ParameterTemplateTabsEditor templateId={query.parameterTemplateId} groups={groups.data} />
+      {groups.length > 0 ? (
+        <ParameterTemplateTabsEditor templateId={query.parameterTemplateId} groups={groups} />
       ) : (
         <div className="flex h-full min-h-0 overflow-hidden items-center justify-center text-sm text-destructive">
-          加载模板参数失败：{groups.message}
+          加载模板参数失败
         </div>
       )}
     </ParameterPageShell>

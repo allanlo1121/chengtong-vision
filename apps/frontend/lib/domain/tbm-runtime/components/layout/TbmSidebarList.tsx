@@ -9,7 +9,7 @@ import { routes } from "@/lib/core/router/router";
 //     id: "1",
 //     name: "中铁装备982",
 //     code: "CREC982",
-//     managementCode: "1131-0035-0214",
+//     manageCode: "1131-0035-0214",
 //     tbmTypeName: "土压平衡盾构机",
 //     manufacturerName: "中铁装备",
 //     diameter: 9110,
@@ -19,7 +19,7 @@ import { routes } from "@/lib/core/router/router";
 //     id: "2",
 //     name: "罗宾斯423",
 //     code: "RBNS423",
-//     managementCode: "1131-0035-0213",
+//     manageCode: "1131-0035-0213",
 //     tbmTypeName: "泥水平衡盾构机",
 //     manufacturerName: "中交天和",
 //     diameter: 9130,
@@ -47,7 +47,7 @@ export function TbmSidebarList({
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
               <div className="truncate text-sm font-medium">{tbm.name}</div>
-              <div className="mt-0.5 text-xs text-muted-foreground">{tbm.managementCode}</div>
+              <div className="mt-0.5 text-xs text-muted-foreground">{tbm.manageCode}</div>
             </div>
 
             {/* <Badge variant={tbm.status === "在线" ? "default" : "secondary"} className="shrink-0">

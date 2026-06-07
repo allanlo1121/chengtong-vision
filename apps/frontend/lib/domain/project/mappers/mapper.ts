@@ -1,6 +1,8 @@
 import { CreateProjectInput, UpdateProjectInput } from "../schemas";
 import {
   Project,
+  ProjectDetail,
+  ProjectDetailRow,
   ProjectInsertRow,
   ProjectListItem,
   ProjectListRow,
@@ -199,5 +201,80 @@ export function mapProjectToUpdate(
 
     external_id: input.externalId,
     external_version: input.externalVersion,
+  };
+}
+
+export function mapProjectDetail(row: ProjectDetailRow): ProjectDetail {
+  return {
+    id: row.id,
+    name: row.name,
+    fullName: row.full_name,
+    code: row.code,
+
+    projectTypeId: row.project_type_id,
+    projectSubTypeId: row.project_sub_type_id,
+
+    organizationId: row.organization_id,
+    projectManagementModeId: row.project_management_mode_id,
+
+    actualEndDate: row.actual_end_date,
+    actualStartDate: row.actual_start_date,
+
+    address: row.address,
+    latitude: row.latitude,
+    longitude: row.longitude,
+
+    sortOrder: row.sort_order,
+
+    externalId: row.external_id,
+    externalVersion: row.external_version,
+
+    projectTypeName: row.project_type_name,
+    projectSubTypeName: row.project_sub_type_name,
+    organizationName: row.organization_name,
+    projectManagementModeName: row.project_management_mode_name,
+
+    countryName: row.country_name,
+    regionName: row.region_name,
+    provinceName: row.province_name,
+    cityName: row.city_name,
+    districtName: row.district_name,
+
+    projectAttentionLevelId: row.project_attention_level_id,
+    projectAttentionLevelName: row.project_attention_level_name,
+    projectChiefEngineerId: row.project_chief_engineer_id,
+    projectChiefEngineerName: row.project_chief_engineer_name,
+    projectControlLevelId: row.project_control_level_id,
+    projectControlLevelName: row.project_control_level_name,
+    projectRiskLevelId: row.project_risk_level_id,
+    projectRiskLevelName: row.project_risk_level_name,
+    projectStatusId: row.project_status_id,
+    projectStatusName: row.project_status_name,
+    projectSubStatusId: row.project_sub_status_id,
+    projectSubStatusName: row.project_sub_status_name,
+
+    projectManagerId: row.project_manager_id,
+    projectManagerName: row.project_manager_name,
+    projectOversightLeaderId: row.project_oversight_leader_id,
+    projectOversightLeaderName: row.project_oversight_leader_name,
+    projectCommercialManagerId: row.project_commercial_manager_id,
+    projectCommercialManagerName: row.project_commercial_manager_name,
+    projectSafetyDirectorId: row.project_safety_director_id,
+    projectSafetyDirectorName: row.project_safety_director_name,
+    projectDisciplineInspectionId: row.project_discipline_inspection_id,
+    projectDisciplineInspectionName: row.project_discipline_inspection_name,
+    projectPartySecretaryId: row.project_party_secretary_id,
+    projectPartySecretaryName: row.project_party_secretary_name,
+
+    commissioningDate: row.commissioning_date,
+    contractCurrent: row.contract_current,
+    contractAmount: row.contract_amount,
+    contractStartDate: row.contract_start_date,
+    contractEndDate: row.contract_end_date,
+    contractHistory: row.contract_history,
+    scheduleCurrent: row.schedule_current,
+    scheduleEndDate: row.schedule_end_date,
+    scheduleHistory: row.schedule_history,
+    scheduleStartDate: row.schedule_start_date,
   };
 }

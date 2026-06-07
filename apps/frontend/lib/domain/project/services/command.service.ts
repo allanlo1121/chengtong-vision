@@ -1,24 +1,39 @@
-// import { insertOne } from "@/lib/core/crud/insert";
-// import { CreateEmployeeInput } from "../schemas";
-// import { createRepository } from "@/lib/infra/repositories";
-// import { ServiceResult } from "@/modules/shared/types";
-// import { Entity, TableRow } from "@/lib/core/types/entity.types";
-// import { Result } from "@/modules/shared/contracts/service-result";
+import { projectRepository } from "../repositories";
+import { CreateProjectInput, UpdateProjectInput } from "../schemas";
+import { Project } from "../types";
+import { appErrors } from "@/lib/shared/contracts/error-codes";
 
-// export async function createEmployee(
-//   input: CreateEmployeeInput
-// ): Promise<Result<Entity<"employees">>> {
-//   try {
-//     const result = await insertOne("employees", input);
-//     return {
-//       success: true,
-//       data: result,
-//       message: "创建成功",
-//     };
-//   } catch (error: unknown) {
-//     return {
-//       success: false,
-//       message: (error as Error)?.message ?? "创建失败",
-//     };
-//   }
-// }
+export async function createProject(input: CreateProjectInput): Promise<Project> {
+  console.log("Creating Project with input", input);
+
+  const exits = await projectRepository.findByCode(input.code);
+
+  if (exits) {
+    throw appErrors.conflict("Project编码已存在");
+  }
+  return await projectRepository.insert(input);
+}
+
+export async function updateProject(input: UpdateProjectInput): Promise<Project> {
+  console.log("Updating Project with id and input", { input });
+
+  const exits = await projectRepository.findById(input.id);
+
+  if (!exits) {
+    throw appErrors.notFound("Project不存在，无法更新");
+  }
+
+  return await projectRepository.update(input);
+}
+
+export async function deleteProject(id: string): Promise<void> {
+  console.log("Deleting Project with id", id);
+
+  const exits = await projectRepository.findById(id);
+
+  if (!exits) {
+    throw appErrors.notFound("Project不存在，无法删除");
+  }
+
+  await projectRepository.deleteById(id);
+}

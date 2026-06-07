@@ -2,12 +2,12 @@
 
 import React from "react";
 
-import { Controller, FieldValues, Path, PathValue } from "react-hook-form";
+import { Controller, FieldValues } from "react-hook-form";
 
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 
 import type { FieldRendererProps, FormMeta } from "../types/field.types";
-import { TunnelPicker } from "@/lib/domain/tunnel/components/tunnel-picker/tunnel-picker";
+import { TunnelPicker } from "@/lib/domain/tunnel/components/picker";
 import { TunnelPickerItem } from "@/lib/domain/tunnel/types";
 
 export function FieldTunnelPicker<

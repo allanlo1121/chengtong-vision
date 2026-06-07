@@ -88,7 +88,7 @@ export const EmployeeSchema = z.object({
     section: "基本信息",
     colSpan: 1,
   }),
-  employmentStatusId: idSchema.meta({
+  employmentStatusId: idSchema.optional().meta({
     table: "employees",
     label: "员工状态",
     component: "select",
@@ -142,7 +142,7 @@ export const EmployeeSchema = z.object({
     section: "其他信息",
     colSpan: 1,
   }),
-  sortOrder: z.coerce.number().default(0).meta({
+  sortOrder: z.coerce.number().optional().default(0).meta({
     table: "employees",
     label: "排序",
     component: "input",
@@ -175,21 +175,6 @@ export const EmployeeSchema = z.object({
     section: "岗位信息",
     colSpan: 1,
     optionSource: { source: "organizations", parentId: null },
-  }),
-  postId: idSchema.meta({
-    table: "employee_assignments",
-    label: "岗位",
-    component: "select",
-    section: "岗位信息",
-    colSpan: 1,
-    optionSource: { source: "posts", code: "JOB_TITLE" },
-  }),
-  isPrimary: z.boolean().default(false).meta({
-    table: "employee_assignments",
-    label: "是否主岗",
-    component: "switch",
-    section: "岗位信息",
-    colSpan: 1,
   }),
 });
 

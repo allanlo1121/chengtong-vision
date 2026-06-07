@@ -2,8 +2,8 @@ import { format, subDays } from "date-fns";
 import { ProgressToolbar } from "./_components/ProgressToolBar";
 import { listTbmDailyProgressByTbmIdAndDateRange } from "@/lib/domain/tbm-runtime/services/";
 import { parseDateString } from "@/lib/utils/date";
-import { TunnelDailyProgressTable } from "@/components/domain/tbm-runtime/data-tables/tunnel-daily-progress-table";
-import { TunnelDailyProgressChart } from "@/components/domain/tbm-runtime/charts/TunnelDailyProgressChart";
+import { TbmDailyProgressTable } from "@/components/domain/tbm-runtime/data-tables/tbm-daily-progress-table";
+import { TbmDailyProgressChart } from "@/components/domain/tbm-runtime/charts/TbmDailyProgressChart";
 import { ErrorBlock } from "@/components/common/error-block";
 import { fetchTbmAssignmentByTunnelId } from "@/lib/domain/tbm-assignment/services/query.service";
 
@@ -56,9 +56,9 @@ export default async function TunnelDailyProgressPage({
       <ProgressToolbar from={from} to={to} />
       <div className="min-h-0 flex-1 p-4">
         {view === "table" ? (
-          <TunnelDailyProgressTable data={progress} />
+          <TbmDailyProgressTable data={progress} />
         ) : (
-          <TunnelDailyProgressChart data={progress} />
+          <TbmDailyProgressChart data={progress} />
         )}
       </div>
     </div>

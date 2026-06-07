@@ -1,42 +1,45 @@
 "use server";
 
-import { createTbmRuntimeParameter } from "../services";
+import { z } from "zod";
 
-import { ActionResult } from "@/lib/shared/contracts/action-result";
+import { ActionResult, toActionError } from "@/lib/shared/contracts";
 
 import {
-  CreateTbmParameterTemplateFormInput,
-  CreateTbmRuntimeParameterFormInput,
+  CreateTbmParameterTemplateInput,
+  CreateTbmParameterTemplateSchema,
+  CreateTbmRuntimeParameterInput,
 } from "../schemas";
-import { TbmParameterTemplate, TbmRuntimeParameter } from "../types";
-import { createTbmParameterTemplate } from "../services/parameter-template.service";
+import { TbmParameterTemplate } from "../types";
+import { createTbmParameterTemplate } from "../services/";
 
-export type TbmRuntimeParameterFormState = ActionResult<CreateTbmRuntimeParameterFormInput>;
+export type TbmRuntimeParameterFormState = ActionResult<CreateTbmRuntimeParameterInput>;
 
 export async function createTbmParameterTemplateAction(
-  data: CreateTbmParameterTemplateFormInput
+  data: CreateTbmParameterTemplateInput
 ): Promise<ActionResult<TbmParameterTemplate>> {
   console.log("===createTbmParameterTemplateAction===", data);
 
-  const result = await createTbmParameterTemplate(data);
+  const parsed = CreateTbmParameterTemplateSchema.safeParse(data);
 
-  if (!result.success) {
+  console.log("Parsed form data", parsed);
+
+  if (!parsed.success) {
     return {
-      ...result,
-      errors: {
-        ...result.errors,
-        form: result.errors?.form ?? [result.message || "创建失败"],
-      },
-      errorLevel: "error",
+      success: false,
+      message: "表单验证失败",
+      errors: z.flattenError(parsed.error).fieldErrors,
     };
   }
 
-  return {
-    ...result,
-    nextAction: {
-      type: "redirect",
-      label: "返回参数模板列表",
-      href: "/system/tbm/parameter-templates",
-    },
-  };
+  try {
+    const result = await createTbmParameterTemplate(data);
+
+    return {
+      success: true,
+      data: result,
+      message: "创建参数模板成功",
+    };
+  } catch (error) {
+    return toActionError(error);
+  }
 }

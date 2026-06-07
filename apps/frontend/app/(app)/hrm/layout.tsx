@@ -4,7 +4,7 @@
 import { useUser } from "@/lib/runtime/user/useUser";
 
 // import { OrganizationTreeToolbar } from "@/lib/core/tree/tree-toolbar";
-import { TreeContainer } from "@/lib/core/tree/tree-container";
+import { TreeContainer } from "@/lib/shared/tree/tree-container";
 
 export default function OperationsLayout({ children }: { children: React.ReactNode }) {
   const runtimeUser = useUser();

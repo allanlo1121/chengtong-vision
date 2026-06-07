@@ -3,11 +3,9 @@
 import { z } from "zod";
 import { createTbm } from "../services";
 import { CreateTbmInput, CreateTbmSchema, TbmFields } from "../schemas";
-import { ActionState } from "@/lib/shared/actions/types";
+
 import { Tbm } from "../types";
 import { ActionResult, toActionError } from "@/lib/shared/contracts";
-
-export type TbmFormState = ActionState<TbmFields>;
 
 export async function createTbmAction(data: CreateTbmInput): Promise<ActionResult<Tbm>> {
   console.log("SERVER ACTION RUNNING");

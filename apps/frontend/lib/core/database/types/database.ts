@@ -10567,6 +10567,7 @@ export type Database = {
           tbm_name: string | null;
           tunnel_status_id: string | null;
           tunnel_status_name: string | null;
+          version_no: number | null;
         };
         Relationships: [
           {

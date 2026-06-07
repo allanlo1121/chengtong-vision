@@ -5,13 +5,13 @@
 import { useTunnelWorkspace } from "@/providers/workspace/TunnelWorkspaceProvider";
 
 export function TunnelWorkspaceHeader() {
-  const { tunnel } = useTunnelWorkspace();
+  const { scope } = useTunnelWorkspace();
 
   return (
     <div>
-      <div className="text-sm text-muted-foreground ">{tunnel.projectName}</div>
+      <div className="text-sm text-muted-foreground ">{scope.projectName}</div>
 
-      <h1 className="text-xl font-semibold">{tunnel.name}</h1>
+      <h1 className="text-xl font-semibold">{scope.tunnelName}</h1>
     </div>
   );
 }

@@ -19,6 +19,7 @@ export function CreateTbmRuntimeParameter({ title, description }: Props) {
       schema={TbmRuntimeParameterFormSchema}
       action={createTbmRuntimeParameterAction}
       redirect={routes.tbms.list}
+      meta={{}}
     />
   );
 }

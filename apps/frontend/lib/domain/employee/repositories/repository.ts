@@ -4,16 +4,7 @@ import { employeeQuery, EmployeeQueryType } from "../queries";
 import { appErrors, PaginatedResult } from "@/lib/shared/contracts";
 import { applyPagination, assertNoError } from "@/lib/infra/repositories/base.repository";
 
-import {
-  EmployeeDetailRow,
-  EmployeeDetail,
-  EmployeeInsertRow,
-  EmployeeListRow,
-  EmployeeListItem,
-  EmployeeRow,
-  EmployeeUpdateRow,
-  Employee,
-} from "../types";
+import { EmployeeDetail, EmployeeListItem, Employee } from "../types";
 import {
   mapEmployee,
   mapEmployeeDetail,
@@ -21,7 +12,7 @@ import {
   mapEmployeeToInsert,
   mapEmployeeToUpdate,
 } from "../mappers";
-import { map } from "zod";
+
 import { CreateEmployeeInput, UpdateEmployeeInput } from "../schemas";
 
 export async function findDetailById(id: string): Promise<EmployeeDetail | null> {
@@ -38,28 +29,6 @@ export async function findDetailById(id: string): Promise<EmployeeDetail | null>
 
   return data ? mapEmployeeDetail(data) : null;
 }
-
-// export async function getAllEmployeeList(): Promise<EmployeeListRow[]> {
-//   const supabase = await createClient();
-
-//   const { data, error } = await supabase.schema("hr").from("v_employee_list").select("*");
-
-//   assertNoError(error);
-
-//   return data as EmployeeListRow[];
-// }
-
-// async function softDeleteManyEmployee(ids: string[]) {
-//   const supabase = await createClient();
-
-//   const { data, error } = await supabase.schema("system").rpc("soft_delete", {
-//     p_table: "employees",
-//     p_ids: ids,
-//   });
-
-//   assertNoError(error);
-//   return data ?? 0;
-// }
 
 async function paginate(query: EmployeeQueryType): Promise<PaginatedResult<EmployeeListItem>> {
   const supabase = await createClient();

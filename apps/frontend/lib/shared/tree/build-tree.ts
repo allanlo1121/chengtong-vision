@@ -1,33 +1,75 @@
-import { TreeNode, TreeFlatNode } from "./tree.types";
+import { TreeNode, TreeRow } from "./types";
 
-export function buildTree<T extends TreeFlatNode>(rows: T[]): TreeNode<T>[] {
-  const map = new Map<string, TreeNode<T> & { parentId: string | null }>();
+export function buildTree(rows: TreeRow[]): TreeNode[] {
+  const map = new Map<string, TreeNode>();
 
-  for (const r of rows) {
-    map.set(r.id, {
-      id: r.id,
-      name: r.name,
-      data: r,
-      parentId: r.parentId,
+  const roots: TreeNode[] = [];
+
+  // =====================================
+  // create nodes
+  // =====================================
+
+  for (const row of rows) {
+    if (!row.id) {
+      throw new Error("Tree row id is null");
+    }
+
+    map.set(row.id, {
+      id: row.id,
+
+      parentId: row.parent_id,
+
+      nodeKey: row.node_key ?? "",
+
+      path: row.path ?? "",
+
+      level: row.level ?? 0,
+
+      sortOrder: row.sort_order ?? 0,
+
+      isLeaf: row.is_leaf ?? false,
+
+      hasChildren: row.has_children ?? false,
+
+      isEnabled: row.is_enabled ?? false,
+
+      code: row.code ?? "",
+
+      name: row.name,
+
+      label: row.label,
+
       children: [],
     });
   }
 
-  const tree: TreeNode<T>[] = [];
+  // =====================================
+  // attach
+  // =====================================
 
   for (const node of map.values()) {
-    if (node.parentId) {
-      const parent = map.get(node.parentId);
-
-      if (parent) {
-        parent.children.push(node);
-      } else {
-        tree.push(node);
-      }
+    if (node.parentId && map.has(node.parentId)) {
+      map.get(node.parentId)!.children!.push(node);
     } else {
-      tree.push(node);
+      roots.push(node);
     }
   }
 
-  return tree;
+  // =====================================
+  // sort
+  // =====================================
+
+  function sortTree(nodes: TreeNode[]) {
+    nodes.sort((a, b) => a.sortOrder - b.sortOrder);
+
+    for (const node of nodes) {
+      if (node.children?.length) {
+        sortTree(node.children);
+      }
+    }
+  }
+
+  sortTree(roots);
+
+  return roots;
 }

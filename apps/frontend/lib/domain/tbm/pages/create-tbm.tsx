@@ -19,6 +19,7 @@ export default function CreateTbm({ title, description, projectId }: Props) {
       schema={CreateTbmSchema}
       action={createTbmAction}
       redirect={routes.tbms.list}
+      meta={{}}
     />
   );
 }

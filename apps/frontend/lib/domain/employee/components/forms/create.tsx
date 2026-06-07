@@ -1,7 +1,7 @@
 "use client";
 
 import { createEmployeeAction } from "../../actions";
-import { CreateEmployeeSchema } from "../../schemas";
+import { CreateEmployeeWithAssignmentSchema } from "../../schemas";
 import { CrudFormPage } from "@/lib/shared/crud/components/crud-form-page";
 import { routes } from "@/lib/core/router/router";
 
@@ -16,9 +16,10 @@ export function CreateEmployee({ title, description, parentId }: Props) {
     <CrudFormPage
       title={title}
       description={description}
-      schema={CreateEmployeeSchema}
+      schema={CreateEmployeeWithAssignmentSchema}
       action={createEmployeeAction}
       redirect={routes.employees.list}
+      meta={{}}
     />
   );
 }

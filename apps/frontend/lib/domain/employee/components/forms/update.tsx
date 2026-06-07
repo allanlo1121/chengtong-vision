@@ -24,6 +24,7 @@ export function UpdateEmployee({
       initialValues={initialValues}
       action={updateEmployeeAction}
       redirect={routes.employees.list}
+      meta={{}}
     />
   );
 }

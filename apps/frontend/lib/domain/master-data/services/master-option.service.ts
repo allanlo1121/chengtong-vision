@@ -1,23 +1,7 @@
-import { PaginatedResult } from "@/modules/shared/contracts/paginated-result";
-import { MasterOptionItem } from "../types";
-import { ActionResult } from "@/modules/shared/contracts/action-result";
+import { MasterOption } from "../types";
+
 import { findMasterOptionsByDefinitionCode } from "../repositories/master-data.repository";
-import { mapMasterOptionRowToItem } from "../mapper/master-option.mapper";
 
-export async function getMasterOptions(
-  definitionCode: string
-): Promise<ActionResult<MasterOptionItem[]>> {
-  try {
-    const rows = await findMasterOptionsByDefinitionCode(definitionCode);
-
-    return {
-      success: true,
-      data: rows.map(mapMasterOptionRowToItem),
-    };
-  } catch (error: unknown) {
-    return {
-      success: false,
-      message: (error as Error)?.message ?? "查询失败",
-    };
-  }
+export async function getMasterOptions(definitionCode: string): Promise<MasterOption[]> {
+  return await findMasterOptionsByDefinitionCode(definitionCode);
 }

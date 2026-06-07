@@ -6,7 +6,7 @@ import { Controller, FieldValues } from "react-hook-form";
 
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 
-import { ProjectPicker } from "@/lib/domain/project/components/project-picker/project-picker";
+import { ProjectPicker } from "@/lib/domain/project/components/picker";
 
 import type { FieldRendererProps, FormMeta } from "../types/field.types";
 import { ProjectPickerItem } from "@/lib/domain/project/types/picker.types";

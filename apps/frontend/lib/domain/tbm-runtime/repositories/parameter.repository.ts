@@ -1,15 +1,21 @@
 import { createClient } from "@/lib/infra/supabase/server";
-import {
-  TbmRuntimeParameterListRow,
-  TbmRuntimeParameterInsertRow,
-  TbmRuntimeParameterRow,
-  TbmRuntimeParameterUpdateRow,
-} from "../types";
+import { TbmRuntimeParameter, TbmRuntimeParameterListItem } from "../types";
 import { applyPagination, assertNoError } from "@/lib/infra/repositories/base.repository";
 import { parameterQuery, ParameterQueryType } from "../queries";
-import { PageData } from "@/lib/shared/contracts/paginated-result";
+import { PaginatedResult } from "@/lib/shared/contracts/paginated-result";
+import { CreateTbmRuntimeParameterInput, UpdateTbmRuntimeParameterInput } from "../schemas";
 
-async function paginate(query: ParameterQueryType): Promise<PageData<TbmRuntimeParameterListRow>> {
+import {
+  mapParameterInsert,
+  mapTbmParameter,
+  mapParameterUpdate,
+  mapParameterListItem,
+} from "../mappers";
+import { appErrors } from "@/lib/shared/contracts";
+
+async function paginate(
+  query: ParameterQueryType
+): Promise<PaginatedResult<TbmRuntimeParameterListItem>> {
   const supabase = await createClient();
 
   // console.log("org list query", query);
@@ -56,44 +62,50 @@ async function paginate(query: ParameterQueryType): Promise<PageData<TbmRuntimeP
   assertNoError(error);
 
   return {
-    items: data as TbmRuntimeParameterListRow[],
+    items: (data ?? []).map(mapParameterListItem),
     total: count ?? 0,
+    page: query.page,
+    pageSize: query.pageSize,
   };
 }
 
 export const trpRepository = {
-  insert: async (input: TbmRuntimeParameterInsertRow): Promise<TbmRuntimeParameterRow | null> => {
+  insert: async (input: CreateTbmRuntimeParameterInput): Promise<TbmRuntimeParameter> => {
     const supabase = await createClient();
+
+    const payload = mapParameterInsert(input);
 
     const { data, error } = await supabase
       .schema("eqp")
       .from("tbm_runtime_parameters")
-      .insert(input)
+      .insert(payload)
       .select()
       .single();
 
     assertNoError(error);
-    return data;
+    if (!data) {
+      throw appErrors.internal("Failed to create TBM runtime parameter");
+    }
+    return mapTbmParameter(data);
   },
-  update: async (
-    id: number,
-    input: TbmRuntimeParameterUpdateRow
-  ): Promise<TbmRuntimeParameterRow | null> => {
+  update: async (input: UpdateTbmRuntimeParameterInput): Promise<TbmRuntimeParameter> => {
     const supabase = await createClient();
+
+    const payload = mapParameterUpdate(input);
 
     const { data, error } = await supabase
       .schema("eqp")
       .from("tbm_runtime_parameters")
-      .update(input)
-      .eq("id", id)
+      .update(payload)
+      .eq("id", input.id)
       .select()
       .single();
 
     assertNoError(error);
 
-    return data;
+    return mapTbmParameter(data);
   },
-  findById: async (id: number): Promise<TbmRuntimeParameterRow | null> => {
+  findById: async (id: number): Promise<TbmRuntimeParameter | null> => {
     const supabase = await createClient();
 
     const { data, error } = await supabase
@@ -105,16 +117,30 @@ export const trpRepository = {
 
     assertNoError(error);
 
-    return data;
+    return data ? mapTbmParameter(data) : null;
   },
-  list: async (): Promise<TbmRuntimeParameterListRow[]> => {
+  findByCode: async (code: string): Promise<TbmRuntimeParameter | null> => {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .schema("eqp")
+      .from("tbm_runtime_parameters")
+      .select("*")
+      .eq("code", code)
+      .maybeSingle();
+
+    assertNoError(error);
+
+    return data ? mapTbmParameter(data) : null;
+  },
+  list: async (): Promise<TbmRuntimeParameterListItem[]> => {
     const supabase = await createClient();
     const { data, error } = await supabase
       .schema("eqp")
       .from("v_tbm_runtime_parameters_list")
       .select("*");
     assertNoError(error);
-    return data as TbmRuntimeParameterListRow[];
+    return (data ?? []).map(mapParameterListItem);
   },
-  paginate: paginate,
+  paginate,
 };

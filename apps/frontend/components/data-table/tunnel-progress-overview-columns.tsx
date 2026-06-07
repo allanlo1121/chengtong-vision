@@ -51,7 +51,7 @@ export const columns: ColumnDef<TunnelProgressOverview>[] = [
       const tunnelId = row.original.tunnelId;
       const tunnelName = row.original.tunnelName;
       return (
-        <Link href={routes.tunnels.workspace(tunnelId)} className="w-[60px] text-background/70">
+        <Link href={routes.tunnels.workspace(tunnelId!)} className="w-[60px] text-background/70">
           {tunnelName}
         </Link>
       );

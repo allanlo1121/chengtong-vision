@@ -1,8 +1,8 @@
 import { createClient } from "@/lib/infra/supabase/server";
 import { assertNoError } from "@/lib/infra/repositories/base.repository";
-import { ParameterSubsystemRow } from "../types/subsystem.types";
+import { ParameterSubsystemNode } from "../types/subsystem.types";
 
-export async function searchTbmSubsystems(): Promise<ParameterSubsystemRow[]> {
+export async function searchTbmSubsystems(): Promise<ParameterSubsystemNode[]> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -27,9 +27,9 @@ export async function searchTbmSubsystems(): Promise<ParameterSubsystemRow[]> {
       id: item.id,
       code: item.code,
       name: item.name,
-      sort_order: item.sort_order,
-      is_configurable: item.is_configurable,
-      parameter_count: item.tbm_runtime_parameters?.[0]?.count ?? 0,
+      sortOrder: item.sort_order,
+      isConfigurable: item.is_configurable,
+      parameterCount: item.tbm_runtime_parameters?.[0]?.count ?? 0,
     })) ?? []
   );
 }

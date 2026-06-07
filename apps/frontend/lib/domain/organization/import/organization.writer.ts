@@ -1,6 +1,6 @@
 "use server";
 
-import { CreateOrganizationInput } from "../schemas";
+import { CreateOrganizationInput, UpdateOrganizationInput } from "../schemas";
 import { WriterResult } from "@/lib/core/import/types";
 
 import { organizationRepository } from "../repositories";
@@ -13,7 +13,7 @@ export const organizationWriter = async (data: CreateOrganizationInput): Promise
     const result = await organizationRepository.findByCode(data.code);
 
     const id = result?.id ?? null;
-    const version = result?.external_version ?? null;
+    const version = result?.externalVersion ?? null;
 
     const currentVersion = data.externalVersion ?? 0;
 
@@ -30,7 +30,9 @@ export const organizationWriter = async (data: CreateOrganizationInput): Promise
     }
 
     // insert
-    const baseData: OrganizationInsertRow = mapOrganizationToInsert(data);
+    const baseData: CreateOrganizationInput = {
+      ...data,
+    };
 
     if (!id) {
       console.log(`Inserting new organization with code ${data.code}`);
@@ -49,7 +51,11 @@ export const organizationWriter = async (data: CreateOrganizationInput): Promise
 
     // update
     console.log(`Updating existing organization with code ${data.code} and id ${id}`);
-    const updateRes = await organizationRepository.update(id, baseData as OrganizationUpdateRow);
+    const updateData: UpdateOrganizationInput = {
+      id,
+      ...baseData,
+    };
+    const updateRes = await organizationRepository.update(updateData);
 
     if (!updateRes.id) {
       throw new Error("Failed to update organization");

@@ -1,5 +1,5 @@
 import { ArrowLeft } from "lucide-react";
-import { getTunnelDetailById } from "@/lib/domain/tunnel/services";
+import { fetchTunnelDetailById } from "@/lib/domain/tunnel/services";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ export default async function TunnelDetailPage({ params }: { params: Promise<{ i
 
   let tunnel: TunnelDetail;
   try {
-    tunnel = await getTunnelDetailById(id);
+    tunnel = await fetchTunnelDetailById(id);
   } catch (error: unknown) {
     return <ErrorBlock message={error instanceof Error ? error.message : "查询失败"} />;
   }

@@ -1,25 +1,11 @@
 import { idSchema } from "@/lib/shared/schema";
 
-import { z } from "zod";
+import { coerce, z } from "zod";
 
 /**
  * TBM运行时参数字段规则
  */
 export const TbmRuntimeParameterFormSchema = z.object({
-  id: z.coerce.number().optional().meta({
-    table: "tbm_runtime_parameters",
-    label: "ID",
-    field: "id",
-    searchable: false,
-    sortable: true,
-    component: "input",
-    section: "基本信息",
-    type: "number",
-    disabled: true,
-    required: false,
-    readonly: true,
-    colSpan: 1,
-  }),
   name: z.string().max(50, { message: "名称最多50个字符" }).meta({
     table: "tbm_runtime_parameters",
     label: "参数名称",
@@ -225,19 +211,15 @@ export const TbmRuntimeParameterFormSchema = z.object({
   }),
 });
 
-export const CreateTbmRuntimeParameterFormSchema = TbmRuntimeParameterFormSchema.omit({
-  id: true,
-});
+export const CreateTbmRuntimeParameterSchema = TbmRuntimeParameterFormSchema;
 
 // export type CreateTbmRuntimeParameterInput = z.infer<typeof TbmRuntimeParameterFormSchema>;
 
-export const UpdateTbmRuntimeParameterFormSchema = TbmRuntimeParameterFormSchema;
+export const UpdateTbmRuntimeParameterSchema = TbmRuntimeParameterFormSchema.extend({
+  id: coerce.number(),
+});
 
-export type CreateTbmRuntimeParameterFormInput = z.infer<
-  typeof CreateTbmRuntimeParameterFormSchema
->;
-export type UpdateTbmRuntimeParameterFormInput = z.infer<
-  typeof UpdateTbmRuntimeParameterFormSchema
->;
+export type CreateTbmRuntimeParameterInput = z.infer<typeof CreateTbmRuntimeParameterSchema>;
+export type UpdateTbmRuntimeParameterInput = z.infer<typeof UpdateTbmRuntimeParameterSchema>;
 
 export type TbmRuntimeParameterFormFields = keyof z.infer<typeof TbmRuntimeParameterFormSchema>;

@@ -87,6 +87,9 @@ export function mapEmployeeToInsert(input: CreateEmployeeInput): EmployeeInsertR
 
     remark: input.remark,
     sort_order: input.sortOrder,
+
+    external_id: input.externalId,
+    external_version: input.externalVersion,
   };
 }
 
@@ -109,6 +112,8 @@ export function mapEmployeeToUpdate(input: UpdateEmployeeInput): EmployeeUpdateR
     hire_date: input.hireDate,
     entry_date: input.entryDate,
     leave_date: input.leaveDate,
+    external_id: input.externalId,
+    external_version: input.externalVersion,
 
     remark: input.remark,
     sort_order: input.sortOrder,

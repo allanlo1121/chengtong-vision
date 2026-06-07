@@ -1,5 +1,5 @@
-import { PaginatedResult } from "@/lib/shared/contracts";
-import { Project, ProjectListItem } from "../types";
+import { appErrors, PaginatedResult } from "@/lib/shared/contracts";
+import { Project, ProjectDetail, ProjectListItem } from "../types";
 import { projectRepository } from "../repositories";
 import { ProjectQueryType } from "../queries";
 
@@ -13,7 +13,17 @@ export async function fetchProjectById(id: string): Promise<Project> {
   const project = await projectRepository.findById(id);
 
   if (!project) {
-    throw new Error("未找到项目");
+    throw appErrors.notFound("Project not found");
+  }
+
+  return project;
+}
+
+export async function fetchProjectDetailById(id: string): Promise<ProjectDetail> {
+  const project = await projectRepository.findDetailById(id);
+
+  if (!project) {
+    throw appErrors.notFound("Project not found");
   }
 
   return project;

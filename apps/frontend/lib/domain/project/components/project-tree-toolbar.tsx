@@ -1,6 +1,6 @@
 "use client";
 
-import { useProjectQuery } from "../../hooks/use-project-tree";
+import { useProjectQuery } from "../hooks/use-project-tree";
 
 export function ProjectTreeToolbar() {
   const { query, updateQuery } = useProjectQuery();

@@ -13,12 +13,9 @@ import {
   CreateTunnelStatusTimelineInput,
   TunnelFields,
 } from "../schemas";
-import { ActionState } from "@/lib/shared/actions/types";
 
 import { ActionResult, toActionError } from "@/lib/shared/contracts";
 import { Tunnel, TunnelScheduleVersion, TunnelStatusTimeline } from "../types";
-
-export type TunnelFormState = ActionState<TunnelFields>;
 
 export async function createTunnelAction(data: CreateTunnelInput): Promise<ActionResult<Tunnel>> {
   console.log("SERVER ACTION RUNNING");

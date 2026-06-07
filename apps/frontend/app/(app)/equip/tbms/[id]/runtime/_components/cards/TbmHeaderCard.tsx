@@ -59,10 +59,10 @@ export function TbmHeaderCard({ tbm, manufacturerName }: TbmHeaderCardProps) {
                   {tbm.code}
                 </span>
 
-                {tbm.managementCode && (
+                {tbm.manageCode && (
                   <span>
                     管理编号：
-                    {tbm.managementCode}
+                    {tbm.manageCode}
                   </span>
                 )}
               </div>
@@ -83,7 +83,6 @@ export function TbmHeaderCard({ tbm, manufacturerName }: TbmHeaderCardProps) {
             >
               <InfoItem label="厂家" value={manufacturerName ?? "-"} />
               <InfoItem label="直径" value={tbm.diameter ? `${tbm.diameter} m` : "-"} />
-              <InfoItem label="长度" value={tbm.length ? `${tbm.length} m` : "-"} />
               <InfoItem label="型号" value={tbm.model ?? "-"} />
             </div>
           </div>

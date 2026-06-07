@@ -1,4 +1,4 @@
-import { TreeNode } from "@/lib/core/tree/types";
+import { TreeNode } from "@/lib/shared/tree/types";
 
 export interface TreeProps {
   data: TreeNode[];

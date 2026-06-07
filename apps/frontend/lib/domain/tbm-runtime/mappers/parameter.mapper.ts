@@ -1,15 +1,14 @@
-import { CreateTbmRuntimeParameterFormInput } from "../schemas";
+import { CreateTbmRuntimeParameterInput, UpdateTbmRuntimeParameterInput } from "../schemas";
 import {
   TbmRuntimeParameterListItem,
   TbmRuntimeParameterListRow,
   TbmRuntimeParameterInsertRow,
   TbmRuntimeParameter,
   TbmRuntimeParameterRow,
+  TbmRuntimeParameterUpdateRow,
 } from "../types";
 
-export function mapParameterListRowToParameterListItem(
-  row: TbmRuntimeParameterListRow
-): TbmRuntimeParameterListItem {
+export function mapParameterListItem(row: TbmRuntimeParameterListRow): TbmRuntimeParameterListItem {
   if (!row.id) throw new Error("Row id is missing");
 
   if (!row.name) throw new Error("Row name is missing");
@@ -30,8 +29,8 @@ export function mapParameterListRowToParameterListItem(
   };
 }
 
-export function mapParameterInputToParameterRow(
-  input: CreateTbmRuntimeParameterFormInput
+export function mapParameterInsert(
+  input: CreateTbmRuntimeParameterInput
 ): TbmRuntimeParameterInsertRow {
   return {
     name: input.name,
@@ -50,7 +49,27 @@ export function mapParameterInputToParameterRow(
   };
 }
 
-export function mapParameterRowToTbmParameter(row: TbmRuntimeParameterRow): TbmRuntimeParameter {
+export function mapParameterUpdate(
+  input: UpdateTbmRuntimeParameterInput
+): TbmRuntimeParameterUpdateRow {
+  return {
+    name: input.name,
+    code: input.code,
+    data_type: input.dataType,
+    digits: input.digits,
+    is_alarm: input.isAlarm,
+    is_disabled: input.isDisabled,
+    sort_order: input.sortOrder,
+    subsystem_id: input.subsystemId,
+    unit: input.unit,
+    is_group: input.isGroup,
+    is_reportable: input.isReportable,
+    is_trendable: input.isTrendable,
+    is_virtual: input.isVirtual,
+  };
+}
+
+export function mapTbmParameter(row: TbmRuntimeParameterRow): TbmRuntimeParameter {
   if (!row.id) throw new Error("Row id is missing");
 
   if (!row.name) throw new Error("Row name is missing");

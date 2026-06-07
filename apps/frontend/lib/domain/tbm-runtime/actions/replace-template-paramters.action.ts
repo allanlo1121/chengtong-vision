@@ -1,6 +1,6 @@
 "use server";
 
-import { ActionResult } from "@/lib/shared/contracts/action-result";
+import { ActionResult, toActionError } from "@/lib/shared/contracts/action-result";
 import { replaceTemplateParameters } from "../services/parameter-template.service";
 
 export async function replaceTemplateParametersAction(input: {
@@ -9,25 +9,15 @@ export async function replaceTemplateParametersAction(input: {
 }): Promise<ActionResult<{ count: number }>> {
   console.log("===replaceTemplateParametersAction===", input);
 
-  const result = await replaceTemplateParameters(input);
-
-  if (!result.success) {
+  try {
+    const result = await replaceTemplateParameters(input);
     return {
-      ...result,
-      errors: {
-        ...result.errors,
-        form: result.errors?.form ?? [result.message || "创建失败"],
-      },
-      errorLevel: "error",
+      success: true,
+      data: { count: result },
+      message: "替换参数成功",
     };
+  } catch (error) {
+    console.error("Error replacing template parameters:", error);
+    return toActionError(error);
   }
-
-  return {
-    ...result,
-    nextAction: {
-      type: "redirect",
-      label: "返回参数模板列表",
-      href: "/system/tbm/parameter-templates",
-    },
-  };
 }

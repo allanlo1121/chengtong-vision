@@ -19,6 +19,7 @@ export function CreateTbm({ title, description, parentId }: Props) {
       schema={CreateTbmSchema}
       action={createTbmAction}
       redirect={routes.tbms.list}
+      meta={{}}
     />
   );
 }

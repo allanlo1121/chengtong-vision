@@ -1,7 +1,7 @@
 import { createTbmParameterTemplateAction } from "@/lib/domain/tbm-runtime/actions/create-parameter-template.action";
 import {
-  CreateTbmParameterTemplateFormInput,
-  CreateTbmParameterTemplateFormSchema,
+  CreateTbmParameterTemplateInput,
+  CreateTbmParameterTemplateSchema,
 } from "@/lib/domain/tbm-runtime/schemas/tbm-parameter-template.schema";
 import { SchemaForm } from "@/lib/shared/form-engine/schema-form";
 import { useRouter } from "next/navigation";
@@ -20,13 +20,13 @@ export function ParameterTemplateCreateForm({
 
   return (
     <SchemaForm
-      schema={CreateTbmParameterTemplateFormSchema}
+      schema={CreateTbmParameterTemplateSchema}
       initialValues={
         {
           isDefault: false,
           isDisabled: false,
           sortOrder: 0,
-        } satisfies DefaultValues<CreateTbmParameterTemplateFormInput>
+        } satisfies DefaultValues<CreateTbmParameterTemplateInput>
       }
       action={createTbmParameterTemplateAction}
       onSuccess={(result) => {

@@ -6,20 +6,20 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
-import { TunnelDailyProgressItem } from "@/lib/domain/tbm-runtime/types";
-import { UpdateTunnelDailyProgressInput } from "@/lib/domain/tbm-runtime/schemas";
+import { TbmDailyProgressListItem } from "@/lib/domain/tbm-runtime/types";
+import { UpdateTbmDailyProgressInput } from "@/lib/domain/tbm-runtime/schemas";
 import { calcDistance, formatMeters } from "@/lib/utils/format";
 
 export type EditableProgressDraft = Partial<
-  Pick<UpdateTunnelDailyProgressInput, "ringEnd" | "chainageEnd" | "planRingCount">
+  Pick<UpdateTbmDailyProgressInput, "ringEnd" | "chainageEnd" | "planRingCount">
 >;
 
 interface GetColumnsOptions {
   editingRowId: string | null;
   drafts: Record<string, EditableProgressDraft>;
-  onEdit: (row: TunnelDailyProgressItem) => void;
+  onEdit: (row: TbmDailyProgressListItem) => void;
   onCancel: () => void;
-  onSave: (row: UpdateTunnelDailyProgressInput) => void;
+  onSave: (row: UpdateTbmDailyProgressInput) => void;
   onDraftChange: (rowId: string, key: keyof EditableProgressDraft, value: number | null) => void;
 }
 
@@ -32,7 +32,7 @@ function NumberCell({
   drafts,
   onDraftChange,
 }: {
-  row: TunnelDailyProgressItem;
+  row: TbmDailyProgressListItem;
   field: keyof EditableProgressDraft;
   editingRowId: string | null;
   drafts: Record<string, EditableProgressDraft>;
@@ -74,7 +74,7 @@ export function getTunnelDailyProgressColumns({
   onCancel,
   onSave,
   onDraftChange,
-}: GetColumnsOptions): ColumnDef<TunnelDailyProgressItem>[] {
+}: GetColumnsOptions): ColumnDef<TbmDailyProgressListItem>[] {
   return [
     {
       id: "select",
@@ -228,12 +228,11 @@ export function getTunnelDailyProgressColumns({
                 onClick={() =>
                   onSave({
                     id: row.original.id,
-                    tunnelId: row.original.tunnelId,
                     tbmId: row.original.tbmId,
                     workDate: row.original.workDate,
-                    ringEnd: drafts[row.original.id]?.ringEnd,
-                    chainageEnd: drafts[row.original.id]?.chainageEnd,
-                    planRingCount: drafts[row.original.id]?.planRingCount,
+                    ringEnd: drafts[row.original.id]?.ringEnd!,
+                    chainageEnd: drafts[row.original.id]?.chainageEnd!,
+                    planRingCount: drafts[row.original.id]?.planRingCount!,
                   })
                 }
               >

@@ -1,12 +1,10 @@
 "use server";
 
 import { z } from "zod";
-import { OrganizationFields, UpdateOrganizationInput, UpdateOrganizationSchema } from "../schemas";
-import { ActionState } from "@/lib/shared/actions/types";
+import { UpdateOrganizationInput, UpdateOrganizationSchema } from "../schemas";
+
 import { ActionResult, toActionError } from "@/lib/shared/contracts/action-result";
 import { updateOrganization } from "../services";
-
-export type OrganizationFormState = ActionState<OrganizationFields>;
 
 export async function updateOrganizationAction(
   data: UpdateOrganizationInput

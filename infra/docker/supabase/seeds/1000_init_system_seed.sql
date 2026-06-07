@@ -73,7 +73,7 @@ values
   null,
   'HardHat',
   4,
-  'workspace.read'
+  'hrm.read'
 ),
 (
   'system',

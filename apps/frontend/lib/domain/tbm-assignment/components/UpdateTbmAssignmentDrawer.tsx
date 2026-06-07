@@ -16,9 +16,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { updateTbmAssignmentAction } from "../actions";
-import { Tbm } from "../../tbm/types";
+
 import { TbmAssignmentListItem } from "../types";
-import { TunnelPicker } from "../../tunnel/components/tunnel-picker/tunnel-picker";
+import { TunnelPicker } from "@/lib/domain/tunnel/components/picker";
 import { TunnelPickerItem } from "../../tunnel/types";
 
 type Props = {

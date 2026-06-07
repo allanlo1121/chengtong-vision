@@ -1,6 +1,12 @@
 "use server";
 
-import { EmployeeInsertInput } from "../schemas";
+import {
+  CreateEmployeeAssignmentInput,
+  CreateEmployeeInput,
+  CreateEmployeeWithAssignmentInput,
+  EmployeeInsertInput,
+  UpdateEmployeeInput,
+} from "../schemas";
 import { WriterResult } from "@/lib/core/import/types";
 
 import {
@@ -11,29 +17,29 @@ import {
 } from "../types";
 import { employeeRepository, employeeAssignmentsRepository } from "../repositories";
 
-async function syncEmployeeAssignment(
-  employeeId: string,
-  data: EmployeeAssignmentInsertRow
-): Promise<EmployeeAssignmentRow | void> {
-  const old = await employeeAssignmentsRepository.getByEmployeeId(employeeId); // 👈 关键
-  console.log("Existing assignment for employee ID", employeeId, ":", old);
+// async function syncEmployeeAssignment(
+//   employeeId: string,
+//   data: EmployeeAssignmentInsertRow
+// ): Promise<EmployeeAssignmentRow | void> {
+//   const old = await employeeAssignmentsRepository.getByEmployeeId(employeeId); // 👈 关键
+//   console.log("Existing assignment for employee ID", employeeId, ":", old);
 
-  if (!old) {
-    return employeeAssignmentsRepository.insert(data);
-  }
+//   if (!old) {
+//     return employeeAssignmentsRepository.insert(data);
+//   }
 
-  const changed = old.organization_id !== data.organization_id || old.post_id !== data.post_id;
+//   const changed = old.organization_id !== data.organization_id || old.post_id !== data.post_id;
 
-  console.log("Assignment changed for employee ID", employeeId, ":", changed);
+//   console.log("Assignment changed for employee ID", employeeId, ":", changed);
 
-  if (!changed) return;
+//   if (!changed) return;
 
-  console.log("Deactivating existing assignment for employee ID", employeeId);
-  await employeeAssignmentsRepository.deactivateByEmployeeId(employeeId);
-  console.log("Inserting new assignment for employee ID", employeeId, "with data:", data);
+//   console.log("Deactivating existing assignment for employee ID", employeeId);
+//   await employeeAssignmentsRepository.deactivateByEmployeeId(employeeId);
+//   console.log("Inserting new assignment for employee ID", employeeId, "with data:", data);
 
-  return employeeAssignmentsRepository.insert(data);
-}
+//   return employeeAssignmentsRepository.insert(data);
+// }
 
 export const employeeWriter = async (data: EmployeeInsertInput): Promise<WriterResult> => {
   console.log("Upserting employee with data:", data);
@@ -44,7 +50,7 @@ export const employeeWriter = async (data: EmployeeInsertInput): Promise<WriterR
     const result = await employeeRepository.findByCode(data.code);
 
     const id = result?.id ?? null;
-    const version = result?.external_version ?? null;
+    const version = result?.externalVersion ?? null;
 
     console.log(
       "Employee code:",
@@ -69,22 +75,25 @@ export const employeeWriter = async (data: EmployeeInsertInput): Promise<WriterR
     // ======================
     // 3️⃣ 组装通用数据（避免重复）
     // ======================
-    const baseData = {
+    const baseData: CreateEmployeeInput = {
       code: data.code,
       name: data.name,
       phone: data.phone,
       email: data.email,
-      employment_type_id: data.employmentTypeId,
-      hire_date: data.hireDate,
-      external_id: data.externalId,
-      external_version: currentVersion,
+      employmentTypeId: data.employmentTypeId,
+      genderId: data.genderId,
+      hireDate: data.hireDate,
+      organizationId: data.organizationId,
+      sortOrder: 0,
+      externalId: data.externalId,
+      externalVersion: currentVersion,
     };
 
     // ======================
     // 4️⃣ 不存在 → INSERT
     // ======================
     if (!id) {
-      const insertData: EmployeeInsertRow = baseData;
+      const insertData: CreateEmployeeInput = baseData;
       console.log("Inserting new employee with data:", insertData);
 
       const res = await employeeRepository.insert(insertData);
@@ -94,11 +103,11 @@ export const employeeWriter = async (data: EmployeeInsertInput): Promise<WriterR
       }
 
       // 👉 插入岗位
-      const assignmentData: EmployeeAssignmentInsertRow = {
-        employee_id: res.id,
-        organization_id: data.organizationId,
-        post_id: data.postId,
-        is_primary: true,
+      const assignmentData: CreateEmployeeAssignmentInput = {
+        employeeId: res.id,
+        organizationId: data.organizationId,
+        postId: data.postId!,
+        isPrimary: true,
       };
 
       await employeeAssignmentsRepository.insert(assignmentData);
@@ -113,22 +122,25 @@ export const employeeWriter = async (data: EmployeeInsertInput): Promise<WriterR
     // ======================
     // 5️⃣ 存在 → UPDATE
     // ======================
-    const updateData: EmployeeUpdateRow = baseData;
+    const updateData: UpdateEmployeeInput = {
+      ...baseData,
+      id,
+    };
 
     console.log("Updating existing employee (ID:", id, ") with data:", updateData);
 
-    const updateRes = await employeeRepository.update(id, updateData);
+    const updateRes = await employeeRepository.update(updateData);
 
     if (!updateRes?.id) {
       throw new Error("Failed to update employee: no id returned");
     }
 
-    await syncEmployeeAssignment(updateRes.id, {
-      employee_id: updateRes.id,
-      organization_id: data.organizationId,
-      post_id: data.postId,
-      is_primary: true,
-    });
+    // await syncEmployeeAssignment(updateRes.id, {
+    //   employeeId: updateRes.id,
+    //   organizationId: data.organizationId,
+    //   postId: data.postId,
+    //   isPrimary: true,
+    // });
 
     return {
       success: true,

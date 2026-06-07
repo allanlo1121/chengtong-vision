@@ -1,5 +1,5 @@
 import { Breadcrumbs } from "@/components/common/bread-crubms";
-import CreateOrganization from "@/modules/organization/ui/forms/create-organization";
+import { CreateEmployee } from "@/lib/domain/employee/components/forms";
 
 export default async function Page({
   searchParams,
@@ -16,17 +16,17 @@ export default async function Page({
       <Breadcrumbs
         breadcrumbs={[
           { label: "系统设置", href: "/system" },
-          { label: "组织", href: "/system/organizations" },
+          { label: "员工", href: "/hrm/employees" },
           {
-            label: "新建组织",
+            label: "新建员工",
             active: true,
           },
         ]}
       />
 
-      <CreateOrganization
-        title="新建组织"
-        description="在此处创建一个新的组织。请确保提供准确的信息，以便正确设置组织的结构和权限。"
+      <CreateEmployee
+        title="新建员工"
+        description="在此处创建一个新的员工。请确保提供准确的信息，以便正确设置员工的角色和权限。"
         parentId={parentId}
       />
     </main>

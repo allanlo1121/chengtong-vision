@@ -3,19 +3,7 @@ import { Camelize } from "@/lib/shared/utils/case-converter";
 
 export type ProjectDetailRow = Database["proj"]["Views"]["v_project_detail"]["Row"];
 
-// export type ProjectDetailRow = RemoveNull<RawProjectDetailRow> & {
-//   full_name: string | null;
-//   parent_org_name: string | null;
-
-//   province_name: string | null;
-//   city_name: string | null;
-//   district_name: string | null;
-//   address: string | null;
-
-//   org_type_name: string | null;
-//   business_name: string | null;
-//   country_name: string | null;
-// };
+export type ProjectDetail = Camelize<ProjectDetailRow>;
 
 export type ProjectListRow = Database["proj"]["Views"]["v_project_list"]["Row"];
 

@@ -66,11 +66,11 @@ export default async function Page({ searchParams }: PageProps) {
       tbmTypeOptions={tbmTypeOption}
       manufacturerOptions={manufacturerOptions}
     >
-      {groups.success ? (
-        <ParameterBindingTabsEditor tbmId={selectedId} groups={groups.data} />
+      {groups.length > 0 ? (
+        <ParameterBindingTabsEditor tbmId={selectedId} groups={groups} />
       ) : (
         <div className="flex h-full min-h-0 overflow-hidden items-center justify-center text-sm text-destructive">
-          加载模板参数失败：{groups.message}
+          加载模板参数失败
         </div>
       )}
     </ParameterPageShell>

@@ -1,2 +1,2 @@
-export * from "./master-option.types";
 export * from "./master-data.types";
+export * from "./db.types";

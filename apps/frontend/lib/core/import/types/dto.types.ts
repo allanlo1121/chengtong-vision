@@ -1,7 +1,7 @@
 // types/dto.types.ts
 
 import { Camelize } from "@/lib/utils/case-converter";
-import { ImportBatch, ImportRecordInsert, ImportRecordRow } from "./entity.types";
+import { ImportBatch, ImportRecordInsert, ImportRecordRow } from "./db.types";
 
 export type CreateImportBatch = {
   entityType: string;

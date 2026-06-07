@@ -51,9 +51,7 @@ export function mapTunnelProgressOverviewRowToEntity(
     projectName: row.project_name!,
     tunnelId: row.tunnel_id!,
     tunnelName: row.tunnel_name!,
-    tunnelStatusId: row.tunnel_status_id!,
-    tunnelStatusName: row.tunnel_status_name!,
-    tunnelStatusCode: row.tunnel_status_code!,
+
     tbmId: row.tbm_id!,
     tbmName: row.tbm_name!,
     tbmCode: row.tbm_code!,

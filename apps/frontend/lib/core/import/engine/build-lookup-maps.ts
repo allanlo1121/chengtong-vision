@@ -1,4 +1,3 @@
-import { LookupMaps } from "../types";
 import { LOOKUP_DEFINITIONS } from "../services/lookup.service";
 
 export async function buildLookupMaps(keys: (keyof typeof LOOKUP_DEFINITIONS)[]) {

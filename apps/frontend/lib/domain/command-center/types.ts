@@ -1,4 +1,5 @@
 import { Database } from "@/lib/core/database/types";
+import { Camelize } from "@/lib/utils/case-converter";
 
 export type CommandCenterSummaryRow =
   Database["public"]["Views"]["v_command_center_summary"]["Row"];
@@ -87,30 +88,4 @@ export const statusClassMap: Record<TbmPhaseType, string> = {
   offline: "rounded-full bg-slate-500/10 px-2 py-1 text-xs font-medium text-slate-600",
 };
 
-export type TunnelProgressOverview = {
-  projectId: string;
-  projectName: string;
-  tunnelId: string;
-  tunnelName: string;
-  tunnelStatusId: string;
-  tunnelStatusCode: string;
-  tunnelStatusName: string;
-  tbmId: string;
-  tbmName: string;
-  tbmCode: string;
-  totalLengthMeter: number | null;
-  totalRingCount: number;
-  todayRingCount: number;
-  weekRingCount: number;
-  monthRingCount: number;
-  todayAdvanceMeter: number;
-  weekAdvanceMeter: number;
-  monthAdvanceMeter: number;
-  totalAdvanceRingCount: number;
-  totalAdvanceMeter: number | null;
-  currentWorkDate: string;
-  weekStartWorkDate: string;
-  monthStartWorkDate: string;
-  sortOrder: number;
-  refreshedAt: string;
-};
+export type TunnelProgressOverview = Camelize<TunnelProgressOverviewRow>;

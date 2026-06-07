@@ -44,6 +44,8 @@ export const EmployeeAssignmentSchema = z.object({
     .refine((date) => !isNaN(Date.parse(date)), {
       message: "Invalid date format",
     })
+    .optional()
+    .nullable()
     .meta({
       table: "employee_assignments",
       label: "开始日期",
@@ -56,6 +58,8 @@ export const EmployeeAssignmentSchema = z.object({
     .refine((date) => !isNaN(Date.parse(date)), {
       message: "Invalid date format",
     })
+    .optional()
+    .nullable()
     .meta({
       table: "employee_assignments",
       label: "结束日期",

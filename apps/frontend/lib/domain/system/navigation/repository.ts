@@ -27,6 +27,9 @@ export async function getMenusByScope(menuScope: MenuScope): Promise<MenuTreeRow
     .eq("menu_scope", menuScope)
     .order("sort_order", { ascending: true });
 
+  console.log("getMenusByScope - data length:", data?.length);
+  console.log("getMenusByScope - error:", error);
+
   assertNoError(error);
 
   return (data ?? []) as MenuTreeRow[];

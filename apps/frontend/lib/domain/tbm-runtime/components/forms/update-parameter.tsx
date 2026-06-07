@@ -1,7 +1,7 @@
 "use client";
 
 import { updateTbmRuntimeParameterAction } from "../../actions";
-import { TbmRuntimeParameterFormSchema } from "../../schemas";
+import { UpdateTbmRuntimeParameterSchema } from "../../schemas";
 import { CrudFormPage } from "@/lib/shared/crud/components/crud-form-page";
 import { routes } from "@/lib/core/router/router";
 
@@ -20,10 +20,11 @@ export function UpdateTbmRuntimeParameter({
     <CrudFormPage
       title={title}
       description={description}
-      schema={TbmRuntimeParameterFormSchema}
+      schema={UpdateTbmRuntimeParameterSchema}
       initialValues={initialValues}
       action={updateTbmRuntimeParameterAction}
       redirect={routes.tbms.list}
+      meta={{}}
     />
   );
 }

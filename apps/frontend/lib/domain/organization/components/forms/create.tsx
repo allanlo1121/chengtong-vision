@@ -22,6 +22,7 @@ export function CreateOrganization({ title, description, parentId }: Props) {
         parentId,
       }}
       redirect={routes.organizations.list}
+      meta={{}}
     />
   );
 }

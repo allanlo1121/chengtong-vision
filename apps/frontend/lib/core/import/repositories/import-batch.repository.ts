@@ -1,7 +1,6 @@
-import { mapperRegistry } from "@/lib/core/mapper/mapper-registry";
 import { assertNoError } from "@/lib/infra/repositories/base.repository";
 import { createClient } from "@/lib/infra/supabase/server";
-import { ImportBatchRow } from "../types";
+import { ImportBatchInsertRow, ImportBatchRow } from "../types";
 
 type ImportBatchSummary = {
   inserted: number;
@@ -14,19 +13,17 @@ export class ImportBatchRepository {
   async create(input: { tableName: string; totalCount: number }) {
     const supabase = await createClient();
 
-    const mapper = mapperRegistry["import_batches"];
-
-    const dbInput = mapper.toInsert({
-      tableName: input.tableName,
-      totalCount: input.totalCount,
+    const dbInput: ImportBatchInsertRow = {
+      table_name: input.tableName,
+      total_count: input.totalCount,
 
       status: "processing",
 
-      insertedCount: 0,
-      updatedCount: 0,
-      skippedCount: 0,
-      failedCount: 0,
-    });
+      inserted_count: 0,
+      updated_count: 0,
+      skipped_count: 0,
+      failed_count: 0,
+    };
 
     console.log("import batch dbInput", dbInput);
 
@@ -38,7 +35,7 @@ export class ImportBatchRepository {
 
     assertNoError(error);
 
-    return mapper.fromDb(data as ImportBatchRow);
+    return data;
   }
 
   async finish(id: string, summary: ImportBatchSummary) {

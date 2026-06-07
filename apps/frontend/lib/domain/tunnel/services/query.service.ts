@@ -53,10 +53,6 @@ export async function listTunnelWorkspaceScopesByOrganizations(
 ): Promise<TunnelWorkspaceScope[]> {
   const tunnels = await searchTunnelWorkspaceScopesByOrganizations(organizationIds);
 
-  if (!tunnels || tunnels.length === 0) {
-    throw appErrors.notFound("未查询到隧道工作区详情");
-  }
-
   return tunnels;
 }
 

@@ -192,6 +192,8 @@ export async function getTunnelWorkspaceDetail(id: string): Promise<TunnelWorksp
     .eq("id", id)
     .single();
 
+  console.log("getTunnelWorkspaceDetail - data:", data);
+
   assertNoError(error);
 
   return data ? mapTunnelWorkspaceScope(data) : null;
@@ -207,6 +209,8 @@ export async function searchTunnelWorkspaceScopesByOrganizations(
     .from("v_tunnel_workspace_detail")
     .select("*")
     .in("organization_id", organizationIds);
+
+  console.log("searchTunnelWorkspaceScopesByOrganizations - data length:", data?.length);
 
   assertNoError(error);
 

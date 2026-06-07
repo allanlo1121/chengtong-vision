@@ -4,6 +4,7 @@ import { findTbmRuntimeParameters } from "@/lib/domain/tbm-runtime/services";
 import { ParameterPageShell } from "./_components/ParameterPageShell";
 import { ParameterList } from "./_components/ParameterList";
 import { ParameterToolbar } from "./_components/ParameterToolbar";
+import { ErrorBlock } from "@/components/common/error-block";
 
 interface PageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -14,24 +15,30 @@ export default async function ParametersPage({ searchParams }: PageProps) {
 
   const query = parameterQuery.parse(params);
 
-  const [subsystems, parameters] = await Promise.all([
-    listTbmSubsystems(),
-    findTbmRuntimeParameters(query),
-  ]);
+  let subsystems, parameters;
+  try {
+    [subsystems, parameters] = await Promise.all([
+      listTbmSubsystems(),
+      findTbmRuntimeParameters(query),
+    ]);
 
-  if (!subsystems.success) {
-    return <div>加载子系统失败: {subsystems.message}</div>;
-  }
+    if (subsystems.length === 0) {
+      return <div>没有子系统数据</div>;
+    }
 
-  if (!parameters.success) {
-    return <div>加载参数失败: {parameters.message}</div>;
+    if (!parameters || parameters.items.length === 0) {
+      return <div>没有参数数据</div>;
+    }
+  } catch (error) {
+    console.error("Error loading data:", error);
+    return <ErrorBlock message="加载数据失败，请稍后再试" />;
   }
 
   return (
-    <ParameterPageShell subsystems={subsystems.data} selectedSubsystemId={query.subsystemId}>
+    <ParameterPageShell subsystems={subsystems} selectedSubsystemId={query.subsystemId}>
       <div className="flex h-full flex-col">
         <ParameterToolbar query={query} />
-        <ParameterList parameters={parameters.data.items} />
+        <ParameterList parameters={parameters.items} />
       </div>
     </ParameterPageShell>
   );

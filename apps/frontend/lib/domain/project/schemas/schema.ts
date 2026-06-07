@@ -7,7 +7,6 @@ import {
 } from "@/lib/shared/schema";
 
 import { z } from "zod";
-import { is } from "zod/v4/locales/index.js";
 
 /**
  * Project字段规则

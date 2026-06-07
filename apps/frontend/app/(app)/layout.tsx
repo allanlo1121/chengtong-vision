@@ -4,11 +4,20 @@ import { Providers } from "@/app/providers";
 
 import { LayoutContent } from "@/components/layout/layout-content";
 import { fetchMenusByCode } from "@/lib/domain/system/navigation/service";
-import { BreadcrumbProvider } from "@/components/layout/breadcrumb-context";
 
 import { queryRuntimeUser } from "@/lib/domain/system/services/query";
 
 import { AppContextType } from "@/lib/domain/system/appContext/types";
+import { BreadcrumbProvider } from "@/components/layout/breadcrumb-context";
+import { breadcrumbMap } from "@/lib/core/router/breadcrumbs";
+import { BreadcrumbLabelMap } from "@/lib/domain/system/breadcrumb/types";
+
+import {
+  fetchBreadcrumbLabelMaps,
+  fetchEntityNameByPath,
+} from "@/lib/domain/system/breadcrumb/service";
+
+export const dynamic = "force-dynamic";
 
 export default async function SystemLayout({ children }: { children: React.ReactNode }) {
   try {
@@ -34,10 +43,18 @@ export default async function SystemLayout({ children }: { children: React.React
 
     // Menus
     const menus = await fetchMenusByCode("global");
+    const breadcrumbLabelMap = await fetchBreadcrumbLabelMaps();
+
+    // const entityLabelMap = await fetchEntityNameByPath("tunnels", id);
+
+    const breadcrumbMap: BreadcrumbLabelMap = {
+      ...breadcrumbLabelMap,
+      // ...entityLabelMap,
+    };
 
     return (
       <Providers runtimeUser={runtimeUser} appContext={appContext} menus={menus}>
-        <BreadcrumbProvider>
+        <BreadcrumbProvider breadcrumbMap={breadcrumbMap}>
           <LayoutContent>{children}</LayoutContent>
         </BreadcrumbProvider>
       </Providers>

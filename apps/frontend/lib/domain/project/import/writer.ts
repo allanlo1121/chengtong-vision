@@ -1,12 +1,11 @@
 "use server";
 
-import { ProjectInsertInput } from "../schemas";
+import { CreateProjectInput, ProjectInsertInput, UpdateProjectInput } from "../schemas";
 import { WriterResult } from "@/lib/core/import/types";
 
 import { OrganizationRoleAssignmentInsertRow, ProjectInsertRow } from "../types";
 import {
   projectRepository,
-  employeeAssignmentsRepository,
   insertProjectStatusTimeline,
   insertProjectRiskLevelTimeline,
   insertProjectAttentionLevelTimeline,
@@ -24,7 +23,7 @@ export const projectWriter = async (data: ProjectInsertInput): Promise<WriterRes
     const result = await projectRepository.findByCode(data.code);
 
     const id = result?.id ?? null;
-    const version = result?.external_version ?? null;
+    const version = result?.externalVersion ?? null;
 
     console.log(
       "project code:",
@@ -49,41 +48,45 @@ export const projectWriter = async (data: ProjectInsertInput): Promise<WriterRes
     // ======================
     // 3️⃣ 组装通用数据（避免重复）
     // ======================
-    const baseData = {
-      code: data.code,
-      name: data.name,
-      full_name: data.fullName,
-      project_overview: data.projectOverview,
-      project_key_points: data.projectKeyPoints,
-      project_scope: data.projectScope,
+    // const baseData = {
+    //   code: data.code,
+    //   name: data.name,
+    //   full_name: data.fullName,
+    //   project_overview: data.projectOverview,
+    //   project_key_points: data.projectKeyPoints,
+    //   project_scope: data.projectScope,
 
-      project_type_id: data.projectTypeId,
-      project_sub_type_id: data.projectSubTypeId,
-      project_management_mode_id: data.projectManagementModeId,
+    //   project_type_id: data.projectTypeId,
+    //   project_sub_type_id: data.projectSubTypeId,
+    //   project_management_mode_id: data.projectManagementModeId,
 
-      organization_id: data.organizationId,
-      region_id: data.regionId,
+    //   organization_id: data.organizationId,
+    //   region_id: data.regionId,
 
-      country_code: data.countryCode,
-      province_code: data.provinceCode,
-      city_code: data.cityCode,
-      district_code: data.districtCode,
-      address: data.address,
-      longitude: data.longitude,
-      latitude: data.latitude,
-      actual_start_date: data.actualStartDate,
-      actual_end_date: data.actualEndDate,
-      remark: data.remark,
+    //   country_code: data.countryCode,
+    //   province_code: data.provinceCode,
+    //   city_code: data.cityCode,
+    //   district_code: data.districtCode,
+    //   address: data.address,
+    //   longitude: data.longitude,
+    //   latitude: data.latitude,
+    //   actual_start_date: data.actualStartDate,
+    //   actual_end_date: data.actualEndDate,
+    //   remark: data.remark,
 
-      external_id: data.externalId,
-      external_version: currentVersion,
-    };
+    //   external_id: data.externalId,
+    //   external_version: currentVersion,
+    // };
 
     // ======================
     // 4️⃣ 不存在 → INSERT
     // ======================
     if (!id) {
-      const insertData: ProjectInsertRow = baseData;
+      const insertData: CreateProjectInput = {
+        ...data,
+        isDisabled: false,
+        sortOrder: 0,
+      };
       console.log("Inserting new project with data:", insertData);
 
       const res = await projectRepository.insert(insertData);

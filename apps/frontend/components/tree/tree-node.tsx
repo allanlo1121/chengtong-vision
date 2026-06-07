@@ -1,6 +1,6 @@
 "use client";
 
-import { TreeNode } from "@/lib/core/tree/types";
+import { TreeNode } from "@/lib/shared/tree/types";
 import { ChevronRight, ChevronDown } from "lucide-react";
 
 interface Props {

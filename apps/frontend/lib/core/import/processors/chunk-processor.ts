@@ -1,7 +1,7 @@
 import { repository } from "../repositories";
 import { ImportRow } from "../types";
 import { importRegistry } from "../registry/import.registry";
-import { TableEntity } from "@/lib/core/types/entity.types";
+import { TableEntity } from "@/lib/core/database/types";
 
 export async function processChunk<T extends TableEntity>(
   entity: T,

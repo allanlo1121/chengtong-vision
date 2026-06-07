@@ -13,7 +13,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { useCrudMutation } from "@/lib/ui/crud/hooks/useCrudMutation";
 import { deleteTbmDailyProgressAction } from "@/lib/domain/tbm-runtime/actions";
 import { routes } from "@/lib/core/router/router";
 import { TbmDailyProgressListItem } from "@/lib/domain/tbm-runtime/types/tbm-daily-progress.types";
@@ -30,17 +29,22 @@ export function DataTableRowActions<TData>({
   const tbmDailyProgress = row.original as unknown as TbmDailyProgressListItem;
   const router = useRouter();
 
-  const deleteMutation = useCrudMutation<string, number>({
-    action: deleteTbmDailyProgressAction,
-    successMessage: "删除成功",
-    onSuccess: () => router.refresh(),
-  });
-
   const handleDelete = () => {
     if (!confirm("确认删除该TBM吗？")) return;
 
-    console.log("deleteMutation", deleteMutation);
-    deleteMutation.mutate(tbmDailyProgress.id);
+    deleteTbmDailyProgressAction(tbmDailyProgress.id)
+      .then((res) => {
+        if (res.success) {
+          alert("删除成功");
+          router.refresh();
+        } else {
+          alert("删除失败：" + res.message);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("删除过程中发生错误");
+      });
   };
 
   return (

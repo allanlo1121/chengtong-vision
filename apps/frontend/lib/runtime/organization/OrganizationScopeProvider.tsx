@@ -5,7 +5,7 @@ import { useUser } from "../user/useUser";
 
 interface OrganizationScopeContextType {
   organizationId: string;
-  organizationPath: string;
+  organizationIds: string[];
   isInScope: (organizationPath: string) => boolean;
 }
 
@@ -17,9 +17,9 @@ export function OrganizationScopeProvider({ children }: { children: React.ReactN
   const value = useMemo(
     () => ({
       organizationId: user.organizationId,
-      organizationPath: user.organizationPath,
+      organizationIds: user.organizationIds,
       isInScope: (organizationPath: string) => {
-        return organizationPath.startsWith(user.organizationPath);
+        return user.organizationIds.some((id) => organizationPath.startsWith(id));
       },
     }),
     [user]

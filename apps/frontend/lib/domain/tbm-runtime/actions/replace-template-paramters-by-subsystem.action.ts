@@ -1,6 +1,6 @@
 "use server";
 
-import { ActionResult } from "@/lib/shared/contracts/action-result";
+import { ActionResult, toActionError } from "@/lib/shared/contracts/action-result";
 import { replaceTemplateParametersBySubsystem } from "../services/parameter-template.service";
 
 export async function replaceTemplateParametersBySubsystemAction(input: {
@@ -10,25 +10,15 @@ export async function replaceTemplateParametersBySubsystemAction(input: {
 }): Promise<ActionResult<{ count: number }>> {
   console.log("===replaceTemplateParametersBySubsystemAction===", input);
 
-  const result = await replaceTemplateParametersBySubsystem(input);
-
-  if (!result.success) {
+  try {
+    const result = await replaceTemplateParametersBySubsystem(input);
     return {
-      ...result,
-      errors: {
-        ...result.errors,
-        form: result.errors?.form ?? [result.message || "创建失败"],
-      },
-      errorLevel: "error",
+      success: true,
+      data: { count: result },
+      message: "替换参数成功",
     };
+  } catch (error) {
+    console.error("Error creating TBM:", error);
+    return toActionError(error);
   }
-
-  return {
-    ...result,
-    nextAction: {
-      type: "redirect",
-      label: "返回参数模板列表",
-      href: "/system/tbm/parameter-templates",
-    },
-  };
 }

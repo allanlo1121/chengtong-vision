@@ -1,18 +1,19 @@
-import { createClient } from "@/lib/core/supabase/server";
+import { createClient } from "@/lib/infra/supabase/server";
 import { assertNoError } from "@/lib/infra/repositories/base.repository";
-import { MasterOptionRow } from "../types";
+import { MasterOption } from "../types";
+import { mapMasterOption } from "../mapper/master-option.mapper";
 
 export async function findMasterOptionsByDefinitionCode(
   definition_code: string
-): Promise<MasterOptionRow[]> {
+): Promise<MasterOption[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("v_master_options")
-    .select("id,code,name,description,definition_code,definition_name")
+    .select("*")
     .eq("definition_code", definition_code)
     .order("code", { ascending: true });
 
   assertNoError(error);
 
-  return data ?? [];
+  return (data ?? []).map(mapMasterOption);
 }

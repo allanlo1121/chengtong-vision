@@ -1,5 +1,6 @@
 // (app)/layout.tsx
 
+import React from "react";
 import { Providers } from "@/app/providers";
 
 import { LayoutContent } from "./_components/layout-content";
@@ -17,7 +18,6 @@ import { TunnelWorkspaceProvider } from "@/providers/workspace/TunnelWorkspacePr
 import {
   fetchTunnelWorkspaceDetail,
   listAccessibleTunnelScopes,
-  listTunnelWorkspaceScopesByOrganizations,
 } from "@/lib/domain/tunnel/services/query.service";
 
 export default async function TunnelWorkspaceLayout({
@@ -67,9 +67,10 @@ export default async function TunnelWorkspaceLayout({
 
     const scope = await fetchTunnelWorkspaceDetail(id);
 
+    console.log("Tunnel Workspace Scope:", scope);
+
     const tunnelOptions = await listAccessibleTunnelScopes(runtimeUser.organizationIds);
 
-    console.log("Tunnel Workspace Scope:", scope);
     console.log("Accessible Tunnel Scopes:", tunnelOptions);
 
     return (
@@ -82,7 +83,7 @@ export default async function TunnelWorkspaceLayout({
       </Providers>
     );
   } catch (error) {
-    console.error("SystemLayout error", error);
+    console.error("TunnelWorkspaceLayout error", error);
 
     return <div className="flex h-screen items-center justify-center">系统初始化失败</div>;
   }

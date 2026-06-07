@@ -19,6 +19,7 @@ export default function CreateTunnel({ title, description, projectId }: Props) {
       schema={CreateTunnelFullSchema}
       action={createTunnelAction}
       redirect={routes.tunnels.list}
+      meta={{}}
     />
   );
 }

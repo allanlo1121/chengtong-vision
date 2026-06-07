@@ -6,7 +6,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { type TbmListItem } from "../types";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
-import { formatDateTime } from "@/lib/utils";
 import { routes } from "@/lib/core/router/router";
 
 export const columns: ColumnDef<TbmListItem>[] = [
