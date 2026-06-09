@@ -8,8 +8,8 @@ export function buildBreadcrumbsFromPathname({
   pathname: string;
   breadcrumbMap: BreadcrumbLabelMap;
 }): BreadcrumbItem[] {
-  console.log("Building breadcrumbs from pathname:", pathname);
-  console.log("Using breadcrumb map:", breadcrumbMap);
+  // console.log("Building breadcrumbs from pathname:", pathname);
+  // console.log("Using breadcrumb map:", breadcrumbMap);
   const segments = pathname.split("/").filter(Boolean);
   const breadcrumbs: BreadcrumbItem[] = [];
 
@@ -21,7 +21,7 @@ export function buildBreadcrumbsFromPathname({
     const segment = segments[i];
     currentPath += `/${segment}`;
 
-    console.log(`Processing segment: ${segment}, currentPath: ${currentPath}`);
+    // console.log(`Processing segment: ${segment}, currentPath: ${currentPath}`);
 
     let label: string | undefined;
 

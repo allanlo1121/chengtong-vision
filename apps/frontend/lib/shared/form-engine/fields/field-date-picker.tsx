@@ -18,8 +18,6 @@ export function FieldDatePicker<T extends FieldValues, C = any, O = T>({
   name,
   ui,
   form,
-  disabled,
-  required,
 }: FieldRendererProps<T, C, O>) {
   return (
     <Controller
@@ -36,7 +34,7 @@ export function FieldDatePicker<T extends FieldValues, C = any, O = T>({
             <FieldLabel htmlFor={field.name} className="flex items-center">
               {ui.label ?? name}
 
-              {required && <span className="ml-1 text-destructive align-middle">*</span>}
+              {/* {required && <span className="ml-1 text-destructive align-middle">*</span>} */}
             </FieldLabel>
 
             <Popover>
@@ -44,7 +42,7 @@ export function FieldDatePicker<T extends FieldValues, C = any, O = T>({
                 <Button
                   type="button"
                   variant="outline"
-                  disabled={disabled}
+                  // disabled={disabled}
                   className={cn(
                     "w-full justify-start text-left font-normal",
                     !field.value && "text-muted-foreground"

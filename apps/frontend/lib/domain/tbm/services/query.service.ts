@@ -49,7 +49,7 @@ export async function listTbmPicker(
   }
 }
 
-export async function getTbmDetailById(id: string): Promise<TbmDetail> {
+export async function fetchTbmDetailById(id: string): Promise<TbmDetail> {
   const tbm = await tbmRepository.getTbmDetailById(id);
 
   if (!tbm) {

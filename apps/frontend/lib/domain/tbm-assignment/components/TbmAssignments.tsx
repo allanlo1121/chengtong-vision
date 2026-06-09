@@ -105,11 +105,7 @@ export function CreateTbmAssignmentDrawer({ open, onOpenChange, tbmId, tbmName }
             <div className="space-y-2">
               <label className="text-sm font-medium">绑定区间</label>
 
-              <TunnelPicker
-                selected={selectedTunnel}
-                disabled={pending}
-                onChange={setSelectedTunnel}
-              />
+              <TunnelPicker selected={selectedTunnel} onChange={setSelectedTunnel} />
             </div>
 
             <div className="space-y-2">

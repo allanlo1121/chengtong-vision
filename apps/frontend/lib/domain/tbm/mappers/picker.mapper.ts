@@ -12,9 +12,9 @@ export function mapTbmPicker(row: TbmPickerRow): TbmPickerItem {
   return {
     id: row.id,
     name: row.name,
-    manageCode: row.manage_code,
-    tbmTypeName: row.tbm_type_name,
-    manufacturerName: row.manufacturer_name,
-    diameter: row.diameter,
+    manageCode: row.manage_code ?? undefined,
+    tbmTypeName: row.tbm_type_name ?? "未知类型",
+    manufacturerName: row.manufacturer_name ?? undefined,
+    diameter: row.diameter ?? undefined,
   };
 }

@@ -1,26 +1,21 @@
-import { Camelize } from "@/lib/utils/case-converter";
 import { EmployeePickerRow } from "./db.types";
-import { OptionalNullable, SelectiveRemoveNull } from "@/lib/utils/remove-nullable";
+import { PickerQuery } from "@/lib/shared/picker/types";
 
-export type EmployeePickerItem = SelectiveRemoveNull<
-  OptionalNullable<Camelize<EmployeePickerRow>>,
-  "id" | "name"
->;
-
-export type EmployeePickerQuery = {
-  search?: string;
+export type EmployeePickerItem = {
+  id: string;
+  name: string;
+  code: string;
 
   organizationId?: string;
-
   organizationName?: string;
-
   postId?: string;
   postName?: string;
-
-  page?: number;
-
-  pageSize?: number;
+  sortOrder?: number;
 };
+export interface EmployeePickerQuery extends PickerQuery {
+  organizationName?: string;
+  postName?: string;
+}
 
 export type EmployeePickerResult = {
   data: EmployeePickerRow[];

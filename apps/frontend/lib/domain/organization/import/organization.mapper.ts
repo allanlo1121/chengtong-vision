@@ -1,6 +1,6 @@
 /// @description: 员工数据映射器
 
-import { CreateOrganizationInput } from "../schemas";
+import { InsertOrganizationInput } from "../schemas";
 import { OrganizationImportRow } from "../types";
 
 export const organizationMapper = (row: OrganizationImportRow) =>
@@ -19,4 +19,4 @@ export const organizationMapper = (row: OrganizationImportRow) =>
     externalVersion: row["ctcemti_bltjzz_serial_version"]
       ? Number(row["ctcemti_bltjzz_serial_version"])
       : 0,
-  }) satisfies Omit<CreateOrganizationInput, "orgTypeId" | "orgCategoryId" | "parentId">;
+  }) satisfies Omit<InsertOrganizationInput, "orgTypeId" | "orgCategoryId" | "parentId">;

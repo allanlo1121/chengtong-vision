@@ -48,8 +48,8 @@ export function TbmSidebar() {
     async function loadTbms() {
       const result = await listTbmPicker(filters);
 
-      if (result.success && result.data) {
-        setTbms(result.data.items);
+      if (result && result.items.length > 0) {
+        setTbms(result.items);
       }
     }
 

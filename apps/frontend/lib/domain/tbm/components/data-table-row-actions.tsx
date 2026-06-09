@@ -68,6 +68,18 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<Tbm
           TBM绑定
         </DropdownMenuItem>
 
+        <DropdownMenuItem onClick={() => router.push(`/equip/tbms/${tbm.id}/parameter-config`)}>
+          TBM参数配置
+        </DropdownMenuItem>
+
+        <DropdownMenuItem onClick={() => router.push(`/equip/tbms/${tbm.id}/mqtt`)}>
+          TBM MQTT配置
+        </DropdownMenuItem>
+
+        <DropdownMenuItem onClick={() => router.push(`/equip/tbms/${tbm.id}/plc-tags`)}>
+          TBM PLC地址
+        </DropdownMenuItem>
+
         <DropdownMenuSeparator />
 
         <DropdownMenuItem onClick={() => router.push(routes.tbms.runtime(tbm.id!))}>

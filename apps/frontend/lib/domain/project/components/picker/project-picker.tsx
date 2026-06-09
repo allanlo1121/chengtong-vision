@@ -11,15 +11,10 @@ import type { ProjectPickerItem } from "../../types/picker.types";
 
 type Props = {
   selected?: ProjectPickerItem | null;
-  disabled?: boolean;
   onChange?: (item: ProjectPickerItem | null) => void;
 };
 
-export function ProjectPicker({
-  selected: selectedProp = null,
-  disabled = false,
-  onChange,
-}: Props) {
+export function ProjectPicker({ selected: selectedProp = null, onChange }: Props) {
   const [open, setOpen] = useState(false);
 
   const [selected, setSelected] = useState<ProjectPickerItem | null>(selectedProp);
@@ -46,13 +41,12 @@ export function ProjectPicker({
           placeholder="选择项目"
           value={selected?.name ?? ""}
           onClick={() => {
-            if (!disabled) setOpen(true);
+            setOpen(true);
           }}
           readOnly
-          disabled={disabled}
         />
 
-        {selected && !disabled && (
+        {selected && (
           <Button type="button" variant="outline" onClick={handleClear}>
             清除
           </Button>

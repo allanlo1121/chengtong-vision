@@ -7,27 +7,8 @@ import { mapTbmPicker } from "../mappers";
 
 export async function listTbmPicker(
   query: TbmPickerQuery
-): Promise<Result<PaginatedResult<TbmPickerItem>>> {
-  try {
-    const data = await tbmClientRepository.searchTbmPicker(query);
-
-    console.log("tbm picker list data:", data);
-
-    return {
-      success: true,
-      data: {
-        items: data.data.map(mapTbmPicker),
-        total: data.count,
-        page: query.page ?? 1,
-        pageSize: query.pageSize ?? 10,
-      },
-    };
-  } catch (error: unknown) {
-    return {
-      success: false,
-      message: (error as Error)?.message ?? "查询失败",
-    };
-  }
+): Promise<PaginatedResult<TbmPickerItem>> {
+  return await tbmClientRepository.searchTbmPicker(query);
 }
 
 export async function getTbmPickerItemById(id: string): Promise<TbmPickerItem | null> {

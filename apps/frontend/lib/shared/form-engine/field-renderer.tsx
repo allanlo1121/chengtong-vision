@@ -7,40 +7,20 @@ export function FieldRenderer<
   T extends FieldValues,
   C = any,
   O = T,
-  M extends FormMeta = FormMeta,
+  M extends FormMeta<T> = FormMeta<T>,
 >({ name, ui, form, meta }: FieldRendererProps<T, C, O, M>) {
-  //console.log("FieldRenderer,ui", ui);
+  const Component = fieldRegistry[ui.component as keyof typeof fieldRegistry];
 
-  const dependsOn = ui.dependsOn ?? [];
+  if (!Component) {
+    return null;
+  }
 
-  const watchValues = useWatch({
-    control: form.control,
-    name: dependsOn,
-  });
+  const fieldMeta = meta?.[name];
 
-  const context = {
-    ...form.getValues(),
-    ...watchValues,
+  const mergedUi = {
+    ...ui,
+    ...fieldMeta,
   };
 
-  const visible = resolveValue(ui.visible, context);
-
-  if (visible === false) return null;
-
-  const Component = fieldRegistry[ui.component];
-  if (!Component) return null;
-
-  const disabled = resolveValue(ui.disabled, context);
-  const required = resolveValue(ui.required, context);
-
-  return (
-    <Component<T, C, O, M>
-      name={name}
-      ui={ui}
-      form={form}
-      meta={meta}
-      disabled={disabled}
-      required={required}
-    />
-  );
+  return <Component<T, C, O> name={name} ui={mergedUi} form={form} />;
 }

@@ -9,17 +9,17 @@ import { DefaultValues } from "react-hook-form";
 import { useFormActionHandlers } from "@/lib/shared/crud/use-form-action-handlers";
 import { FormMeta } from "../../form-engine/types/field.types";
 
-type CrudFormPageProps<TSchema extends ZodObject<any>, TMeta extends FormMeta = FormMeta> = {
+type CrudFormPageProps<TSchema extends ZodObject<any>> = {
   title: string;
   description?: string;
   schema: TSchema;
   initialValues?: DefaultValues<z.input<TSchema>>;
   action?: (data: z.output<TSchema>, id?: string) => Promise<any>;
   redirect?: string;
-  meta: TMeta;
+  meta?: FormMeta<z.input<TSchema>>;
 };
 
-export function CrudFormPage<TSchema extends ZodObject<any>, TMeta extends FormMeta = FormMeta>({
+export function CrudFormPage<TSchema extends ZodObject<any>>({
   title,
   description,
   schema,
@@ -27,10 +27,18 @@ export function CrudFormPage<TSchema extends ZodObject<any>, TMeta extends FormM
   action,
   redirect,
   meta,
-}: CrudFormPageProps<TSchema, TMeta>) {
+}: CrudFormPageProps<TSchema>) {
   const router = useRouter();
   const { handleSuccess, handleError, handleCancel } = useFormActionHandlers(router);
-
+  console.log("CrudFormPage", {
+    title,
+    description,
+    schema,
+    initialValues,
+    action,
+    redirect,
+    meta,
+  });
   return (
     <Card className="w-full mx-auto max-w-4xl">
       <CardHeader>

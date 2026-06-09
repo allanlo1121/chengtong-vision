@@ -24,7 +24,6 @@ export function UpdateOrganization({
       initialValues={initialValues}
       action={updateOrganizationAction}
       redirect={routes.organizations.list}
-      meta={{}}
     />
   );
 }

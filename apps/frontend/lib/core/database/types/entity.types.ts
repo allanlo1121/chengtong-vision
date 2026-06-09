@@ -25,6 +25,7 @@ export const tableEntities = [
   "projects",
   "tunnels",
   "tbms",
+  // "tbm_parameter_configs",
 ] as const satisfies readonly (HrTables | ProjTables | EqpTables)[];
 
 export type TableEntity = (typeof tableEntities)[number];

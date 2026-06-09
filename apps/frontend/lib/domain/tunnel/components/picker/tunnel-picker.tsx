@@ -11,11 +11,10 @@ import { Button } from "@/components/ui/button";
 
 type Props = {
   selected?: TunnelPickerItem | null;
-  disabled?: boolean;
   onChange?: (item: TunnelPickerItem | null) => void;
 };
 
-export function TunnelPicker({ selected: selectedProp = null, disabled = false, onChange }: Props) {
+export function TunnelPicker({ selected: selectedProp = null, onChange }: Props) {
   const [open, setOpen] = useState(false);
 
   const [selected, setSelected] = useState<TunnelPickerItem | null>(selectedProp);
@@ -43,9 +42,8 @@ export function TunnelPicker({ selected: selectedProp = null, disabled = false, 
           value={selected?.name ?? ""}
           onClick={() => setOpen(true)}
           readOnly
-          disabled={disabled}
         />
-        {selected && !disabled && (
+        {selected && (
           <Button type="button" variant="outline" onClick={handleClear}>
             清除
           </Button>

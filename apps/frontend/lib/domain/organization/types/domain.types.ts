@@ -34,3 +34,29 @@ export type TreeNode = {
 };
 
 export type Organization = Camelize<OrganizationRow>;
+
+export type OrganizationFormModel = {
+  id: string;
+  name: string;
+  code: string;
+  fullName?: string;
+  parent?: {
+    id: string;
+    name: string;
+  };
+
+  orgCategoryId?: string;
+  orgTypeId: string;
+  businessId?: string;
+
+  countryCode?: string;
+  provinceCode?: string;
+  cityCode?: string;
+  districtCode?: string;
+  address?: string;
+
+  description?: string;
+  isDisabled: boolean;
+  latitude?: number;
+  longitude?: number;
+};

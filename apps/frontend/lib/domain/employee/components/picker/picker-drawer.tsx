@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Drawer,
@@ -14,9 +14,13 @@ import {
 import { Button } from "@/components/ui/button";
 
 import { PickerToolbar } from "./picker-toolbar";
-import { PickerTable } from "./picker-table";
+import { DataTable } from "@/lib/shared/picker/data-table";
 
 import type { EmployeePickerItem, EmployeePickerQuery } from "../../types";
+import { employeePickerColumns } from "./data-table-columns";
+import useSWR from "swr";
+import { listPicker } from "../../services/client";
+import { ErrorBlock } from "@/components/common/error-block";
 
 type Props = {
   open: boolean;
@@ -25,14 +29,31 @@ type Props = {
   onSelect: (item: EmployeePickerItem) => void;
 };
 
-export function PickerDrawer({ open, onOpenChange, onSelect }: Props) {
+export function PickerDrawer({
+  open,
+  onOpenChange,
+  selected: controlledSelected,
+  onSelect,
+}: Props) {
   const [query, setQuery] = useState<EmployeePickerQuery>({
     search: "",
     page: 1,
     pageSize: 20,
   });
 
-  const [selected, setSelected] = useState<EmployeePickerItem | null>(null);
+  const [selected, setSelected] = useState<EmployeePickerItem | null>(controlledSelected ?? null);
+
+  useEffect(() => {
+    if (open) {
+      setSelected(controlledSelected ?? null);
+    }
+  }, [open, controlledSelected]);
+
+  const { data, error, isLoading } = useSWR(["employee-picker", query], () => listPicker(query));
+
+  if (error) {
+    return <ErrorBlock message="加载数据时发生错误" />;
+  }
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange} direction="right">
@@ -41,7 +62,7 @@ export function PickerDrawer({ open, onOpenChange, onSelect }: Props) {
           <DrawerHeader className="border-b">
             <DrawerTitle>选择员工</DrawerTitle>
 
-            <DrawerDescription>支持按员工名称搜索选择员工</DrawerDescription>
+            <DrawerDescription>支持按员工姓名搜索选择员工</DrawerDescription>
           </DrawerHeader>
 
           <div className="flex-1 overflow-hidden p-4">
@@ -49,7 +70,24 @@ export function PickerDrawer({ open, onOpenChange, onSelect }: Props) {
               <PickerToolbar query={query} onChange={setQuery} />
 
               <div className="min-h-0 flex-1 overflow-auto">
-                <PickerTable query={query} selected={selected} onSelectedChange={setSelected} />
+                <DataTable<EmployeePickerItem, any>
+                  columns={employeePickerColumns}
+                  data={data?.items ?? []}
+                  total={data?.total ?? 0}
+                  page={data?.page ?? 1}
+                  pageSize={data?.pageSize ?? 20}
+                  loading={isLoading}
+                  manualPagination
+                  onPaginationChange={(page, pageSize) => {
+                    setQuery((prev) => ({
+                      ...prev,
+                      page,
+                      pageSize,
+                    }));
+                  }}
+                  selectedRow={selected}
+                  onSelectedChange={setSelected}
+                />
               </div>
             </div>
           </div>

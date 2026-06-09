@@ -1,7 +1,8 @@
 import { createClient } from "@/lib/infra/supabase/client";
 import { assertNoError } from "@/lib/infra/repositories/base.repository";
-import { Tunnel, TunnelPickerQuery, TunnelPickerResult } from "../types";
-import { mapTunnel } from "../mappers";
+import { Tunnel, TunnelPickerItem, TunnelPickerQuery, TunnelPickerResult } from "../types";
+import { mapTunnel, mapTunnelPicker } from "../mappers";
+import { PaginatedResult } from "@/lib/shared/contracts/paginated-result";
 
 export const tunnelClientRepository = {
   searchTunnelPicker,
@@ -24,7 +25,9 @@ async function findById(id: string): Promise<Tunnel | null> {
   return data ? mapTunnel(data) : null;
 }
 
-async function searchTunnelPicker(query: TunnelPickerQuery): Promise<TunnelPickerResult> {
+async function searchTunnelPicker(
+  query: TunnelPickerQuery
+): Promise<PaginatedResult<TunnelPickerItem>> {
   const supabase = createClient();
 
   console.log("searchTunnelPicker query", query);
@@ -32,26 +35,9 @@ async function searchTunnelPicker(query: TunnelPickerQuery): Promise<TunnelPicke
   let builder = supabase.schema("proj").from("v_tunnel_picker").select("*", { count: "exact" });
 
   if (query.search) {
-    builder = builder.or(`name.ilike.%${query.search}%`);
+    builder = builder.or(`name.ilike.%${query.search}%,
+      full_name.ilike.%${query.search}%,`);
   }
-
-  // if (query.organizationName && query.organizationName !== "all") {
-  //     builder = builder.eq(
-  //         "organization_name",
-  //         query.organizationName
-  //     );
-  // }
-
-  // if (query.projectName && query.projectName !== "all") {
-  //     builder = builder.ilike(
-  //         "project_name",
-  //         `%${query.projectName}%`
-  //     );
-  // }
-
-  // if (query.diameterRange) {
-  //     builder = builder.gte("diameter", query.diameterRange[0] * 1000).lte("diameter", query.diameterRange[1] * 1000);
-  // }
 
   const page = query.page ?? 1;
   const pageSize = query.pageSize ?? 20;
@@ -64,8 +50,10 @@ async function searchTunnelPicker(query: TunnelPickerQuery): Promise<TunnelPicke
   assertNoError(error);
 
   return {
-    data: data ?? [],
-    count: count ?? 0,
+    items: (data ?? []).map(mapTunnelPicker),
+    total: count ?? 0,
+    page,
+    pageSize,
   };
 }
 

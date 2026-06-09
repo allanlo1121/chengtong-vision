@@ -1,21 +1,20 @@
-import { Camelize } from "@/lib/utils/case-converter";
+import { PickerQuery } from "@/lib/shared/picker/types";
 import { ProjectPickerRow } from "./db.types";
-import { OptionalNullable, SelectiveRemoveNull } from "@/lib/utils/remove-nullable";
 
-export type ProjectPickerItem = SelectiveRemoveNull<
-  OptionalNullable<Camelize<ProjectPickerRow>>,
-  "id" | "name"
->;
+export type ProjectPickerItem = {
+  id: string;
+  name: string;
+  fullName?: string;
+  organizationName?: string;
+  regionName?: string;
+  statusName?: string;
+};
 
-export type ProjectPickerQuery = {
+export interface ProjectPickerQuery extends PickerQuery {
   search?: string;
 
-  organizationId?: string;
-
-  page?: number;
-
-  pageSize?: number;
-};
+  organizationName?: string;
+}
 
 export type ProjectPickerResult = {
   data: ProjectPickerRow[];

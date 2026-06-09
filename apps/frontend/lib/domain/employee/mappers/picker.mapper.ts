@@ -12,11 +12,11 @@ export function mapEmployeePicker(row: EmployeePickerRow): EmployeePickerItem {
   return {
     id: row.id,
     name: row.name,
-    code: row.code,
-    organizationId: row.organization_id,
-    organizationName: row.organization_name,
-    postId: row.post_id,
-    postName: row.post_name,
-    sortOrder: row.sort_order,
+    code: row.code ?? "",
+    organizationId: row.organization_id ?? undefined,
+    organizationName: row.organization_name ?? undefined,
+    postId: row.post_id ?? undefined,
+    postName: row.post_name ?? undefined,
+    sortOrder: row.sort_order ?? 0,
   };
 }

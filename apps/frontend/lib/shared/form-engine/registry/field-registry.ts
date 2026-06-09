@@ -13,7 +13,7 @@ import { FieldTbmPicker } from "../fields/field-tbm-picker";
 import { FieldTunnelPicker } from "../fields/field-tunnel-picker";
 // import { FieldRegionCascader } from "./fields/field-region-cascader"
 
-export const fieldRegistry: Record<string, FieldComponentType> = {
+export const fieldRegistry = {
   input: FieldInput,
   select: FieldSelect,
   // treeSelect: FieldTreeSelect,
@@ -26,4 +26,6 @@ export const fieldRegistry: Record<string, FieldComponentType> = {
   tunnelPicker: FieldTunnelPicker, // TODO: 替换为专用的FieldTunnelPicker
   datePicker: FieldDatePicker,
   // cascader: FieldRegionCascader,
-};
+} satisfies Record<string, FieldComponentType>;
+
+export type FieldComponent = keyof typeof fieldRegistry;

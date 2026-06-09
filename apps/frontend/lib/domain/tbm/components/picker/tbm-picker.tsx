@@ -15,7 +15,11 @@ type Props = {
   onChange?: (item: TbmPickerItem | null) => void;
 };
 
-export function TbmPicker({ selected: selectedProp = null, disabled = false, onChange }: Props) {
+export function TbmPicker({
+  selected: selectedProp = null,
+  disabled: disable = false,
+  onChange,
+}: Props) {
   const [open, setOpen] = useState(false);
 
   const [selected, setSelected] = useState<TbmPickerItem | null>(selectedProp);
@@ -39,13 +43,16 @@ export function TbmPicker({ selected: selectedProp = null, disabled = false, onC
     <>
       <div className="flex gap-2">
         <Input
-          placeholder="选择隧道..."
+          placeholder="选择盾构机..."
           value={selected?.name ?? ""}
-          onClick={() => setOpen(true)}
+          onClick={() => {
+            if (!disable) return;
+            setOpen(true);
+          }}
           readOnly
-          disabled={disabled}
+          disabled={disable}
         />
-        {selected && !disabled && (
+        {selected && !disable && (
           <Button type="button" variant="outline" onClick={handleClear}>
             清除
           </Button>

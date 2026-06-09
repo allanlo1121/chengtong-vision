@@ -11,6 +11,7 @@ export type ImportRowMap = {
   projects: ProjectImportRow;
   tunnels: any;
   tbms: any;
+  // tbm_parameter_configs: any;
 };
 
 export type ImportInsertInputMap = {
@@ -19,4 +20,5 @@ export type ImportInsertInputMap = {
   projects: ProjectInsertInput;
   tunnels: any;
   tbms: any;
+  // tbm_parameter_configs: any;
 };

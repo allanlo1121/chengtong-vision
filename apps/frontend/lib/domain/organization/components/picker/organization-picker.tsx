@@ -11,15 +11,10 @@ import { Button } from "@/components/ui/button";
 
 type Props = {
   selected?: OrganizationPickerItem | null;
-  disabled?: boolean;
   onChange?: (item: OrganizationPickerItem | null) => void;
 };
 
-export function OrganizationPicker({
-  selected: selectedProp = null,
-  disabled = false,
-  onChange,
-}: Props) {
+export function OrganizationPicker({ selected: selectedProp = null, onChange }: Props) {
   const [open, setOpen] = useState(false);
 
   const [selected, setSelected] = useState<OrganizationPickerItem | null>(selectedProp);
@@ -47,9 +42,8 @@ export function OrganizationPicker({
           value={selected?.name ?? ""}
           onClick={() => setOpen(true)}
           readOnly
-          disabled={disabled}
         />
-        {selected && !disabled && (
+        {selected && (
           <Button type="button" variant="outline" onClick={handleClear}>
             清除
           </Button>

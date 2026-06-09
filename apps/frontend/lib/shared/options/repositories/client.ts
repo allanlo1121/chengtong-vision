@@ -123,3 +123,78 @@ export async function listTbmSubsystems() {
     })) ?? []
   );
 }
+
+export async function listTbmPlcTagNames(
+  tbmId: string,
+  tagNames: string[]
+): Promise<{ id: number; name: string }[]> {
+  const supabase = createClient();
+
+  const chunks = chunk(tagNames, 500);
+
+  const result: {
+    id: number;
+    name: string;
+  }[] = [];
+
+  for (const names of chunks) {
+    const { data, error } = await supabase
+      .schema("eqp")
+      .from("tbm_plc_tags")
+      .select("id, tag_name")
+      .eq("tbm_id", tbmId)
+      .in("tag_name", names);
+
+    assertNoError(error);
+
+    result.push(
+      ...(data?.map((item) => ({
+        id: item.id,
+        name: item.tag_name,
+      })) ?? [])
+    );
+  }
+
+  return result;
+}
+
+export async function listTbmParametersByCode(
+  parameterCodes: string[]
+): Promise<{ id: number; code: string }[]> {
+  const supabase = createClient();
+
+  const chunks = chunk(parameterCodes, 500);
+
+  const result: {
+    id: number;
+    code: string;
+  }[] = [];
+
+  for (const codes of chunks) {
+    const { data, error } = await supabase
+      .schema("eqp")
+      .from("tbm_runtime_parameters")
+      .select("id, code")
+      .in("code", codes);
+    assertNoError(error);
+
+    result.push(
+      ...(data?.map((item) => ({
+        id: item.id,
+        code: item.code,
+      })) ?? [])
+    );
+  }
+
+  return result;
+}
+
+function chunk<T>(arr: T[], size: number): T[][] {
+  const result: T[][] = [];
+
+  for (let i = 0; i < arr.length; i += size) {
+    result.push(arr.slice(i, i + size));
+  }
+
+  return result;
+}

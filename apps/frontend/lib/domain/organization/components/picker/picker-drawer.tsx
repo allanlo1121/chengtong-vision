@@ -14,9 +14,13 @@ import {
 import { Button } from "@/components/ui/button";
 
 import { PickerToolbar } from "./picker-toolbar";
-import { PickerTable } from "./picker-table";
+import { DataTable } from "@/lib/shared/picker/data-table";
 
 import type { OrganizationPickerItem, OrganizationPickerQuery } from "../../types";
+import { organizationPickerColumns } from "./data-table-columns";
+import useSWR from "swr";
+import { listPicker } from "../../services/client";
+import { ErrorBlock } from "@/components/common/error-block";
 
 type Props = {
   open: boolean;
@@ -47,6 +51,14 @@ export function PickerDrawer({
     }
   }, [open, controlledSelected]);
 
+  const { data, error, isLoading } = useSWR(["organization-picker", query], () =>
+    listPicker(query)
+  );
+
+  if (error) {
+    return <ErrorBlock message="加载数据时发生错误" />;
+  }
+
   return (
     <Drawer open={open} onOpenChange={onOpenChange} direction="right">
       <DrawerContent className="h-full max-w-5xl w-[900px] ml-auto rounded-l-xl rounded-r-none">
@@ -62,7 +74,24 @@ export function PickerDrawer({
               <PickerToolbar query={query} onChange={setQuery} />
 
               <div className="min-h-0 flex-1 overflow-auto">
-                <PickerTable query={query} selected={selected} onSelectedChange={setSelected} />
+                <DataTable<OrganizationPickerItem, any>
+                  columns={organizationPickerColumns}
+                  data={data?.items ?? []}
+                  total={data?.total ?? 0}
+                  page={data?.page ?? 1}
+                  pageSize={data?.pageSize ?? 20}
+                  loading={isLoading}
+                  manualPagination
+                  onPaginationChange={(page, pageSize) => {
+                    setQuery((prev) => ({
+                      ...prev,
+                      page,
+                      pageSize,
+                    }));
+                  }}
+                  selectedRow={selected}
+                  onSelectedChange={setSelected}
+                />
               </div>
             </div>
           </div>

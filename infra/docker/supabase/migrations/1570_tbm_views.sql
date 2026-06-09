@@ -84,29 +84,54 @@ group by manufacturer_id;
 
 create or replace view eqp.v_tbm_bound_parameters as
 select
-  b.id as binding_id,
-  b.tbm_id,
-  b.parameter_id,
 
+  bpc.id as config_id,
+
+  bpc.parameter_id,
+  bpc.plc_tag_id,
+
+  bpc.scale,
+  bpc.value_offset, 
+
+  -- subsystem
   s.id as subsystem_id,
   s.code as subsystem_code,
   s.name as subsystem_name,
   s.sort_order as subsystem_sort_order,
 
+  -- platform parameter
   p.code as parameter_code,
   p.name as parameter_name,
-  p.unit,
-  p.digits,
-  p.data_type,
+  p.unit as parameter_unit,
+  p.digits as parameter_digits,
+  p.data_type as parameter_data_type,
   p.sort_order as parameter_sort_order,
   p.is_alarm,
   p.is_chartable,
-  p.is_disabled
-from eqp.tbm_parameter_bindings b
+  p.is_disabled as parameter_is_disabled,
+
+  -- plc tag
+  t.tag_name,
+  t.comment as tag_comment,
+  t.internal,
+  t.bit,
+
+  t.data_type as plc_data_type,
+  t.unit as plc_unit,
+
+  t.archive,
+  t.sort_order as plc_sort_order
+
+from eqp.tbm_parameter_configs bpc
+
 join eqp.tbm_runtime_parameters p
-  on p.id = b.parameter_id
+  on p.id = bpc.parameter_id
+
 join eqp.tbm_subsystems s
-  on s.id = p.subsystem_id;
+  on s.id = p.subsystem_id
+
+join eqp.tbm_plc_tags t
+  on t.id = bpc.plc_tag_id;
 
 
 create view eqp.v_tbm_assignment_list as
@@ -138,3 +163,56 @@ join proj.tunnels t
 
 left join proj.projects p
     on p.id = t.project_id;
+
+create or replace view eqp.v_tbm_parameter_configs as
+select
+
+    tp.id as tbm_parameter_id,
+    tp.tbm_id,
+
+    tp.custom_name,
+    tp.custom_unit,
+    tp.scale,
+    tp.value_offset,
+    tbm.code as tbm_code,
+    tbm.name as tbm_name,
+
+    -- subsystem
+    s.id as subsystem_id,
+    s.code as subsystem_code,
+    s.name as subsystem_name,  
+
+    -- runtime parameter
+    p.id as parameter_id,
+    p.code as parameter_code,
+    p.name as parameter_name,
+    p.unit as parameter_unit,
+    p.digits as parameter_digits,
+    p.data_type as parameter_data_type,
+    p.is_chartable,
+    p.sort_order,
+
+    -- plc tag
+    tp.plc_tag_id,
+    t.tag_name,
+    t.comment as plc_tag_comment,
+
+    t.data_type as plc_data_type,
+    t.unit as plc_unit,
+
+    t.archive,
+    tp.is_disabled
+
+from eqp.tbm_parameter_configs tp
+
+join eqp.tbms tbm
+    on tbm.id = tp.tbm_id
+
+join eqp.tbm_runtime_parameters p
+    on p.id = tp.parameter_id
+
+join eqp.tbm_subsystems s
+    on s.id = p.subsystem_id
+
+left join eqp.tbm_plc_tags t
+    on t.id = tp.plc_tag_id;

@@ -1,5 +1,10 @@
 import { appErrors, PaginatedResult } from "@/lib/shared/contracts";
-import { OrganizationListItem, Organization, OrganizationDetail } from "../types";
+import {
+  OrganizationListItem,
+  Organization,
+  OrganizationDetail,
+  OrganizationFormModel,
+} from "../types";
 import { organizationRepository } from "../repositories";
 import { OrganizationQueryType } from "../queries";
 
@@ -11,6 +16,15 @@ export async function listOrganizations(
 
 export async function fetchOrganizationDetailById(id: string): Promise<OrganizationDetail> {
   const organization = await organizationRepository.findDetailById(id);
+
+  if (!organization) {
+    throw appErrors.notFound("未查询到组织");
+  }
+  return organization;
+}
+
+export async function fetchOrganizationFormById(id: string): Promise<OrganizationFormModel> {
+  const organization = await organizationRepository.findFormById(id);
 
   if (!organization) {
     throw appErrors.notFound("未查询到组织");

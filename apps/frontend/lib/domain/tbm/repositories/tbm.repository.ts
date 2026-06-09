@@ -170,12 +170,6 @@ async function searchTbmPicker(query: TbmPickerQuery): Promise<TbmPickerResult> 
     builder = builder.ilike("manufacturer_name", `%${query.manufacturerName}%`);
   }
 
-  if (query.diameterRange) {
-    builder = builder
-      .gte("diameter", query.diameterRange[0] * 1000)
-      .lte("diameter", query.diameterRange[1] * 1000);
-  }
-
   const page = query.page ?? 1;
   const pageSize = query.pageSize ?? 20;
 

@@ -138,11 +138,40 @@ create table eqp.tbm_parameter_template_parameters (
 comment on table eqp.tbm_parameter_template_parameters
 is '模板参数绑定';
 
+create table eqp.tbm_plc_tags (
+
+    id bigserial primary key,
+
+    tbm_id uuid not null
+        references eqp.tbms(id),
+
+    tag_name text not null,
+
+    data_type text not null,
+
+    unit text,
+
+    internal text,
+
+    bit integer,
+
+    archive boolean not null default false,
+
+    comment text,
+
+    sort_order integer not null default 0,
+
+    unique (
+        tbm_id,
+        tag_name
+    )
+);
+
 -- =========================================================
--- TBM PARAMETER BINDINGS
+-- TBM PARAMETER CONFIGURATIONS
 -- =========================================================
 
-create table eqp.tbm_parameter_bindings (
+create table eqp.tbm_parameter_configs (
 
     id bigserial primary key,
 
@@ -151,6 +180,12 @@ create table eqp.tbm_parameter_bindings (
 
     parameter_id integer not null
         references eqp.tbm_runtime_parameters(id),
+
+    plc_tag_id bigint,
+
+    scale numeric not null default 1,
+
+    value_offset numeric not null default 0,
 
     is_disabled boolean not null default false,
 
@@ -164,8 +199,10 @@ create table eqp.tbm_parameter_bindings (
     )
 );
 
-comment on table eqp.tbm_parameter_bindings
+comment on table eqp.tbm_parameter_configs
 is 'TBM实际运行参数';
+
+
 
 -- =========================================================
 -- THRESHOLD RULES
@@ -174,8 +211,8 @@ is 'TBM实际运行参数';
 create table eqp.tbm_parameter_threshold_rules (
     id bigserial primary key,
 
-    binding_id bigint not null
-        references eqp.tbm_parameter_bindings(id)
+    binding_id bigserial not null
+        references eqp.tbm_parameter_configs(id)
         on delete cascade,
 
     level smallint not null
@@ -256,157 +293,7 @@ is 'TBM参数模板报警规则';
 
 
 
--- =========================================================
--- CREATE TBM RUNTIME TABLE
--- =========================================================
 
-create or replace function eqp.create_tbm_runtime_table(
-    p_tbm_id uuid
-)
-returns void
-language plpgsql
-security definer
-as $$
-
-declare
-
-    v_table_name text;
-
-    v_sql text;
-
-    v_column_sql text := '';
-
-    v_parameter record;
-
-begin
-
-    -- =====================================================
-    -- get realtime table name
-    -- =====================================================
-
-    select
-        realtime_table_name
-    into
-        v_table_name
-    from public.tbms
-    where id = p_tbm_id;
-
-    if v_table_name is null then
-        raise exception 'TBM realtime table name not found';
-    end if;
-
-    -- =====================================================
-    -- build columns
-    -- =====================================================
-
-    for v_parameter in
-
-        select
-            p.code,
-            p.data_type
-
-        from eqp.tbm_parameter_bindings b
-
-        join eqp.tbm_runtime_parameters p
-          on p.id = b.parameter_id
-
-        where b.tbm_id = p_tbm_id
-          and b.is_enabled = true
-
-        order by b.sort_order
-
-    loop
-
-        v_column_sql :=
-            v_column_sql ||
-            format(
-                '%I %s,',
-                v_parameter.code,
-
-                case v_parameter.data_type
-
-                    when 'boolean'
-                        then 'boolean'
-
-                    when 'integer'
-                        then 'integer'
-
-                    when 'text'
-                        then 'text'
-
-                    else
-                        'double precision'
-
-                end
-            );
-
-    end loop;
-
-    -- =====================================================
-    -- create table
-    -- =====================================================
-
-    v_sql := format(
-    '
-    create table if not exists tbm.%I (
-
-        recorded_at timestamptz not null,
-
-        tunnel_id uuid not null,
-
-        %s
-
-        primary key (
-            recorded_at,
-            tunnel_id
-        )
-    )
-    ',
-    v_table_name,
-    v_column_sql
-    );
-
-    execute v_sql;
-
-    -- =====================================================
-    -- create hypertable
-    -- =====================================================
-
-    perform create_hypertable(
-        format('tbm.%I', v_table_name),
-        'recorded_at',
-        if_not_exists => true,
-        chunk_time_interval => interval '1 day'
-    );
-
-    -- =====================================================
-    -- indexes
-    -- =====================================================
-
-    execute format(
-        '
-        create index if not exists %I
-        on eqp.%I(recorded_at desc)
-        ',
-        'idx_' || v_table_name || '_time',
-        v_table_name
-    );
-
-    execute format(
-        '
-        create index if not exists %I
-        on eqp.%I(tunnel_id, recorded_at desc)
-        ',
-        'idx_' || v_table_name || '_tunnel_time',
-        v_table_name
-    );
-
-end;
-
-$$;
-
-comment on function eqp.create_tbm_runtime_table(uuid)
-is '动态创建TBM实时数据hypertable';
 
 create or replace view eqp.v_tbm_runtime_parameters_list as
 select
@@ -515,7 +402,7 @@ begin
         when 'text' then 'text'
         else 'text'
       end as sql_type
-    from eqp.tbm_parameter_bindings tp
+    from eqp.tbm_parameter_configs tp
     join eqp.tbm_runtime_parameters p
       on p.id = tp.parameter_id
     where tp.tbm_id = p_tbm_id

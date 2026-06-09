@@ -7,6 +7,12 @@ export type OrganizationDetailRow = AppDatabase["hr"]["Views"]["v_organization_d
 
 export type OrganizationListRow = Database["hr"]["Views"]["v_organization_list"]["Row"];
 
+export type OrganizationFormRow = Database["hr"]["Tables"]["organizations"]["Row"] & {
+  parent: {
+    id: string;
+    name: string;
+  } | null;
+};
 // export type OrganizationListRow = {
 //     business_name: string | null;
 //     city_name: string | null;

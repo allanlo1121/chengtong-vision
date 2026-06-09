@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/infra/supabase/server";
 
-import { EmployeeAssignmentRow, EmployeeAssignmentUpdateRow, EmployeeAssignment } from "../types";
+import { EmployeeAssignmentUpdateRow, EmployeeAssignment } from "../types";
 
 import { assertNoError } from "@/lib/infra/repositories/base.repository";
 

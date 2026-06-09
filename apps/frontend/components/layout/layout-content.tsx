@@ -12,7 +12,7 @@ import { useBreadcrumbContext } from "./breadcrumb-context";
 
 export function LayoutContent({ children }: { children: React.ReactNode }) {
   const { breadcrumbs } = useBreadcrumbContext();
-  console.log("LayoutContent breadcrumbs:", breadcrumbs);
+  // console.log("LayoutContent breadcrumbs:", breadcrumbs);
 
   return (
     <SidebarProvider className="h-screen flex">

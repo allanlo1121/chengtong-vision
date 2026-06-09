@@ -17,17 +17,23 @@ import { DependencyGraph } from "./types/dependency-graph";
 import { z, ZodObject } from "zod";
 import { FormMeta } from "./types/field.types";
 
-type SchemaFormProps<TSchema extends ZodObject<any>, TMeta extends FormMeta = FormMeta> = {
+type SchemaFormProps<TSchema extends ZodObject<any>> = {
   schema: TSchema;
+
   initialValues?: DefaultValues<z.input<TSchema>>;
+
   action?: (data: z.output<TSchema>) => Promise<ActionResult<any>>;
+
   onSuccess?: (result: ActionResult<z.output<TSchema>>) => void;
+
   onError?: (result: ActionResult<z.output<TSchema>>) => void;
+
   onCancel?: () => void;
-  meta?: TMeta;
+
+  meta?: FormMeta<z.input<TSchema>>;
 };
 
-export function SchemaForm<TSchema extends ZodObject<any>, TMeta extends FormMeta = FormMeta>({
+export function SchemaForm<TSchema extends ZodObject<any>>({
   schema,
   initialValues,
   action,
@@ -35,7 +41,7 @@ export function SchemaForm<TSchema extends ZodObject<any>, TMeta extends FormMet
   onError,
   onCancel,
   meta,
-}: SchemaFormProps<TSchema, TMeta>) {
+}: SchemaFormProps<TSchema>) {
   // console.log("SchemaForm props", {
   //   schema,
   //   initialValues,
@@ -120,11 +126,11 @@ export function SchemaForm<TSchema extends ZodObject<any>, TMeta extends FormMet
    * ------------------------------------------------ */
 
   const onSubmit = async (data: FormOutput) => {
-    console.log("schema-form submit data", data);
+    // console.log("schema-form submit data", data);
     if (!action) return;
     const result = await action(data);
 
-    console.log("schema-form action result", result);
+    // console.log("schema-form action result", result);
 
     if (!result.success) {
       onError?.(result);

@@ -1,10 +1,12 @@
 import {
   adminRegionCodeSchema,
   countryCodeSchema,
+  EntityReferenceSchema,
   idSchema,
   latitudeSchema,
   longitudeSchema,
 } from "@/lib/shared/schema";
+import { FormFieldMeta } from "@/lib/shared/form-engine/types";
 
 import { z } from "zod";
 
@@ -21,11 +23,8 @@ export const OrganizationFormSchema = {
       component: "input",
       section: "基本信息",
       type: "text",
-      disabled: false,
-      required: true,
-      readonly: false,
       colSpan: 1,
-    }),
+    } satisfies FormFieldMeta),
 
   code: z
     .string()
@@ -38,31 +37,39 @@ export const OrganizationFormSchema = {
       type: "text",
       section: "基本信息",
       colSpan: 1,
-      description: "唯一标识，建议使用大写字母、数字和下划线",
-    }),
+      placeholder: "唯一标识，建议使用大写字母、数字和下划线",
+    } satisfies FormFieldMeta),
 
-  fullName: z.string().max(100, { message: "组织全称最多100个字符" }).optional().meta({
-    label: "组织全称",
-    component: "input",
-    type: "text",
-    section: "基本信息",
-    colSpan: 2,
-  }),
+  fullName: z
+    .string()
+    .max(100, { message: "组织全称最多100个字符" })
+    .optional()
+    .meta({
+      label: "组织全称",
+      component: "input",
+      type: "text",
+      section: "基本信息",
+      colSpan: 2,
+    } satisfies FormFieldMeta),
 
-  description: z.string().max(200, { message: "描述最多200个字符" }).optional().nullable().meta({
-    label: "描述",
-    component: "textarea",
-    section: "基本信息",
-    colSpan: 2,
-  }),
+  description: z
+    .string()
+    .max(200, { message: "描述最多200个字符" })
+    .optional()
+    .nullable()
+    .meta({
+      label: "组织描述",
+      component: "textarea",
+      section: "基本信息",
+      colSpan: 2,
+    } satisfies FormFieldMeta),
 
-  parentId: idSchema.meta({
+  parent: EntityReferenceSchema.meta({
     label: "上级组织",
     component: "organizationPicker",
     section: "基本信息",
     colSpan: 1,
-    optionSource: { source: "organizations", parentId: null },
-  }),
+  } satisfies FormFieldMeta),
 
   orgTypeId: idSchema.meta({
     label: "组织类型",
@@ -70,7 +77,7 @@ export const OrganizationFormSchema = {
     section: "基本信息",
     colSpan: 1,
     optionSource: { source: "master", code: "ORG_TYPE" },
-  }),
+  } satisfies FormFieldMeta),
   orgCategoryId: idSchema
     .nullable()
     .optional()
@@ -80,7 +87,7 @@ export const OrganizationFormSchema = {
       section: "基本信息",
       colSpan: 1,
       optionSource: { source: "master", code: "ORG_CATEGORY" },
-    }),
+    } satisfies FormFieldMeta),
 
   businessId: idSchema
     .nullable()
@@ -91,7 +98,7 @@ export const OrganizationFormSchema = {
       section: "基本信息",
       colSpan: 1,
       optionSource: { source: "master", code: "ORG_BUSINESS" },
-    }),
+    } satisfies FormFieldMeta),
 
   countryCode: countryCodeSchema.default("CN").meta({
     label: "国家代码",
@@ -99,7 +106,7 @@ export const OrganizationFormSchema = {
     section: "地理信息",
     colSpan: 1,
     optionSource: { source: "countries" },
-  }),
+  } satisfies FormFieldMeta),
 
   provinceCode: adminRegionCodeSchema.meta({
     label: "省",
@@ -110,7 +117,7 @@ export const OrganizationFormSchema = {
       source: "admin_regions",
       level: 1,
     },
-  }),
+  } satisfies FormFieldMeta),
 
   cityCode: adminRegionCodeSchema.meta({
     label: "市",
@@ -123,7 +130,7 @@ export const OrganizationFormSchema = {
       level: 2,
       parentCode: v.provinceCode,
     }),
-  }),
+  } satisfies FormFieldMeta),
 
   districtCode: adminRegionCodeSchema.meta({
     label: "区县",
@@ -135,68 +142,99 @@ export const OrganizationFormSchema = {
       level: 3,
       parentCode: v.cityCode,
     }),
-  }),
+  } satisfies FormFieldMeta),
 
-  address: z.string().max(200, { message: "地址最多200个字符" }).optional().nullable().meta({
-    label: "地址",
-    component: "input",
-    section: "地理信息",
-    colSpan: 2,
-  }),
+  address: z
+    .string()
+    .max(200, { message: "地址最多200个字符" })
+    .optional()
+    .nullable()
+    .meta({
+      label: "地址",
+      component: "input",
+      section: "地理信息",
+      colSpan: 2,
+    } satisfies FormFieldMeta),
 
-  latitude: latitudeSchema.optional().nullable().meta({
-    label: "纬度",
-    component: "input",
-    section: "地理信息",
-    type: "number",
-    colSpan: 1,
-  }),
+  latitude: latitudeSchema
+    .optional()
+    .nullable()
+    .meta({
+      label: "纬度",
+      component: "input",
+      section: "地理信息",
+      type: "number",
+      colSpan: 1,
+    } satisfies FormFieldMeta),
 
-  longitude: longitudeSchema.optional().nullable().meta({
-    label: "经度",
-    component: "input",
-    section: "地理信息",
-    type: "number",
-    colSpan: 1,
-  }),
+  longitude: longitudeSchema
+    .optional()
+    .nullable()
+    .meta({
+      label: "经度",
+      component: "input",
+      section: "地理信息",
+      type: "number",
+      colSpan: 1,
+    } satisfies FormFieldMeta),
 
-  sortOrder: z.coerce.number().default(0).meta({
-    label: "排序",
-    component: "input",
-    section: "其他信息",
-    type: "number",
-    colSpan: 1,
-  }),
+  sortOrder: z.coerce
+    .number()
+    .default(0)
+    .meta({
+      label: "排序",
+      component: "input",
+      section: "其他信息",
+      type: "number",
+      colSpan: 1,
+    } satisfies FormFieldMeta),
 
-  isDisabled: z.coerce.boolean().default(false).meta({
-    label: "是否禁用",
-    component: "switch",
-    section: "其他信息",
-    colSpan: 1,
-  }),
+  isDisabled: z.coerce
+    .boolean()
+    .default(false)
+    .meta({
+      label: "是否禁用",
+      component: "switch",
+      section: "其他信息",
+      colSpan: 1,
+    } satisfies FormFieldMeta),
 
-  externalId: z.string().nullable().optional().meta({
-    label: "外部ID",
-    component: "input",
-    section: "系统字段",
-    colSpan: 1,
-    disabled: true,
-  }),
+  externalId: z
+    .string()
+    .nullable()
+    .optional()
+    .meta({
+      label: "外部ID",
+      component: "input",
+      readonly: true,
+      section: "系统字段",
+      colSpan: 1,
+    } satisfies FormFieldMeta),
 
-  externalVersion: z.coerce.number().nullable().optional().meta({
-    label: "外部版本",
-    component: "input",
-    section: "系统字段",
-    colSpan: 1,
-    disabled: true,
-  }),
+  externalVersion: z.coerce
+    .number()
+    .nullable()
+    .optional()
+    .meta({
+      label: "外部版本",
+      component: "input",
+      readonly: true,
+      section: "系统字段",
+      colSpan: 1,
+    } satisfies FormFieldMeta),
 };
 
 export const OrganizationSchema = z.object(OrganizationFormSchema);
 
 export const CreateOrganizationSchema = OrganizationSchema;
 
+export const InsertOrganizationSchema = OrganizationSchema.omit({ parent: true }).extend({
+  parentId: idSchema,
+});
+
 export type CreateOrganizationInput = z.infer<typeof CreateOrganizationSchema>;
+
+export type InsertOrganizationInput = z.infer<typeof InsertOrganizationSchema>;
 
 export const UpdateOrganizationSchema = OrganizationSchema.extend({
   id: idSchema,

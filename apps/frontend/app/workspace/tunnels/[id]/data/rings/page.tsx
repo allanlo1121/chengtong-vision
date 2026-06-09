@@ -1,7 +1,7 @@
 import { fetchTbmAssignmentByTunnelId } from "@/lib/domain/tbm-assignment/services/query.service";
 import { RuntimePageClient } from "./RuntimePageClient";
 import { fetchRuntimeQueryLimits } from "@/lib/domain/tbm-runtime/services/realdata.service";
-import { findTbmBoundParameterGroups } from "@/lib/domain/tbm-runtime/services/tbm-parameter-binding.service";
+import { findTbmBoundParameterGroups } from "@/lib/domain/tbm-runtime/services/tbm-parameter-config.service";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

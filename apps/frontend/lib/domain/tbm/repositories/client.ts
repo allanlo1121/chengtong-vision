@@ -1,7 +1,8 @@
 import { createClient } from "@/lib/infra/supabase/client";
 import { assertNoError } from "@/lib/infra/repositories/base.repository";
-import { Tbm, TbmPickerQuery, TbmPickerResult } from "../types";
-import { mapTbm } from "../mappers";
+import { Tbm, TbmPickerItem, TbmPickerQuery, TbmPickerResult } from "../types";
+import { mapTbm, mapTbmPicker } from "../mappers";
+import { PaginatedResult } from "@/lib/shared/contracts";
 
 export const tbmClientRepository = {
   searchTbmPicker,
@@ -24,7 +25,9 @@ async function findById(id: string): Promise<Tbm | null> {
   return data ? mapTbm(data) : null;
 }
 
-export async function searchTbmPicker(query: TbmPickerQuery): Promise<TbmPickerResult> {
+export async function searchTbmPicker(
+  query: TbmPickerQuery
+): Promise<PaginatedResult<TbmPickerItem>> {
   const supabase = createClient();
 
   console.log("searchTbmPicker query", query);
@@ -43,11 +46,11 @@ export async function searchTbmPicker(query: TbmPickerQuery): Promise<TbmPickerR
     builder = builder.ilike("manufacturer_name", `%${query.manufacturerName}%`);
   }
 
-  if (query.diameterRange) {
-    builder = builder
-      .gte("diameter", query.diameterRange[0] * 1000)
-      .lte("diameter", query.diameterRange[1] * 1000);
-  }
+  // if (query.diameterRange) {
+  //   builder = builder
+  //     .gte("diameter", query.diameterRange[0] * 1000)
+  //     .lte("diameter", query.diameterRange[1] * 1000);
+  // }
 
   const page = query.page ?? 1;
   const pageSize = query.pageSize ?? 20;
@@ -60,8 +63,10 @@ export async function searchTbmPicker(query: TbmPickerQuery): Promise<TbmPickerR
   assertNoError(error);
 
   return {
-    data: data ?? [],
-    count: count ?? 0,
+    items: (data ?? []).map(mapTbmPicker),
+    total: count ?? 0,
+    page,
+    pageSize,
   };
 }
 

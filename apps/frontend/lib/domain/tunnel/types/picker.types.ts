@@ -1,19 +1,17 @@
-import { Camelize } from "@/lib/utils/case-converter";
+import { PickerQuery } from "@/lib/shared/picker/types";
 import { TunnelPickerRow } from "./db.types";
-import { OptionalNullable, SelectiveRemoveNull } from "@/lib/utils/remove-nullable";
 
-export type TunnelPickerItem = SelectiveRemoveNull<
-  OptionalNullable<Camelize<TunnelPickerRow>>,
-  "id" | "name"
->;
-
-export type TunnelPickerQuery = {
-  tunnelId?: string;
-  search?: string;
-
-  page?: number;
-  pageSize?: number;
+export type TunnelPickerItem = {
+  id: string;
+  name: string;
+  organizationName: string | null;
+  projectName: string | null;
+  tunnelStatusName: string | null;
 };
+
+export interface TunnelPickerQuery extends PickerQuery {
+  search?: string;
+}
 
 export type TunnelPickerResult = {
   data: TunnelPickerRow[];

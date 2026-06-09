@@ -27,8 +27,6 @@ export default async function Page({
     sortBy: raw.sortBy ?? "sortOrder",
   };
 
-  // console.log("employees page  params", params);
-
   let result;
   let tbmTypesResult;
   let tbmManufacturersResult;

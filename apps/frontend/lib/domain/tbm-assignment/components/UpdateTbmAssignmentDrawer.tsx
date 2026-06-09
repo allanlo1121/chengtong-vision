@@ -29,11 +29,11 @@ type Props = {
 
 export function UpdateTbmAssignmentDrawer({ open, onOpenChange, tbmAssignment }: Props) {
   const router = useRouter();
-  const [selectedTunnel, setSelectedTunnel] = useState<TunnelPickerItem | null>(
-    tbmAssignment.tunnelId
-      ? { id: tbmAssignment.tunnelId, name: tbmAssignment.tunnelName ?? "" }
-      : null
-  );
+  const [selectedTunnel, setSelectedTunnel] = useState<TunnelPickerItem | null>({
+    id: tbmAssignment.tunnelId!,
+    name: tbmAssignment.tunnelName!,
+  } as TunnelPickerItem);
+
   const [startDate, setStartDate] = useState(tbmAssignment?.startDate ?? "");
   const [endDate, setEndDate] = useState(tbmAssignment?.endDate ?? "");
   const [pending, setPending] = useState(false);
@@ -83,11 +83,7 @@ export function UpdateTbmAssignmentDrawer({ open, onOpenChange, tbmAssignment }:
             <div className="space-y-2">
               <label className="text-sm font-medium">绑定区间</label>
 
-              <TunnelPicker
-                selected={selectedTunnel}
-                disabled={pending}
-                onChange={setSelectedTunnel}
-              />
+              <TunnelPicker selected={selectedTunnel} onChange={setSelectedTunnel} />
             </div>
 
             <div className="space-y-2">

@@ -1,13 +1,20 @@
 import { createClient } from "@/lib/infra/supabase/server";
+import { QueryResult, QueryData, QueryError } from "@supabase/supabase-js";
 
 import { OrganizationQueryType, organizationQuery } from "../queries";
 import { appErrors, PaginatedResult } from "@/lib/shared/contracts";
 import { applyPagination, assertNoError } from "@/lib/infra/repositories/base.repository";
 
-import { Organization, OrganizationListItem, OrganizationDetail } from "../types";
+import {
+  Organization,
+  OrganizationListItem,
+  OrganizationDetail,
+  OrganizationFormModel,
+} from "../types";
 import {
   mapOrganization,
   mapOrganizationDetail,
+  mapOrganizationFormModel,
   mapOrganizationListItem,
   mapOrganizationToInsert,
   mapOrganizationToUpdate,
@@ -161,6 +168,26 @@ export const organizationRepository = {
     assertNoError(error);
 
     return data ? mapOrganization(data) : null;
+  },
+  findFormById: async (id: string): Promise<OrganizationFormModel | null> => {
+    const supabase = await createClient();
+
+    const organizationFormModelQuery = supabase
+      .schema("hr")
+      .from("organizations")
+      .select(`*, parent:parent_id(id,name)`)
+      .eq("id", id)
+      .maybeSingle();
+
+    type DbOrganization = QueryData<typeof organizationFormModelQuery>;
+
+    const { data, error } = await organizationFormModelQuery;
+
+    console.log("findFormById query result", { data, error });
+
+    assertNoError(error);
+
+    return data ? mapOrganizationFormModel(data) : null;
   },
   findDetailById,
   paginate,

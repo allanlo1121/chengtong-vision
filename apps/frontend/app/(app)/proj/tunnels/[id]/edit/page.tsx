@@ -31,19 +31,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           },
         ]}
       />
-      <UpdateTunnel
-        title="编辑隧道"
-        description="隧道"
-        initialValues={tunnel}
-        meta={{
-          entities: {
-            projectId: {
-              id: project.id,
-              name: project.name,
-            },
-          },
-        }}
-      />
+      <UpdateTunnel title="编辑隧道" description="隧道" initialValues={tunnel} />
     </main>
   );
 }

@@ -11,15 +11,10 @@ import { Button } from "@/components/ui/button";
 
 type Props = {
   selected?: EmployeePickerItem | null;
-  disabled?: boolean;
   onChange?: (item: EmployeePickerItem | null) => void;
 };
 
-export function EmployeePicker({
-  selected: selectedProp = null,
-  disabled = false,
-  onChange,
-}: Props) {
+export function EmployeePicker({ selected: selectedProp = null, onChange }: Props) {
   const [open, setOpen] = useState(false);
 
   const [selected, setSelected] = useState<EmployeePickerItem | null>(selectedProp);
@@ -48,7 +43,7 @@ export function EmployeePicker({
           onClick={() => setOpen(true)}
           readOnly
         />
-        {selected && !disabled && (
+        {selected && (
           <Button type="button" variant="outline" onClick={handleClear}>
             清除
           </Button>

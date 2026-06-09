@@ -7,27 +7,8 @@ import { mapOrganizationPicker } from "../mappers";
 
 export async function listPicker(
   query: OrganizationPickerQuery
-): Promise<Result<PaginatedResult<OrganizationPickerItem>>> {
-  try {
-    const data = await organizationClientRepository.searchOrganizationPicker(query);
-
-    console.log("organization picker list data:", data);
-
-    return {
-      success: true,
-      data: {
-        items: data.data.map(mapOrganizationPicker),
-        total: data.count,
-        page: query.page ?? 1,
-        pageSize: query.pageSize ?? 10,
-      },
-    };
-  } catch (error: unknown) {
-    return {
-      success: false,
-      message: (error as Error)?.message ?? "查询失败",
-    };
-  }
+): Promise<PaginatedResult<OrganizationPickerItem>> {
+  return await organizationClientRepository.searchOrganizationPicker(query);
 }
 
 export async function getOrganizationPickerItemById(

@@ -1,5 +1,5 @@
 import { ArrowLeft } from "lucide-react";
-import { getTbmDetailById } from "@/lib/domain/tbm/services";
+import { fetchTbmDetailById } from "@/lib/domain/tbm/services";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ export default async function TbmDetailPage({ params }: { params: Promise<{ id: 
   const { id } = await params;
   let tbmDetail: TbmDetail;
   try {
-    tbmDetail = await getTbmDetailById(id);
+    tbmDetail = await fetchTbmDetailById(id);
   } catch (error) {
     console.error("Error fetching TBM detail:", error);
     return <ErrorBlock message={error instanceof Error ? error.message : "查询失败"} />;

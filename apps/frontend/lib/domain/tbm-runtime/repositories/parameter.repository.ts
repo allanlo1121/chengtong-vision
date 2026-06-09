@@ -12,6 +12,7 @@ import {
   mapParameterListItem,
 } from "../mappers";
 import { appErrors } from "@/lib/shared/contracts";
+import { selectAll } from "@/lib/core/database/utils/select-all";
 
 async function paginate(
   query: ParameterQueryType
@@ -135,12 +136,47 @@ export const trpRepository = {
   },
   list: async (): Promise<TbmRuntimeParameterListItem[]> => {
     const supabase = await createClient();
-    const { data, error } = await supabase
-      .schema("eqp")
-      .from("v_tbm_runtime_parameters_list")
-      .select("*");
-    assertNoError(error);
-    return (data ?? []).map(mapParameterListItem);
+
+    const pagesize = 1000;
+    let from = 0;
+    let allData: TbmRuntimeParameterListItem[] = [];
+
+    while (true) {
+      const { data, error } = await supabase
+        .schema("eqp")
+        .from("v_tbm_runtime_parameters_list")
+        .select("*")
+        .range(from, from + pagesize - 1);
+
+      assertNoError(error);
+
+      if (!data || data.length === 0) {
+        break;
+      }
+
+      allData = allData.concat(data.map(mapParameterListItem));
+
+      if (data.length < pagesize) {
+        break;
+      }
+
+      from += pagesize;
+    }
+
+    return allData;
   },
   paginate,
+  count: async (): Promise<number> => {
+    const supabase = await createClient();
+    const { data, count, error } = await supabase
+      .schema("eqp")
+      .from("tbm_runtime_parameters")
+      .select("*", { count: "exact" });
+    assertNoError(error);
+    console.log({
+      count,
+      rows: data?.length,
+    });
+    return count ?? 0;
+  },
 };

@@ -10,12 +10,10 @@ export function UpdateTunnel({
   title,
   description,
   initialValues,
-  meta,
 }: {
   title: string;
   description?: string;
   initialValues: any;
-  meta: FormMeta;
 }) {
   console.log("UpdateTunnel", initialValues);
 
@@ -27,7 +25,6 @@ export function UpdateTunnel({
       initialValues={initialValues}
       action={updateTunnelAction}
       redirect={routes.tunnels.list}
-      meta={meta}
     />
   );
 }

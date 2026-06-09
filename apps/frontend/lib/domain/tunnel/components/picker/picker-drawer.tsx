@@ -14,9 +14,13 @@ import {
 import { Button } from "@/components/ui/button";
 
 import { PickerToolbar } from "./picker-toolbar";
-import { PickerTable } from "./picker-table";
+import { DataTable } from "@/lib/shared/picker/data-table";
 
-import { TunnelPickerItem, TunnelPickerQuery } from "../../types";
+import type { TunnelPickerItem, TunnelPickerQuery } from "../../types";
+import { tunnelPickerColumns } from "./data-table-columns";
+import useSWR from "swr";
+import { listTunnelPicker } from "../../services/client";
+import { ErrorBlock } from "@/components/common/error-block";
 
 type Props = {
   open: boolean;
@@ -45,12 +49,21 @@ export function PickerDrawer({
     }
   }, [open, controlledSelected]);
 
+  const { data, error, isLoading } = useSWR(["tunnel-picker", query], () =>
+    listTunnelPicker(query)
+  );
+
+  if (error) {
+    return <ErrorBlock message="加载数据时发生错误" />;
+  }
+
   return (
     <Drawer open={open} onOpenChange={onOpenChange} direction="right">
-      <DrawerContent className="ml-auto h-full w-[900px] max-w-5xl rounded-l-xl rounded-r-none">
+      <DrawerContent className="h-full max-w-5xl w-[900px] ml-auto rounded-l-xl rounded-r-none">
         <div className="flex h-full flex-col overflow-hidden">
           <DrawerHeader className="border-b">
             <DrawerTitle>选择隧道</DrawerTitle>
+
             <DrawerDescription>支持按隧道名称搜索选择隧道</DrawerDescription>
           </DrawerHeader>
 
@@ -59,7 +72,24 @@ export function PickerDrawer({
               <PickerToolbar query={query} onChange={setQuery} />
 
               <div className="min-h-0 flex-1 overflow-auto">
-                <PickerTable query={query} selected={selected} onSelectedChange={setSelected} />
+                <DataTable<TunnelPickerItem, any>
+                  columns={tunnelPickerColumns}
+                  data={data?.items ?? []}
+                  total={data?.total ?? 0}
+                  page={data?.page ?? 1}
+                  pageSize={data?.pageSize ?? 20}
+                  loading={isLoading}
+                  manualPagination
+                  onPaginationChange={(page, pageSize) => {
+                    setQuery((prev) => ({
+                      ...prev,
+                      page,
+                      pageSize,
+                    }));
+                  }}
+                  selectedRow={selected}
+                  onSelectedChange={setSelected}
+                />
               </div>
             </div>
           </div>
@@ -74,7 +104,9 @@ export function PickerDrawer({
                 disabled={!selected}
                 onClick={() => {
                   if (!selected) return;
+
                   onSelect(selected);
+
                   onOpenChange(false);
                 }}
               >

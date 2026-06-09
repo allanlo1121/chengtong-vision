@@ -318,3 +318,19 @@ cross join (
   sort_order
   )
 where parent.code = 'workspace';
+
+
+select
+  id,
+  parent_id,
+  name
+from hr.organizations
+where id = '4c6a49fe-ffcd-4248-bd59-0aa4b57609c2';
+
+select
+    conname,
+    pg_get_constraintdef(oid)
+from pg_constraint
+where conrelid = 'hr.organizations'::regclass;
+
+NOTIFY pgrst, 'reload schema';

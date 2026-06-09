@@ -1,28 +1,14 @@
-import { Camelize } from "@/lib/utils/case-converter";
 import { OrganizationPickerRow } from "./db.types";
-import { OptionalNullable, SelectiveRemoveNull } from "@/lib/utils/remove-nullable";
 
-export type OrganizationPickerItem = SelectiveRemoveNull<
-  OptionalNullable<Camelize<OrganizationPickerRow>>,
-  "id" | "name"
->;
-
-export type OrganizationPickerQuery = {
-  search?: string;
-
-  parentId?: string;
-
-  orgTypeName?: string;
-
-  parentOrgName?: string;
-
-  provinceName?: string;
-
-  cityName?: string;
-
-  page?: number;
-
-  pageSize?: number;
+export type OrganizationPickerItem = {
+  id: string;
+  name: string;
+  cityName: string | null;
+  orgTypeName: string | null;
+  parentId: string | null;
+  parentOrgName: string | null;
+  provinceName: string | null;
+  sortOrder: number | null;
 };
 
 export type OrganizationPickerResult = {
@@ -30,3 +16,11 @@ export type OrganizationPickerResult = {
 
   count: number;
 };
+
+import { PickerQuery } from "@/lib/shared/picker/types";
+
+export interface OrganizationPickerQuery extends PickerQuery {
+  parentId?: string;
+
+  orgTypeName?: string;
+}

@@ -1,5 +1,6 @@
-import { projectClinetRepository } from "../repositories/client";
-import { Project } from "../types";
+import { searchProjectPicker, projectClinetRepository } from "../repositories/client";
+import { PaginatedResult } from "@/lib/shared/contracts";
+import { Project, ProjectPickerItem, ProjectPickerQuery } from "../types";
 
 export async function fetchProjectById(id: string): Promise<Project> {
   const project = await projectClinetRepository.findById(id);
@@ -9,4 +10,10 @@ export async function fetchProjectById(id: string): Promise<Project> {
   }
 
   return project;
+}
+
+export async function listProjectPicker(
+  query: ProjectPickerQuery
+): Promise<PaginatedResult<ProjectPickerItem>> {
+  return await searchProjectPicker(query);
 }

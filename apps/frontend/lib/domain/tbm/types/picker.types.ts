@@ -1,22 +1,21 @@
-import { Camelize } from "@/lib/utils/case-converter";
 import { TbmPickerRow } from "./db.types";
-import { OptionalNullable, SelectiveRemoveNull } from "@/lib/utils/remove-nullable";
+import { PickerQuery } from "@/lib/shared/picker/types";
 
-export type TbmPickerItem = SelectiveRemoveNull<
-  OptionalNullable<Camelize<TbmPickerRow>>,
-  "id" | "name"
->;
+export type TbmPickerItem = {
+  id: string;
+  name: string;
+  diameter?: number;
 
-export type TbmPickerQuery = {
-  tbmId?: string;
-  search?: string;
+  manageCode?: string;
+  manufacturerName?: string;
 
+  tbmTypeName: string;
+};
+
+export interface TbmPickerQuery extends PickerQuery {
   tbmTypeName?: string;
   manufacturerName?: string;
-  diameterRange?: [number, number];
-  page?: number;
-  pageSize?: number;
-};
+}
 
 export type TbmPickerResult = {
   data: TbmPickerRow[];

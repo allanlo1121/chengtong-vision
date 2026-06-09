@@ -8,27 +8,8 @@ import { mapTunnelPicker } from "../mappers/picker.mapper";
 
 export async function listTunnelPicker(
   query: TunnelPickerQuery
-): Promise<Result<PaginatedResult<TunnelPickerItem>>> {
-  try {
-    const data = await tunnelClientRepository.searchTunnelPicker(query);
-
-    console.log("tunnel picker list data:", data);
-
-    return {
-      success: true,
-      data: {
-        items: data.data.map(mapTunnelPicker),
-        total: data.count,
-        page: query.page ?? 1,
-        pageSize: query.pageSize ?? 10,
-      },
-    };
-  } catch (error: unknown) {
-    return {
-      success: false,
-      message: (error as Error)?.message ?? "查询失败",
-    };
-  }
+): Promise<PaginatedResult<TunnelPickerItem>> {
+  return await tunnelClientRepository.searchTunnelPicker(query);
 }
 
 export async function getTunnelPickerItemById(id: string): Promise<TunnelPickerItem | null> {

@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/core/utils";
 import { TbmPickerItem } from "@/lib/domain/tbm/types";
 import { routes } from "@/lib/core/router/router";
+import { usePathname } from "next/navigation";
 
 // const tbms = [
 //   {
@@ -34,34 +35,44 @@ export function TbmSidebarList({
   tbms: TbmPickerItem[];
   activeTbmId?: string;
 }) {
+  const pathname = usePathname();
+  // const segments = pathname.split("/").filter(Boolean);
+  // const currentTbmId = segments[segments.length - 1];
+  // console.log("Current TBM ID from pathname:", currentTbmId);
+  // console.log("Active TBM ID from params:", activeTbmId);
+  // console.log("segments:", segments);
   return (
     <div className="divide-y">
-      {tbms.map((tbm) => (
-        <Link
-          key={tbm.id}
-          href={`${routes.tbms.runtime(tbm.id)}?tab=overview`}
-          className={cn("block px-4 py-3 transition-colors hover:bg-muted", {
-            "bg-muted": tbm.id === activeTbmId,
-          })}
-        >
-          <div className="flex items-start justify-between gap-2">
-            <div className="min-w-0">
-              <div className="truncate text-sm font-medium">{tbm.name}</div>
-              <div className="mt-0.5 text-xs text-muted-foreground">{tbm.manageCode}</div>
-            </div>
+      {tbms.map((tbm) => {
+        const href = pathname.replace(activeTbmId!, tbm.id);
+        // console.log("Generated href for TBM", { tbmId: tbm.id, href });
+        return (
+          <Link
+            key={tbm.id}
+            href={href}
+            className={cn("block px-4 py-3 transition-colors hover:bg-muted", {
+              "bg-muted": tbm.id === activeTbmId,
+            })}
+          >
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <div className="truncate text-sm font-medium">{tbm.name}</div>
+                <div className="mt-0.5 text-xs text-muted-foreground">{tbm.manageCode}</div>
+              </div>
 
-            {/* <Badge variant={tbm.status === "在线" ? "default" : "secondary"} className="shrink-0">
+              {/* <Badge variant={tbm.status === "在线" ? "default" : "secondary"} className="shrink-0">
               {tbm.status}
             </Badge> */}
-          </div>
+            </div>
 
-          <div className="mt-2 space-y-1 text-xs text-muted-foreground">
-            <div>{tbm.tbmTypeName}</div>
-            <div>{tbm.manufacturerName}</div>
-            <div>刀盘直径：{tbm.diameter}</div>
-          </div>
-        </Link>
-      ))}
+            <div className="mt-2 space-y-1 text-xs text-muted-foreground">
+              <div>{tbm.tbmTypeName}</div>
+              <div>{tbm.manufacturerName}</div>
+              <div>刀盘直径：{tbm.diameter}</div>
+            </div>
+          </Link>
+        );
+      })}
     </div>
   );
 }

@@ -12,9 +12,9 @@ export function mapProjectPicker(row: ProjectPickerRow): ProjectPickerItem {
   return {
     id: row.id,
     name: row.name,
-    fullName: row.full_name,
-    organizationName: row.organization_name,
-    regionName: row.region_name,
-    statusName: row.status_name,
+    fullName: row.full_name ?? undefined,
+    organizationName: row.organization_name ?? undefined,
+    regionName: row.region_name ?? undefined,
+    statusName: row.status_name ?? undefined,
   };
 }

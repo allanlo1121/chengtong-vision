@@ -19,8 +19,6 @@ export function FieldTextarea<T extends FieldValues, C = any, O = T>({
   name,
   ui,
   form,
-  disabled,
-  required,
 }: FieldRendererProps<T, C, O>) {
   return (
     <Controller
@@ -37,8 +35,6 @@ export function FieldTextarea<T extends FieldValues, C = any, O = T>({
               value={field.value ?? ""}
               placeholder={ui.placeholder}
               aria-invalid={fieldState.invalid}
-              required={required}
-              disabled={disabled}
             />
 
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
