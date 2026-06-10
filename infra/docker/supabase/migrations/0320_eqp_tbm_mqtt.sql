@@ -85,34 +85,7 @@ create table eqp.mqtt_acl (
 comment on table eqp.mqtt_acl
 is 'MQTT ACL';
 
--- =========================================================
--- TBMS ADDITIONAL FIELDS
--- =========================================================
 
-alter table eqp.tbms
-
-add column if not exists parameter_template_id smallint
-references eqp.tbm_parameter_templates(id);
-
-alter table eqp.tbms
-
-add column if not exists realtime_table_name text;
-
--- =========================================================
--- INDEXES
--- =========================================================
-
-create index idx_tbm_parameter_bindings_tbm
-on eqp.tbm_parameter_bindings(tbm_id);
-
-create index idx_tbm_parameter_bindings_parameter
-on eqp.tbm_parameter_bindings(parameter_id);
-
-create index idx_threshold_binding
-on eqp.tbm_parameter_threshold_rules(binding_id);
-
-create index idx_runtime_parameters_subsystem
-on eqp.tbm_runtime_parameters(subsystem_id);
 
 create table eqp.mqtt_user_status (
 

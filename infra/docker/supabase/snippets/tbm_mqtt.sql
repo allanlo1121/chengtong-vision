@@ -174,3 +174,20 @@ create table eqp.tbm_connection_status_history (
     )
 );
 
+select count(*)
+from hr.organizations;
+
+select indexdef
+from pg_indexes
+where indexname = 'one_root_org';
+
+
+select
+    o.id,
+    o.name,
+    o.parent_id
+from hr.organizations o
+left join hr.organizations p
+    on p.id = o.parent_id
+where o.parent_id is not null
+  and p.id is null;

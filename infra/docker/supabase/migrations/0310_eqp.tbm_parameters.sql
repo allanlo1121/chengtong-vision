@@ -461,3 +461,20 @@ begin
   return v_table_schema || '.' || v_table_name;
 end;
 $$;
+
+
+-- =========================================================
+-- INDEXES
+-- =========================================================
+
+create index idx_tbm_parameter_configs_tbm
+on eqp.tbm_parameter_configs(tbm_id);
+
+create index idx_tbm_parameter_configs_parameter
+on eqp.tbm_parameter_configs(parameter_id);
+
+create index idx_threshold_binding
+on eqp.tbm_parameter_threshold_rules(binding_id);
+
+create index idx_runtime_parameters_subsystem
+on eqp.tbm_runtime_parameters(subsystem_id);
