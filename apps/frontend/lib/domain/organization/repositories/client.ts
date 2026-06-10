@@ -29,7 +29,7 @@ async function findById(id: string): Promise<Organization | null> {
 async function searchOrganizationPicker(
   query: OrganizationPickerQuery
 ): Promise<PaginatedResult<OrganizationPickerItem>> {
-  console.log("searchOrganizationPicker query", query);
+  // console.log("searchOrganizationPicker query", query);
   const supabase = createClient();
 
   let builder = supabase.schema("hr").from("v_organization_picker").select("*", { count: "exact" });

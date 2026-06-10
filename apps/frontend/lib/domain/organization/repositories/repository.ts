@@ -15,11 +15,16 @@ import {
   mapOrganization,
   mapOrganizationDetail,
   mapOrganizationFormModel,
+  mapOrganizationInsertFromImport,
   mapOrganizationListItem,
   mapOrganizationToInsert,
   mapOrganizationToUpdate,
 } from "../mappers";
-import { CreateOrganizationInput, UpdateOrganizationInput } from "../schemas";
+import {
+  CreateOrganizationInput,
+  ImportOrganizationInput,
+  UpdateOrganizationInput,
+} from "../schemas";
 
 export async function findDetailById(id: string): Promise<OrganizationDetail | null> {
   const supabase = await createClient();
@@ -88,7 +93,7 @@ async function paginate(
 
 export const organizationRepository = {
   insert: async (input: CreateOrganizationInput): Promise<Organization> => {
-    console.log("Inserting organization with input:", input);
+    // console.log("Inserting organization with input:", input);
 
     const payload = mapOrganizationToInsert(input);
     const supabase = await createClient();
@@ -101,6 +106,28 @@ export const organizationRepository = {
       .single();
 
     console.log("Insert organization result:", { data, error });
+    assertNoError(error);
+
+    if (!data) {
+      throw appErrors.internal("organizationRepository.create", "创建组织失败");
+    }
+
+    return mapOrganization(data);
+  },
+  insertByImport: async (input: ImportOrganizationInput): Promise<Organization> => {
+    // console.log("Inserting organization with input:", input);
+
+    const payload = mapOrganizationInsertFromImport(input);
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .schema("hr")
+      .from("organizations")
+      .insert([payload])
+      .select("*")
+      .single();
+
+    // console.log("Insert organization result:", { data, error });
     assertNoError(error);
 
     if (!data) {
@@ -183,7 +210,7 @@ export const organizationRepository = {
 
     const { data, error } = await organizationFormModelQuery;
 
-    console.log("findFormById query result", { data, error });
+    // console.log("findFormById query result", { data, error });
 
     assertNoError(error);
 

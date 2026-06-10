@@ -77,8 +77,8 @@ export async function findByTbmId(tbmId: string): Promise<MqttUserView | null> {
     .eq("tbm_id", tbmId)
     .maybeSingle();
 
-  console.log("findByTbmId data", data);
-  console.log("findByTbmId error", error);
+  // console.log("findByTbmId data", data);
+  // console.log("findByTbmId error", error);
 
   assertNoError(error);
 

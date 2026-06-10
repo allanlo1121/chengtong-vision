@@ -228,13 +228,17 @@ export const OrganizationSchema = z.object(OrganizationFormSchema);
 
 export const CreateOrganizationSchema = OrganizationSchema;
 
-export const InsertOrganizationSchema = OrganizationSchema.omit({ parent: true }).extend({
-  parentId: idSchema,
+export const ImportOrganizationSchema = OrganizationSchema.omit({ parent: true }).extend({
+  parentId: idSchema.meta({
+    label: "上级组织",
+    component: "select",
+    optionSource: { source: "organizations" },
+  } satisfies FormFieldMeta),
 });
 
 export type CreateOrganizationInput = z.infer<typeof CreateOrganizationSchema>;
 
-export type InsertOrganizationInput = z.infer<typeof InsertOrganizationSchema>;
+export type ImportOrganizationInput = z.infer<typeof ImportOrganizationSchema>;
 
 export const UpdateOrganizationSchema = OrganizationSchema.extend({
   id: idSchema,

@@ -6,19 +6,33 @@ import { TreeRow, TreeKey } from "./types";
 export async function getAllTrees(treeKey: TreeKey): Promise<TreeRow[]> {
   const supabase = createClient();
 
-  const { data, error } = await supabase
-    .schema("system")
-    .from("v_tree_nodes")
-    .select("*")
-    .eq("tree_key", treeKey);
+  const pageSize = 1000; // adjust as needed
+  let page = 0;
+  let allData: TreeRow[] = [];
 
-  console.log("[getAllTrees]", { treeKey, data, error });
+  while (true) {
+    const { data, error } = await supabase
+      .schema("system")
+      .from("v_tree_nodes")
+      .select("*")
+      .eq("tree_key", treeKey)
+      .range(page * pageSize, (page + 1) * pageSize - 1);
 
-  if (error) {
-    throw error;
+    // console.log(`[getAllTrees] page ${page}`, { treeKey, data, error });
+
+    if (error) {
+      throw error;
+    }
+
+    if (!data || data.length === 0) {
+      break;
+    }
+
+    allData = allData.concat(data);
+    page++;
   }
 
-  return data ?? [];
+  return allData ?? [];
 }
 
 export const treeRepository = {

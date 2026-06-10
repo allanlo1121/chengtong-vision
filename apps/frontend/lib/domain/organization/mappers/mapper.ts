@@ -1,4 +1,8 @@
-import { CreateOrganizationInput, UpdateOrganizationInput } from "../schemas";
+import {
+  CreateOrganizationInput,
+  ImportOrganizationInput,
+  UpdateOrganizationInput,
+} from "../schemas";
 import {
   OrganizationListRow,
   OrganizationListItem,
@@ -124,7 +128,38 @@ export function mapOrganizationToInsert(row: CreateOrganizationInput): Organizat
 
     org_type_id: row.orgTypeId,
     business_id: row.businessId ?? null,
-    country_code: row.countryCode,
+    country_code: row.countryCode ?? null,
+
+    address: row.address ?? null,
+    latitude: row.latitude ?? null,
+    longitude: row.longitude ?? null,
+
+    external_id: row.externalId ?? null,
+    external_version: row.externalVersion ?? null,
+  };
+}
+
+export function mapOrganizationInsertFromImport(
+  row: ImportOrganizationInput
+): OrganizationInsertRow {
+  return {
+    code: row.code,
+    name: row.name,
+    full_name: row.fullName ?? null,
+    description: row.description ?? null,
+    parent_id: row.parentId ?? null,
+
+    org_category_id: row.orgCategoryId ?? null,
+    sort_order: row.sortOrder,
+    is_disabled: row.isDisabled,
+
+    province_code: row.provinceCode ?? null,
+    city_code: row.cityCode ?? null,
+    district_code: row.districtCode ?? null,
+
+    org_type_id: row.orgTypeId,
+    business_id: row.businessId ?? null,
+    country_code: row.countryCode ?? null,
 
     address: row.address ?? null,
     latitude: row.latitude ?? null,

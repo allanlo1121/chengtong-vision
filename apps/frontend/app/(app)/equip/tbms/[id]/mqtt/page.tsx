@@ -19,8 +19,8 @@ export const metadata: Metadata = {
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id: tbmId } = await params;
 
-  console.log("===TbmMqttPage===");
-  console.log("tbmId", tbmId);
+  // console.log("===TbmMqttPage===");
+  // console.log("tbmId", tbmId);
 
   let tbmMqtt;
   let tbmDetail;

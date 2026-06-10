@@ -62,10 +62,6 @@ export function mapTbm(row: TbmRow): Tbm {
     serialNo: row.serial_no,
     diameter: row.diameter,
     power: row.power,
-
-    parameterTemplateId: row.parameter_template_id,
-    realtimeTableName: row.realtime_table_name,
-
     sortOrder: row.sort_order,
     isDisabled: row.is_disabled,
     remark: row.remark,

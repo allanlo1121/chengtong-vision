@@ -39,6 +39,16 @@ export function useTreeRuntime({ treeKey }: UseTreeRuntimeOptions) {
         return;
       }
 
+      // console.log("tree root count", res.data?.length);
+
+      // console.log(
+      //   "tree first level",
+      //   res.data?.map((x) => ({
+      //     name: x.name,
+      //     id: x.id,
+      //   }))
+      // );
+
       setTreeData(res.data ?? []);
     } finally {
       setLoading(false);

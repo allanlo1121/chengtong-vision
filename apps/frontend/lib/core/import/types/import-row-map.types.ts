@@ -1,6 +1,6 @@
 import { EmployeeInsertInput } from "@/lib/domain/employee/schemas";
 import { EmployeeImportRow } from "@/lib/domain/employee/types";
-import { CreateOrganizationInput } from "@/lib/domain/organization/schemas";
+import { ImportOrganizationInput } from "@/lib/domain/organization/schemas";
 import { OrganizationImportRow } from "@/lib/domain/organization/types";
 import { ProjectInsertInput } from "@/lib/domain/project/schemas";
 import { ProjectImportRow } from "@/lib/domain/project/types";
@@ -15,7 +15,7 @@ export type ImportRowMap = {
 };
 
 export type ImportInsertInputMap = {
-  organizations: CreateOrganizationInput;
+  organizations: ImportOrganizationInput;
   employees: EmployeeInsertInput;
   projects: ProjectInsertInput;
   tunnels: any;

@@ -32,11 +32,10 @@ export async function createMqttUser(input: CreateMqttUserInput): Promise<MqttUs
   return mapMqttUserWithAclFromMqttUserRowWithAcl(result);
 }
 
-import { MqttUserView } from "../types";
 import { findByTbmId } from "../repositories";
 
 export async function getMqttUserByTbmId(id: string): Promise<MqttUserDetail | null> {
-  console.log("===getMqttUserByTbmId===");
+  // console.log("===getMqttUserByTbmId===");
 
   const row = await findByTbmId(id);
 

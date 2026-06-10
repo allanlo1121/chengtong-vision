@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/infra/supabase/client";
 import { assertNoError } from "@/lib/infra/repositories/base.repository";
-import { MasterOption } from "../types";
+import { MasterOption, SelectOption } from "../types";
 
 export async function findMasterOptions(definitionCode: string): Promise<MasterOption[] | []> {
   console.log("findMasterOptions", { definitionCode });
@@ -47,16 +47,56 @@ export async function searchEmployees(search?: string) {
   return data ?? [];
 }
 
-// export async function searchProjects(search?: string) {
-//   const supabase = createClient();
-//   let builder = supabase.from("projects").select("id, name");
-//   if (search) {
-//     builder = builder.ilike("name", `%${search}%`);
-//   }
-//   const { data } = await builder;
-//   return data ?? [];
-// }
+export async function listProjects(): Promise<SelectOption[]> {
+  const supabase = createClient();
+  const pagesize = 500;
+  let from = 0;
+  const allData: { id: string; name: string }[] = [];
+  while (true) {
+    const { data } = await supabase
+      .schema("proj")
+      .from("projects")
+      .select("id, name")
+      .range(from, from + pagesize - 1);
 
+    if (!data || data.length === 0) {
+      break;
+    }
+
+    allData.push(...data);
+    from += pagesize;
+  }
+
+  return allData.map((item) => ({
+    value: item.id,
+    label: item.name,
+  }));
+}
+export async function listOrganizations(): Promise<SelectOption[]> {
+  const supabase = createClient();
+  const pagesize = 500;
+  let from = 0;
+  const allData: { id: string; external_id: string | null }[] = [];
+  while (true) {
+    const { data } = await supabase
+      .schema("hr")
+      .from("organizations")
+      .select("id, external_id")
+      .range(from, from + pagesize - 1);
+
+    if (!data || data.length === 0) {
+      break;
+    }
+
+    allData.push(...data);
+    from += pagesize;
+  }
+
+  return allData.map((item) => ({
+    value: item.id,
+    label: item.external_id ?? "",
+  }));
+}
 // export async function getAllTreeRows(entity: TreeEntity = "organization"): Promise<TreeNodeRow[]> {
 //   const supabase = createClient();
 

@@ -31,7 +31,7 @@ export type OptionConfig =
   | { source: "master"; code: string }
   | { source: "countries" }
   | { source: "admin_regions"; level: number; parentCode?: string }
-  | { source: "organization_tree"; parentId?: string }
+  | { source: "organizations" }
   | { source: "customers"; categoryCode: string }
   | { source: "posts" }
   | { source: "tbm_subsystems" };

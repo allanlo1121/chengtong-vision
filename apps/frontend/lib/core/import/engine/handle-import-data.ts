@@ -16,8 +16,8 @@ export async function handleImportData<T extends TableEntity>(
   // 1️⃣ 加载 lookup（建议后面加缓存）
   const config = importRegistry[entity];
 
-  // console.log("===handleImportData config===");
-  // console.log("config", config);
+  console.log("===handleImportData config===");
+  console.log("config", config);
 
   const maps = config.requiredLookups ? await buildLookupMaps(config.requiredLookups) : {};
 

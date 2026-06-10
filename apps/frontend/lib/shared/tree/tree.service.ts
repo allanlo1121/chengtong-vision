@@ -15,9 +15,27 @@ export const treeService = {
 
       const rows = await getAllTrees(treeKey);
 
+      // console.log(
+      //   "flat rows",
+      //   rows.length,
+      //   rows.map((x) => ({
+      //     id: x.id,
+      //     name: x.name,
+      //     parentId: x.parent_id,
+      //   }))
+      // );
+
       // build tree
 
       const tree = buildTree(rows);
+      // console.log(
+      //   "tree roots",
+      //   tree.map((x) => ({
+      //     id: x.id,
+      //     name: x.name,
+      //     parentId: x.parentId,
+      //   }))
+      // );
 
       return {
         success: true,

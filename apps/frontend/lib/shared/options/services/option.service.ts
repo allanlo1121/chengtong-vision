@@ -5,6 +5,7 @@ import {
   findCustomers,
   listPosts,
   listTbmSubsystems,
+  listOrganizations,
 } from "../repositories/client";
 import { mapCodeOption, mapMasterOption } from "../mappers/option.mapper";
 
@@ -38,6 +39,9 @@ export async function getOptions(config: OptionConfig): Promise<SelectOption[] |
   if (config.source === "tbm_subsystems") {
     const rows = await listTbmSubsystems();
     return rows.map(mapMasterOption);
+  }
+  if (config.source === "organizations") {
+    return await listOrganizations();
   }
   return [];
 }

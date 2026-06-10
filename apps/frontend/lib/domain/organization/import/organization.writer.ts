@@ -1,13 +1,17 @@
 "use server";
 
-import { CreateOrganizationInput, UpdateOrganizationInput } from "../schemas";
+import {
+  CreateOrganizationInput,
+  ImportOrganizationInput,
+  UpdateOrganizationInput,
+} from "../schemas";
 import { WriterResult } from "@/lib/core/import/types";
 
 import { organizationRepository } from "../repositories";
 import { OrganizationInsertRow, OrganizationUpdateRow } from "../types";
 import { mapOrganizationToInsert } from "../mappers";
 
-export const organizationWriter = async (data: CreateOrganizationInput): Promise<WriterResult> => {
+export const organizationWriter = async (data: ImportOrganizationInput): Promise<WriterResult> => {
   console.log("organizationWriter received data:", data);
   try {
     const result = await organizationRepository.findByCode(data.code);
@@ -30,13 +34,13 @@ export const organizationWriter = async (data: CreateOrganizationInput): Promise
     }
 
     // insert
-    const baseData: CreateOrganizationInput = {
+    const baseData: ImportOrganizationInput = {
       ...data,
     };
 
     if (!id) {
       console.log(`Inserting new organization with code ${data.code}`);
-      const res = await organizationRepository.insert(baseData);
+      const res = await organizationRepository.insertByImport(baseData);
 
       if (!res.id) {
         throw new Error("Failed to insert organization");
@@ -51,20 +55,20 @@ export const organizationWriter = async (data: CreateOrganizationInput): Promise
 
     // update
     console.log(`Updating existing organization with code ${data.code} and id ${id}`);
-    const updateData: UpdateOrganizationInput = {
-      id,
-      ...baseData,
-    };
-    const updateRes = await organizationRepository.update(updateData);
+    // const updateData: UpdateOrganizationInput = {
+    //   id,
+    //   ...baseData,
+    // };
+    // const updateRes = await organizationRepository.update(updateData);
 
-    if (!updateRes.id) {
-      throw new Error("Failed to update organization");
-    }
+    // if (!updateRes.id) {
+    //   throw new Error("Failed to update organization");
+    // }
 
     return {
       success: true,
       action: "updated",
-      id: updateRes.id ?? null,
+      id: null,
     };
   } catch (err) {
     return {

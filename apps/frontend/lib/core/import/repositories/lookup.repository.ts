@@ -188,6 +188,7 @@ export async function listAdminRegions(): Promise<LookupItem[]> {
 // }
 
 export async function listOrganizations(): Promise<LookupItem[]> {
+  console.log("===listOrganizations===");
   const supabase = createClient();
   const pageSize = 1000;
   let from = 0;
@@ -211,7 +212,7 @@ export async function listOrganizations(): Promise<LookupItem[]> {
 
     from += pageSize;
   }
-
+  console.log("Fetched organizations:", all);
   return all.map((r) => ({
     id: r.id,
     key: r.code,
@@ -242,8 +243,10 @@ export async function listParentOrganizations(): Promise<LookupItem[]> {
       .select("id, external_id")
       .range(from, from + pageSize - 1);
 
-    if (error) throw error;
     console.log("Fetched parent orgs batch:", data);
+    console.log("Error (if any):", error);
+
+    if (error) throw error;
 
     if (!data || data.length === 0) break;
 

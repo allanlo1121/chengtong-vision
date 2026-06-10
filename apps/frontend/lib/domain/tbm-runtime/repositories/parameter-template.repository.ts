@@ -1,11 +1,6 @@
 import { createClient } from "@/lib/infra/supabase/server";
 import {
-  TbmParameterTemplateRow,
-  TbmParameterTemplateInsertRow,
-  TbmParameterTemplateUpdateRow,
   TbmParameterTemplateListRow,
-  ParameterTemplateNodeRow,
-  TbmRuntimeParameterListRow,
   TemplateOption,
   TbmParameterTemplate,
   TbmRuntimeParameterListItem,

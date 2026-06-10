@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { InsertOrganizationSchema } from "@/lib/domain/organization/schemas";
+import { ImportOrganizationSchema } from "@/lib/domain/organization/schemas";
 
 import { EmployeeInsertInputSchema } from "@/lib/domain/employee/schemas";
 import {
@@ -21,7 +21,7 @@ type ImportRegistry = {
 
 export const importRegistry: ImportRegistry = {
   organizations: {
-    schema: InsertOrganizationSchema,
+    schema: ImportOrganizationSchema,
     mapper: organizationMapper,
     lookups: organizationLookup,
     requiredLookups: ["parentOrganizations", "orgType", "orgCategory"],
