@@ -11,19 +11,16 @@ export async function searchEmployeePicker(
 
   let builder = supabase.schema("hr").from("v_employee_picker").select("*", { count: "exact" });
 
-  if (query.search) {
-    builder = builder.or(`
-      name.ilike.%${query.search}%,
-      short_name.ilike.%${query.search}%
-    `);
-  }
+  if (query.search?.trim()) {
+    const keyword = query.search.trim();
 
-  if (query.organizationName) {
-    builder = builder.eq("organization_name", query.organizationName);
-  }
-
-  if (query.postName) {
-    builder = builder.ilike("post_name", `%${query.postName}%`);
+    builder = builder.or(
+      [
+        `name.ilike.%${keyword}%`,
+        `organization_name.ilike.%${keyword}%`,
+        `post_name.ilike.%${keyword}%`,
+      ].join(",")
+    );
   }
 
   const page = query.page ?? 1;
@@ -44,17 +41,32 @@ export async function searchEmployeePicker(
   };
 }
 
-export function getPickerItemById(id: string) {
+// export function getPickerItemById(id: string) {
+//   const supabase = createClient();
+
+//   return supabase
+//     .schema("hr")
+//     .from("v_employee_picker")
+//     .select("*")
+//     .eq("id", id)
+//     .single()
+//     .then(({ data, error }) => {
+//       assertNoError(error);
+//       return data ? mapEmployeePicker(data) : null;
+//     });
+// }
+
+export async function getPickerById(id: string): Promise<EmployeePickerItem | null> {
   const supabase = createClient();
 
-  return supabase
+  const { data, error } = await supabase
     .schema("hr")
     .from("v_employee_picker")
     .select("*")
     .eq("id", id)
-    .single()
-    .then(({ data, error }) => {
-      assertNoError(error);
-      return data ?? null;
-    });
+    .maybeSingle();
+
+  assertNoError(error);
+
+  return data ? mapEmployeePicker(data) : null;
 }

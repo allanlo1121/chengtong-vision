@@ -155,7 +155,7 @@ export const ProjectSchema = z.object({
     optionSource: { source: "countries" },
   } satisfies FormFieldMeta),
 
-  regionId: idSchema.meta({
+  regionId: idSchema.optional().meta({
     label: "所在区域",
     component: "select",
     section: "地理信息",

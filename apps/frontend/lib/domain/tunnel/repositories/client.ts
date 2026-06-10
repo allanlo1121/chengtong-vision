@@ -6,7 +6,7 @@ import { PaginatedResult } from "@/lib/shared/contracts/paginated-result";
 
 export const tunnelClientRepository = {
   searchTunnelPicker,
-  getPickerItemById,
+  getTunnelPickerById,
   findById,
 };
 
@@ -34,9 +34,10 @@ async function searchTunnelPicker(
 
   let builder = supabase.schema("proj").from("v_tunnel_picker").select("*", { count: "exact" });
 
-  if (query.search) {
-    builder = builder.or(`name.ilike.%${query.search}%,
-      full_name.ilike.%${query.search}%,`);
+  if (query.search?.trim()) {
+    const keyword = query.search.trim();
+
+    builder = builder.or([`name.ilike.%${keyword}%`, `project_name.ilike.%${keyword}%`].join(","));
   }
 
   const page = query.page ?? 1;
@@ -57,17 +58,33 @@ async function searchTunnelPicker(
   };
 }
 
-export function getPickerItemById(id: string) {
+// export function getPickerItemById(id: string) {
+//   const supabase = createClient();
+
+//   return supabase
+//     .schema("proj")
+//     .from("v_tunnel_picker")
+//     .select("*")
+//     .eq("id", id)
+//     .single()
+//     .then(({ data, error }) => {
+//       assertNoError(error);
+//       return data ?? null;
+//     });
+// }
+
+export async function getTunnelPickerById(id: string): Promise<TunnelPickerItem | null> {
+  // console.log("getTunnelPickerById id", id);
   const supabase = createClient();
 
-  return supabase
+  const { data, error } = await supabase
     .schema("proj")
     .from("v_tunnel_picker")
     .select("*")
     .eq("id", id)
-    .single()
-    .then(({ data, error }) => {
-      assertNoError(error);
-      return data ?? null;
-    });
+    .maybeSingle();
+
+  assertNoError(error);
+
+  return data ? mapTunnelPicker(data) : null;
 }

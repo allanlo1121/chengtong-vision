@@ -19,6 +19,7 @@ export async function runBootstrap() {
     .maybeSingle();
 
   if (data?.completed) {
+    console.log("System already initialized");
     return;
   }
 
@@ -35,4 +36,5 @@ export async function runBootstrap() {
   if (error) {
     throw error;
   }
+  console.log("database bootstrapped");
 }

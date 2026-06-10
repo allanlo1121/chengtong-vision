@@ -59,7 +59,7 @@ export function SchemaForm<TSchema extends ZodObject<any>>({
   type FormInput = z.input<TSchema>;
   type FormOutput = z.output<TSchema>;
 
-  // console.log("Schema fields", fields);
+  console.log("Schema fields", fields);
 
   /** ------------------------------------------------
    * 2 初始化 form
@@ -101,7 +101,7 @@ export function SchemaForm<TSchema extends ZodObject<any>>({
     defaultValues,
   });
 
-  // console.log("schemaForm form", form);
+  console.log("schemaForm form", form);
 
   /** ------------------------------------------------
    * 3 initialValues 更新
@@ -178,7 +178,13 @@ export function SchemaForm<TSchema extends ZodObject<any>>({
                   colSpanClassMap[field.ui.colSpan as keyof typeof colSpanClassMap] ?? "col-span-1"
                 }
               >
-                <FieldRenderer name={field.name} ui={field.ui} form={form} meta={meta} />
+                <FieldRenderer
+                  name={field.name}
+                  ui={field.ui}
+                  form={form}
+                  required={field.required}
+                  meta={meta}
+                />
               </div>
             ))}
           </div>

@@ -12,8 +12,6 @@ import {
   OrganizationRow,
   OrganizationInsertRow,
   OrganizationUpdateRow,
-  OrganizationFormModel,
-  OrganizationFormRow,
 } from "../types";
 
 export function mapOrganizationListItem(rows: OrganizationListRow): OrganizationListItem {
@@ -116,7 +114,7 @@ export function mapOrganizationToInsert(row: CreateOrganizationInput): Organizat
     name: row.name,
     full_name: row.fullName ?? null,
     description: row.description ?? null,
-    parent_id: row.parent?.id ?? null,
+    parent_id: row.parentId ?? null,
 
     org_category_id: row.orgCategoryId ?? null,
     sort_order: row.sortOrder,
@@ -178,7 +176,7 @@ export function mapOrganizationToUpdate(
     name: input.name,
     full_name: input.fullName,
     description: input.description,
-    parent_id: input.parent?.id ?? null,
+    parent_id: input.parentId ?? null,
 
     org_category_id: input.orgCategoryId,
     sort_order: input.sortOrder,
@@ -198,35 +196,5 @@ export function mapOrganizationToUpdate(
 
     external_id: input.externalId,
     external_version: input.externalVersion,
-  };
-}
-
-export function mapOrganizationFormModel(row: OrganizationFormRow): OrganizationFormModel {
-  return {
-    id: row.id,
-    name: row.name,
-    code: row.code,
-    fullName: row.full_name ?? undefined,
-    parent: row.parent
-      ? {
-          id: row.parent.id,
-          name: row.parent.name,
-        }
-      : undefined,
-
-    orgCategoryId: row.org_category_id ?? undefined,
-    orgTypeId: row.org_type_id,
-    businessId: row.business_id ?? undefined,
-
-    countryCode: row.country_code ?? undefined,
-    provinceCode: row.province_code ?? undefined,
-    cityCode: row.city_code ?? undefined,
-    districtCode: row.district_code ?? undefined,
-    address: row.address ?? undefined,
-
-    latitude: row.latitude ?? undefined,
-    longitude: row.longitude ?? undefined,
-    description: row.description ?? undefined,
-    isDisabled: row.is_disabled,
   };
 }

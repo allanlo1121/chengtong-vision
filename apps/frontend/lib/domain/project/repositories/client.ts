@@ -19,22 +19,23 @@ async function findById(id: string): Promise<Project | null> {
   return data ? mapProject(data) : null;
 }
 
-export const projectClinetRepository = {
+export const projectClientRepository = {
   findById,
+  getProjectPickerById,
+  searchProjectPicker,
 };
 
-export async function searchProjectPicker(
+async function searchProjectPicker(
   query: ProjectPickerQuery
 ): Promise<PaginatedResult<ProjectPickerItem>> {
   const supabase = createClient();
 
   let builder = supabase.schema("proj").from("v_project_picker").select("*", { count: "exact" });
 
-  if (query.search) {
-    builder = builder.or(`
-      name.ilike.%${query.search}%,
-      short_name.ilike.%${query.search}%
-    `);
+  if (query.search?.trim()) {
+    const keyword = query.search.trim();
+
+    builder = builder.or([`name.ilike.%${keyword}%`, `full_name.ilike.%${keyword}%`].join(","));
   }
 
   // if (query.organizationId) {
@@ -60,4 +61,19 @@ export async function searchProjectPicker(
     page,
     pageSize,
   };
+}
+
+async function getProjectPickerById(id: string): Promise<ProjectPickerItem | null> {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .schema("proj")
+    .from("v_project_picker")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  assertNoError(error);
+
+  return data ? mapProjectPicker(data) : null;
 }

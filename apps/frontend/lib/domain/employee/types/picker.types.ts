@@ -1,21 +1,16 @@
 import { EmployeePickerRow } from "./db.types";
-import { PickerQuery } from "@/lib/shared/picker/types";
 
-export type EmployeePickerItem = {
-  id: string;
-  name: string;
+import { PickerItem, PickerQuery } from "@/lib/shared/picker/types";
+
+export interface EmployeePickerItem extends PickerItem {
   code: string;
-
   organizationId?: string;
   organizationName?: string;
   postId?: string;
   postName?: string;
   sortOrder?: number;
-};
-export interface EmployeePickerQuery extends PickerQuery {
-  organizationName?: string;
-  postName?: string;
 }
+export interface EmployeePickerQuery extends PickerQuery {}
 
 export type EmployeePickerResult = {
   data: EmployeePickerRow[];

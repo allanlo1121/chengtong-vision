@@ -17,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { TunnelPicker } from "@/lib/domain/tunnel/components/picker/";
-import type { TunnelPickerItem } from "@/lib/domain/tunnel//types";
 
 import { createTbmAssignmentAction } from "../actions";
 
@@ -31,20 +30,21 @@ type Props = {
 export function CreateTbmAssignmentDrawer({ open, onOpenChange, tbmId, tbmName }: Props) {
   const router = useRouter();
 
-  const [selectedTunnel, setSelectedTunnel] = useState<TunnelPickerItem | null>(null);
+  const [selectedTunnelId, setSelectedTunnelId] = useState<string | null>(null);
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [pending, setPending] = useState(false);
 
   function resetForm() {
-    setSelectedTunnel(null);
+    setSelectedTunnelId(null);
     setStartDate("");
     setEndDate("");
   }
 
   async function handleSubmit() {
-    if (!selectedTunnel) {
+    console.log("handleSubmit", { tbmId, selectedTunnelId, startDate, endDate });
+    if (!selectedTunnelId) {
       toast.error("请选择绑定区间");
       return;
     }
@@ -59,7 +59,7 @@ export function CreateTbmAssignmentDrawer({ open, onOpenChange, tbmId, tbmName }
 
       const result = await createTbmAssignmentAction({
         tbmId,
-        tunnelId: selectedTunnel.id,
+        tunnelId: selectedTunnelId,
         startDate: new Date(startDate),
         endDate: endDate ? new Date(endDate) : null,
       });
@@ -105,7 +105,7 @@ export function CreateTbmAssignmentDrawer({ open, onOpenChange, tbmId, tbmName }
             <div className="space-y-2">
               <label className="text-sm font-medium">绑定区间</label>
 
-              <TunnelPicker selected={selectedTunnel} onChange={setSelectedTunnel} />
+              <TunnelPicker selectedId={selectedTunnelId} onChange={setSelectedTunnelId} />
             </div>
 
             <div className="space-y-2">

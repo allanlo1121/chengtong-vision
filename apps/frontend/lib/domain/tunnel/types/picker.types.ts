@@ -1,17 +1,13 @@
-import { PickerQuery } from "@/lib/shared/picker/types";
+import { PickerItem, PickerQuery } from "@/lib/shared/picker/types";
 import { TunnelPickerRow } from "./db.types";
 
-export type TunnelPickerItem = {
-  id: string;
-  name: string;
+export interface TunnelPickerItem extends PickerItem {
   organizationName: string | null;
   projectName: string | null;
   tunnelStatusName: string | null;
-};
-
-export interface TunnelPickerQuery extends PickerQuery {
-  search?: string;
 }
+
+export interface TunnelPickerQuery extends PickerQuery {}
 
 export type TunnelPickerResult = {
   data: TunnelPickerRow[];

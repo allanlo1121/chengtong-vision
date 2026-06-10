@@ -23,15 +23,6 @@ export async function fetchOrganizationDetailById(id: string): Promise<Organizat
   return organization;
 }
 
-export async function fetchOrganizationFormById(id: string): Promise<OrganizationFormModel> {
-  const organization = await organizationRepository.findFormById(id);
-
-  if (!organization) {
-    throw appErrors.notFound("未查询到组织");
-  }
-  return organization;
-}
-
 export async function getOrganizationById(id: string): Promise<Organization> {
   const organization = await organizationRepository.findById(id);
 

@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/infra/supabase/server";
-import { TbmPlcTag, TbmPlcTagFormModel } from "../types";
+import { TbmPlcTag } from "../types";
 import { applyPagination, assertNoError } from "@/lib/infra/repositories/base.repository";
 
 import { appErrors, PaginatedResult } from "@/lib/shared/contracts";
@@ -7,7 +7,6 @@ import {
   mapTbmPlcTag,
   mapTbmPlcTagInsertRow,
   mapTbmPlcTagUpdateRow,
-  mapTbmPlcTagFormModel,
   mapTbmPlcTagInsertFromImportRow,
 } from "../mappers";
 import { CreateTbmPlcTagInput, ImportTbmPlcTagInput, UpdateTbmPlcTagInput } from "../schemas";
@@ -65,27 +64,19 @@ export const tbmPlcTagRepository = {
 
     assertNoError(error);
   },
-  findById: async (id: number): Promise<TbmPlcTagFormModel | null> => {
+  findById: async (id: number): Promise<TbmPlcTag | null> => {
     const supabase = await createClient();
 
     const { data, error } = await supabase
       .schema("eqp")
       .from("tbm_plc_tags")
-      .select(
-        `
-        *,
-        tbm:tbms ({
-          id,
-          name
-        })
-        `
-      )
+      .select("*")
       .eq("id", id)
       .maybeSingle();
 
     assertNoError(error);
 
-    return data ? mapTbmPlcTagFormModel(data) : null;
+    return data ? mapTbmPlcTag(data) : null;
   },
   deleteByTbmId: async (tbmId: string): Promise<void> => {
     const supabase = await createClient();

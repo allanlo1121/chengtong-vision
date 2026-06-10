@@ -1,19 +1,15 @@
-import { PickerQuery } from "@/lib/shared/picker/types";
+import { PickerItem, PickerQuery } from "@/lib/shared/picker/types";
 import { ProjectPickerRow } from "./db.types";
 
-export type ProjectPickerItem = {
-  id: string;
-  name: string;
+export interface ProjectPickerItem extends PickerItem {
   fullName?: string;
   organizationName?: string;
   regionName?: string;
   statusName?: string;
-};
+}
 
 export interface ProjectPickerQuery extends PickerQuery {
   search?: string;
-
-  organizationName?: string;
 }
 
 export type ProjectPickerResult = {

@@ -147,44 +147,8 @@ export const tbmRepository = {
   // getAllList,
   paginate,
   getTbmDetailById,
-  searchTbmPicker,
   // softDeleteMany,
 };
-
-async function searchTbmPicker(query: TbmPickerQuery): Promise<TbmPickerResult> {
-  const supabase = await createClient();
-
-  console.log("searchTbmPicker query", query);
-
-  let builder = supabase.schema("eqp").from("v_tbm_picker").select("*", { count: "exact" });
-
-  if (query.search) {
-    builder = builder.or(`name.ilike.%${query.search}%`);
-  }
-
-  if (query.tbmTypeName && query.tbmTypeName !== "all") {
-    builder = builder.eq("tbm_type_name", query.tbmTypeName);
-  }
-
-  if (query.manufacturerName && query.manufacturerName !== "all") {
-    builder = builder.ilike("manufacturer_name", `%${query.manufacturerName}%`);
-  }
-
-  const page = query.page ?? 1;
-  const pageSize = query.pageSize ?? 20;
-
-  const from = (page - 1) * pageSize;
-  const to = from + pageSize - 1;
-
-  const { data, count, error } = await builder.range(from, to);
-
-  assertNoError(error);
-
-  return {
-    data: data ?? [],
-    count: count ?? 0,
-  };
-}
 
 async function getTbmDetailById(id: string): Promise<TbmDetail | null> {
   const supabase = await createClient();

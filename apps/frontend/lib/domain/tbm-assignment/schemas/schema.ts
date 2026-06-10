@@ -1,3 +1,4 @@
+import { FormFieldMeta } from "@/lib/shared/form-engine/types/field.types";
 import { idSchema } from "@/lib/shared/schema";
 
 import { z } from "zod";
@@ -7,61 +8,37 @@ import { z } from "zod";
  */
 export const TbmAssignmentFormSchema = z.object({
   tbmId: idSchema.meta({
-    table: "tbm_assignments",
     label: "盾构机",
-    field: "tbm_id",
-    searchable: true, // ⭐
-    sortable: true,
     component: "tbmPicker",
     section: "基本信息",
     type: "text",
-    disabled: false,
-    required: true,
-    readonly: false,
     colSpan: 1,
-  }),
+  } satisfies FormFieldMeta),
   tunnelId: idSchema.meta({
-    table: "tbm_assignments",
     label: "隧道",
-    field: "tunnel_id",
-    searchable: true, // ⭐
-    sortable: true,
     component: "tunnelPicker",
     section: "基本信息",
     type: "text",
-    disabled: false,
-    required: true,
-    readonly: false,
     colSpan: 1,
-  }),
+  } satisfies FormFieldMeta),
   startDate: z.coerce.date().meta({
-    table: "tbm_assignments",
     label: "开始日期",
-    field: "start_date",
-    searchable: true,
-    sortable: true,
     component: "datePicker",
     section: "基本信息",
     type: "date",
-    disabled: false,
-    required: true,
-    readonly: false,
     colSpan: 1,
-  }),
-  endDate: z.coerce.date().optional().nullable().meta({
-    table: "tbm_assignments",
-    label: "结束日期",
-    field: "end_date",
-    searchable: true,
-    sortable: true,
-    component: "datePicker",
-    section: "基本信息",
-    type: "date",
-    disabled: false,
-    required: true,
-    readonly: false,
-    colSpan: 1,
-  }),
+  } satisfies FormFieldMeta),
+  endDate: z.coerce
+    .date()
+    .optional()
+    .nullable()
+    .meta({
+      label: "结束日期",
+      component: "datePicker",
+      section: "基本信息",
+      type: "date",
+      colSpan: 1,
+    } satisfies FormFieldMeta),
 });
 
 export const CreateTbmAssignmentSchema = TbmAssignmentFormSchema;

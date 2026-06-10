@@ -16,13 +16,13 @@ export async function handleImportData<T extends TableEntity>(
   // 1️⃣ 加载 lookup（建议后面加缓存）
   const config = importRegistry[entity];
 
-  console.log("===handleImportData config===");
-  console.log("config", config);
+  // console.log("===handleImportData config===");
+  // console.log("config", config);
 
   const maps = config.requiredLookups ? await buildLookupMaps(config.requiredLookups) : {};
 
-  console.log("===handleImportData maps===");
-  console.log("maps", maps);
+  // console.log("===handleImportData maps===");
+  // console.log("maps", maps);
 
   const ctx = { maps };
 
@@ -34,15 +34,15 @@ export async function handleImportData<T extends TableEntity>(
     try {
       // 2.1 字段映射（raw → schema data）
       const mapped = config.mapper(raw);
-      console.log("===handleImportData mapped===");
-      console.log("mapped", mapped);
-      console.log("raw", raw);
+      // console.log("===handleImportData mapped===");
+      // console.log("mapped", mapped);
+      // console.log("raw", raw);
 
       // 2️⃣ lookup
       const enriched = config.lookups ? { ...mapped, ...(await config.lookups(raw, ctx)) } : mapped;
 
-      console.log("===handleImportData enriched===");
-      console.log("enriched", enriched);
+      // console.log("===handleImportData enriched===");
+      // console.log("enriched", enriched);
       // 2.2 schema 校验（建议 safeParse）
       const parsed = config.schema.safeParse(enriched);
 
@@ -66,8 +66,8 @@ export async function handleImportData<T extends TableEntity>(
     }
   }
 
-  console.log("valid", valid);
-  console.log("failed", failed);
+  // console.log("valid", valid);
+  // console.log("failed", failed);
 
   return { validRows: valid, failedRows: failed };
 }

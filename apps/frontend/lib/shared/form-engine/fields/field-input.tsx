@@ -9,6 +9,7 @@ export function FieldInput<T extends FieldValues, C = any, O = T>({
   name,
   ui,
   form,
+  required,
 }: FieldRendererProps<T, C, O>) {
   // console.log("FieldInput", { name, ui, form });
   return (
@@ -21,7 +22,7 @@ export function FieldInput<T extends FieldValues, C = any, O = T>({
           <Field data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor={field.name} className="flex items-center">
               {ui.label ?? name}
-              {/* {required && <span className="ml-1 text-destructive align-middle">*</span>} */}
+              {required && <span className="ml-1 text-destructive align-middle">*</span>}
             </FieldLabel>
 
             <Input
@@ -31,8 +32,7 @@ export function FieldInput<T extends FieldValues, C = any, O = T>({
               type={ui.type ?? "text"}
               placeholder={ui.placeholder}
               aria-invalid={fieldState.invalid}
-
-              // required={ui.required ?? false}
+              required={required}
               // disabled={ui.disabled ?? false}
             />
 

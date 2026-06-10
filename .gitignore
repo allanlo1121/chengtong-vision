@@ -15,7 +15,10 @@ apps/backend/dist/
 # env
 *.env
 *.env.local
+*.env.production
+apps/frontend/.env.production
 apps/frontend/.env.local
+apps/frontend/.env
 apps/backend/.env
 
 # supabase local data
@@ -30,3 +33,4 @@ infra/docker/emqx/log/
 infra/docker/supabase/.temp/
 infra/docker/supabase/.branches/
 infra/docker/supabase/snippets/
+

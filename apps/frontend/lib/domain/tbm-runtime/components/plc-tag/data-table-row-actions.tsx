@@ -16,7 +16,7 @@ import {
 import { deleteTbmPlcTagAction, updateTbmPlcTagAction } from "../../actions";
 import { routes } from "@/lib/core/router/router";
 import { toast } from "sonner";
-import { TbmPlcTagFormModel } from "../../types";
+import { TbmPlcTag } from "../../types";
 import { TbmPlcTagDrawer } from "./TbmPlcTagDrawer";
 import { useState } from "react";
 
@@ -26,8 +26,8 @@ interface DataTableRowActionsProps<TData> {
   onDelete?: (id: string) => void;
 }
 
-export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TbmPlcTagFormModel>) {
-  const tbmPlcTag = row.original as unknown as TbmPlcTagFormModel;
+export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TbmPlcTag>) {
+  const tbmPlcTag = row.original as unknown as TbmPlcTag;
   // console.log("DataTableRowActions", { row, tbmPlcTag });
   const router = useRouter();
 
@@ -67,7 +67,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<Tbm
       router.refresh();
     } catch (error) {
       console.error(error);
-      toast.error("删除失败");
+      toast.error("更新失败");
     }
   };
 

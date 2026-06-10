@@ -10,7 +10,7 @@ async function InsertOne(input: ImportRecordInput): Promise<ImportRecordEntity> 
 
   const dbInput = camelToSnake(input);
 
-  console.log("import record dbInput", dbInput);
+  // console.log("import record dbInput", dbInput);
 
   const { data, error } = await supabase
     .from("import_records")

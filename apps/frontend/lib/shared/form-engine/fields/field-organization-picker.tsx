@@ -13,6 +13,7 @@ export function FieldOrganizationPicker<T extends FieldValues, C = any, O = T>({
   name,
   ui,
   form,
+  required,
 }: FieldRendererProps<T, C, O>) {
   // console.log("FieldOrganizationPicker", { name, ui });
   return (
@@ -26,11 +27,11 @@ export function FieldOrganizationPicker<T extends FieldValues, C = any, O = T>({
               <FieldLabel htmlFor={field.name}>
                 {ui.label}
 
-                {/* {required && <span className="ml-1 text-destructive">*</span>} */}
+                {required && <span className="ml-1 text-destructive">*</span>}
               </FieldLabel>
             )}
 
-            <OrganizationPicker selected={field.value} onChange={field.onChange} />
+            <OrganizationPicker selectedId={field.value} onChange={field.onChange} />
 
             {fieldState.error && <FieldError errors={[fieldState.error]} />}
           </Field>

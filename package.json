@@ -12,7 +12,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "powershell -ExecutionPolicy Bypass -File ./scripts/dev.ps1",
     "prepare": "husky",
-    "generate:permissions": "tsx scripts/generate-permissions.ts"
+    "generate:permissions": "tsx scripts/generate-permissions.ts",
+    "db:reset": "supabase db reset --workdir infra/docker",
+    "db:start": "supabase start --workdir infra/docker",
+    "db:stop": "supabase stop --workdir infra/docker",
+    "db:types": "supabase gen types typescript --db-url \"postgresql://postgres:postgres@127.0.0.1:54322/postgres\" --schema public,rbac,system,hr,eqp,proj > apps/frontend/lib/core/database/types/database.ts"
   },
   "packageManager": "pnpm@9.15.9",
   "keywords": [],
@@ -20,7 +24,7 @@
   "license": "ISC",
   "devDependencies": {
     "@supabase/supabase-js": "^2.97.0",
-    "@types/node": "^25.3.1",
+    "@types/node": "^25.5.2",
     "dotenv": "^17.3.1",
     "eslint": "^9",
     "eslint-config-prettier": "^10.1.8",
@@ -30,5 +34,9 @@
     "prettier": "^3.7.4",
     "tsx": "^4.20.6",
     "turbo": "^2.6.3"
+  },
+  "dependencies": {
+    "postgres": "^3.4.9",
+    "@cv/database": "workspace:*"
   }
 }

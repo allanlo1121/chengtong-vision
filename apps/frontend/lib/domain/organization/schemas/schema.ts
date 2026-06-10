@@ -64,7 +64,7 @@ export const OrganizationFormSchema = {
       colSpan: 2,
     } satisfies FormFieldMeta),
 
-  parent: EntityReferenceSchema.meta({
+  parentId: idSchema.meta({
     label: "上级组织",
     component: "organizationPicker",
     section: "基本信息",
@@ -228,13 +228,7 @@ export const OrganizationSchema = z.object(OrganizationFormSchema);
 
 export const CreateOrganizationSchema = OrganizationSchema;
 
-export const ImportOrganizationSchema = OrganizationSchema.omit({ parent: true }).extend({
-  parentId: idSchema.meta({
-    label: "上级组织",
-    component: "select",
-    optionSource: { source: "organizations" },
-  } satisfies FormFieldMeta),
-});
+export const ImportOrganizationSchema = OrganizationSchema;
 
 export type CreateOrganizationInput = z.infer<typeof CreateOrganizationSchema>;
 

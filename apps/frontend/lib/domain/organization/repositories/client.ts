@@ -8,7 +8,7 @@ import { PaginatedResult } from "@/lib/shared/contracts";
 export const organizationClientRepository = {
   findById,
   searchOrganizationPicker,
-  getPickerItemById,
+  getOrganizationPickerById,
 };
 
 async function findById(id: string): Promise<Organization | null> {
@@ -63,17 +63,19 @@ async function searchOrganizationPicker(
   };
 }
 
-export function getPickerItemById(id: string) {
+export async function getOrganizationPickerById(
+  id: string
+): Promise<OrganizationPickerItem | null> {
   const supabase = createClient();
 
-  return supabase
+  const { data, error } = await supabase
     .schema("hr")
     .from("v_organization_picker")
     .select("*")
     .eq("id", id)
-    .single()
-    .then(({ data, error }) => {
-      assertNoError(error);
-      return data ?? null;
-    });
+    .maybeSingle();
+
+  assertNoError(error);
+
+  return data ? mapOrganizationPicker(data) : null;
 }

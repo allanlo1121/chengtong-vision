@@ -5,10 +5,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
-import { type TbmPlcTagFormModel } from "../../types";
+import { type TbmPlcTag } from "../../types";
 import { Badge } from "@/components/ui/badge";
 
-export const columns: ColumnDef<TbmPlcTagFormModel>[] = [
+export const columns: ColumnDef<TbmPlcTag>[] = [
   {
     id: "select",
     header: ({ table }) => (

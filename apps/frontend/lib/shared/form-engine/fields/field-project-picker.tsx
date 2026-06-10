@@ -12,6 +12,7 @@ export function FieldProjectPicker<T extends FieldValues, C = any, O = T>({
   name,
   ui,
   form,
+  required,
 }: FieldRendererProps<T, C, O>) {
   console.log("FieldProjectPicker", { name, ui });
   return (
@@ -25,11 +26,11 @@ export function FieldProjectPicker<T extends FieldValues, C = any, O = T>({
               <FieldLabel htmlFor={field.name}>
                 {ui.label}
 
-                {/* {required && <span className="ml-1 text-destructive">*</span>} */}
+                {required && <span className="ml-1 text-destructive">*</span>}
               </FieldLabel>
             )}
 
-            <ProjectPicker selected={field.value} onChange={field.onChange} />
+            <ProjectPicker selectedId={field.value} onChange={field.onChange} />
 
             {fieldState.error && <FieldError errors={[fieldState.error]} />}
           </Field>

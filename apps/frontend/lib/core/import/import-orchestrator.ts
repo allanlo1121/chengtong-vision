@@ -11,8 +11,8 @@ export async function runImport<T extends TableEntity>(
   entity: T,
   rows: ImportRow<T>[]
 ): Promise<Result<SyncImportResult>> {
-  console.log("Starting runImport with entity:", entity);
-  console.log(" rows to import:", rows);
+  // console.log("Starting runImport with entity:", entity);
+  // console.log(" rows to import:", rows);
   const batch = await importBatchRepo.create({
     tableName: entity,
     totalCount: rows.length,

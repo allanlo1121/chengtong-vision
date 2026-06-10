@@ -11,7 +11,7 @@ type Props = {
   projectId?: string;
 };
 
-export default function CreateTunnel({ title, description, projectId }: Props) {
+export default function CreateTunnel({ title, description }: Props) {
   return (
     <CrudFormPage
       title={title}
@@ -19,7 +19,6 @@ export default function CreateTunnel({ title, description, projectId }: Props) {
       schema={CreateTunnelFullSchema}
       action={createTunnelAction}
       redirect={routes.tunnels.list}
-      meta={{}}
     />
   );
 }

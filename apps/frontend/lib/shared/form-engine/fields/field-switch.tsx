@@ -2,13 +2,7 @@
 
 import { Controller, Control, FieldValues, Path } from "react-hook-form";
 
-import {
-  Field,
-  FieldContent,
-  FieldLabel,
-  FieldDescription,
-  FieldError,
-} from "@/components/ui/field";
+import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
 
 import { Switch } from "@/components/ui/switch";
 
@@ -18,6 +12,7 @@ export function FieldSwitch<T extends FieldValues, C = any, O = T>({
   name,
   ui,
   form,
+  required,
 }: FieldRendererProps<T, C, O>) {
   // console.log("FieldSwitch", { name, ui, disabled, required, form });
 
@@ -36,7 +31,7 @@ export function FieldSwitch<T extends FieldValues, C = any, O = T>({
           <Field orientation="responsive">
             <FieldContent>
               <FieldLabel>{ui.label}</FieldLabel>
-              {/* {ui.description && <FieldDescription>{ui.description}</FieldDescription>} */}
+              {required && <span className="ml-1 text-destructive">*</span>}
             </FieldContent>
 
             <Switch checked={field.value === true} onCheckedChange={field.onChange} />

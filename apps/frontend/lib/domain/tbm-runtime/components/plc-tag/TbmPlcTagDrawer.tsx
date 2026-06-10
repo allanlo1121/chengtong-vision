@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import {
@@ -17,17 +15,17 @@ import { updateTbmPlcTagAction } from "../../actions";
 
 import { SchemaForm } from "@/lib/shared/form-engine/schema-form";
 import { UpdateTbmPlcTagSchema } from "../../schemas";
-import { TbmPlcTagFormModel } from "../../types";
+import { TbmPlcTag } from "../../types";
 
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  initialValue?: TbmPlcTagFormModel;
+  initialValue?: TbmPlcTag;
 };
 
 export function TbmPlcTagDrawer({ open, onOpenChange, initialValue }: Props) {
   console.log("TbmPlcTagDrawer", { open, initialValue });
-  const tbmId = initialValue?.tbm.id;
+  const tbmId = initialValue?.tbmId;
   console.log("TbmPlcTagDrawer tbmId", { tbmId });
   if (!tbmId) {
     toast.error("缺少TBM ID");
@@ -42,9 +40,7 @@ export function TbmPlcTagDrawer({ open, onOpenChange, initialValue }: Props) {
           <DrawerHeader>
             <DrawerTitle>修改TBM PLC标签</DrawerTitle>
             <DrawerDescription>
-              {initialValue?.tbm.id
-                ? `当前隧道：${initialValue.tbm.id}`
-                : "修改当前隧道TBM PLC标签"}
+              {initialValue?.tbmId ? `当前隧道：${initialValue.tbmId}` : "修改当前隧道TBM PLC标签"}
             </DrawerDescription>
           </DrawerHeader>
 
@@ -59,11 +55,6 @@ export function TbmPlcTagDrawer({ open, onOpenChange, initialValue }: Props) {
             onCancel={() => onOpenChange(false)}
             onError={(error) => {
               console.error("Error submitting form:", error);
-            }}
-            meta={{
-              tbm: {
-                readonly: true,
-              },
             }}
           />
           <DrawerFooter>

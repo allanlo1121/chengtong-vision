@@ -230,7 +230,7 @@ function chunkArray<T>(arr: T[], size: number): T[][] {
 }
 
 export async function listParentOrganizations(): Promise<LookupItem[]> {
-  console.log("===listParentOrganizations===");
+  // console.log("===listParentOrganizations===");
   const supabase = createClient();
   const pageSize = 1000;
   let from = 0;
@@ -243,8 +243,8 @@ export async function listParentOrganizations(): Promise<LookupItem[]> {
       .select("id, external_id")
       .range(from, from + pageSize - 1);
 
-    console.log("Fetched parent orgs batch:", data);
-    console.log("Error (if any):", error);
+    // console.log("Fetched parent orgs batch:", data);
+    // console.log("Error (if any):", error);
 
     if (error) throw error;
 

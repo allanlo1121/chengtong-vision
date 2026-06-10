@@ -1,4 +1,4 @@
-import { fetchOrganizationFormById, getOrganizationById } from "@/lib/domain/organization/services";
+import { fetchOrganizationById } from "@/lib/domain/organization/services";
 
 import { UpdateOrganization } from "@/lib/domain/organization/components/forms";
 import { ErrorBlock } from "@/components/common/error-block";
@@ -10,7 +10,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   let organization;
   try {
-    organization = await fetchOrganizationFormById(id);
+    organization = await fetchOrganizationById(id);
     console.log("Fetched organization for editing:", organization);
   } catch (error) {
     console.error("Failed to fetch organization detail", error);

@@ -1,14 +1,13 @@
-import { FieldValues, useWatch } from "react-hook-form";
+import { FieldValues } from "react-hook-form";
 import { fieldRegistry } from "./registry/field-registry";
 import { FieldRendererProps, FormMeta } from "./types/field.types";
-import { resolveValue } from "./engines/value-resolver";
 
 export function FieldRenderer<
   T extends FieldValues,
   C = any,
   O = T,
   M extends FormMeta<T> = FormMeta<T>,
->({ name, ui, form, meta }: FieldRendererProps<T, C, O, M>) {
+>({ name, ui, form, required, meta }: FieldRendererProps<T, C, O, M>) {
   const Component = fieldRegistry[ui.component as keyof typeof fieldRegistry];
 
   if (!Component) {
@@ -22,5 +21,5 @@ export function FieldRenderer<
     ...fieldMeta,
   };
 
-  return <Component<T, C, O> name={name} ui={mergedUi} form={form} />;
+  return <Component<T, C, O> name={name} ui={mergedUi} form={form} required={required} />;
 }

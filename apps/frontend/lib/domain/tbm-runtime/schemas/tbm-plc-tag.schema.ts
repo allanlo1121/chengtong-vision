@@ -1,12 +1,12 @@
 import { z } from "zod";
 import { FormFieldMeta } from "@/lib/shared/form-engine/types/field.types";
-import { EntityReferenceSchema } from "@/lib/shared/schema";
+import { idSchema } from "@/lib/shared/schema";
 
 /**
  * TBM PLC标签字段规则
  */
 export const TbmPlcTagFormSchema = z.object({
-  tbm: EntityReferenceSchema.meta({
+  tbmId: idSchema.meta({
     label: "盾构机",
     component: "tbmPicker",
     section: "基本信息",
@@ -104,7 +104,7 @@ export const UpdateTbmPlcTagSchema = TbmPlcTagFormSchema.extend({
   id: z.coerce.number(),
 });
 
-export const ImportTbmPlcTagSchema = TbmPlcTagFormSchema.omit({ tbm: true });
+export const ImportTbmPlcTagSchema = TbmPlcTagFormSchema.omit({ tbmId: true });
 
 export const ImportTbmPlcTagsSchema = z.array(ImportTbmPlcTagSchema);
 

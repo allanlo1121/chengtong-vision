@@ -26,7 +26,8 @@
     "**/*.mts",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "lib/domain/tbm-runtime/types/paramter.typests"
+    "lib/domain/tbm-runtime/types/paramter.typests",
+    "../../scripts/init-system.ts"
   ],
   "exclude": ["node_modules"]
 }

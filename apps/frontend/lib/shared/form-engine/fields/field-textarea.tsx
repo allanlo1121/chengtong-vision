@@ -19,6 +19,7 @@ export function FieldTextarea<T extends FieldValues, C = any, O = T>({
   name,
   ui,
   form,
+  required,
 }: FieldRendererProps<T, C, O>) {
   return (
     <Controller
@@ -28,7 +29,7 @@ export function FieldTextarea<T extends FieldValues, C = any, O = T>({
         <Field data-invalid={fieldState.invalid}>
           <FieldContent>
             <FieldLabel>{ui.label}</FieldLabel>
-
+            {required && <span className="ml-1 text-destructive">*</span>}
             <Textarea
               {...field}
               id={field.name}

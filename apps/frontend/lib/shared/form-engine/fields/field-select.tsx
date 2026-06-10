@@ -19,6 +19,7 @@ export function FieldSelect<T extends FieldValues, C = any, O = T>({
   name,
   ui,
   form,
+  required,
 }: FieldRendererProps<T, C, O>) {
   //console.log("FieldSelect", { name, ui, disabled, required });
   // 只监听依赖字段
@@ -66,7 +67,7 @@ export function FieldSelect<T extends FieldValues, C = any, O = T>({
             {ui.label && (
               <FieldLabel htmlFor={field.name}>
                 {ui.label}
-                {/* {required && <span className="ml-1 text-destructive align-middle">*</span>} */}
+                {required && <span className="ml-1 text-destructive align-middle">*</span>}
               </FieldLabel>
             )}
 
@@ -74,7 +75,7 @@ export function FieldSelect<T extends FieldValues, C = any, O = T>({
               value={field.value == null ? "" : String(field.value)}
               onValueChange={field.onChange}
               disabled={finalDisabled || loading}
-              // required={required}
+              required={required}
             >
               <SelectTrigger id={field.name}>
                 <SelectValue placeholder={ui.placeholder ?? "请选择"} />

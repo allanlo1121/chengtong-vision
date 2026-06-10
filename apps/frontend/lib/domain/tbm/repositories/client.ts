@@ -6,7 +6,7 @@ import { PaginatedResult } from "@/lib/shared/contracts";
 
 export const tbmClientRepository = {
   searchTbmPicker,
-  getPickerItemById,
+  getTbmPickerById,
   findById,
 };
 
@@ -25,25 +25,23 @@ async function findById(id: string): Promise<Tbm | null> {
   return data ? mapTbm(data) : null;
 }
 
-export async function searchTbmPicker(
-  query: TbmPickerQuery
-): Promise<PaginatedResult<TbmPickerItem>> {
+async function searchTbmPicker(query: TbmPickerQuery): Promise<PaginatedResult<TbmPickerItem>> {
   const supabase = createClient();
 
   console.log("searchTbmPicker query", query);
 
   let builder = supabase.schema("eqp").from("v_tbm_picker").select("*", { count: "exact" });
 
-  if (query.search) {
-    builder = builder.or(`name.ilike.%${query.search}%`);
-  }
+  if (query.search?.trim()) {
+    const keyword = query.search.trim();
 
-  if (query.tbmTypeName && query.tbmTypeName !== "all") {
-    builder = builder.eq("tbm_type_name", query.tbmTypeName);
-  }
-
-  if (query.manufacturerName && query.manufacturerName !== "all") {
-    builder = builder.ilike("manufacturer_name", `%${query.manufacturerName}%`);
+    builder = builder.or(
+      [
+        `name.ilike.%${keyword}%`,
+        `tbm_type_name.ilike.%${keyword}%`,
+        `manufacturer_name.ilike.%${keyword}%`,
+      ].join(",")
+    );
   }
 
   // if (query.diameterRange) {
@@ -70,17 +68,17 @@ export async function searchTbmPicker(
   };
 }
 
-export function getPickerItemById(id: string) {
+async function getTbmPickerById(id: string): Promise<TbmPickerItem | null> {
   const supabase = createClient();
 
-  return supabase
+  const { data, error } = await supabase
     .schema("eqp")
     .from("v_tbm_picker")
     .select("*")
     .eq("id", id)
-    .single()
-    .then(({ data, error }) => {
-      assertNoError(error);
-      return data ?? null;
-    });
+    .maybeSingle();
+
+  assertNoError(error);
+
+  return data ? mapTbmPicker(data) : null;
 }

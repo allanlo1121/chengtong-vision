@@ -1,6 +1,6 @@
 import { appErrors, PaginatedResult } from "@/lib/shared/contracts";
 
-import { TbmPlcTag, TbmPlcTagFormModel } from "../types";
+import { TbmPlcTag } from "../types";
 import { CreateTbmPlcTagInput, UpdateTbmPlcTagInput, ImportTbmPlcTagInput } from "../schemas";
 import { tbmPlcTagRepository } from "../repositories";
 import { tbmRepository } from "../../tbm/repositories";
@@ -14,7 +14,7 @@ export async function updateTbmPlcTag(input: UpdateTbmPlcTagInput): Promise<TbmP
   return await tbmPlcTagRepository.update(input);
 }
 
-export async function getTbmPlcTagById(id: number): Promise<TbmPlcTagFormModel> {
+export async function getTbmPlcTagById(id: number): Promise<TbmPlcTag> {
   const data = await tbmPlcTagRepository.findById(id);
   if (!data) {
     throw appErrors.notFound("未找到TBM参数绑定");
@@ -34,7 +34,7 @@ export async function deleteTbmPlcTag(id: number): Promise<void> {
 export async function listTbmPlcTagsByTbmId(
   tbmId: string,
   queryParams: TbmPlcTagQueryType
-): Promise<PaginatedResult<TbmPlcTagFormModel>> {
+): Promise<PaginatedResult<TbmPlcTag>> {
   const result = await tbmPlcTagRepository.paginateByTbmId(tbmId, queryParams);
   const tbm = await tbmRepository.findById(tbmId);
   if (!tbm) {

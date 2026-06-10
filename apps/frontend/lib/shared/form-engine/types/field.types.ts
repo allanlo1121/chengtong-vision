@@ -57,6 +57,7 @@ export interface FieldRendererProps<
   form: UseFormReturn<T, C, O>;
 
   meta?: M;
+  required: boolean;
 }
 
 export type FieldComponentType = <T extends FieldValues, C = any, O = T>(
@@ -73,4 +74,5 @@ export type ValueResolver<T extends FieldValues, R> =
 export interface FieldDefinition<T extends FieldValues = FieldValues> {
   name: Path<T>;
   ui: FormFieldMeta<T>;
+  required: boolean;
 }

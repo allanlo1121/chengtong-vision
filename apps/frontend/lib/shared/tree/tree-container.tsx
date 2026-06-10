@@ -20,7 +20,7 @@ export function TreeContainer({ treeKey }: { treeKey: TreeKey }) {
       treeKey,
       selectedId,
     });
-  console.log("TreeContainer render", { treeKey, selectedId, treeData, loading, expandedIds });
+  // console.log("TreeContainer render", { treeKey, selectedId, treeData, loading, expandedIds });
   // =====================================
   // select
   // =====================================
