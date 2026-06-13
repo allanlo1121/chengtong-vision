@@ -29,7 +29,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname(); // 或者用 usePathname() client component
   return (
     <main className="relative min-h-screen overflow-hidden bg-background text-foreground">
-      <DashboardBackground />
       <header className="relative z-20 flex h-16 items-center justify-between border-b bg-background/80 px-6 backdrop-blur">
         <div className="flex items-center gap-4">
           <HardHat className="size-6 text-primary" />

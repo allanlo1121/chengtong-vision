@@ -61,6 +61,8 @@ export async function getTbmParameterConfigById(id: number): Promise<TbmParamete
 export async function findTbmBoundParameterGroups(tbmId: string): Promise<ParameterGroup[]> {
   const data = await tbmParameterConfigRepository.getTbmParameterConfigs(tbmId);
 
+  console.log("findTbmBoundParameterGroups data", data);
+
   return buildParameterGroups(data);
 }
 

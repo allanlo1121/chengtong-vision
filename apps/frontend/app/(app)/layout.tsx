@@ -9,13 +9,9 @@ import { queryRuntimeUser } from "@/lib/domain/system/services/query";
 
 import { AppContextType } from "@/lib/domain/system/appContext/types";
 import { BreadcrumbProvider } from "@/components/layout/breadcrumb-context";
-import { breadcrumbMap } from "@/lib/core/router/breadcrumbs";
 import { BreadcrumbLabelMap } from "@/lib/domain/system/breadcrumb/types";
 
-import {
-  fetchBreadcrumbLabelMaps,
-  fetchEntityNameByPath,
-} from "@/lib/domain/system/breadcrumb/service";
+import { fetchBreadcrumbLabelMaps } from "@/lib/domain/system/breadcrumb/service";
 
 export const dynamic = "force-dynamic";
 

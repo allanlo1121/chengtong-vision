@@ -14,7 +14,7 @@ function quoteIdent(name: string) {
 }
 
 function getShieldTableName(tbmCode: string) {
-  return `shield_realdata_${normalizeTbmCode(tbmCode)}`;
+  return `shield_${normalizeTbmCode(tbmCode)}`;
 }
 
 export async function getTbmRuntimeContextByCode(tbmCode: string): Promise<TbmRuntimeContext> {
@@ -48,7 +48,7 @@ async function getAllowedParameterCodes(tbmId: string): Promise<Set<string>> {
   const { rows } = await pgPool.query<{ code: string }>(
     `
     select p.code
-    from eqp.tbm_parameter_bindings b
+    from eqp.tbm_parameter_configs b
     join eqp.tbm_runtime_parameters p
       on p.id = b.parameter_id
     where b.tbm_id = $1
@@ -80,7 +80,7 @@ async function insertShieldRealdata(data: TbmRuntimeData) {
     dataValues: data.values,
   });
   const tableName = getShieldTableName(data.tbmCode);
-  const fullTableName = `eqp.${quoteIdent(tableName)}`;
+  const fullTableName = `realdata.${quoteIdent(tableName)}`;
 
   const context = await getTbmRuntimeContextByCode(data.tbmCode);
 

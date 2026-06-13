@@ -20,6 +20,8 @@ interface ParameterNameStore {
   reset: () => void;
 }
 
+const PAGE_SIZE = 1000;
+
 export const useParameterNameMap = create<ParameterNameStore>((set, get) => ({
   codeToMeta: {},
   isLoaded: false,
@@ -39,6 +41,7 @@ export const useParameterNameMap = create<ParameterNameStore>((set, get) => ({
   },
 
   loadParameterMetaMap: async () => {
+    console.log("开始加载参数定义");
     const { isLoaded, isLoading } = get();
 
     if (isLoaded || isLoading) return;
@@ -47,28 +50,40 @@ export const useParameterNameMap = create<ParameterNameStore>((set, get) => ({
 
     const supabase = createClient();
 
-    const { data, error } = await supabase
-      .schema("eqp")
-      .from("tbm_runtime_parameters")
-      .select("code, name, unit")
-      .eq("is_disabled", false)
-      .order("sort_order", { ascending: true });
+    let from = 0;
+    let all: { code: string; name: string; unit: string | null }[] = [];
 
-    console.log("加载参数定义", { data, error });
+    while (true) {
+      const to = from + PAGE_SIZE - 1;
 
-    if (error) {
-      console.error("加载参数定义失败:", error);
+      const { data, error } = await supabase
+        .schema("eqp")
+        .from("tbm_runtime_parameters")
+        .select("code, name, unit")
+        .eq("is_disabled", false)
+        .order("sort_order", { ascending: true })
+        .range(from, to);
 
-      set({
-        isLoading: false,
-        error: error.message,
-      });
+      if (error) {
+        console.error("加载参数定义失败:", error);
+        set({
+          isLoading: false,
+          error: error.message,
+        });
+        return;
+      }
 
-      return;
+      all = all.concat(data ?? []);
+
+      if (!data || data.length < PAGE_SIZE) break;
+
+      from += PAGE_SIZE;
     }
 
+    console.log("完成加载参数定义, 共", all.length, "条");
+
     const codeToMeta = Object.fromEntries(
-      (data ?? []).map((item) => [
+      (all ?? []).map((item) => [
         item.code,
         {
           name: item.name,

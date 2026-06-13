@@ -1,6 +1,6 @@
-import { DataTable } from "@/components/data-table/data-table";
+import { DataTable } from "@/lib/domain/command-center/components/data-table";
 import { fetchTunnelProgressOverview } from "@/lib/domain/command-center/server.service";
-import { columns } from "@/components/data-table/tunnel-progress-overview-columns";
+import { columns } from "@/lib/domain/command-center/components/tunnel-progress-overview-columns";
 import React from "react";
 import { Tabs } from "@/components/ui/tabs";
 
@@ -18,9 +18,12 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
 
   console.log("===data===", data);
   return (
-    <div>
-      <Tabs value={period} />
-      <DataTable columns={columns} data={data} />
-    </div>
+    <>
+      {/* <DashboardBackground /> */}
+      <div>
+        <Tabs value={period} />
+        <DataTable columns={columns} data={data} />
+      </div>
+    </>
   );
 }

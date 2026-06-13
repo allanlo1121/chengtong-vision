@@ -33,6 +33,7 @@ export default async function TunnelWorkspaceLayout({
   if (!id || id === "undefined") {
     notFound();
   }
+
   try {
     // Runtime User
     const runtimeUser = await queryRuntimeUser();

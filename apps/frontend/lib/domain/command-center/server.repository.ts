@@ -39,6 +39,8 @@ export async function getTunnelProgressOverview(): Promise<TunnelProgressOvervie
     .select("*")
     .order("sort_order", { ascending: true });
 
+  console.log("===getTunnelProgressOverview data===", data);
+
   assertNoError(error);
 
   return data;

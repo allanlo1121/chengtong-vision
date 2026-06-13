@@ -3,12 +3,11 @@ import { createListQuerySchema } from "@/lib/shared/query/query-factory";
 import { idSchema } from "@/lib/shared/schema";
 
 export const tbmParameterConfigQuery = createListQuerySchema({
-  sortFields: ["subsystemCode", "parameterCode", "sortOrder"] as const,
+  sortFields: ["subsystemCode", "parameterCode"] as const,
 
   map: {
     subsystemCode: "subsystem_code",
     parameterCode: "parameter_code",
-    sortOrder: "sort_order",
   },
 
   extra: {
@@ -24,7 +23,7 @@ export const tbmParameterConfigQuery = createListQuerySchema({
     search: z.string().optional(),
   },
 
-  defaultSortField: "sortOrder",
+  defaultSortField: "parameterCode",
 });
 
 export type TbmParameterConfigQueryType = z.infer<typeof tbmParameterConfigQuery.schema>;

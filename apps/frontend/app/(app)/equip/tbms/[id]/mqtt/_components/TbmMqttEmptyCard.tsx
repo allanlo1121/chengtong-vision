@@ -16,7 +16,7 @@ export function TbmMqttEmptyCard({ tbm }: { tbm: TbmDetail }) {
   const password = generateMqttInitialPassword();
   const router = useRouter();
   const { handleSuccess, handleError, handleCancel } = useFormActionHandlers(router);
-  const redirect = `${routes.tbms.runtime(tbm.id!)}?mqtt`;
+  const redirect = `/equip/tbms/${tbm.id}/mqtt`;
 
   const aclRules = [
     {

@@ -54,8 +54,8 @@ export function TbmDailyProgressTable({ data }: TbmDailyProgressTableProps) {
         onSave: async (row) => {
           const draft = drafts[row.id];
 
-          console.log("===onSave draft===", draft);
-          console.log("===onSave row===", row);
+          // console.log("===onSave draft===", draft);
+          // console.log("===onSave row===", row);
 
           if (!draft) return;
 

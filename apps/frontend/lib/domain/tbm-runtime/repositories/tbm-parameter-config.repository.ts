@@ -255,8 +255,7 @@ async function getTbmParameterConfigs(tbmId: string): Promise<TbmParameterConfig
     .eq("tbm_id", tbmId)
     .eq("is_disabled", false)
     .eq("is_chartable", true)
-    .order("subsystem_sort_order", { ascending: true })
-    .order("parameter_sort_order", { ascending: true });
+    .order("parameter_code", { ascending: true });
   assertNoError(error);
   return (data ?? []).map(mapTbmParameterConfigListItem);
 }

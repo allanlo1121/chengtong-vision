@@ -11,7 +11,7 @@ returns table (
 )
 language plpgsql
 security definer
-set search_path = eqp, public
+set search_path = eqp,realdata, public
 as $$
 declare
   v_tbm_code text;
@@ -30,7 +30,7 @@ begin
   end if;
 
   v_tbm_code := regexp_replace(v_tbm_code, '[^a-z0-9_]', '_', 'g');
-  v_table_name := 'shield_realdata_' || v_tbm_code;
+  v_table_name := 'shield_' || v_tbm_code;
 
   return query execute format(
     '
@@ -39,7 +39,7 @@ begin
       max(recorded_at) as max_time,
       min(s100100008)::integer as min_ring,
       max(s100100008)::integer as max_ring
-    from eqp.%I
+    from realdata.%I
     where tbm_id = $1
       and s100100008 is not null
     ',
@@ -66,7 +66,7 @@ returns table (
 )
 language plpgsql
 security definer
-set search_path = eqp, public
+set search_path = eqp, realdata,public
 as $$
 declare
   v_tbm_code text;
@@ -99,7 +99,7 @@ begin
   end if;
 
   v_tbm_code := regexp_replace(v_tbm_code, '[^a-z0-9_]', '_', 'g');
-  v_table_name := 'shield_realdata_' || v_tbm_code;
+  v_table_name := 'shield_' || v_tbm_code;
 
   if exists (
     select 1
@@ -141,7 +141,7 @@ begin
       recorded_at as ts,
       s100100008::integer as ring,
       jsonb_build_object(%s) as data
-    from eqp.%I
+    from realdata.%I
     where tbm_id = $1
       and s100100008 is not null
       and s100100008 >= $2
@@ -175,7 +175,7 @@ returns table (
 )
 language plpgsql
 security definer
-set search_path = eqp, public
+set search_path = eqp, realdata,public
 as $$
 declare
   v_tbm_code text;
@@ -208,7 +208,7 @@ begin
   end if;
 
   v_tbm_code := regexp_replace(v_tbm_code, '[^a-z0-9_]', '_', 'g');
-  v_table_name := 'shield_realdata_' || v_tbm_code;
+  v_table_name := 'shield_' || v_tbm_code;
 
   if exists (
     select 1
@@ -250,7 +250,7 @@ begin
       recorded_at as ts,
       s100100008::integer as ring,
       jsonb_build_object(%s) as data
-    from eqp.%I
+    from realdata.%I
     where tbm_id = $1
       and recorded_at >= $2
       and recorded_at <= $3
@@ -283,7 +283,7 @@ returns table (
 )
 language plpgsql
 security definer
-set search_path = eqp, public
+set search_path = eqp, realdata, public
 as $$
 declare
   v_tbm_code text;
@@ -337,8 +337,8 @@ begin
     return;
   end if;
 
-  v_table_name := 'shield_realdata_' || regexp_replace(lower(v_tbm_code), '[^a-z0-9_]', '_', 'g');
-  v_table_regclass := to_regclass(format('eqp.%I', v_table_name));
+  v_table_name := 'shield_' || regexp_replace(lower(v_tbm_code), '[^a-z0-9_]', '_', 'g');
+  v_table_regclass := to_regclass(format('realdata.%I', v_table_name));
 
   if v_table_regclass is null then
     return query
