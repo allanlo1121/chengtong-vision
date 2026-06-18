@@ -24,15 +24,32 @@ import { WarningPanel } from "@/components/command-center/WarningPanel";
 
 import type { CommandCenterSummary } from "@/lib/domain/command-center/types";
 import { useCommandCenterSummary } from "@/lib/domain/command-center/useCommandCenterSummary";
+import { useCommandCenterTunnel } from "@/lib/domain/command-center/useCommandCenterTunnel";
 
-interface CommandCenterDashboardProps {
-  initialSummary: CommandCenterSummary;
-}
+import { useTunnelRuntime } from "@/hooks/use-tunnel-command-center";
+import { useTunnelDashboard } from "@/hooks/useTunnelDashboard";
+import { useMemo } from "react";
 
-export function CommandCenterDashboard({ initialSummary }: CommandCenterDashboardProps) {
-  const { data, loading, refreshing, error } = useCommandCenterSummary(initialSummary);
+// interface CommandCenterDashboardProps {
+//   initialSummary: CommandCenterSummary;
+// }
 
-  const summary = data ?? initialSummary;
+type TbmStatusSummaryValue = {
+  advancing: number;
+  assembly: number;
+  stopped: number;
+  fault: number;
+  offline: number;
+};
+
+export function CommandCenterDashboard() {
+  // const { data, loading, refreshing, error } = useCommandCenterSummary(initialSummary);
+
+  const { data, summary, tunnelProgressData, loading, error } = useTunnelDashboard();
+
+  console.log("CommandCenterDashboard useTunnelDashboard:", data);
+
+  // const summary = data ?? initialSummary;
 
   if (loading) {
     return <div className="p-6 text-sm text-muted-foreground">加载中...</div>;
@@ -60,22 +77,22 @@ export function CommandCenterDashboard({ initialSummary }: CommandCenterDashboar
       <section className="relative z-10 p-6">
         <div className="grid grid-cols-12 gap-5">
           <div className="col-span-12 grid grid-cols-4 gap-5">
+            <ProjectSummary
+              projects={summary?.projectCount ?? 0}
+              tunnels={summary?.tunnelCount ?? 0}
+              tbms={summary?.tbmCount ?? 0}
+            />
+
             <TbmStatusSummary
-              advancing={summary.advancingCount}
-              assembly={summary.assemblyCount}
-              stopped={summary.stoppedCount}
-              fault={summary.faultCount}
-              offline={summary.offlineCount}
-              refreshing={refreshing}
+              advancing={summary?.advancing ?? 0}
+              assembly={summary?.assembly ?? 0}
+              stopped={summary?.stopped ?? 0}
+              fault={summary?.fault ?? 0}
+              offline={summary?.offline ?? 0}
+              refreshing={false}
             />
 
             <AdvanceMetricSummary rings={100} distance={1025.6} avgRings={11} avgDistance={34.2} />
-
-            <ProjectSummary
-              projects={initialSummary.projectCount}
-              tunnels={initialSummary.tunnelCount}
-              tbms={initialSummary.tbmCount}
-            />
 
             <WarningSummary high={5} medium={3} low={2} />
           </div>
@@ -95,11 +112,11 @@ export function CommandCenterDashboard({ initialSummary }: CommandCenterDashboar
   );
 }
 
-const tunnelProgressData = [
-  { id: "1", name: "中湖左线", completed: 955, remaining: 128 },
-  { id: "2", name: "新基左线", completed: 160, remaining: 1837 },
-  { id: "3", name: "五五左线", completed: 1264, remaining: 844 },
-];
+// const tunnelProgressData = [
+//   { id: "1", name: "中湖左线", completed: 955, remaining: 128 },
+//   { id: "2", name: "新基左线", completed: 160, remaining: 1837 },
+//   { id: "3", name: "五五左线", completed: 1264, remaining: 844 },
+// ];
 
 const warnings = [
   { id: "1", title: "CT-06 液压油温过高", level: "high" as const, time: "09:48:12" },

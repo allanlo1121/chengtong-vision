@@ -24,8 +24,8 @@ export async function getTbmRuntimeContextByCode(tbmCode: string): Promise<TbmRu
       t.id as "tbmId",
       t.code as "tbmCode",
       a.id as "assignmentId"
-    from eqp.tbms t
-    left join eqp.tbm_assignments a
+    from tbm.tbms t
+    left join tbm.tbm_assignments a
       on a.tbm_id = t.id
      and a.end_date is null
     where lower(t.code) = lower($1)
@@ -48,8 +48,8 @@ async function getAllowedParameterCodes(tbmId: string): Promise<Set<string>> {
   const { rows } = await pgPool.query<{ code: string }>(
     `
     select p.code
-    from eqp.tbm_parameter_configs b
-    join eqp.tbm_runtime_parameters p
+    from tbm.tbm_parameter_configs b
+    join tbm.tbm_runtime_parameters p
       on p.id = b.parameter_id
     where b.tbm_id = $1
       and coalesce(b.is_disabled, false) = false

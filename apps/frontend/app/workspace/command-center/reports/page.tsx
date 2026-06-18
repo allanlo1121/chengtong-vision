@@ -1,29 +1,42 @@
-import { DataTable } from "@/lib/domain/command-center/components/data-table";
-import { fetchTunnelProgressOverview } from "@/lib/domain/command-center/server.service";
-import { columns } from "@/lib/domain/command-center/components/tunnel-progress-overview-columns";
-import React from "react";
-import { Tabs } from "@/components/ui/tabs";
+import {
+  fetchTunnelProgressByPeriod,
+  fetchTunnelProgressOverview,
+} from "@/lib/domain/command-center/server.service";
+import { reportQuery } from "@/lib/domain/command-center/queries/report.query";
+import { ReportsClientPage } from "./_components/ReportsClientPage";
+import { raw } from "next/dist/build/webpack/loaders/lightningcss-loader/src/loader";
+import { getToday } from "@/lib/shared/time/engine/day";
+import { getCurrentWeek } from "@/lib/shared/time/engine/week";
+import { getCurrentMonth } from "@/lib/shared/time/engine/month";
 
 export const REPORT_PERIODS = ["daily", "weekly", "monthly"] as const;
 
 export type ReportPeriod = (typeof REPORT_PERIODS)[number];
 
 interface ReportsPageProps {
-  searchParams?: { period?: ReportPeriod };
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
 export default async function ReportsPage({ searchParams }: ReportsPageProps) {
-  const period: ReportPeriod = searchParams?.period || "daily";
-  const data = await fetchTunnelProgressOverview();
+  const rawParams = await searchParams;
+
+  const params = reportQuery.parse(rawParams);
+
+  const normalizedQuery = {
+    ...params,
+    date: params.date ?? (await getToday()),
+    week: params.week ?? (await getCurrentWeek()),
+    month: params.month ?? (await getCurrentMonth()),
+  };
+
+  let result;
+  const data = await fetchTunnelProgressByPeriod(normalizedQuery);
 
   console.log("===data===", data);
   return (
     <>
       {/* <DashboardBackground /> */}
-      <div>
-        <Tabs value={period} />
-        <DataTable columns={columns} data={data} />
-      </div>
+      <ReportsClientPage query={normalizedQuery} data={data} />
     </>
   );
 }

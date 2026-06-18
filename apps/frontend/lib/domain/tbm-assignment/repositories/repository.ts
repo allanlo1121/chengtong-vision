@@ -17,7 +17,7 @@ export async function insertTbmAssignment(input: CreateTbmAssignmentInput): Prom
 
   const payload = mapTbmAssignmentInsert(input);
   const { data, error } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("tbm_assignments")
     .insert(payload)
     .select("*")
@@ -37,7 +37,7 @@ export async function updateTbmAssignment(input: UpdateTbmAssignmentInput): Prom
 
   const payload = mapTbmAssignmentUpdate(input);
   const { data, error } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("tbm_assignments")
     .update(payload)
     .eq("id", input.id)
@@ -56,7 +56,7 @@ export async function updateTbmAssignment(input: UpdateTbmAssignmentInput): Prom
 export async function deleteTbmAssignment(id: string): Promise<void> {
   const supabase = await createClient();
 
-  const { error } = await supabase.schema("eqp").from("tbm_assignments").delete().eq("id", id);
+  const { error } = await supabase.schema("tbm").from("tbm_assignments").delete().eq("id", id);
 
   assertNoError(error);
 }
@@ -64,7 +64,7 @@ export async function deleteTbmAssignment(id: string): Promise<void> {
 export async function getTbmAssignmentByTbmId(tbmId: string): Promise<TbmAssignment | null> {
   const supabase = await createClient();
   const { data, error } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("tbm_assignments")
     .select("*")
     .eq("tbm_id", tbmId)
@@ -86,7 +86,7 @@ export async function paginate(
   const { from, to } = applyPagination(query.page, query.pageSize);
 
   let dbQuery = supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("v_tbm_assignment_list")
     .select("*", { count: "exact" })
     .range(from, to);
@@ -121,7 +121,7 @@ export async function paginate(
 export async function getTbmAssignmentByTunnelId(tunnelId: string): Promise<TbmAssignment | null> {
   const supabase = await createClient();
   const { data, error } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("tbm_assignments")
     .select("*")
     .eq("tunnel_id", tunnelId)

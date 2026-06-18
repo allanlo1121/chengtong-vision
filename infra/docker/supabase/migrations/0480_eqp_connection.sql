@@ -17,7 +17,7 @@ create table eqp.mqtt_user (
     ),
 
     tbm_id uuid
-        references eqp.tbms(id),
+        references tbm.tbms(id),
 
     username text not null unique,
 
@@ -267,8 +267,8 @@ group by
 
 
 
-create table eqp.tbm_connection_status (
-  tbm_id uuid not null references eqp.tbms(id),
+create table tbm.tbm_connection_status (
+  tbm_id uuid not null references tbm.tbms(id),
 
   type text not null check (
     type in ('heartbeat', 'realdata')
@@ -283,10 +283,12 @@ create table eqp.tbm_connection_status (
   primary key (tbm_id, type)
 );
 
-create table eqp.tbm_connection_status_history (
+
+
+create table tbm.tbm_connection_status_history (
   id uuid primary key default gen_random_uuid(),
 
-  tbm_id uuid not null references eqp.tbms(id),
+  tbm_id uuid not null references tbm.tbms(id),
 
   type text not null check (
     type in ('heartbeat', 'realdata')

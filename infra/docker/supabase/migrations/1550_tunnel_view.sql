@@ -8,6 +8,9 @@ select
   p.organization_id,
   o.name as organization_name,
 
+  region.id as region_id,
+  region.name as region_name,
+
   t.name,
   t.full_name,
   t.prefix,
@@ -39,6 +42,9 @@ from proj.tunnels t
 
 left join proj.projects p
   on p.id = t.project_id
+
+left join master_data region
+  on region.id = p.region_id
 
 left join hr.organizations o
   on o.id = p.organization_id
@@ -159,11 +165,11 @@ left join proj.tunnel_status_timeline ps
 left join public.master_data s
   on s.id = ps.tunnel_status_id
 
-left join eqp.tbm_assignments ta
+left join tbm.tbm_assignments ta
   on ta.tunnel_id = t.id
  and ta.end_date is null
 
-left join eqp.tbms tbm
+left join tbm.tbms tbm
   on tbm.id = ta.tbm_id
 
 -- 取最新的计划进度版本

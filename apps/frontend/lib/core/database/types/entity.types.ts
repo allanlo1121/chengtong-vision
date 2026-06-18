@@ -18,6 +18,7 @@ export function createTable<S extends keyof Database, T extends keyof Database[S
 type HrTables = keyof Database["hr"]["Tables"];
 type ProjTables = keyof Database["proj"]["Tables"];
 type EqpTables = keyof Database["eqp"]["Tables"];
+type TbmTables = keyof Database["tbm"]["Tables"];
 
 export const tableEntities = [
   "organizations",
@@ -26,7 +27,7 @@ export const tableEntities = [
   "tunnels",
   "tbms",
   // "tbm_parameter_configs",
-] as const satisfies readonly (HrTables | ProjTables | EqpTables)[];
+] as const satisfies readonly (HrTables | ProjTables | EqpTables | TbmTables)[];
 
 export type TableEntity = (typeof tableEntities)[number];
 

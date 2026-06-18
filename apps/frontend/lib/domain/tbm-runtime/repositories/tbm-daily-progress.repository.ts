@@ -26,7 +26,7 @@ async function insert(input: CreateTbmDailyProgressInput): Promise<TbmDailyProgr
   const payload = mapCreateTbmDailyProgressInsert(input);
 
   const { data, error } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("tbm_daily_progress")
     .insert(payload)
     .select("*")
@@ -48,7 +48,7 @@ async function update(input: UpdateTbmDailyProgressInput): Promise<TbmDailyProgr
   const payload = mapUpdateTbmDailyProgressUpdate(input);
 
   const { data, error } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("tbm_daily_progress")
     .update(payload)
     .eq("id", input.id!)
@@ -67,7 +67,7 @@ async function update(input: UpdateTbmDailyProgressInput): Promise<TbmDailyProgr
 async function deleteById(id: string): Promise<void> {
   const supabase = await createClient();
   const { data, error } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("tbm_daily_progress")
     .delete()
     .eq("id", id)
@@ -80,7 +80,7 @@ async function deleteById(id: string): Promise<void> {
 async function getById(id: string): Promise<TbmDailyProgress | null> {
   const supabase = await createClient();
   const { data, error } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("tbm_daily_progress")
     .select("*")
     .eq("id", id)
@@ -97,7 +97,7 @@ async function getByTbmIdAndDate(
 ): Promise<TbmDailyProgressListItem[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("v_tbm_daily_progress")
     .select("*")
     .eq("tbm_id", tbmId)
@@ -117,7 +117,7 @@ async function listByTbmIdAndDateRange(
   const supabase = await createClient();
 
   const { data, error } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("v_tbm_daily_progress")
     .select("*")
     .eq("tbm_id", tbmId)

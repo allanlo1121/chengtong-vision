@@ -6,7 +6,10 @@ import {
   CommandCenterSummaryRow,
   CommandCenterTunnelRow,
   TunnelProgressOverviewRow,
+  TunnelProgressReportItem,
 } from "./types";
+import { DateString } from "@/lib/utils/types/date.types";
+import { mapTunnelProgressReport } from "./mapper";
 
 export async function getCommandCenterSummary(): Promise<CommandCenterSummaryRow | null> {
   const supabase = await createClient();
@@ -44,4 +47,22 @@ export async function getTunnelProgressOverview(): Promise<TunnelProgressOvervie
   assertNoError(error);
 
   return data;
+}
+
+export async function getTunnelProgressByPeriod(
+  from: DateString,
+  to: DateString
+): Promise<TunnelProgressReportItem[]> {
+  console.log("Querying tunnel progress by period with query:", { from, to });
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .schema("public")
+    .rpc("get_tunnel_progress_report", { p_from: from, p_to: to })
+    .select("*");
+
+  console.log("Query result for tunnel progress ", data, error);
+
+  assertNoError(error);
+
+  return mapTunnelProgressReport(data);
 }

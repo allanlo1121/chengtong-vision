@@ -4,28 +4,28 @@
 -- 0301 EQUIPMENT SCHEMA PERMISSIONS
 -- =====================================================
 
-create schema if not exists eqp;
+create schema if not exists tbm;
 
 -- schema usage
-grant usage on schema eqp to authenticated, service_role;
+grant usage on schema tbm to authenticated, service_role;
 
 -- existing tables
 grant select, insert, update, delete
-on all tables in schema eqp
+on all tables in schema tbm
 to authenticated, service_role;
 
 -- existing sequences
 grant usage, select
-on all sequences in schema eqp
+on all sequences in schema tbm
 to authenticated, service_role;
 
 -- future tables
-alter default privileges for role postgres in schema eqp
+alter default privileges for role postgres in schema tbm
 grant select, insert, update, delete
 on tables to authenticated, service_role;
 
 -- future sequences
-alter default privileges for role postgres in schema eqp
+alter default privileges for role postgres in schema tbm
 grant usage, select
 on sequences to authenticated, service_role;
 
@@ -33,7 +33,7 @@ on sequences to authenticated, service_role;
 -- 0302 TBM TABLES
 -- =====================================================
 
-create table eqp.tbms (
+create table tbm.tbms (
   id uuid primary key default gen_random_uuid(),
   code text not null unique,
   name text not null,
@@ -53,7 +53,7 @@ create table eqp.tbms (
   );
 
 
-create table eqp.tbm_type_operation_modes (
+create table tbm.tbm_operation_modes (
 
     tbm_type_id uuid not null
         references public.master_data(id),

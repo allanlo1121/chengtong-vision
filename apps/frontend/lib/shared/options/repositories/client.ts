@@ -97,20 +97,6 @@ export async function listOrganizations(): Promise<SelectOption[]> {
     label: item.external_id ?? "",
   }));
 }
-// export async function getAllTreeRows(entity: TreeEntity = "organization"): Promise<TreeNodeRow[]> {
-//   const supabase = createClient();
-
-//   const { data, error } = await supabase
-//     .schema("system")
-//     .from("v_tree_nodes")
-//     .select("*")
-//     .eq("entity_type", entity)
-//     .order("sort_order", { ascending: true });
-
-//   assertNoError(error);
-
-//   return (data as TreeNodeRow[]) ?? [];
-// }
 
 export async function findCustomers(categoryCode: string) {
   const supabase = createClient();
@@ -149,7 +135,7 @@ export async function listPosts() {
 export async function listTbmSubsystems() {
   const supabase = createClient();
   const { data, error } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("tbm_subsystems")
     .select("id,code,name")
     .order("sort_order", { ascending: true });
@@ -179,8 +165,8 @@ export async function listTbmPlcTagNames(
 
   for (const names of chunks) {
     const { data, error } = await supabase
-      .schema("eqp")
-      .from("tbm_plc_tags")
+      .schema("tbm")
+      .from("plc_tags")
       .select("id, tag_name")
       .eq("tbm_id", tbmId)
       .in("tag_name", names);
@@ -212,7 +198,7 @@ export async function listTbmParametersByCode(
 
   for (const codes of chunks) {
     const { data, error } = await supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbm_runtime_parameters")
       .select("id, code")
       .in("code", codes);

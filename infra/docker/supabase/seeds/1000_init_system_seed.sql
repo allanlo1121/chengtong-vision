@@ -1,6 +1,6 @@
 
 
-insert into system.stat_period_settings (
+insert into public.stat_period_settings (
     code,
     effective_from
 )

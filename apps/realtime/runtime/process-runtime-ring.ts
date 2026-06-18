@@ -134,7 +134,7 @@ async function upsertTbmDailyProgress(input: {
 }) {
   await pgPool.query(
     `
-    insert into eqp.tbm_daily_progress (
+    insert into tbm.tbm_daily_progress (
       tbm_id,
       work_date,
       ring_end,
@@ -146,12 +146,12 @@ async function upsertTbmDailyProgress(input: {
     do update set
       tbm_id = excluded.tbm_id,
       ring_end = greatest(
-        eqp.tbm_daily_progress.ring_end,
+        tbm.tbm_daily_progress.ring_end,
         excluded.ring_end
       ),
       chainage_end = coalesce(
         excluded.chainage_end,
-        eqp.tbm_daily_progress.chainage_end
+        tbm.tbm_daily_progress.chainage_end
       ),
       updated_at = now()
     `,

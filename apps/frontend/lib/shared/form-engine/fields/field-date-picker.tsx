@@ -48,6 +48,17 @@ export function FieldDatePicker<T extends FieldValues, C = any, O = T>({
           field.value && typeof field.value === "string" ? parseISO(field.value) : undefined;
 
         const selectedDate = date && isValid(date) ? date : undefined;
+        React.useEffect(() => {
+          if (field.value) {
+            const date = typeof field.value === "string" ? parseISO(field.value) : undefined;
+
+            if (date && isValid(date)) {
+              setInputValue(format(date, "yyyy-MM-dd"));
+            }
+          } else {
+            setInputValue("");
+          }
+        }, [field.value]);
 
         return (
           <Field data-invalid={fieldState.invalid}>
@@ -59,8 +70,8 @@ export function FieldDatePicker<T extends FieldValues, C = any, O = T>({
             <InputGroup>
               <InputGroupInput
                 id={field.name}
-                value={inputValue ?? formatDisplayDate(selectedDate)}
-                placeholder={ui.placeholder ?? "2055-08-09"}
+                value={inputValue}
+                placeholder={ui.placeholder ?? "2005-08-09"}
                 onChange={(e) => {
                   const value = e.target.value;
                   setInputValue(value);
@@ -85,11 +96,13 @@ export function FieldDatePicker<T extends FieldValues, C = any, O = T>({
                   const parsedDate = parseDisplayDate(inputValue);
 
                   if (!parsedDate) {
-                    // 不合法输入恢复为空，而不是旧日期
                     setInputValue("");
+                    field.onChange(null);
+                  } else {
+                    const formatted = format(parsedDate, "yyyy-MM-dd");
+                    setInputValue(formatted);
+                    field.onChange(formatted);
                   }
-
-                  setInputValue("");
                 }}
                 onKeyDown={(e) => {
                   if (e.key === "ArrowDown") {
@@ -133,8 +146,10 @@ export function FieldDatePicker<T extends FieldValues, C = any, O = T>({
                           return;
                         }
 
-                        field.onChange(format(date, "yyyy-MM-dd"));
-                        setInputValue("");
+                        const formatted = format(date, "yyyy-MM-dd");
+
+                        field.onChange(formatted);
+                        setInputValue(formatted);
                         setMonth(date);
                         setOpen(false);
                       }}

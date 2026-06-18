@@ -1,11 +1,11 @@
 import { Database } from "@/lib/core/database/types";
 
-export type TbmSubsystemRow = Database["eqp"]["Tables"]["tbm_subsystems"]["Row"];
-export type TbmSubsystemInsert = Database["eqp"]["Tables"]["tbm_subsystems"]["Insert"];
-export type TbmSubsystemUpdate = Database["eqp"]["Tables"]["tbm_subsystems"]["Update"];
+export type TbmSubsystemRow = Database["tbm"]["Tables"]["tbm_subsystems"]["Row"];
+export type TbmSubsystemInsert = Database["tbm"]["Tables"]["tbm_subsystems"]["Insert"];
+export type TbmSubsystemUpdate = Database["tbm"]["Tables"]["tbm_subsystems"]["Update"];
 
-// export type TbmSubsystemListRow = Database["eqp"]["Views"]["v_tbm_subsystems_list"]["Row"];
-// export type TbmSubsystemPicker = Database["eqp"]["Views"]["v_tbm_subsystems_picker"]["Row"];
+// export type TbmSubsystemListRow = Database["tbm"]["Views"]["v_tbm_subsystems_list"]["Row"];
+// export type TbmSubsystemPicker = Database["tbm"]["Views"]["v_tbm_subsystems_picker"]["Row"];
 
 export type TbmSubsystem = {
   id: number;
@@ -40,7 +40,7 @@ export type TbmSubsystem = {
 //     id: number;
 //     name: string;
 //     code: string;
-//     subsystemCode: number;
+//     subsystemCode: string;
 //     subsystemName: string;
 // }
 

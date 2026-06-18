@@ -1,12 +1,13 @@
 
 
-create table eqp.tbm_phase_active (
+create table tbm.tbm_phase_active (
   id uuid primary key default gen_random_uuid(),
   
-  tbm_id uuid not null references eqp.tbms(id),
+  tbm_id uuid not null references tbm.tbms(id),
 
 
-  ring_no integer not null,
+  ring_no integer,
+  chainage numeric,
 
   phase_type text not null check (
     phase_type in ('advance', 'assembly', 'stop', 'fault')
@@ -21,13 +22,13 @@ create table eqp.tbm_phase_active (
 );
 
 
-create table eqp.tbm_phase_records (
+create table tbm.tbm_phase_records (
   id uuid primary key default gen_random_uuid(),
 
 
-  tbm_id uuid not null references eqp.tbms(id),
+  tbm_id uuid not null references tbm.tbms(id),
 
-  ring_no integer not null,
+  ring_no integer,
 
   phase_type text not null check (
     phase_type in ('advance', 'assembly', 'stop','fault')
@@ -35,6 +36,8 @@ create table eqp.tbm_phase_records (
 
   start_at timestamptz not null,
   end_at timestamptz not null,
+
+  chainage numeric,
 
   source text not null default 'auto' check (
     source in ('auto', 'manual', 'corrected')
@@ -48,17 +51,17 @@ create table eqp.tbm_phase_records (
 );
 
 create index idx_tbm_phase
-on eqp.tbm_phase_records (tbm_id, ring_no);
+on tbm.tbm_phase_records (tbm_id, ring_no);
 
 create index idx_tbm_phase_time
-on eqp.tbm_phase_records (tbm_id, start_at, end_at);
+on tbm.tbm_phase_records (tbm_id, start_at, end_at);
 
 
 
-create table eqp.tbm_daily_progress (
+create table tbm.tbm_daily_progress (
   id uuid primary key default gen_random_uuid(),
 
-  tbm_id uuid not null references eqp.tbms(id),
+  tbm_id uuid not null references tbm.tbms(id),
 
   work_date date not null,
 
@@ -71,7 +74,7 @@ create table eqp.tbm_daily_progress (
   unique (tbm_id, work_date)
 );
 
-create or replace view eqp.v_tbm_daily_progress as
+create or replace view tbm.v_tbm_daily_progress as
 select
   p.id,
   p.tbm_id, 
@@ -111,4 +114,8 @@ select
 
   p.plan_ring_count
 
-from eqp.tbm_daily_progress p;
+from tbm.tbm_daily_progress p
+left join tbm.tbms t 
+on p.tbm_id = t.id
+
+;

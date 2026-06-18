@@ -6,7 +6,7 @@ export async function searchTbmSubsystems(): Promise<ParameterSubsystemNode[]> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("tbm_subsystems")
     .select(
       `

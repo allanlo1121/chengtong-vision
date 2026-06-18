@@ -30,6 +30,7 @@ export function useCommandCenterTunnel(initialData: TunnelRuntimeCardData[]) {
   const [error, setError] = React.useState<string | null>(null);
 
   const refetch = React.useCallback(async () => {
+    console.log("Refetching command center tunnel data...");
     try {
       setRefreshing(true);
       setError(null);

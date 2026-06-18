@@ -1,15 +1,15 @@
 import { Database } from "@/lib/core/database/types";
 import { TbmRuntimeParameterListItem } from "./parameter.types";
 
-export type TbmParameterTemplateRow = Database["eqp"]["Tables"]["tbm_parameter_templates"]["Row"];
+export type TbmParameterTemplateRow = Database["tbm"]["Tables"]["tbm_parameter_templates"]["Row"];
 export type TbmParameterTemplateInsertRow =
-  Database["eqp"]["Tables"]["tbm_parameter_templates"]["Insert"];
+  Database["tbm"]["Tables"]["tbm_parameter_templates"]["Insert"];
 export type TbmParameterTemplateUpdateRow =
-  Database["eqp"]["Tables"]["tbm_parameter_templates"]["Update"];
+  Database["tbm"]["Tables"]["tbm_parameter_templates"]["Update"];
 
 export type TbmParameterTemplateListRow =
-  Database["eqp"]["Views"]["v_tbm_parameter_templates_list"]["Row"];
-// export type TbmParameterTemplatePickerRow = Database["eqp"]["Views"]["v_tbm_parameter_templates_picker"]["Row"];
+  Database["tbm"]["Views"]["v_tbm_parameter_templates_list"]["Row"];
+// export type TbmParameterTemplatePickerRow = Database["tbm"]["Views"]["v_tbm_parameter_templates_picker"]["Row"];
 
 export type TbmParameterTemplate = {
   id: number;

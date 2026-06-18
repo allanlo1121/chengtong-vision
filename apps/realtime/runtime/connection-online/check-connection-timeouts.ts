@@ -20,7 +20,7 @@ async function checkTimeoutByType(type: ConnectionType, timeoutMs: number) {
   const result = await pgPool.query(
     `
     select tbm_id
-    from eqp.tbm_connection_status
+    from tbm.tbm_connection_status
     where type = $1
       and is_online = true
       and last_seen_at < now() - ($2::text)::interval

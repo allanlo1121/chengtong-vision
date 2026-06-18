@@ -1,6 +1,6 @@
 
 --查询盾构机(本区间)实时数据的时间范围和环号范围
-create or replace function eqp.fn_get_tbm_realdata_limits(
+create or replace function tbm.fn_get_tbm_realdata_limits(
   p_tbm_id uuid
 )
 returns table (
@@ -11,7 +11,7 @@ returns table (
 )
 language plpgsql
 security definer
-set search_path = eqp,realdata, public
+set search_path = tbm,realdata, public
 as $$
 declare
   v_tbm_code text;
@@ -19,8 +19,8 @@ declare
 begin
   select lower(t.code)
   into v_tbm_code
-  from eqp.tbm_assignments a
-  join eqp.tbms t on t.id = a.tbm_id
+  from tbm.tbm_assignments a
+  join tbm.tbms t on t.id = a.tbm_id
   where a.tbm_id = p_tbm_id
     and a.end_date is null
   limit 1;
@@ -52,7 +52,7 @@ $$;
 
 
 -- 查询盾构机参数历史数据，按环号(所工作时间)查询，适用于需要展示环号范围内数据的场景
-create or replace function eqp.fn_get_tbm_param_history_by_ring(
+create or replace function tbm.fn_get_tbm_param_history_by_ring(
   p_tbm_id uuid,
   p_from_ring integer,
   p_to_ring integer,
@@ -66,7 +66,7 @@ returns table (
 )
 language plpgsql
 security definer
-set search_path = eqp, realdata,public
+set search_path = tbm, realdata,public
 as $$
 declare
   v_tbm_code text;
@@ -88,8 +88,8 @@ begin
 
   select lower(t.code)
   into v_tbm_code
-  from eqp.tbm_assignments a
-  join eqp.tbms t on t.id = a.tbm_id
+  from tbm.tbm_assignments a
+  join tbm.tbms t on t.id = a.tbm_id
   where a.tbm_id = p_tbm_id
     and a.end_date is null
   limit 1;
@@ -104,7 +104,7 @@ begin
   if exists (
     select 1
     from unnest(p_fields) f(code)
-    left join eqp.tbm_runtime_parameters p
+    left join tbm.tbm_runtime_parameters p
       on p.code = f.code
     where p.id is null
        or p.is_chartable is not true
@@ -161,7 +161,7 @@ $$;
 
 
 -- 查询盾构机参数历史数据，按时间查询，适用于需要展示时间范围内数据的场景
-create or replace function eqp.fn_get_tbm_param_history_by_time(
+create or replace function tbm.fn_get_tbm_param_history_by_time(
   p_tbm_id uuid,
   p_from timestamptz,
   p_to timestamptz,
@@ -175,7 +175,7 @@ returns table (
 )
 language plpgsql
 security definer
-set search_path = eqp, realdata,public
+set search_path = tbm,realdata,public
 as $$
 declare
   v_tbm_code text;
@@ -197,8 +197,8 @@ begin
 
   select lower(t.code)
   into v_tbm_code
-  from eqp.tbm_assignments a
-  join eqp.tbms t on t.id = a.tbm_id
+  from tbm.tbm_assignments a
+  join tbm.tbms t on t.id = a.tbm_id
   where a.tbm_id = p_tbm_id
     and a.end_date is null
   limit 1;
@@ -213,7 +213,7 @@ begin
   if exists (
     select 1
     from unnest(p_fields) f(code)
-    left join eqp.tbm_runtime_parameters p
+    left join tbm.tbm_runtime_parameters p
       on p.code = f.code
     where p.id is null
        or p.is_chartable is not true
@@ -283,7 +283,7 @@ returns table (
 )
 language plpgsql
 security definer
-set search_path = eqp, realdata, public
+set search_path = tbm, realdata, public
 as $$
 declare
   v_tbm_code text;
@@ -318,8 +318,8 @@ begin
 
   select t.code
   into v_tbm_code
-  from eqp.tbm_assignments a
-  join eqp.tbms t on t.id = a.tbm_id
+  from tbm.tbm_assignments a
+  join tbm.tbms t on t.id = a.tbm_id
   where a.tbm_id = p_tbm_id
     and a.end_date is null
   order by a.start_date desc nulls last

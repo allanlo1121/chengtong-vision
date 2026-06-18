@@ -1,6 +1,6 @@
 
 
-create view eqp.v_tbm_list as
+create view tbm.v_tbm_list as
 select
   t.id,
   t.code,
@@ -18,12 +18,12 @@ select
   mt.name as tbm_type_name,
   t.manufacturer_id,
   mf.name as manufacturer_name
-from eqp.tbms t
+from tbm.tbms t
 left join public.master_data mt on t.tbm_type_id = mt.id
 left join hr.customers mf on t.manufacturer_id = mf.id
 where t.deleted_at is null;
 
-create view eqp.v_tbm_picker as
+create view tbm.v_tbm_picker as
 select
   t.id,
   t.code,
@@ -32,12 +32,12 @@ select
   t.diameter,
   mt.name as tbm_type_name,
   cus.name as manufacturer_name
-from eqp.tbms t
+from tbm.tbms t
 left join public.master_data mt on t.tbm_type_id = mt.id
 left join hr.customers cus on t.manufacturer_id = cus.id
 where t.deleted_at is null;
 
-create or replace view eqp.v_tbm_detail as
+create or replace view tbm.v_tbm_detail as
 select
   t.id,
   t.code,
@@ -62,27 +62,27 @@ select
   t.updated_by,
   t.deleted_at,
   t.deleted_by
-from eqp.tbms t
+from tbm.tbms t
 left join public.master_data mt on t.tbm_type_id = mt.id
 left join hr.customers mf on t.manufacturer_id = mf.id;
 
-create or replace view eqp.v_tbm_type_counts as
+create or replace view tbm.v_tbm_type_counts as
 select
   tbm_type_id,
   count(*)::int as tbm_count
-from eqp.tbms
+from tbm.tbms
 where deleted_at is null
 group by tbm_type_id;
 
-create or replace view eqp.v_tbm_manufacturer_counts as
+create or replace view tbm.v_tbm_manufacturer_counts as
 select
   manufacturer_id,
   count(*)::int as tbm_count
-from eqp.tbms
+from tbm.tbms
 where deleted_at is null
 group by manufacturer_id;
 
-create or replace view eqp.v_tbm_bound_parameters as
+create or replace view tbm.v_tbm_bound_parameters as
 select
 
   bpc.id as config_id,
@@ -122,25 +122,25 @@ select
   t.archive,
   t.sort_order as plc_sort_order
 
-from eqp.tbm_parameter_configs bpc
+from tbm.tbm_parameter_configs bpc
 
-join eqp.tbm_runtime_parameters p
+join tbm.tbm_runtime_parameters p
   on p.id = bpc.parameter_id
 
-join eqp.tbm_subsystems s
+join tbm.tbm_subsystems s
   on s.id = p.subsystem_id
 
-join eqp.tbm_plc_tags t
+join tbm.plc_tags t
   on t.id = bpc.plc_tag_id;
 
 
-create view eqp.v_tbm_assignment_list as
+create view tbm.v_tbm_assignment_list as
 select
     a.id,
 
     a.tbm_id,
-    tbm.name as tbm_name,
-    tbm.code as tbm_code,
+    tb.name as tbm_name,
+    tb.code as tbm_code,
 
     a.tunnel_id,
     t.name as tunnel_name,
@@ -153,10 +153,10 @@ select
 
     a.remark
 
-from eqp.tbm_assignments a
+from tbm.tbm_assignments a
 
-join eqp.tbms tbm
-    on tbm.id = a.tbm_id
+join tbm.tbms tb
+    on tb.id = a.tbm_id
 
 join proj.tunnels t
     on t.id = a.tunnel_id
@@ -164,7 +164,7 @@ join proj.tunnels t
 left join proj.projects p
     on p.id = t.project_id;
 
-create or replace view eqp.v_tbm_parameter_configs as
+create or replace view tbm.v_tbm_parameter_configs as
 select
 
     tp.id as tbm_parameter_id,
@@ -174,8 +174,8 @@ select
     tp.custom_unit,
     tp.scale,
     tp.value_offset,
-    tbm.code as tbm_code,
-    tbm.name as tbm_name,
+    tb.code as tbm_code,
+    tb.name as tbm_name,
 
     -- subsystem
     s.id as subsystem_id,
@@ -203,16 +203,47 @@ select
     t.archive,
     tp.is_disabled
 
-from eqp.tbm_parameter_configs tp
+from tbm.tbm_parameter_configs tp
 
-join eqp.tbms tbm
-    on tbm.id = tp.tbm_id
+join tbm.tbms tb
+    on tb.id = tp.tbm_id
 
-join eqp.tbm_runtime_parameters p
+join tbm.tbm_runtime_parameters p
     on p.id = tp.parameter_id
 
-join eqp.tbm_subsystems s
+join tbm.tbm_subsystems s
     on s.id = p.subsystem_id
 
-left join eqp.tbm_plc_tags t
+left join tbm.plc_tags t
     on t.id = tp.plc_tag_id;
+
+
+create view tbm.v_tbm_runtime_state as
+select
+  tb.id as tbm_id,
+  tb.name as tbm_name,
+
+  phase.phase_type,
+
+  conn.is_online as realdata_is_online,
+  conn.last_seen_at as realdata_last_seen_at,
+
+  conn_heartbeat.is_online as heartbeat_is_online,
+  conn_heartbeat.last_seen_at as heartbeat_last_seen_at
+
+from tbm.tbm_assignments ta
+join tbm.tbms tb
+  on tb.id = ta.tbm_id
+
+left join tbm.tbm_phase_active phase
+  on phase.tbm_id = ta.tbm_id
+
+left join tbm.tbm_connection_status conn
+  on conn.tbm_id = ta.tbm_id
+ and conn.type = 'realdata'
+
+left join tbm.tbm_connection_status conn_heartbeat
+  on conn_heartbeat.tbm_id = ta.tbm_id
+ and conn_heartbeat.type = 'heartbeat'
+
+where tb.deleted_at is null;

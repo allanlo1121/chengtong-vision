@@ -24,7 +24,7 @@ async function paginate(
   const { from, to } = applyPagination(query.page, query.pageSize);
 
   let dbQuery = supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("v_tbm_runtime_parameters_list")
     .select("*", { count: "exact" })
     .range(from, to);
@@ -77,7 +77,7 @@ export const trpRepository = {
     const payload = mapParameterInsert(input);
 
     const { data, error } = await supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbm_runtime_parameters")
       .insert(payload)
       .select()
@@ -95,7 +95,7 @@ export const trpRepository = {
     const payload = mapParameterUpdate(input);
 
     const { data, error } = await supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbm_runtime_parameters")
       .update(payload)
       .eq("id", input.id)
@@ -110,7 +110,7 @@ export const trpRepository = {
     const supabase = await createClient();
 
     const { data, error } = await supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbm_runtime_parameters")
       .select("*")
       .eq("id", id)
@@ -124,7 +124,7 @@ export const trpRepository = {
     const supabase = await createClient();
 
     const { data, error } = await supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbm_runtime_parameters")
       .select("*")
       .eq("code", code)
@@ -143,7 +143,7 @@ export const trpRepository = {
 
     while (true) {
       const { data, error } = await supabase
-        .schema("eqp")
+        .schema("tbm")
         .from("v_tbm_runtime_parameters_list")
         .select("*")
         .range(from, from + pagesize - 1);
@@ -169,7 +169,7 @@ export const trpRepository = {
   count: async (): Promise<number> => {
     const supabase = await createClient();
     const { data, count, error } = await supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbm_runtime_parameters")
       .select("*", { count: "exact" });
     assertNoError(error);

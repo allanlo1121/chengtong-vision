@@ -1,9 +1,9 @@
 
 
 
-INSERT INTO eqp.tbm_runtime_parameters (code, name,subsystem_id,data_type, is_alarm, is_reportable, sort_order)
+INSERT INTO tbm.tbm_runtime_parameters (code, name,subsystem_id,data_type, is_alarm, is_reportable, sort_order)
 SELECT v.code, v.name,ss.id,v.data_type, v.is_alarm, v.is_reportable, v.sort_order 
-FROM eqp.tbm_subsystems ss
+FROM tbm.tbm_subsystems ss
 CROSS JOIN (
     VALUES 
 ('b000000001', '推进模式启动','boolean', false, false, 100001), 
@@ -13,9 +13,9 @@ WHERE ss.code = 'b00'
 ON CONFLICT (code) DO NOTHING;
 
 
-INSERT INTO eqp.tbm_runtime_parameters (code, name,subsystem_id,data_type, is_alarm, is_reportable, sort_order)
+INSERT INTO tbm.tbm_runtime_parameters (code, name,subsystem_id,data_type, is_alarm, is_reportable, sort_order)
 SELECT v.code, v.name,ss.id,v.data_type, v.is_alarm, v.is_reportable, v.sort_order 
-FROM eqp.tbm_subsystems ss
+FROM tbm.tbm_subsystems ss
 CROSS JOIN (
     VALUES 
 ('b010000001', '02含量超过极限值','boolean', true,false, 101001),

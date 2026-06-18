@@ -14,7 +14,7 @@ async function findById(id: string): Promise<Tbm | null> {
   const supabase = createClient();
 
   const { data, error } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("tbms")
     .select("*")
     .eq("id", id)
@@ -30,7 +30,7 @@ async function searchTbmPicker(query: TbmPickerQuery): Promise<PaginatedResult<T
 
   console.log("searchTbmPicker query", query);
 
-  let builder = supabase.schema("eqp").from("v_tbm_picker").select("*", { count: "exact" });
+  let builder = supabase.schema("tbm").from("v_tbm_picker").select("*", { count: "exact" });
 
   if (query.search?.trim()) {
     const keyword = query.search.trim();
@@ -72,7 +72,7 @@ async function getTbmPickerById(id: string): Promise<TbmPickerItem | null> {
   const supabase = createClient();
 
   const { data, error } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("v_tbm_picker")
     .select("*")
     .eq("id", id)

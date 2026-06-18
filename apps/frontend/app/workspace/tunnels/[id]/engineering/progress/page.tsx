@@ -6,6 +6,10 @@ import { TbmDailyProgressTable } from "@/components/domain/tbm-runtime/data-tabl
 import { TbmDailyProgressChart } from "@/components/domain/tbm-runtime/charts/TbmDailyProgressChart";
 import { ErrorBlock } from "@/components/common/error-block";
 import { fetchTbmAssignmentByTunnelId } from "@/lib/domain/tbm-assignment/services/query.service";
+import { Tbm } from "@/lib/domain/tbm/types";
+import { TbmDailyProgressListItem } from "@/lib/domain/tbm-runtime/types/tbm-daily-progress.types";
+import { DataTable } from "./_components/data-table/data-table";
+import { columns } from "./_components/data-table/columns";
 
 function getStringParam(value: string | string[] | undefined): string | undefined {
   if (Array.isArray(value)) {
@@ -38,7 +42,7 @@ export default async function TunnelDailyProgressPage({
 
   const from = parseDateString(getStringParam(sp.from) || format(subDays(today, 30), "yyyy-MM-dd"));
 
-  let progress;
+  let progress: TbmDailyProgressListItem[] = [];
   let tbmAssignment;
 
   try {
@@ -56,7 +60,7 @@ export default async function TunnelDailyProgressPage({
       <ProgressToolbar from={from} to={to} />
       <div className="min-h-0 flex-1 p-4">
         {view === "table" ? (
-          <TbmDailyProgressTable data={progress} />
+          <DataTable columns={columns} data={progress} tbmId={tbmAssignment.tbmId} />
         ) : (
           <TbmDailyProgressChart data={progress} />
         )}

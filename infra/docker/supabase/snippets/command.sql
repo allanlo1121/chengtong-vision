@@ -1,218 +1,38 @@
-create table public.command_center_summary (
-  id text primary key default 'global',
 
-  advancing_count int not null default 0,
-  assembly_count int not null default 0,
-  stopped_count int not null default 0,
-  fault_count int not null default 0,
+grant usage on schema app to anon;
+grant usage on schema app to authenticated;
 
-  today_ring_count int not null default 0,
-  today_advance_meter numeric not null default 0,
+grant select on all tables in schema app to anon;
+grant select on all tables in schema app to authenticated;
 
-  project_count int not null default 0,
-  tunnel_count int not null default 0,
-  tbm_count int not null default 0,
+alter default privileges in schema app
+grant select on tables to anon;
 
-  warning_high_count int not null default 0,
-  warning_medium_count int not null default 0,
-  warning_low_count int not null default 0,
+alter default privileges in schema app
+grant select on tables to authenticated;
 
-  updated_at timestamptz not null default now()
-);
+grant usage, select on all sequences in schema app to anon;
+grant usage, select on all sequences in schema app to authenticated;
 
+alter default privileges in schema app
+grant usage, select on sequences to anon;
 
+alter default privileges in schema app
+grant usage, select on sequences to authenticated;
 
-
-create or replace view public.v_command_center_summary as
-with active_projects as (
-  select distinct pst.project_id
-  from proj.project_status_timeline pst
-  where pst.valid_to is null
-    and pst.project_status_id = (
-      select md.id
-      from public.master_data md
-      join public.master_definitions def
-        on def.id = md.definition_id
-      where def.code = 'PROJECT_STATUS'
-        and md.code = '10200002'
-      limit 1
-    )
-),
-
-active_assignments as (
-  select distinct
-    ta.tbm_id,
-    ta.tunnel_id
-  from eqp.tbm_assignments ta
-  where ta.end_date is null
-)
-
-select
-  -- 设备运行状态
-  coalesce((
-    select count(*)
-    from eqp.tbm_phase_active p
-    where p.phase_type = 'advance'
-  ), 0) as advancing_count,
-
-  coalesce((
-    select count(*)
-    from eqp.tbm_phase_active p
-    where p.phase_type = 'assembly'
-  ), 0) as assembly_count,
-
-  coalesce((
-    select count(*)
-    from eqp.tbm_phase_active p
-    where p.phase_type = 'stop'
-  ), 0) as stopped_count,
-
-    coalesce((
-    select count(*)
-    from eqp.tbm_phase_active p
-    where p.phase_type = 'fault'
-  ), 0) as fault_count,
-
-  coalesce((
-  select count(distinct c.tbm_id)
-  from eqp.tbm_connection_status c
-  where c.type = 'realdata'
-    and c.is_online = false
-), 0) as offline_count,
-
-  -- 项目概况
-  coalesce((
-    select count(*)
-    from active_projects
-  ), 0) as project_count,
-
-  coalesce((
-    select count(distinct aa.tunnel_id)
-    from active_assignments aa
-    join proj.tunnels tn
-      on tn.id = aa.tunnel_id
-    join active_projects ap
-      on ap.project_id = tn.project_id
-    where tn.deleted_at is null
-  ), 0) as tunnel_count,
-
-  coalesce((
-    select count(distinct aa.tbm_id)
-    from active_assignments aa
-    join proj.tunnels tn
-      on tn.id = aa.tunnel_id
-    join active_projects ap
-      on ap.project_id = tn.project_id
-    join eqp.tbms t
-      on t.id = aa.tbm_id
-    where tn.deleted_at is null
-      and t.deleted_at is null
-  ), 0) as tbm_count,
-
-  now() as refreshed_at;
+alter publication supabase_realtime add table proj.tunnels;
+alter publication supabase_realtime add table proj.tunnel_status_timeline;
+alter publication supabase_realtime add table tbm.tbm_connection_status;
+alter publication supabase_realtime add table tbm.tbm_phase_active;
+alter publication supabase_realtime add table tbm.tbm_assignments;
 
 
-alter publication supabase_realtime add table eqp.tbm_connection_status;
-alter publication supabase_realtime add table eqp.tbm_phase_active;
-alter publication supabase_realtime add table eqp.tbm_assignments;
-alter publication supabase_realtime add table warning.warning_events;
+drop view app.v_tbm_progress_overview cascade;
+create or replace view app.v_tbm_progress_overview as
 
-
-create or replace view public.v_command_center_tunnel as
-with current_tunnel_status as (
-  select distinct on (tst.tunnel_id)
-    tst.tunnel_id,
-    tst.tunnel_status_id,
-    md.code as tunnel_status_code,
-    md.name as tunnel_status_name
-  from proj.tunnel_status_timeline tst
-  left join public.master_data md
-    on md.id = tst.tunnel_status_id
-  where tst.valid_to is null
-  order by tst.tunnel_id, tst.valid_from desc
-)
-
-select
-  tn.id as tunnel_id,
-  tn.name as tunnel_name,
-
-  cts.tunnel_status_id,
-  cts.tunnel_status_code,
-  cts.tunnel_status_name,
-
-  p.id as project_id,
-  p.name as project_name,
-
-  tbm.id as tbm_id,
-  tbm.name as tbm_name,
-  tbm.code as tbm_code,
-
-  tn.actual_start_date,
-  tn.actual_end_date,
-
-  tsv.schedule_start_date,
-  tsv.schedule_end_date,
-
-  phase.phase_type,
-  phase.ring_no,  
-  phase.start_at as phase_start_at,  
-  
-  conn.is_online,
-  conn.last_seen_at as connection_last_seen_at,
-
-  abs(tn.end_ring - tn.start_ring) as total_ring_count,
-  coalesce(phase.ring_no, 0) as current_ring,
-  tn.sort_order
-
-from proj.tunnels tn
-
-join proj.projects p
-  on p.id = tn.project_id
-
-left join lateral (
-  select *
-  from proj.tunnel_schedule_versions tsv
-  where tsv.tunnel_id = tn.id
-  order by tsv.version_no desc
-  limit 1
-) tsv on true
-
-
-left join eqp.tbm_assignments ta
-  on ta.tunnel_id = tn.id
- and ta.end_date is null
-
-left join eqp.tbms tbm
-  on tbm.id = ta.tbm_id
- and tbm.deleted_at is null
-
-left join eqp.tbm_phase_active phase
-  on phase.tbm_id = tbm.id
- and phase.tunnel_id = tn.id
-
-left join eqp.tbm_connection_status conn
-  on conn.tbm_id = tbm.id
- and conn.type = 'realdata'
-
-left join current_tunnel_status cts
-  on cts.tunnel_id = tn.id
-where tn.deleted_at is null
-  and p.deleted_at is null
-  and coalesce(cts.tunnel_status_code, '') not in (
-    '20160005', -- 竣工
-    '20160006', -- 完工
-    '20160007',
-    '20160008'
-  );
-
-
-
-
-
-create or replace view public.v_tunnel_progress_overview as
 with settings as (
   select *
-  from system.stat_period_settings
+  from public.stat_period_settings
   where code = 'tunnel_progress'
     and current_date >= effective_from
     and current_date < coalesce(effective_to, date '9999-12-31')
@@ -223,7 +43,8 @@ with settings as (
 bounds as (
   select
     s.*,
-    now() at time zone s.timezone as local_now,
+    (now() at time zone s.timezone) as local_now,
+
     case
       when (now() at time zone s.timezone)::time >= s.day_cutoff_time
         then ((now() at time zone s.timezone)::date + 1)
@@ -235,9 +56,11 @@ bounds as (
 periods as (
   select
     current_work_date,
+
     current_work_date
       - (((extract(dow from current_work_date)::int - week_start_dow + 7) % 7))
       as week_start_work_date,
+
     case
       when extract(day from current_work_date)::int >= month_start_day
         then date_trunc('month', current_work_date)::date + (month_start_day - 1)
@@ -248,411 +71,174 @@ periods as (
   from bounds
 ),
 
+-- =========================
+-- 日汇总事实
+-- =========================
+daily as (
+  select
+    tbm_id,
+    work_date,
+    max(ring_end) as ring_end,
+    max(chainage_end) as chainage_end
+  from tbm.tbm_daily_progress
+  group by tbm_id, work_date
+),
+
+-- =========================
+-- 日增量计算
+-- =========================
 progress_base as (
   select
-    tdp.tunnel_id,
-    tdp.work_date,
-    tdp.ring_end,
-    tdp.chainage_end,
+    d.*,
 
     greatest(
-      tdp.ring_end
-      - coalesce(
-          lag(tdp.ring_end) over (
-            partition by tdp.tunnel_id
-            order by tdp.work_date
-          ),
-          tdp.ring_end
-        ),
+      d.ring_end - lag(d.ring_end) over (
+        partition by d.tbm_id order by d.work_date
+      ),
       0
     ) as daily_ring_count,
 
-    abs(
-      tdp.chainage_end
-      - coalesce(
-          lag(tdp.chainage_end) over (
-            partition by tdp.tunnel_id
-            order by tdp.work_date
-          ),
-          tdp.chainage_end
-        )
+    greatest(
+      d.chainage_end - lag(d.chainage_end) over (
+        partition by d.tbm_id order by d.work_date
+      ),
+      0
     ) as daily_advance_meter
 
-  from public.tunnel_daily_progress tdp
+  from daily d
 ),
 
+-- =========================
+-- 计划（如果没有 plan 表，这里可以先留 NULL）
+-- =========================
+plan as (
+  select
+    tbm_id,
+    work_date,
+
+    0::numeric as plan_ring,
+    0::numeric as plan_meter
+  from tbm.tbm_daily_progress
+  group by tbm_id, work_date
+),
+
+-- =========================
+-- 核心聚合
+-- =========================
 progress as (
   select
-    pb.tunnel_id,
+    pb.tbm_id,
 
-    coalesce(sum(pb.daily_ring_count) filter (
+    -- ===== 实际累计 =====
+    max(pb.ring_end) as total_ring_end,
+    max(pb.chainage_end) as total_advance_meter,
+
+    -- ===== 今日 =====
+    sum(pb.daily_ring_count) filter (
       where pb.work_date = p.current_work_date
-    ), 0) as today_ring_count,
+    ) as today_ring_count,
 
-    coalesce(sum(pb.daily_ring_count) filter (
-      where pb.work_date >= p.week_start_work_date
-        and pb.work_date <= p.current_work_date
-    ), 0) as week_ring_count,
-
-    coalesce(sum(pb.daily_ring_count) filter (
-      where pb.work_date >= p.month_start_work_date
-        and pb.work_date <= p.current_work_date
-    ), 0) as month_ring_count,
-
-    coalesce(sum(pb.daily_advance_meter) filter (
+    sum(pb.daily_advance_meter) filter (
       where pb.work_date = p.current_work_date
-    ), 0) as today_advance_meter,
+    ) as today_advance_meter,
 
-    coalesce(sum(pb.daily_advance_meter) filter (
-      where pb.work_date >= p.week_start_work_date
-        and pb.work_date <= p.current_work_date
-    ), 0) as week_advance_meter,
+    -- ===== 周 =====
+    sum(pb.daily_ring_count) filter (
+      where pb.work_date between p.week_start_work_date and p.current_work_date
+    ) as week_ring_count,
 
-    coalesce(sum(pb.daily_advance_meter) filter (
-      where pb.work_date >= p.month_start_work_date
-        and pb.work_date <= p.current_work_date
-    ), 0) as month_advance_meter,
+    sum(pb.daily_advance_meter) filter (
+      where pb.work_date between p.week_start_work_date and p.current_work_date
+    ) as week_advance_meter,
 
-    coalesce(max(pb.ring_end), 0) as total_ring_count,
-    coalesce(max(pb.chainage_end), 0) as total_advance_meter
+    -- ===== 月 =====
+    sum(pb.daily_ring_count) filter (
+      where pb.work_date between p.month_start_work_date and p.current_work_date
+    ) as month_ring_count,
+
+    sum(pb.daily_advance_meter) filter (
+      where pb.work_date between p.month_start_work_date and p.current_work_date
+    ) as month_advance_meter,
+
+    -- =========================
+    -- 计划值（占位，可替换 plan 表）
+    -- =========================
+    sum(pl.plan_ring) filter (
+      where pb.work_date = p.current_work_date
+    ) as today_plan_ring,
+
+    sum(pl.plan_meter) filter (
+      where pb.work_date = p.current_work_date
+    ) as today_plan_meter,
+
+    sum(pl.plan_ring) filter (
+      where pb.work_date between p.week_start_work_date and p.current_work_date
+    ) as week_plan_ring,
+
+    sum(pl.plan_meter) filter (
+      where pb.work_date between p.week_start_work_date and p.current_work_date
+    ) as week_plan_meter,
+
+    sum(pl.plan_ring) filter (
+      where pb.work_date between p.month_start_work_date and p.current_work_date
+    ) as month_plan_ring,
+
+    sum(pl.plan_meter) filter (
+      where pb.work_date between p.month_start_work_date and p.current_work_date
+    ) as month_plan_meter
 
   from progress_base pb
   cross join periods p
-  group by pb.tunnel_id
-),
+  left join plan pl
+    on pl.tbm_id = pb.tbm_id
+   and pl.work_date = pb.work_date
 
-current_tunnel_status as (
-  select distinct on (tst.tunnel_id)
-    tst.tunnel_id,
-    tst.tunnel_status_id,
-    md.code as tunnel_status_code,
-    md.name as tunnel_status_name
-  from proj.tunnel_status_timeline tst
-  left join public.master_data md
-    on md.id = tst.tunnel_status_id
-  where tst.valid_to is null
-  order by tst.tunnel_id, tst.valid_from desc
-),
-
-active_assignments as (
-  select distinct on (ta.tunnel_id)
-    ta.tunnel_id,
-    ta.tbm_id,
-    ta.start_date,
-    ta.end_date
-  from eqp.tbm_assignments ta
-  where ta.end_date is null
-  order by ta.tunnel_id, ta.start_date desc
+  group by pb.tbm_id, p.current_work_date, p.week_start_work_date, p.month_start_work_date
 )
 
 select
-  p.id as project_id,
-  p.name as project_name,
+  pg.*,
 
-  tn.id as tunnel_id,
-  tn.name as tunnel_name,
+  p.current_work_date,
+  p.week_start_work_date,
+  p.month_start_work_date,
 
-  cts.tunnel_status_id,
-  cts.tunnel_status_code,
-  cts.tunnel_status_name,
-
-  tbm.id as tbm_id,
-  tbm.name as tbm_name,
-  tbm.code as tbm_code,
-
-  phase.phase_type,
-  phase.ring_no as current_ring,
-  phase.start_at as phase_start_at, 
-
-  coalesce(conn.is_online, false) as is_online,
-  conn.last_seen_at as connection_last_seen_at,
-
-  tn.start_chainage,
-  tn.end_chainage,
-  abs(tn.end_chainage - tn.start_chainage) as total_length_meter,
-
-  coalesce(pg.today_ring_count, 0) as today_ring_count,
-  coalesce(pg.week_ring_count, 0) as week_ring_count,
-  coalesce(pg.month_ring_count, 0) as month_ring_count,
-
-  coalesce(pg.today_advance_meter, 0) as today_advance_meter,
-  coalesce(pg.week_advance_meter, 0) as week_advance_meter,
-  coalesce(pg.month_advance_meter, 0) as month_advance_meter,
-  coalesce(pg.total_advance_meter, 0) as total_advance_meter,
-
-  greatest(
-    abs(tn.end_chainage - tn.start_chainage) - coalesce(pg.total_advance_meter, 0),
-    0
-  ) as remaining_length_meter,
+  -- =========================
+  -- 平均值（工程常用）
+  -- =========================
+  case
+    when (p.current_work_date - p.month_start_work_date + 1) > 0
+    then pg.month_ring_count
+      / (p.current_work_date - p.month_start_work_date + 1)
+    else 0
+  end as month_avg_ring_per_day,
 
   case
-    when abs(tn.end_chainage - tn.start_chainage) > 0
-      then round(
-        (
-          coalesce(pg.total_advance_meter, 0)
-          / abs(tn.end_chainage - tn.start_chainage)
-        ) * 100,
-        2
-      )
+    when (p.current_work_date - p.month_start_work_date + 1) > 0
+    then pg.month_advance_meter
+      / (p.current_work_date - p.month_start_work_date + 1)
     else 0
-  end as progress_percent,
+  end as month_avg_meter_per_day,
 
-  pds.current_work_date,
-  pds.week_start_work_date,
-  pds.month_start_work_date,
+  -- =========================
+  -- 完成率（核心 KPI）
+  -- =========================
+  case
+    when coalesce(pg.month_plan_ring, 0) > 0
+    then pg.month_ring_count::float / pg.month_plan_ring
+    else null
+  end as month_progress_rate,
 
+  case
+    when coalesce(pg.week_plan_ring, 0) > 0
+    then pg.week_ring_count::float / pg.week_plan_ring
+    else null
+  end as week_progress_rate,
+
+  -- =========================
+  -- 元信息
+  -- =========================
   now() as refreshed_at
 
-from proj.tunnels tn
-join proj.projects p
-  on p.id = tn.project_id
-cross join periods pds
-left join current_tunnel_status cts
-  on cts.tunnel_id = tn.id
-left join active_assignments aa
-  on aa.tunnel_id = tn.id
-left join eqp.tbms tbm
-  on tbm.id = aa.tbm_id
- and tbm.deleted_at is null
-left join eqp.tbm_phase_active phase
-  on phase.tbm_id = tbm.id
- and phase.tunnel_id = tn.id
-left join eqp.tbm_connection_status conn
-  on conn.tbm_id = tbm.id
- and conn.type = 'realdata'
-left join progress pg
-  on pg.tunnel_id = tn.id
-where tn.deleted_at is null
-  and p.deleted_at is null
-  and coalesce(cts.tunnel_status_code, '') not in (
-    '20160005',
-    '20160006',
-    '20160007',
-    '20160008'
-  );
-
-
-
-drop view v_tunnel_progress_overview cascade;
-
-create or replace view public.v_tunnel_progress_overview as
-with settings as (
-  select *
-  from system.stat_period_settings
-  where code = 'tunnel_progress'
-    and current_date >= effective_from
-    and current_date < coalesce(effective_to, date '9999-12-31')
-  order by effective_from desc
-  limit 1
-),
-
-bounds as (
-  select
-    s.*,
-    now() at time zone s.timezone as local_now,
-    case
-      when (now() at time zone s.timezone)::time >= s.day_cutoff_time
-        then ((now() at time zone s.timezone)::date + 1)
-      else (now() at time zone s.timezone)::date
-    end as current_work_date
-  from settings s
-),
-
-periods as (
-  select
-    current_work_date,
-    current_work_date
-      - (((extract(dow from current_work_date)::int - week_start_dow + 7) % 7))
-      as week_start_work_date,
-    case
-      when extract(day from current_work_date)::int >= month_start_day
-        then date_trunc('month', current_work_date)::date + (month_start_day - 1)
-      else
-        (date_trunc('month', current_work_date)::date - interval '1 month')::date
-          + (month_start_day - 1)
-    end as month_start_work_date
-  from bounds
-),
-
-progress_base as (
-  select
-    tdp.tunnel_id,
-    tdp.work_date,
-    tdp.ring_end,
-    tdp.chainage_end,
-
-    greatest(
-      tdp.ring_end
-      - coalesce(
-          lag(tdp.ring_end) over (
-            partition by tdp.tunnel_id
-            order by tdp.work_date
-          ),
-          tdp.ring_end
-        ),
-      0
-    ) as daily_ring_count,
-
-    abs(
-      tdp.chainage_end
-      - coalesce(
-          lag(tdp.chainage_end) over (
-            partition by tdp.tunnel_id
-            order by tdp.work_date
-          ),
-          tdp.chainage_end
-        )
-    ) as daily_advance_meter
-
-  from public.tunnel_daily_progress tdp
-),
-
-progress as (
-  select
-    pb.tunnel_id,
-    max(pb.ring_end) as total_ring_end,
-
-    coalesce(sum(pb.daily_ring_count) filter (
-      where pb.work_date = p.current_work_date
-    ), 0) as today_ring_count,
-
-    coalesce(sum(pb.daily_ring_count) filter (
-      where pb.work_date >= p.week_start_work_date
-        and pb.work_date <= p.current_work_date
-    ), 0) as week_ring_count,
-
-    coalesce(sum(pb.daily_ring_count) filter (
-      where pb.work_date >= p.month_start_work_date
-        and pb.work_date <= p.current_work_date
-    ), 0) as month_ring_count,
-
-    coalesce(sum(pb.daily_advance_meter) filter (
-      where pb.work_date = p.current_work_date
-    ), 0) as today_advance_meter,
-
-    coalesce(sum(pb.daily_advance_meter) filter (
-      where pb.work_date >= p.week_start_work_date
-        and pb.work_date <= p.current_work_date
-    ), 0) as week_advance_meter,
-
-    coalesce(sum(pb.daily_advance_meter) filter (
-      where pb.work_date >= p.month_start_work_date
-        and pb.work_date <= p.current_work_date
-    ), 0) as month_advance_meter,
-
-    coalesce(max(pb.ring_end), 0) as total_ring_count,
-    coalesce(max(pb.chainage_end), 0) as total_advance_meter
-
-  from progress_base pb
-  cross join periods p
-  group by pb.tunnel_id
-),
-
-current_tunnel_status as (
-  select distinct on (tst.tunnel_id)
-    tst.tunnel_id,
-    tst.tunnel_status_id,
-    md.code as tunnel_status_code,
-    md.name as tunnel_status_name
-  from proj.tunnel_status_timeline tst
-  left join public.master_data md
-    on md.id = tst.tunnel_status_id
-  where tst.valid_to is null
-  order by tst.tunnel_id, tst.valid_from desc
-),
-
-active_assignments as (
-  select distinct on (ta.tunnel_id)
-    ta.tunnel_id,
-    ta.tbm_id,
-    ta.start_date,
-    ta.end_date
-  from eqp.tbm_assignments ta
-  where ta.end_date is null
-  order by ta.tunnel_id, ta.start_date desc
-)
-
-select
-  p.id as project_id,
-  p.name as project_name,
-
-  tn.id as tunnel_id,
-  tn.name as tunnel_name,
-
-  cts.tunnel_status_id,
-  cts.tunnel_status_code,
-  cts.tunnel_status_name,
-
-  tbm.id as tbm_id,
-  tbm.name as tbm_name,
-  tbm.code as tbm_code,
-
-  abs(tn.end_chainage - tn.start_chainage) as total_length_meter,
-  abs(tn.end_ring - tn.start_ring) as total_ring_count,
-
-  coalesce(pg.today_ring_count, 0) as today_ring_count,
-  coalesce(pg.week_ring_count, 0) as week_ring_count,
-  coalesce(pg.month_ring_count, 0) as month_ring_count,
-  pg.total_ring_end as total_advance_ring_count,
-
-  coalesce(pg.today_advance_meter, 0) as today_advance_meter,
-  coalesce(pg.week_advance_meter, 0) as week_advance_meter,
-  coalesce(pg.month_advance_meter, 0) as month_advance_meter,
-  coalesce(pg.total_advance_meter, 0) as total_advance_meter,
-
-
-  pds.current_work_date,
-  pds.week_start_work_date,
-  pds.month_start_work_date,
-
-  tn.sort_order,
-  now() as refreshed_at
-
-from proj.tunnels tn
-join proj.projects p
-  on p.id = tn.project_id
-cross join periods pds
-left join current_tunnel_status cts
-  on cts.tunnel_id = tn.id
-left join active_assignments aa
-  on aa.tunnel_id = tn.id
-left join eqp.tbms tbm
-  on tbm.id = aa.tbm_id
- and tbm.deleted_at is null
-left join progress pg
-  on pg.tunnel_id = tn.id
-where tn.deleted_at is null
-  and p.deleted_at is null
-  and coalesce(cts.tunnel_status_code, '') not in (
-    '20160005',
-    '20160006',
-    '20160007',
-    '20160008'
-  );
-
-
-create or replace view public.v_command_center_tunnel_scope as
-select
-  tn.id as tunnel_id
-from proj.tunnels tn
-join proj.projects p
-  on p.id = tn.project_id
-left join (
-  select distinct on (tst.tunnel_id)
-    tst.tunnel_id,
-    md.code as tunnel_status_code
-  from proj.tunnel_status_timeline tst
-  left join public.master_data md
-    on md.id = tst.tunnel_status_id
-  where tst.valid_to is null
-  order by tst.tunnel_id, tst.valid_from desc
-) cts
-  on cts.tunnel_id = tn.id
-where tn.deleted_at is null
-  and p.deleted_at is null
-  and coalesce(cts.tunnel_status_code, '') not in (
-    '20160005',
-    '20160006',
-    '20160007',
-    '20160008'
-  );
+from progress pg
+cross join periods p;

@@ -18,8 +18,8 @@ export const tbmPlcTagRepository = {
     const supabase = await createClient();
     const payload = mapTbmPlcTagInsertRow(input);
     const { data, error } = await supabase
-      .schema("eqp")
-      .from("tbm_plc_tags")
+      .schema("tbm")
+      .from("plc_tags")
       .insert(payload)
       .select()
       .single();
@@ -36,8 +36,8 @@ export const tbmPlcTagRepository = {
     const payload = mapTbmPlcTagUpdateRow(input);
 
     const { data, error } = await supabase
-      .schema("eqp")
-      .from("tbm_plc_tags")
+      .schema("tbm")
+      .from("plc_tags")
       .update(payload)
       .eq("id", input.id)
       .select()
@@ -55,8 +55,8 @@ export const tbmPlcTagRepository = {
     const supabase = await createClient();
 
     const { data, error } = await supabase
-      .schema("eqp")
-      .from("tbm_plc_tags")
+      .schema("tbm")
+      .from("plc_tags")
       .delete()
       .eq("id", id)
       .select()
@@ -68,8 +68,8 @@ export const tbmPlcTagRepository = {
     const supabase = await createClient();
 
     const { data, error } = await supabase
-      .schema("eqp")
-      .from("tbm_plc_tags")
+      .schema("tbm")
+      .from("plc_tags")
       .select("*")
       .eq("id", id)
       .maybeSingle();
@@ -81,11 +81,7 @@ export const tbmPlcTagRepository = {
   deleteByTbmId: async (tbmId: string): Promise<void> => {
     const supabase = await createClient();
 
-    const { error } = await supabase
-      .schema("eqp")
-      .from("tbm_plc_tags")
-      .delete()
-      .eq("tbm_id", tbmId);
+    const { error } = await supabase.schema("tbm").from("plc_tags").delete().eq("tbm_id", tbmId);
 
     assertNoError(error);
   },
@@ -94,7 +90,7 @@ export const tbmPlcTagRepository = {
 
     const payload = rows.map((row) => mapTbmPlcTagInsertFromImportRow(tbmId, row));
 
-    const { error } = await supabase.schema("eqp").from("tbm_plc_tags").insert(payload);
+    const { error } = await supabase.schema("tbm").from("plc_tags").insert(payload);
 
     assertNoError(error);
 
@@ -109,8 +105,8 @@ export const tbmPlcTagRepository = {
     const { from, to } = applyPagination(queryParams.page, queryParams.pageSize);
 
     let dbQuery = supabase
-      .schema("eqp")
-      .from("tbm_plc_tags")
+      .schema("tbm")
+      .from("plc_tags")
       .select("*", { count: "exact" })
       .eq("tbm_id", tbmId)
       .range(from, to);

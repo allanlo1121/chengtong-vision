@@ -6,7 +6,7 @@ export async function findTbmTypeCounts(): Promise<CountById[]> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("v_tbm_type_counts")
     .select("tbm_type_id, tbm_count");
 
@@ -22,7 +22,7 @@ export async function findManufacturerCounts(): Promise<CountById[]> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("v_tbm_manufacturer_counts")
     .select("manufacturer_id, tbm_count");
 

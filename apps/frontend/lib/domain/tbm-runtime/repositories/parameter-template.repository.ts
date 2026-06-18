@@ -24,7 +24,7 @@ export const tptRepository = {
     const payload = mapParameterTemplateInsertRow(input);
 
     const { data, error } = await supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbm_parameter_templates")
       .insert(payload)
       .select("*")
@@ -41,7 +41,7 @@ export const tptRepository = {
     const payload = mapParameterTemplateUpdateRow(input);
 
     const { data, error } = await supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbm_parameter_templates")
       .update(payload)
       .eq("id", input.id)
@@ -60,7 +60,7 @@ export const tptRepository = {
     const supabase = await createClient();
 
     const { data, error } = await supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbm_parameter_templates")
       .select("*")
       .eq("id", id)
@@ -73,7 +73,7 @@ export const tptRepository = {
   list: async (): Promise<TbmParameterTemplateListRow[]> => {
     const supabase = await createClient();
     const { data, error } = await supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("v_tbm_parameter_templates_list")
       .select("*");
     assertNoError(error);
@@ -90,7 +90,7 @@ export async function searchTbmParameterTemplates(): Promise<ParameterTemplateNo
   const supabase = await createClient();
 
   const { data, error } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("tbm_parameter_templates")
     .select(
       `
@@ -129,7 +129,7 @@ export async function findParametersByTemplateId(
   const supabase = await createClient();
 
   const { data, error } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("tbm_parameter_template_parameters")
     .select(
       `
@@ -199,7 +199,7 @@ async function addParametersToTemplate(input: {
   }));
 
   const { data, error } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("tbm_parameter_template_parameters")
     .upsert(rows, {
       onConflict: "template_id,parameter_id",
@@ -220,7 +220,7 @@ async function replaceTemplateParametersBySubsystem(input: {
   const supabase = await createClient();
 
   const { data: subsystemParameters, error: parameterError } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("tbm_runtime_parameters")
     .select("id")
     .eq("subsystem_id", input.subsystemId);
@@ -231,7 +231,7 @@ async function replaceTemplateParametersBySubsystem(input: {
 
   if (subsystemParameterIds.length > 0) {
     const { error: deleteError } = await supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbm_parameter_template_parameters")
       .delete()
       .eq("template_id", input.templateId)
@@ -252,7 +252,7 @@ async function replaceTemplateParametersBySubsystem(input: {
   }));
 
   const { data, error } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("tbm_parameter_template_parameters")
     .insert(rows)
     .select();
@@ -271,14 +271,14 @@ async function findParameterTemplateGroups(templateId: number) {
     { data: templateParameters, error: templateError },
   ] = await Promise.all([
     supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbm_subsystems")
       .select("id, code, name")
       .eq("is_configurable", true)
       .order("sort_order", { ascending: true }),
 
     supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbm_runtime_parameters")
       .select(
         `
@@ -301,7 +301,7 @@ async function findParameterTemplateGroups(templateId: number) {
       .order("sort_order", { ascending: true }),
 
     supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbm_parameter_template_parameters")
       .select("parameter_id")
       .eq("template_id", templateId),
@@ -356,7 +356,7 @@ async function replaceTemplateParameters(input: {
   const supabase = await createClient();
 
   const { error: deleteError } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("tbm_parameter_template_parameters")
     .delete()
     .eq("template_id", input.templateId);
@@ -375,7 +375,7 @@ async function replaceTemplateParameters(input: {
   }));
 
   const { data, error } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("tbm_parameter_template_parameters")
     .insert(rows)
     .select();
@@ -394,19 +394,19 @@ async function findParameterTemplateOptions(): Promise<TemplateOption[]> {
     { data: templateParameters, error: templateParameterError },
   ] = await Promise.all([
     supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbm_parameter_templates")
       .select("id, name")
       .order("sort_order", { ascending: true }),
 
     supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbm_subsystems")
       .select("id")
       .eq("is_configurable", true)
       .order("sort_order", { ascending: true }),
 
-    supabase.schema("eqp").from("tbm_parameter_template_parameters").select(`
+    supabase.schema("tbm").from("tbm_parameter_template_parameters").select(`
         template_id,
         parameter_id,
         parameter:tbm_runtime_parameters!inner(

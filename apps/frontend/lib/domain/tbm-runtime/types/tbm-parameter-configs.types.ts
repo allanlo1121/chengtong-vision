@@ -2,12 +2,12 @@ import { Database } from "@/lib/core/database/types";
 import { TbmRuntimeParameterListItem } from "./parameter.types";
 import { Camelize } from "@/lib/utils/case-converter";
 
-export type TbmParameterConfigRow = Database["eqp"]["Tables"]["tbm_parameter_configs"]["Row"];
+export type TbmParameterConfigRow = Database["tbm"]["Tables"]["tbm_parameter_configs"]["Row"];
 export type TbmParameterConfigInsertRow =
-  Database["eqp"]["Tables"]["tbm_parameter_configs"]["Insert"];
+  Database["tbm"]["Tables"]["tbm_parameter_configs"]["Insert"];
 export type TbmParameterConfigUpdateRow =
-  Database["eqp"]["Tables"]["tbm_parameter_configs"]["Update"];
-export type TbmParameterConfigListRow = Database["eqp"]["Views"]["v_tbm_parameter_configs"]["Row"];
+  Database["tbm"]["Tables"]["tbm_parameter_configs"]["Update"];
+export type TbmParameterConfigListRow = Database["tbm"]["Views"]["v_tbm_parameter_configs"]["Row"];
 
 export type TbmParameterConfig = {
   id: number;

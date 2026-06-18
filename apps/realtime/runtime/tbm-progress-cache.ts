@@ -23,7 +23,7 @@ export async function loadTbmProgressCache() {
       work_date,
       ring_end,
       chainage_end
-    from eqp.tbm_daily_progress
+    from tbm.tbm_daily_progress
     where ring_end is not null
     order by tbm_id, work_date desc
   `);

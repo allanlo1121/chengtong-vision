@@ -1,8 +1,158 @@
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
+  app: {
+    Tables: {
+      [_ in never]: never;
+    };
+    Views: {
+      v_tbm_progress_overview: {
+        Row: {
+          current_work_date: string | null;
+          month_advance_meter: number | null;
+          month_ring_count: number | null;
+          month_start_work_date: string | null;
+          refreshed_at: string | null;
+          tbm_id: string | null;
+          today_advance_meter: number | null;
+          today_ring_count: number | null;
+          total_advance_meter: number | null;
+          total_ring_end: number | null;
+          week_advance_meter: number | null;
+          week_ring_count: number | null;
+          week_start_work_date: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_runtime";
+            referencedColumns: ["tbm_id"];
+          },
+        ];
+      };
+      v_tbm_runtime_state: {
+        Row: {
+          chainage: number | null;
+          heartbeat_is_online: boolean | null;
+          heartbeat_last_seen_at: string | null;
+          phase_start_at: string | null;
+          phase_type: string | null;
+          realdata_is_online: boolean | null;
+          realdata_last_seen_at: string | null;
+          ring_no: number | null;
+          tbm_id: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tbm_assignments_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_runtime";
+            referencedColumns: ["tbm_id"];
+          },
+        ];
+      };
+      v_tunnel_runtime: {
+        Row: {
+          actual_end_date: string | null;
+          actual_start_date: string | null;
+          end_chainage: number | null;
+          end_ring: number | null;
+          latitude: number | null;
+          longitude: number | null;
+          prefix: string | null;
+          project_id: string | null;
+          project_name: string | null;
+          region_id: string | null;
+          region_name: string | null;
+          remark: string | null;
+          schedule_end_date: string | null;
+          schedule_start_date: string | null;
+          sort_order: number | null;
+          start_chainage: number | null;
+          start_ring: number | null;
+          tbm_code: string | null;
+          tbm_id: string | null;
+          tbm_name: string | null;
+          tunnel_full_name: string | null;
+          tunnel_id: string | null;
+          tunnel_name: string | null;
+          tunnel_status_id: string | null;
+          tunnel_status_name: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tunnel_status_timeline_tunnel_status_id_fkey";
+            columns: ["tunnel_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_runtime";
+            referencedColumns: ["region_id"];
+          },
+        ];
+      };
+    };
+    Functions: {
+      [_ in never]: never;
+    };
+    Enums: {
+      [_ in never]: never;
+    };
+    CompositeTypes: {
+      [_ in never]: never;
+    };
+  };
   eqp: {
     Tables: {
+      equipments: {
+        Row: {
+          code: string;
+          equip_type_id: string;
+          external_id: string | null;
+          external_version: number | null;
+          id: string;
+          is_disabled: boolean;
+          manage_code: string | null;
+          manufacturer_id: string;
+          model: string;
+          name: string;
+          remark: string | null;
+          serial_no: string | null;
+          sort_order: number;
+        };
+        Insert: {
+          code: string;
+          equip_type_id: string;
+          external_id?: string | null;
+          external_version?: number | null;
+          id?: string;
+          is_disabled?: boolean;
+          manage_code?: string | null;
+          manufacturer_id: string;
+          model: string;
+          name: string;
+          remark?: string | null;
+          serial_no?: string | null;
+          sort_order?: number;
+        };
+        Update: {
+          code?: string;
+          equip_type_id?: string;
+          external_id?: string | null;
+          external_version?: number | null;
+          id?: string;
+          is_disabled?: boolean;
+          manage_code?: string | null;
+          manufacturer_id?: string;
+          model?: string;
+          name?: string;
+          remark?: string | null;
+          serial_no?: string | null;
+          sort_order?: number;
+        };
+        Relationships: [];
+      };
       mqtt_acl: {
         Row: {
           action: string;
@@ -130,36 +280,7 @@ export type Database = {
           user_type?: string;
           username?: string;
         };
-        Relationships: [
-          {
-            foreignKeyName: "mqtt_user_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "tbms";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "mqtt_user_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_detail";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "mqtt_user_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "mqtt_user_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_picker";
-            referencedColumns: ["id"];
-          },
-        ];
+        Relationships: [];
       };
       mqtt_user_status: {
         Row: {
@@ -215,1120 +336,6 @@ export type Database = {
           },
         ];
       };
-      tbm_assignments: {
-        Row: {
-          created_at: string | null;
-          created_by: string | null;
-          deleted_at: string | null;
-          deleted_by: string | null;
-          end_date: string | null;
-          id: string;
-          remark: string | null;
-          start_date: string;
-          tbm_id: string;
-          tunnel_id: string;
-          updated_at: string | null;
-          updated_by: string | null;
-        };
-        Insert: {
-          created_at?: string | null;
-          created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
-          end_date?: string | null;
-          id?: string;
-          remark?: string | null;
-          start_date: string;
-          tbm_id: string;
-          tunnel_id: string;
-          updated_at?: string | null;
-          updated_by?: string | null;
-        };
-        Update: {
-          created_at?: string | null;
-          created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
-          end_date?: string | null;
-          id?: string;
-          remark?: string | null;
-          start_date?: string;
-          tbm_id?: string;
-          tunnel_id?: string;
-          updated_at?: string | null;
-          updated_by?: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tbm_assignments_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "tbms";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_assignments_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_detail";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_assignments_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_assignments_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_picker";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      tbm_connection_status: {
-        Row: {
-          is_online: boolean;
-          last_seen_at: string;
-          tbm_id: string;
-          type: string;
-          updated_at: string;
-        };
-        Insert: {
-          is_online?: boolean;
-          last_seen_at: string;
-          tbm_id: string;
-          type: string;
-          updated_at?: string;
-        };
-        Update: {
-          is_online?: boolean;
-          last_seen_at?: string;
-          tbm_id?: string;
-          type?: string;
-          updated_at?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tbm_connection_status_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "tbms";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_connection_status_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_detail";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_connection_status_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_connection_status_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_picker";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      tbm_connection_status_history: {
-        Row: {
-          created_at: string;
-          end_at: string | null;
-          id: string;
-          remark: string | null;
-          source: string;
-          start_at: string;
-          status: string;
-          tbm_id: string;
-          type: string;
-        };
-        Insert: {
-          created_at?: string;
-          end_at?: string | null;
-          id?: string;
-          remark?: string | null;
-          source?: string;
-          start_at: string;
-          status: string;
-          tbm_id: string;
-          type: string;
-        };
-        Update: {
-          created_at?: string;
-          end_at?: string | null;
-          id?: string;
-          remark?: string | null;
-          source?: string;
-          start_at?: string;
-          status?: string;
-          tbm_id?: string;
-          type?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tbm_connection_status_history_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "tbms";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_connection_status_history_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_detail";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_connection_status_history_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_connection_status_history_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_picker";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      tbm_daily_progress: {
-        Row: {
-          chainage_end: number | null;
-          created_at: string | null;
-          created_by: string | null;
-          deleted_at: string | null;
-          deleted_by: string | null;
-          id: string;
-          plan_ring_count: number | null;
-          ring_end: number;
-          tbm_id: string;
-          updated_at: string | null;
-          updated_by: string | null;
-          work_date: string;
-        };
-        Insert: {
-          chainage_end?: number | null;
-          created_at?: string | null;
-          created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
-          id?: string;
-          plan_ring_count?: number | null;
-          ring_end: number;
-          tbm_id: string;
-          updated_at?: string | null;
-          updated_by?: string | null;
-          work_date: string;
-        };
-        Update: {
-          chainage_end?: number | null;
-          created_at?: string | null;
-          created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
-          id?: string;
-          plan_ring_count?: number | null;
-          ring_end?: number;
-          tbm_id?: string;
-          updated_at?: string | null;
-          updated_by?: string | null;
-          work_date?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "tbms";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_detail";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_picker";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      tbm_operation_modes: {
-        Row: {
-          end_at: string | null;
-          end_ring: number | null;
-          id: number;
-          mode_id: string;
-          remark: string | null;
-          start_at: string | null;
-          start_ring: number;
-          tbm_id: string;
-          tunnel_id: string;
-        };
-        Insert: {
-          end_at?: string | null;
-          end_ring?: number | null;
-          id?: number;
-          mode_id: string;
-          remark?: string | null;
-          start_at?: string | null;
-          start_ring: number;
-          tbm_id: string;
-          tunnel_id: string;
-        };
-        Update: {
-          end_at?: string | null;
-          end_ring?: number | null;
-          id?: number;
-          mode_id?: string;
-          remark?: string | null;
-          start_at?: string | null;
-          start_ring?: number;
-          tbm_id?: string;
-          tunnel_id?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tbm_operation_modes_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "tbms";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_operation_modes_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_detail";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_operation_modes_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_operation_modes_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_picker";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      tbm_operations: {
-        Row: {
-          end_at: string | null;
-          id: string;
-          operation_status: string;
-          remarks: string | null;
-          start_at: string;
-          tbm_id: string;
-          tunnel_id: string;
-        };
-        Insert: {
-          end_at?: string | null;
-          id?: string;
-          operation_status: string;
-          remarks?: string | null;
-          start_at: string;
-          tbm_id: string;
-          tunnel_id: string;
-        };
-        Update: {
-          end_at?: string | null;
-          id?: string;
-          operation_status?: string;
-          remarks?: string | null;
-          start_at?: string;
-          tbm_id?: string;
-          tunnel_id?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tbm_operations_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "tbms";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_operations_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_detail";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_operations_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_operations_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_picker";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      tbm_parameter_configs: {
-        Row: {
-          custom_name: string | null;
-          custom_unit: string | null;
-          id: number;
-          is_disabled: boolean;
-          parameter_id: number;
-          plc_tag_id: number | null;
-          remark: string | null;
-          scale: number;
-          tbm_id: string;
-          value_offset: number;
-        };
-        Insert: {
-          custom_name?: string | null;
-          custom_unit?: string | null;
-          id?: number;
-          is_disabled?: boolean;
-          parameter_id: number;
-          plc_tag_id?: number | null;
-          remark?: string | null;
-          scale?: number;
-          tbm_id: string;
-          value_offset?: number;
-        };
-        Update: {
-          custom_name?: string | null;
-          custom_unit?: string | null;
-          id?: number;
-          is_disabled?: boolean;
-          parameter_id?: number;
-          plc_tag_id?: number | null;
-          remark?: string | null;
-          scale?: number;
-          tbm_id?: string;
-          value_offset?: number;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tbm_parameter_configs_parameter_id_fkey";
-            columns: ["parameter_id"];
-            isOneToOne: false;
-            referencedRelation: "tbm_runtime_parameters";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_configs_parameter_id_fkey";
-            columns: ["parameter_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_parameter_configs";
-            referencedColumns: ["parameter_id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_configs_parameter_id_fkey";
-            columns: ["parameter_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_runtime_parameters_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_configs_parameter_id_fkey";
-            columns: ["parameter_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_runtime_parameters_picker";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_configs_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "tbms";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_configs_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_detail";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_configs_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_configs_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_picker";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      tbm_parameter_template_parameters: {
-        Row: {
-          is_required: boolean;
-          parameter_id: number;
-          sort_order: number;
-          template_id: number;
-        };
-        Insert: {
-          is_required?: boolean;
-          parameter_id: number;
-          sort_order?: number;
-          template_id: number;
-        };
-        Update: {
-          is_required?: boolean;
-          parameter_id?: number;
-          sort_order?: number;
-          template_id?: number;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tbm_parameter_template_parameters_parameter_id_fkey";
-            columns: ["parameter_id"];
-            isOneToOne: false;
-            referencedRelation: "tbm_runtime_parameters";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_template_parameters_parameter_id_fkey";
-            columns: ["parameter_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_parameter_configs";
-            referencedColumns: ["parameter_id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_template_parameters_parameter_id_fkey";
-            columns: ["parameter_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_runtime_parameters_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_template_parameters_parameter_id_fkey";
-            columns: ["parameter_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_runtime_parameters_picker";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_template_parameters_template_id_fkey";
-            columns: ["template_id"];
-            isOneToOne: false;
-            referencedRelation: "tbm_parameter_templates";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_template_parameters_template_id_fkey";
-            columns: ["template_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_parameter_templates_list";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      tbm_parameter_template_threshold_rules: {
-        Row: {
-          color: string | null;
-          direction: string;
-          duration_ms: number;
-          id: number;
-          is_active: boolean;
-          level: number;
-          max_value: number | null;
-          message: string | null;
-          min_value: number | null;
-          parameter_id: number;
-          recover_value: number | null;
-          severity: string | null;
-          template_id: number;
-        };
-        Insert: {
-          color?: string | null;
-          direction: string;
-          duration_ms?: number;
-          id?: number;
-          is_active?: boolean;
-          level: number;
-          max_value?: number | null;
-          message?: string | null;
-          min_value?: number | null;
-          parameter_id: number;
-          recover_value?: number | null;
-          severity?: string | null;
-          template_id: number;
-        };
-        Update: {
-          color?: string | null;
-          direction?: string;
-          duration_ms?: number;
-          id?: number;
-          is_active?: boolean;
-          level?: number;
-          max_value?: number | null;
-          message?: string | null;
-          min_value?: number | null;
-          parameter_id?: number;
-          recover_value?: number | null;
-          severity?: string | null;
-          template_id?: number;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tbm_parameter_template_threshold_rules_parameter_id_fkey";
-            columns: ["parameter_id"];
-            isOneToOne: false;
-            referencedRelation: "tbm_runtime_parameters";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_template_threshold_rules_parameter_id_fkey";
-            columns: ["parameter_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_parameter_configs";
-            referencedColumns: ["parameter_id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_template_threshold_rules_parameter_id_fkey";
-            columns: ["parameter_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_runtime_parameters_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_template_threshold_rules_parameter_id_fkey";
-            columns: ["parameter_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_runtime_parameters_picker";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_template_threshold_rules_template_id_fkey";
-            columns: ["template_id"];
-            isOneToOne: false;
-            referencedRelation: "tbm_parameter_templates";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_template_threshold_rules_template_id_fkey";
-            columns: ["template_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_parameter_templates_list";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      tbm_parameter_templates: {
-        Row: {
-          code: string;
-          diameter: number | null;
-          id: number;
-          is_default: boolean;
-          is_disabled: boolean;
-          name: string;
-          remark: string | null;
-          sort_order: number;
-          tbm_type_id: string;
-        };
-        Insert: {
-          code: string;
-          diameter?: number | null;
-          id?: never;
-          is_default?: boolean;
-          is_disabled?: boolean;
-          name: string;
-          remark?: string | null;
-          sort_order?: number;
-          tbm_type_id: string;
-        };
-        Update: {
-          code?: string;
-          diameter?: number | null;
-          id?: never;
-          is_default?: boolean;
-          is_disabled?: boolean;
-          name?: string;
-          remark?: string | null;
-          sort_order?: number;
-          tbm_type_id?: string;
-        };
-        Relationships: [];
-      };
-      tbm_parameter_threshold_rules: {
-        Row: {
-          binding_id: number;
-          id: number;
-          is_enabled: boolean;
-          level: number;
-          max_value: number | null;
-          min_value: number | null;
-          remark: string | null;
-        };
-        Insert: {
-          binding_id?: number;
-          id?: number;
-          is_enabled?: boolean;
-          level: number;
-          max_value?: number | null;
-          min_value?: number | null;
-          remark?: string | null;
-        };
-        Update: {
-          binding_id?: number;
-          id?: number;
-          is_enabled?: boolean;
-          level?: number;
-          max_value?: number | null;
-          min_value?: number | null;
-          remark?: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tbm_parameter_threshold_rules_binding_id_fkey";
-            columns: ["binding_id"];
-            isOneToOne: false;
-            referencedRelation: "tbm_parameter_configs";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_threshold_rules_binding_id_fkey";
-            columns: ["binding_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_bound_parameters";
-            referencedColumns: ["config_id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_threshold_rules_binding_id_fkey";
-            columns: ["binding_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_parameter_configs";
-            referencedColumns: ["tbm_parameter_id"];
-          },
-        ];
-      };
-      tbm_phase_active: {
-        Row: {
-          id: string;
-          phase_type: string;
-          remark: string | null;
-          ring_no: number;
-          source: string;
-          start_at: string;
-          tbm_id: string;
-        };
-        Insert: {
-          id?: string;
-          phase_type: string;
-          remark?: string | null;
-          ring_no: number;
-          source?: string;
-          start_at: string;
-          tbm_id: string;
-        };
-        Update: {
-          id?: string;
-          phase_type?: string;
-          remark?: string | null;
-          ring_no?: number;
-          source?: string;
-          start_at?: string;
-          tbm_id?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tbm_phase_active_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "tbms";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_phase_active_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_detail";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_phase_active_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_phase_active_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_picker";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      tbm_phase_records: {
-        Row: {
-          end_at: string;
-          id: string;
-          phase_type: string;
-          remark: string | null;
-          ring_no: number;
-          source: string;
-          start_at: string;
-          tbm_id: string;
-        };
-        Insert: {
-          end_at: string;
-          id?: string;
-          phase_type: string;
-          remark?: string | null;
-          ring_no: number;
-          source?: string;
-          start_at: string;
-          tbm_id: string;
-        };
-        Update: {
-          end_at?: string;
-          id?: string;
-          phase_type?: string;
-          remark?: string | null;
-          ring_no?: number;
-          source?: string;
-          start_at?: string;
-          tbm_id?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tbm_phase_records_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "tbms";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_phase_records_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_detail";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_phase_records_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_phase_records_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_picker";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      tbm_plc_tags: {
-        Row: {
-          archive: boolean;
-          bit: number | null;
-          comment: string | null;
-          data_type: string;
-          id: number;
-          internal: string | null;
-          sort_order: number;
-          tag_name: string;
-          tbm_id: string;
-          unit: string | null;
-        };
-        Insert: {
-          archive?: boolean;
-          bit?: number | null;
-          comment?: string | null;
-          data_type: string;
-          id?: number;
-          internal?: string | null;
-          sort_order?: number;
-          tag_name: string;
-          tbm_id: string;
-          unit?: string | null;
-        };
-        Update: {
-          archive?: boolean;
-          bit?: number | null;
-          comment?: string | null;
-          data_type?: string;
-          id?: number;
-          internal?: string | null;
-          sort_order?: number;
-          tag_name?: string;
-          tbm_id?: string;
-          unit?: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tbm_plc_tags_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "tbms";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_plc_tags_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_detail";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_plc_tags_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_plc_tags_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_picker";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      tbm_runtime_parameters: {
-        Row: {
-          code: string;
-          data_type: string;
-          digits: number;
-          id: number;
-          is_alarm: boolean;
-          is_chartable: boolean;
-          is_disabled: boolean;
-          is_group: boolean;
-          is_reportable: boolean;
-          is_trendable: boolean;
-          is_virtual: boolean;
-          name: string;
-          remark: string | null;
-          sort_order: number;
-          subsystem_id: number;
-          unit: string | null;
-        };
-        Insert: {
-          code: string;
-          data_type: string;
-          digits?: number;
-          id?: never;
-          is_alarm?: boolean;
-          is_chartable?: boolean;
-          is_disabled?: boolean;
-          is_group?: boolean;
-          is_reportable?: boolean;
-          is_trendable?: boolean;
-          is_virtual?: boolean;
-          name: string;
-          remark?: string | null;
-          sort_order?: number;
-          subsystem_id: number;
-          unit?: string | null;
-        };
-        Update: {
-          code?: string;
-          data_type?: string;
-          digits?: number;
-          id?: never;
-          is_alarm?: boolean;
-          is_chartable?: boolean;
-          is_disabled?: boolean;
-          is_group?: boolean;
-          is_reportable?: boolean;
-          is_trendable?: boolean;
-          is_virtual?: boolean;
-          name?: string;
-          remark?: string | null;
-          sort_order?: number;
-          subsystem_id?: number;
-          unit?: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tbm_runtime_parameters_subsystem_id_fkey";
-            columns: ["subsystem_id"];
-            isOneToOne: false;
-            referencedRelation: "tbm_subsystems";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_runtime_parameters_subsystem_id_fkey";
-            columns: ["subsystem_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_bound_parameters";
-            referencedColumns: ["subsystem_id"];
-          },
-          {
-            foreignKeyName: "tbm_runtime_parameters_subsystem_id_fkey";
-            columns: ["subsystem_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_parameter_configs";
-            referencedColumns: ["subsystem_id"];
-          },
-        ];
-      };
-      tbm_subsystems: {
-        Row: {
-          code: string;
-          id: number;
-          is_configurable: boolean;
-          is_disabled: boolean;
-          name: string;
-          remark: string | null;
-          sort_order: number;
-        };
-        Insert: {
-          code: string;
-          id?: never;
-          is_configurable?: boolean;
-          is_disabled?: boolean;
-          name: string;
-          remark?: string | null;
-          sort_order?: number;
-        };
-        Update: {
-          code?: string;
-          id?: never;
-          is_configurable?: boolean;
-          is_disabled?: boolean;
-          name?: string;
-          remark?: string | null;
-          sort_order?: number;
-        };
-        Relationships: [];
-      };
-      tbm_type_operation_modes: {
-        Row: {
-          operation_mode_id: string;
-          tbm_type_id: string;
-        };
-        Insert: {
-          operation_mode_id: string;
-          tbm_type_id: string;
-        };
-        Update: {
-          operation_mode_id?: string;
-          tbm_type_id?: string;
-        };
-        Relationships: [];
-      };
-      tbms: {
-        Row: {
-          code: string;
-          created_at: string | null;
-          created_by: string | null;
-          deleted_at: string | null;
-          deleted_by: string | null;
-          diameter: number | null;
-          external_id: string | null;
-          external_version: number | null;
-          id: string;
-          is_disabled: boolean;
-          manage_code: string | null;
-          manufacturer_id: string;
-          model: string;
-          name: string;
-          power: number | null;
-          remark: string | null;
-          serial_no: string | null;
-          sort_order: number;
-          tbm_type_id: string;
-          updated_at: string | null;
-          updated_by: string | null;
-        };
-        Insert: {
-          code: string;
-          created_at?: string | null;
-          created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
-          diameter?: number | null;
-          external_id?: string | null;
-          external_version?: number | null;
-          id?: string;
-          is_disabled?: boolean;
-          manage_code?: string | null;
-          manufacturer_id: string;
-          model: string;
-          name: string;
-          power?: number | null;
-          remark?: string | null;
-          serial_no?: string | null;
-          sort_order?: number;
-          tbm_type_id: string;
-          updated_at?: string | null;
-          updated_by?: string | null;
-        };
-        Update: {
-          code?: string;
-          created_at?: string | null;
-          created_by?: string | null;
-          deleted_at?: string | null;
-          deleted_by?: string | null;
-          diameter?: number | null;
-          external_id?: string | null;
-          external_version?: number | null;
-          id?: string;
-          is_disabled?: boolean;
-          manage_code?: string | null;
-          manufacturer_id?: string;
-          model?: string;
-          name?: string;
-          power?: number | null;
-          remark?: string | null;
-          serial_no?: string | null;
-          sort_order?: number;
-          tbm_type_id?: string;
-          updated_at?: string | null;
-          updated_by?: string | null;
-        };
-        Relationships: [];
-      };
     };
     Views: {
       v_mqtt_users: {
@@ -1354,237 +361,6 @@ export type Database = {
           updated_at: string | null;
           user_type: string | null;
           username: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "mqtt_user_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "tbms";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "mqtt_user_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_detail";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "mqtt_user_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "mqtt_user_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_picker";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      v_tbm_assignment_list: {
-        Row: {
-          end_date: string | null;
-          id: string | null;
-          project_id: string | null;
-          project_name: string | null;
-          remark: string | null;
-          start_date: string | null;
-          tbm_code: string | null;
-          tbm_id: string | null;
-          tbm_name: string | null;
-          tunnel_id: string | null;
-          tunnel_name: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tbm_assignments_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "tbms";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_assignments_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_detail";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_assignments_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_assignments_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_picker";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      v_tbm_bound_parameters: {
-        Row: {
-          archive: boolean | null;
-          bit: number | null;
-          config_id: number | null;
-          internal: string | null;
-          is_alarm: boolean | null;
-          is_chartable: boolean | null;
-          parameter_code: string | null;
-          parameter_data_type: string | null;
-          parameter_digits: number | null;
-          parameter_id: number | null;
-          parameter_is_disabled: boolean | null;
-          parameter_name: string | null;
-          parameter_sort_order: number | null;
-          parameter_unit: string | null;
-          plc_data_type: string | null;
-          plc_sort_order: number | null;
-          plc_tag_id: number | null;
-          plc_unit: string | null;
-          scale: number | null;
-          subsystem_code: string | null;
-          subsystem_id: number | null;
-          subsystem_name: string | null;
-          subsystem_sort_order: number | null;
-          tag_comment: string | null;
-          tag_name: string | null;
-          value_offset: number | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tbm_parameter_configs_parameter_id_fkey";
-            columns: ["parameter_id"];
-            isOneToOne: false;
-            referencedRelation: "tbm_runtime_parameters";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_configs_parameter_id_fkey";
-            columns: ["parameter_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_parameter_configs";
-            referencedColumns: ["parameter_id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_configs_parameter_id_fkey";
-            columns: ["parameter_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_runtime_parameters_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_configs_parameter_id_fkey";
-            columns: ["parameter_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_runtime_parameters_picker";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      v_tbm_daily_progress: {
-        Row: {
-          chainage_end: number | null;
-          chainage_start: number | null;
-          completed_length: number | null;
-          completed_ring_count: number | null;
-          id: string | null;
-          plan_ring_count: number | null;
-          ring_end: number | null;
-          ring_start: number | null;
-          tbm_id: string | null;
-          work_date: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "tbms";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_detail";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_picker";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      v_tbm_detail: {
-        Row: {
-          code: string | null;
-          created_at: string | null;
-          created_by: string | null;
-          deleted_at: string | null;
-          deleted_by: string | null;
-          diameter: number | null;
-          external_id: string | null;
-          external_version: number | null;
-          id: string | null;
-          is_disabled: boolean | null;
-          manage_code: string | null;
-          manufacturer_name: string | null;
-          model: string | null;
-          name: string | null;
-          power: number | null;
-          remark: string | null;
-          serial_no: string | null;
-          sort_order: number | null;
-          tbm_type_id: string | null;
-          tbm_type_name: string | null;
-          updated_at: string | null;
-          updated_by: string | null;
-        };
-        Relationships: [];
-      };
-      v_tbm_list: {
-        Row: {
-          code: string | null;
-          diameter: number | null;
-          id: string | null;
-          is_disabled: boolean | null;
-          manage_code: string | null;
-          manufacturer_id: string | null;
-          manufacturer_name: string | null;
-          model: string | null;
-          name: string | null;
-          power: number | null;
-          serial_no: string | null;
-          sort_order: number | null;
-          tbm_type_id: string | null;
-          tbm_type_name: string | null;
-        };
-        Relationships: [];
-      };
-      v_tbm_manufacturer_counts: {
-        Row: {
-          manufacturer_id: string | null;
-          tbm_count: number | null;
         };
         Relationships: [];
       };
@@ -1616,121 +392,6 @@ export type Database = {
           tbm_name: string | null;
           tbm_parameter_id: number | null;
           value_offset: number | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tbm_parameter_configs_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "tbms";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_configs_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_detail";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_configs_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_list";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_parameter_configs_tbm_id_fkey";
-            columns: ["tbm_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_picker";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      v_tbm_parameter_templates_list: {
-        Row: {
-          code: string | null;
-          diameter: number | null;
-          id: number | null;
-          is_default: boolean | null;
-          is_disabled: boolean | null;
-          name: string | null;
-          remark: string | null;
-          sort_order: number | null;
-          tbm_type_code: string | null;
-          tbm_type_id: string | null;
-          tbm_type_name: string | null;
-        };
-        Relationships: [];
-      };
-      v_tbm_picker: {
-        Row: {
-          code: string | null;
-          diameter: number | null;
-          id: string | null;
-          manage_code: string | null;
-          manufacturer_name: string | null;
-          name: string | null;
-          tbm_type_name: string | null;
-        };
-        Relationships: [];
-      };
-      v_tbm_runtime_parameters_list: {
-        Row: {
-          code: string | null;
-          data_type: string | null;
-          digits: number | null;
-          id: number | null;
-          is_alarm: boolean | null;
-          is_chartable: boolean | null;
-          is_disabled: boolean | null;
-          name: string | null;
-          sort_order: number | null;
-          subsystem_code: string | null;
-          subsystem_id: number | null;
-          subsystem_name: string | null;
-          unit: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tbm_runtime_parameters_subsystem_id_fkey";
-            columns: ["subsystem_id"];
-            isOneToOne: false;
-            referencedRelation: "tbm_subsystems";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tbm_runtime_parameters_subsystem_id_fkey";
-            columns: ["subsystem_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_bound_parameters";
-            referencedColumns: ["subsystem_id"];
-          },
-          {
-            foreignKeyName: "tbm_runtime_parameters_subsystem_id_fkey";
-            columns: ["subsystem_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tbm_parameter_configs";
-            referencedColumns: ["subsystem_id"];
-          },
-        ];
-      };
-      v_tbm_runtime_parameters_picker: {
-        Row: {
-          code: string | null;
-          id: number | null;
-          is_chartable: boolean | null;
-          name: string | null;
-          subsystem_code: string | null;
-          subsystem_name: string | null;
-        };
-        Relationships: [];
-      };
-      v_tbm_type_counts: {
-        Row: {
-          tbm_count: number | null;
-          tbm_type_id: string | null;
         };
         Relationships: [];
       };
@@ -1789,7 +450,6 @@ export type Database = {
           value: string;
         }[];
       };
-      sync_tbm_realdata_table: { Args: { p_tbm_id: string }; Returns: string };
     };
     Enums: {
       [_ in never]: never;
@@ -4142,6 +2802,13 @@ export type Database = {
             referencedColumns: ["project_type_id"];
           },
           {
+            foreignKeyName: "project_attention_level_timelin_project_attention_level_id_fkey";
+            columns: ["project_attention_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_list";
+            referencedColumns: ["region_id"];
+          },
+          {
             foreignKeyName: "project_attention_level_timeline_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
@@ -4491,6 +3158,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_type_id"];
+          },
+          {
+            foreignKeyName: "project_attention_type_timeline_attention_type_id_fkey";
+            columns: ["attention_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_list";
+            referencedColumns: ["region_id"];
           },
           {
             foreignKeyName: "project_attention_type_timeline_created_by_fkey";
@@ -5076,6 +3750,13 @@ export type Database = {
             referencedColumns: ["project_type_id"];
           },
           {
+            foreignKeyName: "project_catalog_std_major_type_id_fkey";
+            columns: ["major_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_list";
+            referencedColumns: ["region_id"];
+          },
+          {
             foreignKeyName: "project_catalog_std_parent_id_fkey";
             columns: ["parent_id"];
             isOneToOne: false;
@@ -5153,6 +3834,13 @@ export type Database = {
             referencedColumns: ["project_type_id"];
           },
           {
+            foreignKeyName: "project_catalog_std_project_catalog_type_id_fkey";
+            columns: ["project_catalog_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_list";
+            referencedColumns: ["region_id"];
+          },
+          {
             foreignKeyName: "project_catalog_std_project_type_id_fkey";
             columns: ["project_type_id"];
             isOneToOne: false;
@@ -5221,6 +3909,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_type_id"];
+          },
+          {
+            foreignKeyName: "project_catalog_std_project_type_id_fkey";
+            columns: ["project_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_list";
+            referencedColumns: ["region_id"];
           },
           {
             foreignKeyName: "project_catalog_std_updated_by_fkey";
@@ -6406,6 +5101,13 @@ export type Database = {
             referencedColumns: ["project_type_id"];
           },
           {
+            foreignKeyName: "project_control_level_timeline_project_control_level_id_fkey";
+            columns: ["project_control_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_list";
+            referencedColumns: ["region_id"];
+          },
+          {
             foreignKeyName: "project_control_level_timeline_project_id_fkey";
             columns: ["project_id"];
             isOneToOne: false;
@@ -6794,6 +5496,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_type_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_project_risk_level_id_fkey";
+            columns: ["project_risk_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_list";
+            referencedColumns: ["region_id"];
           },
           {
             foreignKeyName: "project_risk_level_timeline_updated_by_fkey";
@@ -7642,6 +6351,13 @@ export type Database = {
             referencedColumns: ["project_type_id"];
           },
           {
+            foreignKeyName: "project_status_timeline_project_status_id_fkey";
+            columns: ["project_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_list";
+            referencedColumns: ["region_id"];
+          },
+          {
             foreignKeyName: "project_status_timeline_project_sub_status_id_fkey";
             columns: ["project_sub_status_id"];
             isOneToOne: false;
@@ -7710,6 +6426,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_type_id"];
+          },
+          {
+            foreignKeyName: "project_status_timeline_project_sub_status_id_fkey";
+            columns: ["project_sub_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_list";
+            referencedColumns: ["region_id"];
           },
           {
             foreignKeyName: "project_status_timeline_updated_by_fkey";
@@ -8264,6 +6987,13 @@ export type Database = {
             referencedColumns: ["project_type_id"];
           },
           {
+            foreignKeyName: "projects_project_management_mode_id_fkey";
+            columns: ["project_management_mode_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_list";
+            referencedColumns: ["region_id"];
+          },
+          {
             foreignKeyName: "projects_project_sub_type_id_fkey";
             columns: ["project_sub_type_id"];
             isOneToOne: false;
@@ -8334,6 +7064,13 @@ export type Database = {
             referencedColumns: ["project_type_id"];
           },
           {
+            foreignKeyName: "projects_project_sub_type_id_fkey";
+            columns: ["project_sub_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_list";
+            referencedColumns: ["region_id"];
+          },
+          {
             foreignKeyName: "projects_project_type_id_fkey";
             columns: ["project_type_id"];
             isOneToOne: false;
@@ -8404,6 +7141,13 @@ export type Database = {
             referencedColumns: ["project_type_id"];
           },
           {
+            foreignKeyName: "projects_project_type_id_fkey";
+            columns: ["project_type_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_list";
+            referencedColumns: ["region_id"];
+          },
+          {
             foreignKeyName: "projects_region_id_fkey";
             columns: ["region_id"];
             isOneToOne: false;
@@ -8472,6 +7216,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_type_id"];
+          },
+          {
+            foreignKeyName: "projects_region_id_fkey";
+            columns: ["region_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_list";
+            referencedColumns: ["region_id"];
           },
           {
             foreignKeyName: "projects_updated_by_fkey";
@@ -9199,6 +7950,13 @@ export type Database = {
             referencedColumns: ["project_type_id"];
           },
           {
+            foreignKeyName: "tunnel_status_timeline_tunnel_status_id_fkey";
+            columns: ["tunnel_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_list";
+            referencedColumns: ["region_id"];
+          },
+          {
             foreignKeyName: "tunnel_status_timeline_updated_by_fkey";
             columns: ["updated_by"];
             isOneToOne: false;
@@ -9867,6 +8625,13 @@ export type Database = {
             referencedColumns: ["project_type_id"];
           },
           {
+            foreignKeyName: "project_attention_level_timelin_project_attention_level_id_fkey";
+            columns: ["project_attention_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_list";
+            referencedColumns: ["region_id"];
+          },
+          {
             foreignKeyName: "project_control_level_timeline_project_control_level_id_fkey";
             columns: ["project_control_level_id"];
             isOneToOne: false;
@@ -9937,6 +8702,13 @@ export type Database = {
             referencedColumns: ["project_type_id"];
           },
           {
+            foreignKeyName: "project_control_level_timeline_project_control_level_id_fkey";
+            columns: ["project_control_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_list";
+            referencedColumns: ["region_id"];
+          },
+          {
             foreignKeyName: "project_risk_level_timeline_project_risk_level_id_fkey";
             columns: ["project_risk_level_id"];
             isOneToOne: false;
@@ -10005,6 +8777,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_type_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_project_risk_level_id_fkey";
+            columns: ["project_risk_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_list";
+            referencedColumns: ["region_id"];
           },
         ];
       };
@@ -10138,6 +8917,13 @@ export type Database = {
             referencedColumns: ["project_type_id"];
           },
           {
+            foreignKeyName: "project_attention_level_timelin_project_attention_level_id_fkey";
+            columns: ["project_attention_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_list";
+            referencedColumns: ["region_id"];
+          },
+          {
             foreignKeyName: "project_control_level_timeline_project_control_level_id_fkey";
             columns: ["project_control_level_id"];
             isOneToOne: false;
@@ -10208,6 +8994,13 @@ export type Database = {
             referencedColumns: ["project_type_id"];
           },
           {
+            foreignKeyName: "project_control_level_timeline_project_control_level_id_fkey";
+            columns: ["project_control_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_list";
+            referencedColumns: ["region_id"];
+          },
+          {
             foreignKeyName: "project_risk_level_timeline_project_risk_level_id_fkey";
             columns: ["project_risk_level_id"];
             isOneToOne: false;
@@ -10276,6 +9069,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_type_id"];
+          },
+          {
+            foreignKeyName: "project_risk_level_timeline_project_risk_level_id_fkey";
+            columns: ["project_risk_level_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_list";
+            referencedColumns: ["region_id"];
           },
         ];
       };
@@ -10550,6 +9350,8 @@ export type Database = {
           prefix: string | null;
           project_id: string | null;
           project_name: string | null;
+          region_id: string | null;
+          region_name: string | null;
           remark: string | null;
           schedule_end_date: string | null;
           schedule_start_date: string | null;
@@ -10632,6 +9434,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_type_id"];
+          },
+          {
+            foreignKeyName: "tunnel_status_timeline_tunnel_status_id_fkey";
+            columns: ["tunnel_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_list";
+            referencedColumns: ["region_id"];
           },
           {
             foreignKeyName: "tunnels_project_id_fkey";
@@ -10782,6 +9591,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_project_list";
             referencedColumns: ["project_type_id"];
+          },
+          {
+            foreignKeyName: "tunnel_status_timeline_tunnel_status_id_fkey";
+            columns: ["tunnel_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_list";
+            referencedColumns: ["region_id"];
           },
           {
             foreignKeyName: "tunnels_project_id_fkey";
@@ -11251,64 +10067,44 @@ export type Database = {
           },
         ];
       };
-    };
-    Views: {
-      v_command_center_summary: {
+      stat_period_settings: {
         Row: {
-          advancing_count: number | null;
-          assembly_count: number | null;
-          fault_count: number | null;
-          offline_count: number | null;
-          project_count: number | null;
-          refreshed_at: string | null;
-          stopped_count: number | null;
-          tbm_count: number | null;
-          tunnel_count: number | null;
+          code: string;
+          created_at: string;
+          day_cutoff_time: string;
+          effective_from: string;
+          effective_to: string | null;
+          id: string;
+          month_start_day: number;
+          timezone: string;
+          week_start_dow: number;
+        };
+        Insert: {
+          code: string;
+          created_at?: string;
+          day_cutoff_time?: string;
+          effective_from: string;
+          effective_to?: string | null;
+          id?: string;
+          month_start_day?: number;
+          timezone?: string;
+          week_start_dow?: number;
+        };
+        Update: {
+          code?: string;
+          created_at?: string;
+          day_cutoff_time?: string;
+          effective_from?: string;
+          effective_to?: string | null;
+          id?: string;
+          month_start_day?: number;
+          timezone?: string;
+          week_start_dow?: number;
         };
         Relationships: [];
       };
-      v_command_center_tunnel: {
-        Row: {
-          actual_end_date: string | null;
-          actual_start_date: string | null;
-          connection_last_seen_at: string | null;
-          current_ring: number | null;
-          is_online: boolean | null;
-          phase_start_at: string | null;
-          phase_type: string | null;
-          project_id: string | null;
-          project_name: string | null;
-          ring_no: number | null;
-          schedule_end_date: string | null;
-          schedule_start_date: string | null;
-          sort_order: number | null;
-          tbm_code: string | null;
-          tbm_id: string | null;
-          tbm_name: string | null;
-          total_ring_count: number | null;
-          tunnel_id: string | null;
-          tunnel_name: string | null;
-          tunnel_status_code: string | null;
-          tunnel_status_id: string | null;
-          tunnel_status_name: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "tunnel_status_timeline_tunnel_status_id_fkey";
-            columns: ["tunnel_status_id"];
-            isOneToOne: false;
-            referencedRelation: "master_data";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tunnel_status_timeline_tunnel_status_id_fkey";
-            columns: ["tunnel_status_id"];
-            isOneToOne: false;
-            referencedRelation: "v_master_options";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
+    };
+    Views: {
       v_master_options: {
         Row: {
           code: string | null;
@@ -11332,33 +10128,6 @@ export type Database = {
           permissions: string[] | null;
           roles: string[] | null;
           user_id: string | null;
-        };
-        Relationships: [];
-      };
-      v_tunnel_progress_overview: {
-        Row: {
-          current_work_date: string | null;
-          month_advance_meter: number | null;
-          month_ring_count: number | null;
-          month_start_work_date: string | null;
-          project_id: string | null;
-          project_name: string | null;
-          refreshed_at: string | null;
-          sort_order: number | null;
-          tbm_code: string | null;
-          tbm_id: string | null;
-          tbm_name: string | null;
-          today_advance_meter: number | null;
-          today_ring_count: number | null;
-          total_advance_meter: number | null;
-          total_advance_ring_count: number | null;
-          total_length_meter: number | null;
-          total_ring_count: number | null;
-          tunnel_id: string | null;
-          tunnel_name: string | null;
-          week_advance_meter: number | null;
-          week_ring_count: number | null;
-          week_start_work_date: string | null;
         };
         Relationships: [];
       };
@@ -11957,42 +10726,6 @@ export type Database = {
         };
         Relationships: [];
       };
-      stat_period_settings: {
-        Row: {
-          code: string;
-          created_at: string;
-          day_cutoff_time: string;
-          effective_from: string;
-          effective_to: string | null;
-          id: string;
-          month_start_day: number;
-          timezone: string;
-          week_start_dow: number;
-        };
-        Insert: {
-          code: string;
-          created_at?: string;
-          day_cutoff_time?: string;
-          effective_from: string;
-          effective_to?: string | null;
-          id?: string;
-          month_start_day?: number;
-          timezone?: string;
-          week_start_dow?: number;
-        };
-        Update: {
-          code?: string;
-          created_at?: string;
-          day_cutoff_time?: string;
-          effective_from?: string;
-          effective_to?: string | null;
-          id?: string;
-          month_start_day?: number;
-          timezone?: string;
-          week_start_dow?: number;
-        };
-        Relationships: [];
-      };
       versions: {
         Row: {
           deployed_at: string | null;
@@ -12132,6 +10865,1576 @@ export type Database = {
       [_ in never]: never;
     };
   };
+  tbm: {
+    Tables: {
+      plc_tags: {
+        Row: {
+          archive: boolean;
+          bit: number | null;
+          comment: string | null;
+          data_type: string;
+          id: number;
+          internal: string | null;
+          sort_order: number;
+          tag_name: string;
+          tbm_id: string;
+          unit: string | null;
+        };
+        Insert: {
+          archive?: boolean;
+          bit?: number | null;
+          comment?: string | null;
+          data_type: string;
+          id?: number;
+          internal?: string | null;
+          sort_order?: number;
+          tag_name: string;
+          tbm_id: string;
+          unit?: string | null;
+        };
+        Update: {
+          archive?: boolean;
+          bit?: number | null;
+          comment?: string | null;
+          data_type?: string;
+          id?: number;
+          internal?: string | null;
+          sort_order?: number;
+          tag_name?: string;
+          tbm_id?: string;
+          unit?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "plc_tags_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "tbms";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "plc_tags_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_detail";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "plc_tags_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "plc_tags_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_picker";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "plc_tags_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_runtime_state";
+            referencedColumns: ["tbm_id"];
+          },
+        ];
+      };
+      tbm_assignments: {
+        Row: {
+          created_at: string | null;
+          created_by: string | null;
+          deleted_at: string | null;
+          deleted_by: string | null;
+          end_date: string | null;
+          id: string;
+          remark: string | null;
+          start_date: string;
+          tbm_id: string;
+          tunnel_id: string;
+          updated_at: string | null;
+          updated_by: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          created_by?: string | null;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
+          end_date?: string | null;
+          id?: string;
+          remark?: string | null;
+          start_date: string;
+          tbm_id: string;
+          tunnel_id: string;
+          updated_at?: string | null;
+          updated_by?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          created_by?: string | null;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
+          end_date?: string | null;
+          id?: string;
+          remark?: string | null;
+          start_date?: string;
+          tbm_id?: string;
+          tunnel_id?: string;
+          updated_at?: string | null;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tbm_assignments_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "tbms";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_assignments_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_detail";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_assignments_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_assignments_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_picker";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_assignments_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_runtime_state";
+            referencedColumns: ["tbm_id"];
+          },
+        ];
+      };
+      tbm_connection_status: {
+        Row: {
+          is_online: boolean;
+          last_seen_at: string;
+          tbm_id: string;
+          type: string;
+          updated_at: string;
+        };
+        Insert: {
+          is_online?: boolean;
+          last_seen_at: string;
+          tbm_id: string;
+          type: string;
+          updated_at?: string;
+        };
+        Update: {
+          is_online?: boolean;
+          last_seen_at?: string;
+          tbm_id?: string;
+          type?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tbm_connection_status_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "tbms";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_connection_status_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_detail";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_connection_status_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_connection_status_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_picker";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_connection_status_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_runtime_state";
+            referencedColumns: ["tbm_id"];
+          },
+        ];
+      };
+      tbm_connection_status_history: {
+        Row: {
+          created_at: string;
+          end_at: string | null;
+          id: string;
+          remark: string | null;
+          source: string;
+          start_at: string;
+          status: string;
+          tbm_id: string;
+          type: string;
+        };
+        Insert: {
+          created_at?: string;
+          end_at?: string | null;
+          id?: string;
+          remark?: string | null;
+          source?: string;
+          start_at: string;
+          status: string;
+          tbm_id: string;
+          type: string;
+        };
+        Update: {
+          created_at?: string;
+          end_at?: string | null;
+          id?: string;
+          remark?: string | null;
+          source?: string;
+          start_at?: string;
+          status?: string;
+          tbm_id?: string;
+          type?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tbm_connection_status_history_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "tbms";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_connection_status_history_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_detail";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_connection_status_history_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_connection_status_history_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_picker";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_connection_status_history_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_runtime_state";
+            referencedColumns: ["tbm_id"];
+          },
+        ];
+      };
+      tbm_daily_progress: {
+        Row: {
+          chainage_end: number | null;
+          created_at: string | null;
+          created_by: string | null;
+          deleted_at: string | null;
+          deleted_by: string | null;
+          id: string;
+          plan_ring_count: number | null;
+          ring_end: number;
+          tbm_id: string;
+          updated_at: string | null;
+          updated_by: string | null;
+          work_date: string;
+        };
+        Insert: {
+          chainage_end?: number | null;
+          created_at?: string | null;
+          created_by?: string | null;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
+          id?: string;
+          plan_ring_count?: number | null;
+          ring_end: number;
+          tbm_id: string;
+          updated_at?: string | null;
+          updated_by?: string | null;
+          work_date: string;
+        };
+        Update: {
+          chainage_end?: number | null;
+          created_at?: string | null;
+          created_by?: string | null;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
+          id?: string;
+          plan_ring_count?: number | null;
+          ring_end?: number;
+          tbm_id?: string;
+          updated_at?: string | null;
+          updated_by?: string | null;
+          work_date?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "tbms";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_detail";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_picker";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_runtime_state";
+            referencedColumns: ["tbm_id"];
+          },
+        ];
+      };
+      tbm_operation_modes: {
+        Row: {
+          operation_mode_id: string;
+          tbm_type_id: string;
+        };
+        Insert: {
+          operation_mode_id: string;
+          tbm_type_id: string;
+        };
+        Update: {
+          operation_mode_id?: string;
+          tbm_type_id?: string;
+        };
+        Relationships: [];
+      };
+      tbm_parameter_configs: {
+        Row: {
+          custom_name: string | null;
+          custom_unit: string | null;
+          id: number;
+          is_disabled: boolean;
+          parameter_id: number;
+          plc_tag_id: number | null;
+          remark: string | null;
+          scale: number;
+          tbm_id: string;
+          value_offset: number;
+        };
+        Insert: {
+          custom_name?: string | null;
+          custom_unit?: string | null;
+          id?: number;
+          is_disabled?: boolean;
+          parameter_id: number;
+          plc_tag_id?: number | null;
+          remark?: string | null;
+          scale?: number;
+          tbm_id: string;
+          value_offset?: number;
+        };
+        Update: {
+          custom_name?: string | null;
+          custom_unit?: string | null;
+          id?: number;
+          is_disabled?: boolean;
+          parameter_id?: number;
+          plc_tag_id?: number | null;
+          remark?: string | null;
+          scale?: number;
+          tbm_id?: string;
+          value_offset?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tbm_parameter_configs_parameter_id_fkey";
+            columns: ["parameter_id"];
+            isOneToOne: false;
+            referencedRelation: "tbm_runtime_parameters";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_configs_parameter_id_fkey";
+            columns: ["parameter_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_parameter_configs";
+            referencedColumns: ["parameter_id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_configs_parameter_id_fkey";
+            columns: ["parameter_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_runtime_parameters_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_configs_parameter_id_fkey";
+            columns: ["parameter_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_runtime_parameters_picker";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_configs_plc_tag_id_fkey";
+            columns: ["plc_tag_id"];
+            isOneToOne: false;
+            referencedRelation: "plc_tags";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_configs_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "tbms";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_configs_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_detail";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_configs_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_configs_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_picker";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_configs_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_runtime_state";
+            referencedColumns: ["tbm_id"];
+          },
+        ];
+      };
+      tbm_parameter_template_parameters: {
+        Row: {
+          is_required: boolean;
+          parameter_id: number;
+          sort_order: number;
+          template_id: number;
+        };
+        Insert: {
+          is_required?: boolean;
+          parameter_id: number;
+          sort_order?: number;
+          template_id: number;
+        };
+        Update: {
+          is_required?: boolean;
+          parameter_id?: number;
+          sort_order?: number;
+          template_id?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tbm_parameter_template_parameters_parameter_id_fkey";
+            columns: ["parameter_id"];
+            isOneToOne: false;
+            referencedRelation: "tbm_runtime_parameters";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_template_parameters_parameter_id_fkey";
+            columns: ["parameter_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_parameter_configs";
+            referencedColumns: ["parameter_id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_template_parameters_parameter_id_fkey";
+            columns: ["parameter_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_runtime_parameters_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_template_parameters_parameter_id_fkey";
+            columns: ["parameter_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_runtime_parameters_picker";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_template_parameters_template_id_fkey";
+            columns: ["template_id"];
+            isOneToOne: false;
+            referencedRelation: "tbm_parameter_templates";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_template_parameters_template_id_fkey";
+            columns: ["template_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_parameter_templates_list";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      tbm_parameter_template_threshold_rules: {
+        Row: {
+          color: string | null;
+          direction: string;
+          duration_ms: number;
+          id: number;
+          is_active: boolean;
+          level: number;
+          max_value: number | null;
+          message: string | null;
+          min_value: number | null;
+          parameter_id: number;
+          recover_value: number | null;
+          severity: string | null;
+          template_id: number;
+        };
+        Insert: {
+          color?: string | null;
+          direction: string;
+          duration_ms?: number;
+          id?: number;
+          is_active?: boolean;
+          level: number;
+          max_value?: number | null;
+          message?: string | null;
+          min_value?: number | null;
+          parameter_id: number;
+          recover_value?: number | null;
+          severity?: string | null;
+          template_id: number;
+        };
+        Update: {
+          color?: string | null;
+          direction?: string;
+          duration_ms?: number;
+          id?: number;
+          is_active?: boolean;
+          level?: number;
+          max_value?: number | null;
+          message?: string | null;
+          min_value?: number | null;
+          parameter_id?: number;
+          recover_value?: number | null;
+          severity?: string | null;
+          template_id?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tbm_parameter_template_threshold_rules_parameter_id_fkey";
+            columns: ["parameter_id"];
+            isOneToOne: false;
+            referencedRelation: "tbm_runtime_parameters";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_template_threshold_rules_parameter_id_fkey";
+            columns: ["parameter_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_parameter_configs";
+            referencedColumns: ["parameter_id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_template_threshold_rules_parameter_id_fkey";
+            columns: ["parameter_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_runtime_parameters_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_template_threshold_rules_parameter_id_fkey";
+            columns: ["parameter_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_runtime_parameters_picker";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_template_threshold_rules_template_id_fkey";
+            columns: ["template_id"];
+            isOneToOne: false;
+            referencedRelation: "tbm_parameter_templates";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_template_threshold_rules_template_id_fkey";
+            columns: ["template_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_parameter_templates_list";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      tbm_parameter_templates: {
+        Row: {
+          code: string;
+          diameter: number | null;
+          id: number;
+          is_default: boolean;
+          is_disabled: boolean;
+          name: string;
+          remark: string | null;
+          sort_order: number;
+          tbm_type_id: string;
+        };
+        Insert: {
+          code: string;
+          diameter?: number | null;
+          id?: never;
+          is_default?: boolean;
+          is_disabled?: boolean;
+          name: string;
+          remark?: string | null;
+          sort_order?: number;
+          tbm_type_id: string;
+        };
+        Update: {
+          code?: string;
+          diameter?: number | null;
+          id?: never;
+          is_default?: boolean;
+          is_disabled?: boolean;
+          name?: string;
+          remark?: string | null;
+          sort_order?: number;
+          tbm_type_id?: string;
+        };
+        Relationships: [];
+      };
+      tbm_parameter_threshold_rules: {
+        Row: {
+          binding_id: number;
+          id: number;
+          is_enabled: boolean;
+          level: number;
+          max_value: number | null;
+          min_value: number | null;
+          remark: string | null;
+        };
+        Insert: {
+          binding_id?: number;
+          id?: number;
+          is_enabled?: boolean;
+          level: number;
+          max_value?: number | null;
+          min_value?: number | null;
+          remark?: string | null;
+        };
+        Update: {
+          binding_id?: number;
+          id?: number;
+          is_enabled?: boolean;
+          level?: number;
+          max_value?: number | null;
+          min_value?: number | null;
+          remark?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tbm_parameter_threshold_rules_binding_id_fkey";
+            columns: ["binding_id"];
+            isOneToOne: false;
+            referencedRelation: "tbm_parameter_configs";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_threshold_rules_binding_id_fkey";
+            columns: ["binding_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_bound_parameters";
+            referencedColumns: ["config_id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_threshold_rules_binding_id_fkey";
+            columns: ["binding_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_parameter_configs";
+            referencedColumns: ["tbm_parameter_id"];
+          },
+        ];
+      };
+      tbm_phase_active: {
+        Row: {
+          chainage: number | null;
+          id: string;
+          phase_type: string;
+          remark: string | null;
+          ring_no: number | null;
+          source: string;
+          start_at: string;
+          tbm_id: string;
+        };
+        Insert: {
+          chainage?: number | null;
+          id?: string;
+          phase_type: string;
+          remark?: string | null;
+          ring_no?: number | null;
+          source?: string;
+          start_at: string;
+          tbm_id: string;
+        };
+        Update: {
+          chainage?: number | null;
+          id?: string;
+          phase_type?: string;
+          remark?: string | null;
+          ring_no?: number | null;
+          source?: string;
+          start_at?: string;
+          tbm_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tbm_phase_active_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "tbms";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_phase_active_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_detail";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_phase_active_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_phase_active_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_picker";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_phase_active_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_runtime_state";
+            referencedColumns: ["tbm_id"];
+          },
+        ];
+      };
+      tbm_phase_records: {
+        Row: {
+          chainage: number | null;
+          end_at: string;
+          id: string;
+          phase_type: string;
+          remark: string | null;
+          ring_no: number | null;
+          source: string;
+          start_at: string;
+          tbm_id: string;
+        };
+        Insert: {
+          chainage?: number | null;
+          end_at: string;
+          id?: string;
+          phase_type: string;
+          remark?: string | null;
+          ring_no?: number | null;
+          source?: string;
+          start_at: string;
+          tbm_id: string;
+        };
+        Update: {
+          chainage?: number | null;
+          end_at?: string;
+          id?: string;
+          phase_type?: string;
+          remark?: string | null;
+          ring_no?: number | null;
+          source?: string;
+          start_at?: string;
+          tbm_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tbm_phase_records_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "tbms";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_phase_records_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_detail";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_phase_records_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_phase_records_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_picker";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_phase_records_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_runtime_state";
+            referencedColumns: ["tbm_id"];
+          },
+        ];
+      };
+      tbm_runtime_parameters: {
+        Row: {
+          code: string;
+          data_type: string;
+          digits: number;
+          id: number;
+          is_alarm: boolean;
+          is_chartable: boolean;
+          is_disabled: boolean;
+          is_group: boolean;
+          is_reportable: boolean;
+          is_trendable: boolean;
+          is_virtual: boolean;
+          name: string;
+          remark: string | null;
+          sort_order: number;
+          subsystem_id: number;
+          unit: string | null;
+        };
+        Insert: {
+          code: string;
+          data_type: string;
+          digits?: number;
+          id?: never;
+          is_alarm?: boolean;
+          is_chartable?: boolean;
+          is_disabled?: boolean;
+          is_group?: boolean;
+          is_reportable?: boolean;
+          is_trendable?: boolean;
+          is_virtual?: boolean;
+          name: string;
+          remark?: string | null;
+          sort_order?: number;
+          subsystem_id: number;
+          unit?: string | null;
+        };
+        Update: {
+          code?: string;
+          data_type?: string;
+          digits?: number;
+          id?: never;
+          is_alarm?: boolean;
+          is_chartable?: boolean;
+          is_disabled?: boolean;
+          is_group?: boolean;
+          is_reportable?: boolean;
+          is_trendable?: boolean;
+          is_virtual?: boolean;
+          name?: string;
+          remark?: string | null;
+          sort_order?: number;
+          subsystem_id?: number;
+          unit?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tbm_runtime_parameters_subsystem_id_fkey";
+            columns: ["subsystem_id"];
+            isOneToOne: false;
+            referencedRelation: "tbm_subsystems";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_runtime_parameters_subsystem_id_fkey";
+            columns: ["subsystem_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_bound_parameters";
+            referencedColumns: ["subsystem_id"];
+          },
+          {
+            foreignKeyName: "tbm_runtime_parameters_subsystem_id_fkey";
+            columns: ["subsystem_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_parameter_configs";
+            referencedColumns: ["subsystem_id"];
+          },
+        ];
+      };
+      tbm_subsystems: {
+        Row: {
+          code: string;
+          id: number;
+          is_configurable: boolean;
+          is_disabled: boolean;
+          name: string;
+          remark: string | null;
+          sort_order: number;
+        };
+        Insert: {
+          code: string;
+          id?: never;
+          is_configurable?: boolean;
+          is_disabled?: boolean;
+          name: string;
+          remark?: string | null;
+          sort_order?: number;
+        };
+        Update: {
+          code?: string;
+          id?: never;
+          is_configurable?: boolean;
+          is_disabled?: boolean;
+          name?: string;
+          remark?: string | null;
+          sort_order?: number;
+        };
+        Relationships: [];
+      };
+      tbm_system_alarm_events: {
+        Row: {
+          alarm_type: string;
+          created_at: string | null;
+          delta_value: number | null;
+          id: string;
+          level: string;
+          message: string | null;
+          metadata: Json | null;
+          new_value: number | null;
+          occurred_at: string;
+          old_value: number | null;
+          tbm_id: string;
+          title: string;
+          tunnel_id: string | null;
+        };
+        Insert: {
+          alarm_type: string;
+          created_at?: string | null;
+          delta_value?: number | null;
+          id?: string;
+          level: string;
+          message?: string | null;
+          metadata?: Json | null;
+          new_value?: number | null;
+          occurred_at: string;
+          old_value?: number | null;
+          tbm_id: string;
+          title: string;
+          tunnel_id?: string | null;
+        };
+        Update: {
+          alarm_type?: string;
+          created_at?: string | null;
+          delta_value?: number | null;
+          id?: string;
+          level?: string;
+          message?: string | null;
+          metadata?: Json | null;
+          new_value?: number | null;
+          occurred_at?: string;
+          old_value?: number | null;
+          tbm_id?: string;
+          title?: string;
+          tunnel_id?: string | null;
+        };
+        Relationships: [];
+      };
+      tbms: {
+        Row: {
+          code: string;
+          created_at: string | null;
+          created_by: string | null;
+          deleted_at: string | null;
+          deleted_by: string | null;
+          diameter: number | null;
+          external_id: string | null;
+          external_version: number | null;
+          id: string;
+          is_disabled: boolean;
+          manage_code: string | null;
+          manufacturer_id: string;
+          model: string;
+          name: string;
+          power: number | null;
+          remark: string | null;
+          serial_no: string | null;
+          sort_order: number;
+          tbm_type_id: string;
+          updated_at: string | null;
+          updated_by: string | null;
+        };
+        Insert: {
+          code: string;
+          created_at?: string | null;
+          created_by?: string | null;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
+          diameter?: number | null;
+          external_id?: string | null;
+          external_version?: number | null;
+          id?: string;
+          is_disabled?: boolean;
+          manage_code?: string | null;
+          manufacturer_id: string;
+          model: string;
+          name: string;
+          power?: number | null;
+          remark?: string | null;
+          serial_no?: string | null;
+          sort_order?: number;
+          tbm_type_id: string;
+          updated_at?: string | null;
+          updated_by?: string | null;
+        };
+        Update: {
+          code?: string;
+          created_at?: string | null;
+          created_by?: string | null;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
+          diameter?: number | null;
+          external_id?: string | null;
+          external_version?: number | null;
+          id?: string;
+          is_disabled?: boolean;
+          manage_code?: string | null;
+          manufacturer_id?: string;
+          model?: string;
+          name?: string;
+          power?: number | null;
+          remark?: string | null;
+          serial_no?: string | null;
+          sort_order?: number;
+          tbm_type_id?: string;
+          updated_at?: string | null;
+          updated_by?: string | null;
+        };
+        Relationships: [];
+      };
+    };
+    Views: {
+      v_tbm_assignment_list: {
+        Row: {
+          end_date: string | null;
+          id: string | null;
+          project_id: string | null;
+          project_name: string | null;
+          remark: string | null;
+          start_date: string | null;
+          tbm_code: string | null;
+          tbm_id: string | null;
+          tbm_name: string | null;
+          tunnel_id: string | null;
+          tunnel_name: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tbm_assignments_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "tbms";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_assignments_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_detail";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_assignments_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_assignments_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_picker";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_assignments_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_runtime_state";
+            referencedColumns: ["tbm_id"];
+          },
+        ];
+      };
+      v_tbm_bound_parameters: {
+        Row: {
+          archive: boolean | null;
+          bit: number | null;
+          config_id: number | null;
+          internal: string | null;
+          is_alarm: boolean | null;
+          is_chartable: boolean | null;
+          parameter_code: string | null;
+          parameter_data_type: string | null;
+          parameter_digits: number | null;
+          parameter_id: number | null;
+          parameter_is_disabled: boolean | null;
+          parameter_name: string | null;
+          parameter_sort_order: number | null;
+          parameter_unit: string | null;
+          plc_data_type: string | null;
+          plc_sort_order: number | null;
+          plc_tag_id: number | null;
+          plc_unit: string | null;
+          scale: number | null;
+          subsystem_code: string | null;
+          subsystem_id: number | null;
+          subsystem_name: string | null;
+          subsystem_sort_order: number | null;
+          tag_comment: string | null;
+          tag_name: string | null;
+          value_offset: number | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tbm_parameter_configs_parameter_id_fkey";
+            columns: ["parameter_id"];
+            isOneToOne: false;
+            referencedRelation: "tbm_runtime_parameters";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_configs_parameter_id_fkey";
+            columns: ["parameter_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_parameter_configs";
+            referencedColumns: ["parameter_id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_configs_parameter_id_fkey";
+            columns: ["parameter_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_runtime_parameters_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_configs_parameter_id_fkey";
+            columns: ["parameter_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_runtime_parameters_picker";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_configs_plc_tag_id_fkey";
+            columns: ["plc_tag_id"];
+            isOneToOne: false;
+            referencedRelation: "plc_tags";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      v_tbm_daily_progress: {
+        Row: {
+          chainage_end: number | null;
+          chainage_start: number | null;
+          completed_length: number | null;
+          completed_ring_count: number | null;
+          id: string | null;
+          plan_ring_count: number | null;
+          ring_end: number | null;
+          ring_start: number | null;
+          tbm_id: string | null;
+          work_date: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "tbms";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_detail";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_picker";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_daily_progress_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_runtime_state";
+            referencedColumns: ["tbm_id"];
+          },
+        ];
+      };
+      v_tbm_detail: {
+        Row: {
+          code: string | null;
+          created_at: string | null;
+          created_by: string | null;
+          deleted_at: string | null;
+          deleted_by: string | null;
+          diameter: number | null;
+          external_id: string | null;
+          external_version: number | null;
+          id: string | null;
+          is_disabled: boolean | null;
+          manage_code: string | null;
+          manufacturer_name: string | null;
+          model: string | null;
+          name: string | null;
+          power: number | null;
+          remark: string | null;
+          serial_no: string | null;
+          sort_order: number | null;
+          tbm_type_id: string | null;
+          tbm_type_name: string | null;
+          updated_at: string | null;
+          updated_by: string | null;
+        };
+        Relationships: [];
+      };
+      v_tbm_list: {
+        Row: {
+          code: string | null;
+          diameter: number | null;
+          id: string | null;
+          is_disabled: boolean | null;
+          manage_code: string | null;
+          manufacturer_id: string | null;
+          manufacturer_name: string | null;
+          model: string | null;
+          name: string | null;
+          power: number | null;
+          serial_no: string | null;
+          sort_order: number | null;
+          tbm_type_id: string | null;
+          tbm_type_name: string | null;
+        };
+        Relationships: [];
+      };
+      v_tbm_manufacturer_counts: {
+        Row: {
+          manufacturer_id: string | null;
+          tbm_count: number | null;
+        };
+        Relationships: [];
+      };
+      v_tbm_parameter_configs: {
+        Row: {
+          archive: boolean | null;
+          custom_name: string | null;
+          custom_unit: string | null;
+          is_chartable: boolean | null;
+          is_disabled: boolean | null;
+          parameter_code: string | null;
+          parameter_data_type: string | null;
+          parameter_digits: number | null;
+          parameter_id: number | null;
+          parameter_name: string | null;
+          parameter_unit: string | null;
+          plc_data_type: string | null;
+          plc_tag_comment: string | null;
+          plc_tag_id: number | null;
+          plc_unit: string | null;
+          scale: number | null;
+          sort_order: number | null;
+          subsystem_code: string | null;
+          subsystem_id: number | null;
+          subsystem_name: string | null;
+          tag_name: string | null;
+          tbm_code: string | null;
+          tbm_id: string | null;
+          tbm_name: string | null;
+          tbm_parameter_id: number | null;
+          value_offset: number | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tbm_parameter_configs_plc_tag_id_fkey";
+            columns: ["plc_tag_id"];
+            isOneToOne: false;
+            referencedRelation: "plc_tags";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_configs_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "tbms";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_configs_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_detail";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_configs_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_list";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_configs_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_picker";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_parameter_configs_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_runtime_state";
+            referencedColumns: ["tbm_id"];
+          },
+        ];
+      };
+      v_tbm_parameter_templates_list: {
+        Row: {
+          code: string | null;
+          diameter: number | null;
+          id: number | null;
+          is_default: boolean | null;
+          is_disabled: boolean | null;
+          name: string | null;
+          remark: string | null;
+          sort_order: number | null;
+          tbm_type_code: string | null;
+          tbm_type_id: string | null;
+          tbm_type_name: string | null;
+        };
+        Relationships: [];
+      };
+      v_tbm_picker: {
+        Row: {
+          code: string | null;
+          diameter: number | null;
+          id: string | null;
+          manage_code: string | null;
+          manufacturer_name: string | null;
+          name: string | null;
+          tbm_type_name: string | null;
+        };
+        Relationships: [];
+      };
+      v_tbm_runtime_parameters_list: {
+        Row: {
+          code: string | null;
+          data_type: string | null;
+          digits: number | null;
+          id: number | null;
+          is_alarm: boolean | null;
+          is_chartable: boolean | null;
+          is_disabled: boolean | null;
+          name: string | null;
+          sort_order: number | null;
+          subsystem_code: string | null;
+          subsystem_id: number | null;
+          subsystem_name: string | null;
+          unit: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tbm_runtime_parameters_subsystem_id_fkey";
+            columns: ["subsystem_id"];
+            isOneToOne: false;
+            referencedRelation: "tbm_subsystems";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tbm_runtime_parameters_subsystem_id_fkey";
+            columns: ["subsystem_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_bound_parameters";
+            referencedColumns: ["subsystem_id"];
+          },
+          {
+            foreignKeyName: "tbm_runtime_parameters_subsystem_id_fkey";
+            columns: ["subsystem_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tbm_parameter_configs";
+            referencedColumns: ["subsystem_id"];
+          },
+        ];
+      };
+      v_tbm_runtime_parameters_picker: {
+        Row: {
+          code: string | null;
+          id: number | null;
+          is_chartable: boolean | null;
+          name: string | null;
+          subsystem_code: string | null;
+          subsystem_name: string | null;
+        };
+        Relationships: [];
+      };
+      v_tbm_runtime_state: {
+        Row: {
+          heartbeat_is_online: boolean | null;
+          heartbeat_last_seen_at: string | null;
+          phase_type: string | null;
+          realdata_is_online: boolean | null;
+          realdata_last_seen_at: string | null;
+          tbm_id: string | null;
+          tbm_name: string | null;
+        };
+        Relationships: [];
+      };
+      v_tbm_type_counts: {
+        Row: {
+          tbm_count: number | null;
+          tbm_type_id: string | null;
+        };
+        Relationships: [];
+      };
+    };
+    Functions: {
+      fn_get_tbm_param_history_by_ring: {
+        Args: {
+          p_fields: string[];
+          p_from_ring: number;
+          p_tbm_id: string;
+          p_to_ring: number;
+          p_work_mode?: string;
+        };
+        Returns: {
+          data: Json;
+          ring: number;
+          ts: string;
+        }[];
+      };
+      fn_get_tbm_param_history_by_time: {
+        Args: {
+          p_fields: string[];
+          p_from: string;
+          p_tbm_id: string;
+          p_to: string;
+          p_work_mode?: string;
+        };
+        Returns: {
+          data: Json;
+          ring: number;
+          ts: string;
+        }[];
+      };
+      fn_get_tbm_realdata_limits: {
+        Args: { p_tbm_id: string };
+        Returns: {
+          max_ring: number;
+          max_time: string;
+          min_ring: number;
+          min_time: string;
+        }[];
+      };
+      fn_get_tbm_work_timeline: {
+        Args: {
+          p_end_at: string;
+          p_offline_gap_minutes?: number;
+          p_start_at: string;
+          p_tbm_id: string;
+        };
+        Returns: {
+          duration_seconds: number;
+          end_at: string;
+          id: string;
+          start_at: string;
+          type: string;
+          value: string;
+        }[];
+      };
+      sync_realdata_table: { Args: { p_tbm_id: string }; Returns: string };
+    };
+    Enums: {
+      [_ in never]: never;
+    };
+    CompositeTypes: {
+      [_ in never]: never;
+    };
+  };
 };
 
 type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">;
@@ -12250,6 +12553,9 @@ export type CompositeTypes<
     : never;
 
 export const Constants = {
+  app: {
+    Enums: {},
+  },
   eqp: {
     Enums: {},
   },
@@ -12266,6 +12572,9 @@ export const Constants = {
     Enums: {},
   },
   system: {
+    Enums: {},
+  },
+  tbm: {
     Enums: {},
   },
 } as const;

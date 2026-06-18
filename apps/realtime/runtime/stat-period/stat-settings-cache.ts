@@ -19,7 +19,7 @@ export function getStatSettings() {
 export async function getCurrentStatPeriodSettings() {
   const result = await pgPool.query(`
     select *
-    from system.stat_period_settings
+    from public.stat_period_settings
     where code = 'tunnel_progress'
       and effective_to is null
     limit 1

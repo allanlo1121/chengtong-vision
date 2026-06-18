@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ThrustMode({ speed = 5 }: { speed?: number }) {
+export default function ThrustMode({ speed = 2 }: { speed?: number }) {
   return (
     <div>
       {" "}

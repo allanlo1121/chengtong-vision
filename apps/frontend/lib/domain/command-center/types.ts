@@ -1,11 +1,20 @@
 import { Database } from "@/lib/core/database/types";
 import { Camelize } from "@/lib/utils/case-converter";
 
-export type CommandCenterSummaryRow =
-  Database["public"]["Views"]["v_command_center_summary"]["Row"];
-export type CommandCenterTunnelRow = Database["public"]["Views"]["v_command_center_tunnel"]["Row"];
-export type TunnelProgressOverviewRow =
-  Database["public"]["Views"]["v_tunnel_progress_overview"]["Row"];
+export type TunnelRuntimeRow = Database["app"]["Views"]["v_tunnel_runtime"]["Row"];
+
+export type TbmRuntimeStateRow = Database["app"]["Views"]["v_tbm_runtime_state"]["Row"];
+
+export type TbmProgressOverviewRow = Database["app"]["Views"]["v_tbm_progress_overview"]["Row"];
+
+// export type CommandCenterSummaryRow =
+//   Database["public"]["Views"]["v_command_center_summary"]["Row"];
+// export type CommandCenterTunnelRow = Database["public"]["Views"]["v_command_center_tunnel"]["Row"];
+// export type TunnelProgressOverviewRow =
+//   Database["app"]["Views"]["v_tunnel_progress_overview"]["Row"];
+
+// export type TunnelProgressByPeriodRows =
+//   Database["public"]["Functions"]["get_tunnel_progress_report"]["Returns"];
 
 // export type TbmRow = Database["eqp"]["Tables"]["tbms"]["Row"];
 // export type TbmInsertRow = Database["eqp"]["Tables"]["tbms"]["Insert"];
@@ -16,6 +25,16 @@ export type TunnelProgressOverviewRow =
 // export type tbmTypeCounts = Database["eqp"]["Views"]["v_tbm_type_counts"]["Row"];
 
 // export type TbmManufacturerCounts = Database["eqp"]["Views"]["v_tbm_manufacturer_counts"]["Row"];
+
+export type TunnelProgressReportItem = {
+  completedLength: number;
+  completedRingCount: number;
+  planRingCount: number;
+  projectName: string;
+  tbmName: string;
+  tunnelId: string;
+  tunnelName: string;
+};
 
 export type CommandCenterSummary = {
   advancingCount: number;
@@ -47,7 +66,10 @@ export interface TunnelRuntimeCardData {
 
   // 状态
   phaseType: TbmPhaseType;
-  isOnline: boolean;
+  heartbeatIsOnline: boolean;
+  heartbeatLastSeenAt?: string;
+  realdataIsOnline?: boolean;
+  realdataLastSeenAt?: string;
 
   // 环号
   currentRing: number;
@@ -88,4 +110,63 @@ export const statusClassMap: Record<TbmPhaseType, string> = {
   offline: "rounded-full bg-slate-500/10 px-2 py-1 text-xs font-medium text-slate-600",
 };
 
-export type TunnelProgressOverview = Camelize<TunnelProgressOverviewRow>;
+// export type TunnelProgressOverview = Camelize<TunnelProgressOverviewRow>;
+
+export type TunnelRuntime = {
+  tunnelId: string;
+  tunnelName: string;
+  tunnelFullName: string;
+
+  projectId: string;
+  projectName: string;
+
+  regionId: string;
+  regionName: string;
+
+  tbmId: string | null;
+  tbmName: string | null;
+  tbmCode: string | null;
+
+  scheduleStartDate: string | null;
+  scheduleEndDate: string | null;
+  actualStartDate: string | null;
+  actualEndDate: string | null;
+
+  startRing: number;
+  endRing: number;
+  startChainage: number | null;
+  endChainage: number | null;
+
+  tunnelStatusId: string;
+  tunnelStatusName: string;
+
+  sortOrder: number;
+};
+
+export type TbmRuntimeState = {
+  tbmId: string;
+  chainage: number | null;
+  heartbeatIsOnline: boolean | null;
+  heartbeatLastSeenAt: string | null;
+  phaseStartAt: string | null;
+  phaseType: string | null;
+  realdataIsOnline: boolean | null;
+  realdataLastSeenAt: string | null;
+  ringNo: number | null;
+};
+
+export type TbmProgressOverview = {
+  tbmId: string;
+  currentWorkDate: string | null;
+  monthAdvanceMeter: number | null;
+  monthRingCount: number | null;
+  monthStartWorkDate: string | null;
+  refreshedAt: string | null;
+  todayAdvanceMeter: number | null;
+  todayRingCount: number | null;
+  totalAdvanceMeter: number | null;
+  totalRingEnd: number | null;
+  weekAdvanceMeter: number | null;
+  weekRingCount: number | null;
+  weekStartWorkDate: string | null;
+};

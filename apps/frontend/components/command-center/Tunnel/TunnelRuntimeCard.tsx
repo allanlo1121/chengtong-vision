@@ -8,18 +8,35 @@ import Link from "next/link";
 
 import SegmentBuild from "./SegmentBuild";
 import TbmThrustMode from "./ThrustMode";
+import { ConnectionIndicator } from "@/components/equip/connection-indicator";
+import ThrustIndicator from "./ThrustIndicator";
+import ThrustMode from "./ThrustMode";
+
+export type TunnelDisplayState = "offline" | "advance" | "assembly" | "stop";
+
+function getTunnelDisplayState(data: TunnelRuntimeCardData) {
+  if (!data.realdataIsOnline) return "offline";
+  return data.phaseType;
+}
 
 export function TunnelRuntimeCard({ data }: { data: TunnelRuntimeCardData }) {
   const progress = data.totalRing > 0 ? (data.currentRing / data.totalRing) * 100 : 0;
+
+  const displayState = getTunnelDisplayState(data);
 
   return (
     <Link href={`/workspace/tunnels/${data.tunnelId}`} className="block">
       <div className="@container aspect-[16/9] overflow-hidden h-full grid grid-rows-[56px_1fr_88px] rounded-2xl bg-white/80 shadow-xl backdrop-blur-[2px]">
         {/* Header */}
-        <div className="border-b border-slate-200 px-5 py-4">
+        <div className="flex flex-row items-center justify-between border-b border-slate-200 px-5 py-4">
           <div className="truncate text-lg font-bold text-slate-900">
             {data.projectName} · {data.tunnelName} · {data.tbmName}
           </div>
+          <ConnectionIndicator
+            status={data.heartbeatIsOnline}
+            lastSeen={data.recordedAt}
+            size={12}
+          />
         </div>
 
         {/* Body */}
@@ -73,7 +90,13 @@ export function TunnelRuntimeCard({ data }: { data: TunnelRuntimeCardData }) {
           {/* 右侧状态 */}
           <div className="col-span-3  flex items-center justify-center overflow-hidden">
             <div className="scale-125 @md:scale-125 @lg:scale-125 @xl:scale-175">
-              {data.phaseType === "assembly" ? <SegmentBuild /> : <TbmThrustMode />}
+              {displayState === "offline" ? (
+                <ThrustIndicator status={displayState} />
+              ) : displayState === "assembly" ? (
+                <SegmentBuild />
+              ) : displayState === "advance" ? (
+                <ThrustMode />
+              ) : null}
             </div>
           </div>
         </div>

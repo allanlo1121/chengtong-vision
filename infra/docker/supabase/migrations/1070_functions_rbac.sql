@@ -4,7 +4,7 @@ returns jsonb
 language sql
 stable
 security definer
-set search_path = public, rbac, hr
+set search_path = public, rbac, hr ,proj, eqp, tbm
 as $$
 
 with current_employee as (
@@ -92,7 +92,7 @@ returns boolean
 language sql
 stable
 security definer
-set search_path = public,rbac,hr
+set search_path = public,rbac,hr,proj,eqp,tbm
 as $$
   select exists (
     select 1

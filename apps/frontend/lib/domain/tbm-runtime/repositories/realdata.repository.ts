@@ -12,7 +12,7 @@ import { mapRuntimeQueryLimits, mapRuntimeSeriesPointHistory } from "../mappers/
 export async function getRealdataLimits(tbmId: string): Promise<RuntimeQueryLimits | null> {
   // Implementation for fetching realdata limits
   const supabase = await createClient();
-  const { data, error } = await supabase.schema("eqp").rpc("fn_get_tbm_realdata_limits", {
+  const { data, error } = await supabase.schema("tbm").rpc("fn_get_tbm_realdata_limits", {
     p_tbm_id: tbmId,
   });
   assertNoError(error);
@@ -30,7 +30,7 @@ export async function getTbmWorkTimeline(params: {
 
   console.log("getTbmWorkTimeline params", params);
 
-  const { data, error } = await supabase.schema("eqp").rpc("fn_get_tbm_work_timeline", {
+  const { data, error } = await supabase.schema("tbm").rpc("fn_get_tbm_work_timeline", {
     p_tbm_id: params.tbmId,
     p_start_at: params.startAt,
     p_end_at: params.endAt,
@@ -55,7 +55,7 @@ export async function getRealdataByTime(params: {
 
   console.log("getRealdataByTime params", params);
 
-  const { data, error } = await supabase.schema("eqp").rpc("fn_get_tbm_param_history_by_time", {
+  const { data, error } = await supabase.schema("tbm").rpc("fn_get_tbm_param_history_by_time", {
     p_tbm_id: params.tbmId,
     p_from: params.from,
     p_to: params.to,
@@ -79,7 +79,7 @@ export async function getRealdataByRing(params: {
 
   console.log("getRealdataByRing params", params);
 
-  const { data, error } = await supabase.schema("eqp").rpc("fn_get_tbm_param_history_by_ring", {
+  const { data, error } = await supabase.schema("tbm").rpc("fn_get_tbm_param_history_by_ring", {
     p_tbm_id: params.tbmId,
     p_from_ring: params.from,
     p_to_ring: params.to,

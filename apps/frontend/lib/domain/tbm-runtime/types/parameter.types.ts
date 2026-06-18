@@ -1,15 +1,15 @@
 import { Database } from "@/lib/core/database/types";
 
-export type TbmRuntimeParameterRow = Database["eqp"]["Tables"]["tbm_runtime_parameters"]["Row"];
+export type TbmRuntimeParameterRow = Database["tbm"]["Tables"]["tbm_runtime_parameters"]["Row"];
 export type TbmRuntimeParameterInsertRow =
-  Database["eqp"]["Tables"]["tbm_runtime_parameters"]["Insert"];
+  Database["tbm"]["Tables"]["tbm_runtime_parameters"]["Insert"];
 export type TbmRuntimeParameterUpdateRow =
-  Database["eqp"]["Tables"]["tbm_runtime_parameters"]["Update"];
+  Database["tbm"]["Tables"]["tbm_runtime_parameters"]["Update"];
 
 export type TbmRuntimeParameterListRow =
-  Database["eqp"]["Views"]["v_tbm_runtime_parameters_list"]["Row"];
+  Database["tbm"]["Views"]["v_tbm_runtime_parameters_list"]["Row"];
 export type TbmRuntimeParameterPickerRow =
-  Database["eqp"]["Views"]["v_tbm_runtime_parameters_picker"]["Row"];
+  Database["tbm"]["Views"]["v_tbm_runtime_parameters_picker"]["Row"];
 
 export type TbmRuntimeParameter = {
   id: number;
@@ -51,6 +51,6 @@ export type TbmRuntimeParameterPickerItem = {
   id: number;
   name: string;
   code: string;
-  subsystemCode: number;
+  subsystemCode: string;
   subsystemName: string;
 };

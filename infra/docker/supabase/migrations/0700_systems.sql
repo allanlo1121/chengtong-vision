@@ -123,7 +123,7 @@ create index idx_menus_sort
 on system.menus(sort_order);
 
 
-create table system.stat_period_settings (
+create table public.stat_period_settings (
     id uuid primary key default gen_random_uuid(),
 
     code text not null,

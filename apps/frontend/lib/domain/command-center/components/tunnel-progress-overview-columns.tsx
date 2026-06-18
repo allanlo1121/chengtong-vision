@@ -9,10 +9,13 @@ import { DataTableColumnHeader } from "@/components/data-table/data-table-column
 // import { formatDateTime } from "@/lib/utils";
 import { routes } from "@/lib/core/router/router";
 
-import { TunnelProgressOverview } from "@/lib/domain/command-center/types";
+import {
+  TunnelProgressOverview,
+  TunnelProgressReportItem,
+} from "@/lib/domain/command-center/types";
 import { calcDistance, formatMeters } from "@/lib/utils/format";
 
-export const columns: ColumnDef<TunnelProgressOverview>[] = [
+export const columns: ColumnDef<TunnelProgressReportItem>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -76,128 +79,32 @@ export const columns: ColumnDef<TunnelProgressOverview>[] = [
     enableHiding: true,
   },
   {
-    accessorKey: "todayRingCount",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="当日环数" />,
+    accessorKey: "completedRingCount",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="完成环数" />,
     cell: ({ row }) => (
-      <div className="w-full text-primary text-center">{row.getValue("todayRingCount")}</div>
+      <div className="w-full text-primary text-center">{row.getValue("completedRingCount")}</div>
     ),
     enableSorting: false,
     enableHiding: true,
   },
   {
-    accessorKey: "todayAdvanceMeter",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="当日进尺" />,
-    cell: ({ row }) => (
-      <div className="w-full text-primary text-center">{row.getValue("todayAdvanceMeter")}</div>
-    ),
-    enableSorting: false,
-    enableHiding: true,
-  },
-  {
-    accessorKey: "weekRingCount",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="本周环数" />,
-    cell: ({ row }) => (
-      <div className="w-full text-primary text-center">{row.getValue("weekRingCount")}</div>
-    ),
-    enableSorting: false,
-    enableHiding: true,
-  },
-  {
-    id: "weekAdvanceMeter",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="本周进尺" />,
+    id: "completedLength",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="完成进尺" />,
     cell: ({ row }) => {
       return (
-        <div className="w-full text-primary text-center">{row.getValue("weekAdvanceMeter")}</div>
+        <div className="w-full text-primary text-center">{row.getValue("completedLength")}</div>
       );
     },
     enableSorting: false,
     enableHiding: true,
   },
+
   {
-    accessorKey: "monthRingCount",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="本月环数" />,
+    accessorKey: "planRingCount",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="计划环数" />,
     cell: ({ row }) => (
-      <div className="w-full text-primary text-center">{row.getValue("monthRingCount")}</div>
+      <div className="w-full text-primary text-center">{row.getValue("planRingCount")}</div>
     ),
-    enableSorting: false,
-    enableHiding: true,
-  },
-  {
-    id: "monthAdvanceMeter",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="本月进尺" />,
-    cell: ({ row }) => {
-      return (
-        <div className="w-full text-primary text-center">{row.getValue("monthAdvanceMeter")}</div>
-      );
-    },
-    enableSorting: false,
-    enableHiding: true,
-  },
-  {
-    accessorKey: "totalAdvanceRingCount",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="总掘进环数" />,
-    cell: ({ row }) => (
-      <div className="w-full text-primary text-center">{row.getValue("totalAdvanceRingCount")}</div>
-    ),
-    enableSorting: false,
-    enableHiding: true,
-  },
-  {
-    id: "totalAdvanceMeter",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="总进尺" />,
-    cell: ({ row }) => {
-      return (
-        <div className="w-full text-primary text-center">{row.getValue("totalAdvanceMeter")}</div>
-      );
-    },
-    enableSorting: false,
-    enableHiding: true,
-  },
-  {
-    accessorKey: "totalRingCount",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="总环数" />,
-    cell: ({ row }) => (
-      <div className="w-full text-primary text-center">{row.getValue("totalRingCount")}</div>
-    ),
-    enableSorting: false,
-    enableHiding: true,
-  },
-  {
-    id: "totalLengthMeter",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="总里程" />,
-    cell: ({ row }) => {
-      return (
-        <div className="w-full text-primary text-center">{row.getValue("totalLengthMeter")}</div>
-      );
-    },
-    enableSorting: false,
-    enableHiding: true,
-  },
-  {
-    id: "remainingRingCount",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="剩余环数" />,
-    cell: ({ row }) => {
-      const totalAdvanceRing = row.original.totalAdvanceRingCount ?? 0;
-      const totalRing = row.original.totalRingCount ?? 0;
-
-      const remaining = totalRing - totalAdvanceRing;
-
-      return <div className="w-full text-primary text-center">{remaining}</div>;
-    },
-    enableSorting: false,
-    enableHiding: true,
-  },
-  {
-    id: "remainingLengthMeter",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="剩余里程" />,
-    cell: ({ row }) => {
-      const totalAdvance = row.original.totalAdvanceMeter ?? 0;
-      const totalLength = row.original.totalLengthMeter ?? 0;
-
-      const remaining = formatMeters(calcDistance(totalLength - totalAdvance));
-
-      return <div className="w-full text-primary text-center">{remaining}</div>;
-    },
     enableSorting: false,
     enableHiding: true,
   },

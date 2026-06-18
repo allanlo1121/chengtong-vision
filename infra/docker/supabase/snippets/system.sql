@@ -334,3 +334,35 @@ from pg_constraint
 where conrelid = 'hr.organizations'::regclass;
 
 NOTIFY pgrst, 'reload schema';
+
+
+create table public.stat_period_settings (
+    id uuid primary key default gen_random_uuid(),
+
+    code text not null,
+
+    day_cutoff_time time not null default '19:00',
+
+    week_start_dow smallint not null default 6,
+
+    month_start_day smallint not null default 26,
+
+    timezone text not null default 'Asia/Shanghai',
+
+    effective_from date not null,
+
+    effective_to date,
+
+    created_at timestamptz not null default now(),
+
+    unique(code, effective_from)
+);
+
+insert into public.stat_period_settings (
+    code,
+    effective_from
+)
+values (
+    'tunnel_progress',
+    '2025-01-01'
+);

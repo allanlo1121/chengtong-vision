@@ -20,7 +20,7 @@ export const tbmParameterConfigRepository = {
     const supabase = await createClient();
     const payload = mapTbmParameterConfigInsertRow(input);
     const { data, error } = await supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbm_parameter_configs")
       .insert(payload)
       .select()
@@ -38,7 +38,7 @@ export const tbmParameterConfigRepository = {
     const payload = mapTbmParameterConfigUpdateRow(input);
 
     const { data, error } = await supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbm_parameter_configs")
       .update(payload)
       .eq("id", input.id)
@@ -58,7 +58,7 @@ export const tbmParameterConfigRepository = {
 
     // 删除记录
     const { data, error } = await supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbm_parameter_configs")
       .delete()
       .eq("id", id)
@@ -77,7 +77,7 @@ export const tbmParameterConfigRepository = {
     const supabase = await createClient();
 
     const { data, error } = await supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbm_parameter_configs")
       .select("*")
       .eq("id", id)
@@ -91,7 +91,7 @@ export const tbmParameterConfigRepository = {
     const supabase = await createClient();
 
     const { error } = await supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbm_parameter_configs")
       .delete()
       .eq("tbm_id", tbmId);
@@ -101,7 +101,7 @@ export const tbmParameterConfigRepository = {
   insertMany: async (rows: TbmParameterConfigInsertRow[]): Promise<number> => {
     const supabase = await createClient();
 
-    const { error } = await supabase.schema("eqp").from("tbm_parameter_configs").insert(rows);
+    const { error } = await supabase.schema("tbm").from("tbm_parameter_configs").insert(rows);
 
     assertNoError(error);
 
@@ -117,7 +117,7 @@ export const tbmParameterConfigRepository = {
 async function syncTbmRealdataTable(tbmId: string): Promise<void> {
   const supabase = await createClient();
   console.log("Syncing TBM realdata table for TBM ID", tbmId);
-  const { error } = await supabase.schema("eqp").rpc("sync_tbm_realdata_table", {
+  const { error } = await supabase.schema("tbm").rpc("sync_realdata_table", {
     p_tbm_id: tbmId,
   });
 
@@ -273,7 +273,7 @@ async function paginateByTbmId(
   const { from, to } = applyPagination(query.page, query.pageSize);
 
   let dbQuery = supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("v_tbm_parameter_configs")
     .select("*", { count: "exact" })
     .eq("tbm_id", tbmId)

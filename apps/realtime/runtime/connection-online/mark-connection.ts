@@ -10,7 +10,7 @@ export async function markConnectionOnline(input: MarkOnlineInput) {
     const currentResult = await client.query(
       `
       select is_online
-      from eqp.tbm_connection_status
+      from tbm.tbm_connection_status
       where tbm_id = $1
         and type = $2
       for update
@@ -23,7 +23,7 @@ export async function markConnectionOnline(input: MarkOnlineInput) {
 
     await client.query(
       `
-      insert into eqp.tbm_connection_status (
+      insert into tbm.tbm_connection_status (
         tbm_id,
         type,
         last_seen_at,
@@ -43,7 +43,7 @@ export async function markConnectionOnline(input: MarkOnlineInput) {
     if (!existed || !wasOnline) {
       await client.query(
         `
-        update eqp.tbm_connection_status_history
+        update tbm.tbm_connection_status_history
         set end_at = $3
         where tbm_id = $1
           and type = $2
@@ -54,7 +54,7 @@ export async function markConnectionOnline(input: MarkOnlineInput) {
 
       await client.query(
         `
-        insert into eqp.tbm_connection_status_history (
+        insert into tbm.tbm_connection_status_history (
           tbm_id,
           type,
           status,
@@ -85,7 +85,7 @@ export async function markConnectionOffline(input: MarkOfflineInput) {
     const currentResult = await client.query(
       `
       select is_online
-      from eqp.tbm_connection_status
+      from tbm.tbm_connection_status
       where tbm_id = $1
         and type = $2
       for update
@@ -102,7 +102,7 @@ export async function markConnectionOffline(input: MarkOfflineInput) {
 
     await client.query(
       `
-      update eqp.tbm_connection_status
+      update tbm.tbm_connection_status
       set
         is_online = false,
         updated_at = now()
@@ -114,7 +114,7 @@ export async function markConnectionOffline(input: MarkOfflineInput) {
 
     await client.query(
       `
-      update eqp.tbm_connection_status_history
+      update tbm.tbm_connection_status_history
       set end_at = $3
       where tbm_id = $1
         and type = $2
@@ -125,7 +125,7 @@ export async function markConnectionOffline(input: MarkOfflineInput) {
 
     await client.query(
       `
-      insert into eqp.tbm_connection_status_history (
+      insert into tbm.tbm_connection_status_history (
         tbm_id,
         type,
         status,

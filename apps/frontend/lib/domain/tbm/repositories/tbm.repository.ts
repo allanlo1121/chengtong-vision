@@ -17,7 +17,7 @@ async function paginate(query: TbmQueryType): Promise<PaginatedResult<TbmListIte
   const { from, to } = applyPagination(query.page, query.pageSize);
 
   let dbQuery = supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("v_tbm_list")
     .select("*", { count: "exact" })
     .range(from, to);
@@ -63,7 +63,7 @@ export const tbmRepository = {
     const supabase = await createClient();
 
     const { data, error } = await supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbms")
       .insert(payload)
       .select("*")
@@ -83,7 +83,7 @@ export const tbmRepository = {
     const supabase = await createClient();
 
     const { data, error } = await supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbms")
       .update(payload)
       .eq("id", input.id)
@@ -103,7 +103,7 @@ export const tbmRepository = {
     const supabase = await createClient();
 
     const { error } = await supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbms")
       .update({
         deleted_at: new Date().toISOString(),
@@ -120,7 +120,7 @@ export const tbmRepository = {
     const supabase = await createClient();
 
     const { data, error } = await supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbms")
       .select("*")
       .eq("id", id)
@@ -134,7 +134,7 @@ export const tbmRepository = {
     const supabase = await createClient();
 
     const { data, error } = await supabase
-      .schema("eqp")
+      .schema("tbm")
       .from("tbms")
       .select("*")
       .eq("code", code)
@@ -154,7 +154,7 @@ async function getTbmDetailById(id: string): Promise<TbmDetail | null> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
-    .schema("eqp")
+    .schema("tbm")
     .from("v_tbm_detail")
     .select("*")
     .eq("id", id)
