@@ -1,0 +1,90 @@
+      <!-- <svg
+        className="stroke-gray-400 w-full h-full"
+        viewBox="0 0 100 100"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle cx="50" cy="50" r="49" stroke="#1E3A8A" strokeWidth="2" fill="none" />
+        <path
+          className="segmentA-build"
+          d="M50.1359 99.8582C38.6663 99.8574 27.5583 95.8738 18.706 88.5969L24.4915 81.7021C31.7227 87.6193 40.7826 90.8576 50.1366 90.8582C59.4905 90.8589 68.5509 87.6219 75.7829 81.7056L81.5674 88.6013C72.7141 95.877 61.6056 99.859 50.1359 99.8582Z"
+          fill="#ECDEDE"
+          stroke="#1E3A8A"
+        />
+        <path
+          className="segmentB-build"
+          d="M50.1359 99.8582C38.6663 99.8574 27.5583 95.8738 18.706 88.5969L24.4915 81.7021C31.7227 87.6193 40.7826 90.8576 50.1366 90.8582C59.4905 90.8589 68.5509 87.6219 75.7829 81.7056L81.5674 88.6013C72.7141 95.877 61.6056 99.859 50.1359 99.8582Z"
+          fill="#ECDEDE"
+          stroke="#1E3A8A"
+        />
+        <path
+          className="segmentC-build"
+          d="M50.1359 99.8582C38.6663 99.8574 27.5583 95.8738 18.706 88.5969L24.4915 81.7021C31.7227 87.6193 40.7826 90.8576 50.1366 90.8582C59.4905 90.8589 68.5509 87.6219 75.7829 81.7056L81.5674 88.6013C72.7141 95.877 61.6056 99.859 50.1359 99.8582Z"
+          fill="#ECDEDE"
+          stroke="#1E3A8A"
+        />
+        <path
+          className="segmentD-build"
+          d="M50.1359 99.8582C38.6663 99.8574 27.5583 95.8738 18.706 88.5969L24.4915 81.7021C31.7227 87.6193 40.7826 90.8576 50.1366 90.8582C59.4905 90.8589 68.5509 87.6219 75.7829 81.7056L81.5674 88.6013C72.7141 95.877 61.6056 99.859 50.1359 99.8582Z"
+          fill="#ECDEDE"
+          stroke="#1E3A8A"
+        />
+        <path
+          className="segmentE-build"
+          d="M32.899 96.9846C43.9542 101.008 56.0743 101.005 67.1273 96.9751L63.7018 87.5801C54.8594 90.804 45.1634 90.8067 36.3192 87.5877L32.899 96.9846Z"
+          fill="#ECDEDE"
+          stroke="#1E3A8A"
+        />
+      </svg> -->
+
+
+      const segments = [
+      {key:"A",color:"#F59E0B",start:"08:00",end:"10:30"},
+      {key:"B",color:"#3B82F6",start:"10:30",end:"12:00"},
+      {key:"C",color:"#10B981",start:"12:00",end:"13:30"},
+      {key:"D",color:"#6B7280",start:"13:30",end:"15:00"},
+      {key:"E",color:"#EF4444",start:"15:00",end:"16:30"},
+      ]
+
+      const timeToAngle = (time:string) => {
+        const [hours, minutes] = time.split(':').map(Number);
+        const totalMinutes = hours * 60 + minutes;
+        return (totalMinutes / (24 * 60)) * 360; // Convert to degrees
+      };
+
+      const polarToCartesian = (cx: number, cy: number, radius: number, angle: number) => {
+        const radian = (angle - 90) * (Math.PI / 180); // Adjust for SVG coordinate system
+        return {
+          x: cx + radius * Math.cos(radian),
+          y: cy + radius * Math.sin(radian),
+        };
+      };
+
+      <svg
+        className="stroke-gray-400 w-full h-full"
+        viewBox="0 0 100 100"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle cx="50" cy="50" r="49" stroke="#1E3A8A" strokeWidth="2" fill="none" />
+        {segments.map((segment) => {
+          const startAngle = timeToAngle(segment.start);
+          const endAngle = timeToAngle(segment.end);
+          const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+
+          const start = polarToCartesian(50, 50, 49, endAngle);
+          const end = polarToCartesian(50, 50, 49, startAngle);
+
+          const pathData = `M ${start.x} ${start.y} A 49 49 0 ${largeArcFlag} 0 ${end.x} ${end.y} L 50 50 Z`;
+
+          return (
+            <path
+              key={segment.key}
+              d={pathData}
+              fill={segment.color}
+              stroke="#1E3A8A"
+            />
+          );
+        })}
+
+</svg>

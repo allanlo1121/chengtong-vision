@@ -5,13 +5,13 @@ import { KpiStrip } from "./KpiStrip";
 export function AdvanceMetricSummary({
   rings,
   distance,
-  avgRings,
-  avgDistance,
+  weekRings,
+  monthRings,
 }: {
   rings: number;
   distance: number;
-  avgRings: number;
-  avgDistance: number;
+  weekRings: number;
+  monthRings: number;
 }) {
   return (
     <KpiStrip
@@ -31,16 +31,16 @@ export function AdvanceMetricSummary({
           color: "text-emerald-500",
         },
         {
-          label: "日均环数",
-          value: avgRings,
+          label: "周完成环",
+          value: weekRings,
           unit: "环",
           icon: Gauge,
           color: "text-violet-500",
         },
         {
-          label: "日均里程",
-          value: avgDistance,
-          unit: "m",
+          label: "月完成环",
+          value: monthRings,
+          unit: "环",
           icon: Gauge,
           color: "text-orange-500",
         },

@@ -42,7 +42,7 @@ type Props = {
   initialValue?: TunnelStatusTimelineValue | null;
 };
 
-export async function TunnelStatusTimelineDrawer({
+export function TunnelStatusTimelineDrawer({
   open,
   onOpenChange,
   tunnelId,

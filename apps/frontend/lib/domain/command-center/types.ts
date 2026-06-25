@@ -7,6 +7,9 @@ export type TbmRuntimeStateRow = Database["app"]["Views"]["v_tbm_runtime_state"]
 
 export type TbmProgressOverviewRow = Database["app"]["Views"]["v_tbm_progress_overview"]["Row"];
 
+export type KpiCockpitGlobalRow = Database["app"]["Views"]["v_kpi_cockpit_global"]["Row"];
+
+export type KpiTunnelRow = Database["app"]["Views"]["v_tunnel_kpi"]["Row"];
 // export type CommandCenterSummaryRow =
 //   Database["public"]["Views"]["v_command_center_summary"]["Row"];
 // export type CommandCenterTunnelRow = Database["public"]["Views"]["v_command_center_tunnel"]["Row"];
@@ -169,4 +172,72 @@ export type TbmProgressOverview = {
   weekAdvanceMeter: number | null;
   weekRingCount: number | null;
   weekStartWorkDate: string | null;
+};
+
+export type KpiCockpitGlobal = {
+  advancingCount: number | null;
+  assemblyCount: number | null;
+  faultCount: number | null;
+  monthMeter: number | null;
+  monthPlanRing: number | null;
+  monthProgressRate: number | null;
+  monthRing: number | null;
+  offlineCount: number | null;
+  projectCount: number | null;
+  refreshedAt: string | null;
+  stoppedCount: number | null;
+  tbmCount: number | null;
+  todayMeter: number | null;
+  todayPlanRing: number | null;
+  todayRing: number | null;
+  totalMeter: number | null;
+  totalRing: number | null;
+  tunnelCount: number | null;
+  weekMeter: number | null;
+  weekPlanRing: number | null;
+  weekProgressRate: number | null;
+  weekRing: number | null;
+};
+
+export type KpiTunnel = {
+  tunnelId: string | null;
+  tunnelName: string | null;
+  regionName: string | null;
+  projectName: string | null;
+
+  tbmName: string | null;
+  tbmCode: string | null;
+
+  tunnelStatusName: string | null;
+
+  latitude: number | null;
+  longitude: number | null;
+
+  scheduleEndDate: string | null;
+  scheduleStartDate: string | null;
+  actualEndDate: string | null;
+  actualStartDate: string | null;
+
+  tunnelLength: number | null;
+  tunnelRingCount: number | null;
+
+  chainage: number | null;
+  ringNo: number | null;
+  phaseType: TbmPhaseType;
+  heartbeatIsOnline: boolean | null;
+  realdataIsOnline: boolean | null;
+
+  todayRingCount: number | null;
+  todayAdvanceMeter: number | null;
+  todayPlanRing: number | null;
+
+  weekAdvanceMeter: number | null;
+  weekPlanRing: number | null;
+  weekRingCount: number | null;
+
+  monthAdvanceMeter: number | null;
+  monthPlanRing: number | null;
+  monthRingCount: number | null;
+
+  refreshedAt: string | null;
 };

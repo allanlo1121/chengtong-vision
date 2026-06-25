@@ -3,7 +3,7 @@ import { BarChart3 } from "lucide-react";
 import { cn } from "@/lib/core/utils";
 import { Panel } from "@/components/command-center/panel";
 
-interface TunnelProgressItem {
+export interface TunnelProgressItem {
   id: string;
   name: string;
   completed: number;

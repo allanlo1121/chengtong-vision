@@ -12,17 +12,17 @@ type ConnectionStatus = "online" | "offline" | "stale";
 
 function getConnectionStatus(
   status: boolean,
-  lastSeen: string,
-  threshold: number
+  lastSeen?: string,
+  threshold?: number
 ): ConnectionStatus {
   if (!status) return "offline";
 
   const now = Date.now();
-  const last = new Date(lastSeen).getTime();
+  const last = lastSeen ? new Date(lastSeen).getTime() : NaN;
 
   if (Number.isNaN(last)) return "offline";
 
-  if (now - last > threshold) return "stale";
+  if (threshold !== undefined && now - last > threshold) return "stale";
 
   return "online";
 }

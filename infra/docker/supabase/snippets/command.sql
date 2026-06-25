@@ -242,3 +242,192 @@ select
 
 from progress pg
 cross join periods p;
+
+
+
+drop view app.v_tunnel_kpi cascade;
+
+create or replace view app.v_tunnel_kpi as
+select
+  ta.tunnel_id,
+  s.tbm_name,
+  s.tbm_code,
+  tr.tunnel_name,
+  tr.project_name,
+  tr.region_name,
+
+  abs(tr.end_chainage-tr.start_chainage) as tunnel_length,
+  abs(tr.end_ring-tr.start_ring) as tunnel_ring_count,
+
+  tr.schedule_start_date,
+  tr.schedule_end_date,
+  tr.actual_start_date,
+  tr.actual_end_date,
+
+  tr.longitude,
+  tr.latitude,
+  tr.sort_order,
+  tr.tunnel_status_name,
+
+  -- =========================
+  -- 状态
+  -- =========================
+  s.phase_type,
+  s.heartbeat_is_online,
+  s.realdata_is_online,
+
+  -- =========================
+  -- 当前进度（实时）
+  -- =========================
+  s.ring_no,
+  s.chainage,
+
+  -- =========================
+  -- 进度指标（来自 overview）
+  -- =========================
+  p.today_ring_count,
+  p.week_ring_count,
+  p.month_ring_count,
+
+  p.today_advance_meter,
+  p.week_advance_meter,
+  p.month_advance_meter,
+
+  p.total_ring_end,
+  p.total_advance_meter,
+
+  -- =========================
+  -- 计划（未来扩展）
+  -- =========================
+  p.today_plan_ring,
+  p.week_plan_ring,
+  p.month_plan_ring,
+
+  -- =========================
+  -- 在线状态综合
+  -- =========================
+  case
+    when s.realdata_is_online = false then 'offline'
+    when s.phase_type = 'fault' then 'fault'
+    when s.phase_type = 'assembly' then 'assembly'
+    when s.phase_type = 'advance' then 'advance'
+    else 'stopped'
+  end as status_kpi,
+
+  now() as refreshed_at
+
+from tbm.tbm_assignments ta
+
+left join app.v_tunnel_runtime tr
+  on tr.tunnel_id = ta.tunnel_id
+
+left join app.v_tbm_runtime_state s
+  on s.tbm_id = ta.tbm_id
+
+left join app.v_tbm_progress_overview p
+  on p.tbm_id = ta.tbm_id;
+
+
+
+
+
+
+
+drop view app.v_tbm_runtime_state cascade;
+
+create or replace view app.v_tbm_runtime_state as
+
+select
+  ta.tbm_id,
+  t.name as tbm_name,
+  t.code as tbm_code,
+
+  phase.phase_type,
+  phase.ring_no,
+  phase.chainage,
+  phase.start_at as phase_start_at,  
+  
+  conn.is_online as realdata_is_online,
+  conn.last_seen_at as realdata_last_seen_at,
+
+  conn_heartbeat.is_online as heartbeat_is_online,
+  conn_heartbeat.last_seen_at as heartbeat_last_seen_at
+
+
+from  tbm.tbm_assignments ta
+
+left join tbm.tbms t
+  on t.id = ta.tbm_id
+
+left join tbm.tbm_phase_active phase
+  on phase.tbm_id = ta.tbm_id
+
+left join tbm.tbm_connection_status conn
+  on conn.tbm_id = ta.tbm_id
+ and conn.type = 'realdata'
+
+ left join tbm.tbm_connection_status conn_heartbeat
+   on conn_heartbeat.tbm_id = ta.tbm_id
+  and conn_heartbeat.type = 'heartbeat'
+
+where ta.end_date is null;
+
+drop view app.v_tbm_global_command_center_kpi cascade;
+create or replace view  app.v_kpi_cockpit_global as
+select
+
+  -- =========================
+  -- 结构维度
+  -- =========================
+  count(distinct project_id) as project_count,
+  count(distinct tunnel_id) as tunnel_count,
+  count(distinct tbm_id) as tbm_count,
+
+  -- =========================
+  -- 状态分布
+  -- =========================
+  count(*) filter (where phase_type = 'advance') as advancing_count,
+  count(*) filter (where phase_type = 'assembly') as assembly_count,
+  count(*) filter (where phase_type = 'stopped') as stopped_count,
+  count(*) filter (where phase_type = 'fault') as fault_count,
+  count(*) filter (where heartbeat_is_online = false) as offline_count,
+
+  -- =========================
+  -- 进度汇总
+  -- =========================
+  sum(today_ring_count) as today_ring,
+  sum(week_ring_count) as week_ring,
+  sum(month_ring_count) as month_ring,
+
+  sum(today_advance_meter) as today_meter,
+  sum(week_advance_meter) as week_meter,
+  sum(month_advance_meter) as month_meter,
+
+  sum(total_ring_end) as total_ring,
+  sum(total_advance_meter) as total_meter,
+
+  -- =========================
+  -- 计划
+  -- =========================
+  sum(month_plan_ring) as month_plan_ring,
+  sum(week_plan_ring) as week_plan_ring,
+  sum(today_plan_ring) as today_plan_ring,
+
+  -- =========================
+  -- 完成率
+  -- =========================
+  case
+    when sum(month_plan_ring) > 0
+    then sum(month_ring_count)::float / sum(month_plan_ring)
+    else null
+  end as month_progress_rate,
+
+  case
+    when sum(week_plan_ring) > 0
+    then sum(week_ring_count)::float / sum(week_plan_ring)
+    else null
+  end as week_progress_rate,
+
+  now() as refreshed_at
+
+from app.v_tunnel_command_center_kpi;

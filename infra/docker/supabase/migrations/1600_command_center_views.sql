@@ -490,6 +490,8 @@ create or replace view app.v_tbm_runtime_state as
 
 select
   ta.tbm_id,
+  t.name as tbm_name,
+  t.code as tbm_code,
 
   phase.phase_type,
   phase.ring_no,
@@ -504,6 +506,9 @@ select
 
 
 from  tbm.tbm_assignments ta
+
+left join tbm.tbms t
+  on t.id = ta.tbm_id
 
 left join tbm.tbm_phase_active phase
   on phase.tbm_id = ta.tbm_id
@@ -810,7 +815,7 @@ select
   -- 在线状态综合
   -- =========================
   case
-    when s.heartbeat_is_online = false then 'offline'
+    when s.realdat_is_online = false then 'offline'
     when s.phase_type = 'fault' then 'fault'
     when s.phase_type = 'assembly' then 'assembly'
     when s.phase_type = 'advance' then 'advance'

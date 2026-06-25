@@ -6,19 +6,56 @@ export type Database = {
       [_ in never]: never;
     };
     Views: {
+      v_kpi_cockpit_global: {
+        Row: {
+          advancing_count: number | null;
+          assembly_count: number | null;
+          fault_count: number | null;
+          month_meter: number | null;
+          month_plan_ring: number | null;
+          month_progress_rate: number | null;
+          month_ring: number | null;
+          offline_count: number | null;
+          project_count: number | null;
+          refreshed_at: string | null;
+          stopped_count: number | null;
+          tbm_count: number | null;
+          today_meter: number | null;
+          today_plan_ring: number | null;
+          today_ring: number | null;
+          total_meter: number | null;
+          total_ring: number | null;
+          tunnel_count: number | null;
+          week_meter: number | null;
+          week_plan_ring: number | null;
+          week_progress_rate: number | null;
+          week_ring: number | null;
+        };
+        Relationships: [];
+      };
       v_tbm_progress_overview: {
         Row: {
           current_work_date: string | null;
           month_advance_meter: number | null;
+          month_avg_meter_per_day: number | null;
+          month_avg_ring_per_day: number | null;
+          month_plan_meter: number | null;
+          month_plan_ring: number | null;
+          month_progress_rate: number | null;
           month_ring_count: number | null;
           month_start_work_date: string | null;
           refreshed_at: string | null;
           tbm_id: string | null;
           today_advance_meter: number | null;
+          today_plan_meter: number | null;
+          today_plan_ring: number | null;
           today_ring_count: number | null;
           total_advance_meter: number | null;
           total_ring_end: number | null;
           week_advance_meter: number | null;
+          week_plan_meter: number | null;
+          week_plan_ring: number | null;
+          week_progress_rate: number | null;
           week_ring_count: number | null;
           week_start_work_date: string | null;
         };
@@ -42,7 +79,9 @@ export type Database = {
           realdata_is_online: boolean | null;
           realdata_last_seen_at: string | null;
           ring_no: number | null;
+          tbm_code: string | null;
           tbm_id: string | null;
+          tbm_name: string | null;
         };
         Relationships: [
           {
@@ -51,6 +90,132 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "v_tunnel_runtime";
             referencedColumns: ["tbm_id"];
+          },
+        ];
+      };
+      v_tunnel_command_center_kpi: {
+        Row: {
+          actual_end_date: string | null;
+          actual_start_date: string | null;
+          chainage: number | null;
+          heartbeat_is_online: boolean | null;
+          latitude: number | null;
+          longitude: number | null;
+          month_advance_meter: number | null;
+          month_plan_meter: number | null;
+          month_plan_ring: number | null;
+          month_progress_rate: number | null;
+          month_ring_count: number | null;
+          phase_type: string | null;
+          prefix: string | null;
+          project_id: string | null;
+          project_name: string | null;
+          realdata_is_online: boolean | null;
+          refreshed_at: string | null;
+          region_id: string | null;
+          region_name: string | null;
+          ring_no: number | null;
+          schedule_end_date: string | null;
+          schedule_start_date: string | null;
+          sort_order: number | null;
+          status_kpi: string | null;
+          tbm_code: string | null;
+          tbm_id: string | null;
+          tbm_name: string | null;
+          today_advance_meter: number | null;
+          today_plan_meter: number | null;
+          today_plan_ring: number | null;
+          today_progress_rate: number | null;
+          today_ring_count: number | null;
+          total_advance_meter: number | null;
+          total_ring_end: number | null;
+          tunnel_full_name: string | null;
+          tunnel_id: string | null;
+          tunnel_length: number | null;
+          tunnel_name: string | null;
+          tunnel_ring_count: number | null;
+          tunnel_status_id: string | null;
+          tunnel_status_name: string | null;
+          week_advance_meter: number | null;
+          week_plan_meter: number | null;
+          week_plan_ring: number | null;
+          week_ring_count: number | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tbm_assignments_tbm_id_fkey";
+            columns: ["tbm_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_runtime";
+            referencedColumns: ["tbm_id"];
+          },
+          {
+            foreignKeyName: "tbm_assignments_tunnel_id_fkey";
+            columns: ["tunnel_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_runtime";
+            referencedColumns: ["tunnel_id"];
+          },
+          {
+            foreignKeyName: "tunnel_status_timeline_tunnel_status_id_fkey";
+            columns: ["tunnel_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_command_center_kpi";
+            referencedColumns: ["region_id"];
+          },
+          {
+            foreignKeyName: "tunnel_status_timeline_tunnel_status_id_fkey";
+            columns: ["tunnel_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_runtime";
+            referencedColumns: ["region_id"];
+          },
+        ];
+      };
+      v_tunnel_kpi: {
+        Row: {
+          actual_end_date: string | null;
+          actual_start_date: string | null;
+          chainage: number | null;
+          heartbeat_is_online: boolean | null;
+          latitude: number | null;
+          longitude: number | null;
+          month_advance_meter: number | null;
+          month_plan_ring: number | null;
+          month_ring_count: number | null;
+          phase_type: string | null;
+          project_name: string | null;
+          realdata_is_online: boolean | null;
+          refreshed_at: string | null;
+          region_name: string | null;
+          ring_no: number | null;
+          schedule_end_date: string | null;
+          schedule_start_date: string | null;
+          sort_order: number | null;
+          status_kpi: string | null;
+          tbm_code: string | null;
+          tbm_name: string | null;
+          today_advance_meter: number | null;
+          today_plan_ring: number | null;
+          today_ring_count: number | null;
+          total_advance_meter: number | null;
+          total_ring_end: number | null;
+          tunnel_id: string | null;
+          tunnel_length: number | null;
+          tunnel_name: string | null;
+          tunnel_ring_count: number | null;
+          tunnel_status_name: string | null;
+          week_advance_meter: number | null;
+          week_plan_ring: number | null;
+          week_ring_count: number | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tbm_assignments_tunnel_id_fkey";
+            columns: ["tunnel_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_runtime";
+            referencedColumns: ["tunnel_id"];
           },
         ];
       };
@@ -83,6 +248,13 @@ export type Database = {
           tunnel_status_name: string | null;
         };
         Relationships: [
+          {
+            foreignKeyName: "tunnel_status_timeline_tunnel_status_id_fkey";
+            columns: ["tunnel_status_id"];
+            isOneToOne: false;
+            referencedRelation: "v_tunnel_command_center_kpi";
+            referencedColumns: ["region_id"];
+          },
           {
             foreignKeyName: "tunnel_status_timeline_tunnel_status_id_fkey";
             columns: ["tunnel_status_id"];
@@ -10100,6 +10272,54 @@ export type Database = {
           month_start_day?: number;
           timezone?: string;
           week_start_dow?: number;
+        };
+        Relationships: [];
+      };
+      tbm_system_alarm_events: {
+        Row: {
+          alarm_type: string;
+          created_at: string;
+          delta_value: number | null;
+          id: string;
+          level: string;
+          message: string | null;
+          metadata: Json | null;
+          new_value: number | null;
+          occurred_at: string;
+          old_value: number | null;
+          tbm_id: string;
+          title: string;
+          tunnel_id: string | null;
+        };
+        Insert: {
+          alarm_type: string;
+          created_at?: string;
+          delta_value?: number | null;
+          id?: string;
+          level: string;
+          message?: string | null;
+          metadata?: Json | null;
+          new_value?: number | null;
+          occurred_at: string;
+          old_value?: number | null;
+          tbm_id: string;
+          title: string;
+          tunnel_id?: string | null;
+        };
+        Update: {
+          alarm_type?: string;
+          created_at?: string;
+          delta_value?: number | null;
+          id?: string;
+          level?: string;
+          message?: string | null;
+          metadata?: Json | null;
+          new_value?: number | null;
+          occurred_at?: string;
+          old_value?: number | null;
+          tbm_id?: string;
+          title?: string;
+          tunnel_id?: string | null;
         };
         Relationships: [];
       };

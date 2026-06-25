@@ -1,0 +1,69 @@
+<!-- <svg width="8295" height="6428" viewBox="0 0 8295 6428" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1155.02 2529.03H630.014V2845.16H1155.02V2529.03Z" fill="white"/>
+<path d="M1680 2107.52H1155V2423.64H1680V2107.52Z" fill="black"/>
+<path d="M3150.01 2107.52H2625.01V2423.64H3150.01V2107.52Z" fill="white"/>
+<path d="M5145.01 2529.03H4620.01V2845.16H5145.01V2529.03Z" fill="black"/>
+<path d="M7875.01 2107.52H7350.01V2423.64H7875.01V2107.52Z" fill="white"/>
+<path d="M7875.01 4425.81H7350.01V4741.94H7875.01V4425.81Z" fill="black"/>
+<path d="M5565 4425.81H5040V4741.94H5565V4425.81Z" fill="white"/>
+<path d="M5145.01 4004.3H4620.01V4320.42H5145.01V4004.3Z" fill="black"/>
+<path d="M3045 4004.3H2520V4320.42H3045V4004.3Z" fill="black"/>
+<path d="M735.006 4425.81H210.004V4741.94H735.006V4425.81Z" fill="black"/>
+<path d="M1785.01 4425.81H1260.01V4741.94H1785.01V4425.81Z" fill="white"/>
+<path d="M525.002 6111.83H0V6427.96H525.002V6111.83Z" fill="black"/>
+<path d="M3045 5690.32H2520V6006.44H3045V5690.32Z" fill="white"/>
+<path d="M3885 6111.83H3360V6427.96H3885V6111.83Z" fill="black"/>
+<path d="M8295 6111.83H7770V6427.96H8295V6111.83Z" fill="black"/>
+<path d="M6615 6111.83H6090V6427.96H6615V6111.83Z" fill="white"/>
+<path d="M3570.02 0H3150.01V316.127H3570.02V0Z" fill="black"/>
+<path d="M3885.02 421.496H3465.01V737.623H3885.02V421.496Z" fill="black"/>
+<path d="M5145.01 0H4725V316.127H5145.01V0Z" fill="black"/>
+<path d="M735.008 632.254H314.998V948.38H735.008V632.254Z" fill="black"/>
+<path d="M7875.02 632.254H7455.01V948.38H7875.02V632.254Z" fill="black"/>
+</svg> -->
+
+
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+
+  <defs>
+    <style>
+      :root {
+        --soil-base: #9b7d62;
+        --soil-spot-1: #7a6049;
+        --soil-spot-2: #5e4936;
+        --soil-spot-3: #3e2f23;
+        --soil-spot-4: #b89a7e;
+      }
+    </style>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="256" height="256" fill="var(--soil-base)" fill-opacity="0" />
+
+  <!-- 随机土块（可重复 tile） -->
+  <circle cx="28" cy="35" r="6" fill="var(--soil-spot-1)" />
+  <circle cx="86" cy="18" r="3" fill="var(--soil-spot-2)" />
+  <circle cx="150" cy="42" r="7" fill="var(--soil-spot-1)" />
+  <circle cx="212" cy="26" r="4" fill="var(--soil-spot-2)" />
+
+  <circle cx="46" cy="92" r="5" fill="var(--soil-spot-2)" />
+  <circle cx="118" cy="110" r="8" fill="var(--soil-spot-3)" />
+  <circle cx="182" cy="96" r="3" fill="var(--soil-spot-3)" />
+  <circle cx="228" cy="82" r="6" fill="var(--soil-spot-1)" />
+
+  <circle cx="22" cy="146" r="4" fill="var(--soil-spot-2)" />
+  <circle cx="92" cy="136" r="3" fill="var(--soil-spot-3)" />
+  <circle cx="186" cy="142" r="6" fill="var(--soil-spot-1)" />
+  <circle cx="216" cy="172" r="2" fill="var(--soil-spot-2)" />
+
+  <circle cx="60" cy="194" r="7" fill="var(--soil-spot-1)" />
+  <circle cx="132" cy="204" r="4" fill="var(--soil-spot-2)" />
+  <circle cx="192" cy="186" r="8" fill="var(--soil-spot-3)" />
+  <circle cx="236" cy="206" r="3" fill="var(--soil-spot-2)" />
+
+  <circle cx="30" cy="226" r="3" fill="var(--soil-spot-2)" />
+  <circle cx="104" cy="234" r="5" fill="var(--soil-spot-1)" />
+  <circle cx="172" cy="236" r="3" fill="var(--soil-spot-2)" />
+  <circle cx="224" cy="238" r="4" fill="var(--soil-spot-3)" />
+
+</svg>

@@ -13,22 +13,22 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+import { useMemo } from "react";
+import {
+  TunnelProgressPanel,
+  type TunnelProgressItem,
+} from "@/components/command-center/TunnelProgressPanel";
+
 import { Button } from "@/components/ui/button";
 import { DashboardMap } from "@/components/command-center/DashboardMap";
 import { TbmStatusSummary } from "@/components/command-center/TbmStatusSummary";
 import { AdvanceMetricSummary } from "@/components/command-center/AdvanceMetricSummary";
 import { ProjectSummary } from "@/components/command-center/ProjectSummary";
 import { WarningSummary } from "@/components/command-center/WarningSummary";
-import { TunnelProgressPanel } from "@/components/command-center/TunnelProgressPanel";
 import { WarningPanel } from "@/components/command-center/WarningPanel";
 
-import type { CommandCenterSummary } from "@/lib/domain/command-center/types";
-import { useCommandCenterSummary } from "@/lib/domain/command-center/useCommandCenterSummary";
-import { useCommandCenterTunnel } from "@/lib/domain/command-center/useCommandCenterTunnel";
-
-import { useTunnelRuntime } from "@/hooks/use-tunnel-command-center";
-import { useTunnelDashboard } from "@/hooks/useTunnelDashboard";
-import { useMemo } from "react";
+import { useKpiCockpitGlobal } from "@/hooks/use-kpi-cockpit-global";
+import { useKpiTunnel } from "@/hooks/use-kpi-tunnel";
 
 // interface CommandCenterDashboardProps {
 //   initialSummary: CommandCenterSummary;
@@ -45,11 +45,25 @@ type TbmStatusSummaryValue = {
 export function CommandCenterDashboard() {
   // const { data, loading, refreshing, error } = useCommandCenterSummary(initialSummary);
 
-  const { data, summary, tunnelProgressData, loading, error } = useTunnelDashboard();
+  const { data, loading, error } = useKpiCockpitGlobal();
 
-  console.log("CommandCenterDashboard useTunnelDashboard:", data);
+  const { data: tunnelData, loading: tunnelLoading, error: tunnelError } = useKpiTunnel();
+
+  console.log("CommandCenterDashboard useKpiCockpitGlobal:", data);
+  console.log("CommandCenterDashboard useKpiTunnel:", tunnelData);
 
   // const summary = data ?? initialSummary;
+
+  const tunnelProgress: TunnelProgressItem[] = useMemo(() => {
+    if (!tunnelData) return [];
+
+    return tunnelData.map((item) => ({
+      id: item.tunnelId!,
+      name: item.tunnelName!,
+      completed: item.ringNo ?? 0,
+      remaining: Math.max((item.tunnelRingCount ?? 0) - (item.ringNo ?? 0), 0),
+    }));
+  }, [tunnelData]);
 
   if (loading) {
     return <div className="p-6 text-sm text-muted-foreground">加载中...</div>;
@@ -78,27 +92,32 @@ export function CommandCenterDashboard() {
         <div className="grid grid-cols-12 gap-5">
           <div className="col-span-12 grid grid-cols-4 gap-5">
             <ProjectSummary
-              projects={summary?.projectCount ?? 0}
-              tunnels={summary?.tunnelCount ?? 0}
-              tbms={summary?.tbmCount ?? 0}
+              projects={data?.projectCount ?? 0}
+              tunnels={data?.tunnelCount ?? 0}
+              tbms={data?.tbmCount ?? 0}
             />
 
             <TbmStatusSummary
-              advancing={summary?.advancing ?? 0}
-              assembly={summary?.assembly ?? 0}
-              stopped={summary?.stopped ?? 0}
-              fault={summary?.fault ?? 0}
-              offline={summary?.offline ?? 0}
+              advancing={data?.advancingCount ?? 0}
+              assembly={data?.assemblyCount ?? 0}
+              stopped={data?.stoppedCount ?? 0}
+              fault={data?.faultCount ?? 0}
+              offline={data?.offlineCount ?? 0}
               refreshing={false}
             />
 
-            <AdvanceMetricSummary rings={100} distance={1025.6} avgRings={11} avgDistance={34.2} />
+            <AdvanceMetricSummary
+              rings={data?.todayRing ?? 0}
+              distance={data?.todayMeter ?? 0}
+              weekRings={data?.weekRing ?? 0}
+              monthRings={data?.monthRing ?? 0}
+            />
 
             <WarningSummary high={5} medium={3} low={2} />
           </div>
 
           <div className="col-span-12 space-y-5 xl:col-span-3">
-            <TunnelProgressPanel data={tunnelProgressData} />
+            <TunnelProgressPanel data={tunnelProgress} />
           </div>
 
           <div className="col-span-12 space-y-5 xl:col-span-6" />

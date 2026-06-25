@@ -2,8 +2,9 @@ import { createClient } from "@/lib/infra/supabase/client";
 
 import { assertNoError } from "@/lib/infra/repositories/base.repository";
 
-import { TbmRuntimeState, TunnelRuntime } from "./types";
-import { mapTbmRuntimeState, mapTunnelRuntime } from "./mapper";
+import { KpiCockpitGlobal, KpiTunnel, TbmRuntimeState, TunnelRuntime } from "./types";
+import { mapKpiCockpitGlobal, mapKpiTunnel, mapTbmRuntimeState, mapTunnelRuntime } from "./mapper";
+import { map } from "zod";
 
 // export async function getCommandCenterSummary(): Promise<CommandCenterSummaryRow | null> {
 //   const supabase = createClient();
@@ -56,4 +57,35 @@ export async function getTbmRuntimeState(): Promise<TbmRuntimeState[]> {
   assertNoError(error);
 
   return (data ?? []).map(mapTbmRuntimeState);
+}
+
+export async function getKpiCockpitGlobal(): Promise<KpiCockpitGlobal> {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .schema("app")
+    .from("v_kpi_cockpit_global")
+    .select("*")
+    .maybeSingle();
+
+  assertNoError(error);
+
+  if (!data) {
+    throw new Error("v_kpi_cockpit_global returned empty result");
+  }
+
+  return mapKpiCockpitGlobal(data);
+}
+
+export async function getKpiTunnel(): Promise<KpiTunnel[]> {
+  const supabase = createClient();
+
+  const { data, error } = await supabase.schema("app").from("v_tunnel_kpi").select("*");
+
+  console.log("getKpiTunnel - raw data:", data);
+  console.log("getKpiTunnel - error:", error);
+
+  assertNoError(error);
+
+  return (data ?? []).map(mapKpiTunnel);
 }
