@@ -22,3 +22,12 @@ values (
   true,
   'chengtong/#'
 );
+
+insert into public.stat_period_settings (
+    code,
+    effective_from
+)
+values (
+    'tunnel_progress',
+    '2025-01-01'
+);

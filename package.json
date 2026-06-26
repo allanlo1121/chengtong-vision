@@ -17,7 +17,7 @@
     "db:reset": "supabase db reset --workdir infra/docker",
     "db:start": "supabase start --workdir infra/docker",
     "db:stop": "supabase stop --workdir infra/docker",
-    "db:types": "supabase gen types typescript --db-url postgresql://postgres:postgres@127.0.0.1:54322/postgres --schema public,rbac,system,hr,eqp,proj,app,tbm > apps/frontend/lib/core/database/types/database.ts"
+    "db:types": "supabase gen types typescript --db-url postgresql://postgres:postgres@127.0.0.1:54322/postgres --schema public,rbac,system,hr,eqp,proj,app,tbm > apps/admin/lib/core/database/types/database.ts"
   },
   "packageManager": "pnpm@9.15.9",
   "keywords": [],

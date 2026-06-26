@@ -15,7 +15,7 @@ export default [
       "node_modules",
       "dist",
       ".turbo",
-      "apps/frontend/.next",
+      "apps/admin/.next",
       "apps/backend/dist",
       "packages/core/supabaseTypes.ts", // 忽略大型自动生成文件
     ],

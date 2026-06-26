@@ -7,7 +7,7 @@ import path from "node:path";
 
 const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
-const OUTPUT_PATH = path.resolve("apps/frontend/lib/rbac/permissions.ts");
+const OUTPUT_PATH = path.resolve("apps/admin/lib/rbac/permissions.ts");
 
 const DRY_RUN = process.argv.includes("--dry");
 const CI_MODE = process.argv.includes("--check");

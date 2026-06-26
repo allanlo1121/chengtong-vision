@@ -14,14 +14,14 @@ foreach ($port in $ports) {
 }
 
 # 删除 .next.lock
-$lockPath = "apps/frontend/.next/dev/lock"
+$lockPath = "apps/admin/.next/dev/lock"
 if (Test-Path $lockPath) {
     Write-Host "Removing leftover Next.js lock file..." -ForegroundColor Yellow
     Remove-Item -Force $lockPath
 }
 
 # 删除 .next 目录
-$nextDir = "apps/frontend/.next"
+$nextDir = "apps/admin/.next"
 if (Test-Path $nextDir) {
     Write-Host "Cleaning .next cache..." -ForegroundColor DarkYellow
     Remove-Item -Recurse -Force $nextDir

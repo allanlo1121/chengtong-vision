@@ -1,4 +1,4 @@
 {
   "files": [],
-  "references": [{ "path": "./apps/frontend" }, { "path": "./tsconfig.scripts.json" }]
+  "references": [{ "path": "./apps/admin" }, { "path": "./tsconfig.scripts.json" }]
 }

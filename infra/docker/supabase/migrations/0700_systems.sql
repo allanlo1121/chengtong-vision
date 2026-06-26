@@ -95,6 +95,9 @@ create table system.menus (
     check (
       menu_scope in (
         'global',
+        'admin',
+        'workspace',
+        'command_center',
         'tunnel_workspace',
         'tbm_workspace',
         'project_workspace'

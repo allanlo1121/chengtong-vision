@@ -7,6 +7,9 @@ export async function createAdminUser(): Promise<string> {
 
   const password = process.env.ADMIN_PASSWORD;
 
+  console.log("Creating admin user with email:", email);
+  console.log("Using password:", password);
+
   if (!email || !password) {
     throw new Error("ADMIN_EMAIL and ADMIN_PASSWORD are required");
   }

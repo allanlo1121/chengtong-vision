@@ -76,8 +76,8 @@ sql_paths = [
   "./seeds/0263_tbm_parameter_template.sql",
   "./seeds/0300_init_orgs_seed.sql",
   "./seeds/0900_init_rbac_seed.sql",
-  "./seeds/1000_init_system_seed.sql",
-  "./seeds/1020_init_tree_seed.sql",
+  "./seeds/1000_system_menu_admin.sql",
+  "./seeds/1010_system_menu_workspace.sql",
   "./seeds/1030_tbm_mqtt_seed.sql"
 ]
 

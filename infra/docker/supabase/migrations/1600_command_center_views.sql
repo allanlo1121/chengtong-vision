@@ -642,195 +642,195 @@ from progress pg
 cross join periods p;
 
 
-create or replace view app.v_tbm_command_center_kpi as
-select
-  t.tbm_id,
-  t.tbm_name,
-  t.tbm_code,
+-- create or replace view app.v_tbm_command_center_kpi as
+-- select
+--   t.tbm_id,
+--   t.tbm_name,
+--   t.tbm_code,
 
-  t.tunnel_id,
-  t.tunnel_name,
-  t.project_id,
-  t.project_name,
+--   t.tunnel_id,
+--   t.tunnel_name,
+--   t.project_id,
+--   t.project_name,
 
-  -- =========================
-  -- 状态
-  -- =========================
-  s.phase_type,
-  s.heartbeat_is_online,
-  s.realdata_is_online,
+--   -- =========================
+--   -- 状态
+--   -- =========================
+--   s.phase_type,
+--   s.heartbeat_is_online,
+--   s.realdata_is_online,
 
-  -- =========================
-  -- 当前进度（实时）
-  -- =========================
-  s.ring_no,
-  s.chainage,
+--   -- =========================
+--   -- 当前进度（实时）
+--   -- =========================
+--   s.ring_no,
+--   s.chainage,
 
-  -- =========================
-  -- 进度指标（来自 overview）
-  -- =========================
-  p.today_ring_count,
-  p.week_ring_count,
-  p.month_ring_count,
+--   -- =========================
+--   -- 进度指标（来自 overview）
+--   -- =========================
+--   p.today_ring_count,
+--   p.week_ring_count,
+--   p.month_ring_count,
 
-  p.today_advance_meter,
-  p.week_advance_meter,
-  p.month_advance_meter,
+--   p.today_advance_meter,
+--   p.week_advance_meter,
+--   p.month_advance_meter,
 
-  p.total_ring_end,
-  p.total_advance_meter,
+--   p.total_ring_end,
+--   p.total_advance_meter,
 
-  -- =========================
-  -- 计划（未来扩展）
-  -- =========================
-  p.today_plan_ring,
-  p.week_plan_ring,
-  p.month_plan_ring,
+--   -- =========================
+--   -- 计划（未来扩展）
+--   -- =========================
+--   p.today_plan_ring,
+--   p.week_plan_ring,
+--   p.month_plan_ring,
 
-  p.today_plan_meter,
-  p.week_plan_meter,
-  p.month_plan_meter,
+--   p.today_plan_meter,
+--   p.week_plan_meter,
+--   p.month_plan_meter,
 
-  -- =========================
-  -- 派生 KPI
-  -- =========================
-  case 
-    when p.today_plan_ring > 0 
-    then p.today_ring_count::float / p.today_plan_ring
-    else null
-  end as today_progress_rate,
+--   -- =========================
+--   -- 派生 KPI
+--   -- =========================
+--   case 
+--     when p.today_plan_ring > 0 
+--     then p.today_ring_count::float / p.today_plan_ring
+--     else null
+--   end as today_progress_rate,
 
-  case 
-    when p.month_plan_ring > 0 
-    then p.month_ring_count::float / p.month_plan_ring
-    else null
-  end as month_progress_rate,
+--   case 
+--     when p.month_plan_ring > 0 
+--     then p.month_ring_count::float / p.month_plan_ring
+--     else null
+--   end as month_progress_rate,
 
-  -- =========================
-  -- 在线状态综合
-  -- =========================
-  case
-    when s.heartbeat_is_online = false then 'offline'
-    when s.phase_type = 'fault' then 'fault'
-    when s.phase_type = 'assembly' then 'assembly'
-    when s.phase_type = 'advance' then 'advance'
-    else 'stopped'
-  end as status_kpi,
+--   -- =========================
+--   -- 在线状态综合
+--   -- =========================
+--   case
+--     when s.heartbeat_is_online = false then 'offline'
+--     when s.phase_type = 'fault' then 'fault'
+--     when s.phase_type = 'assembly' then 'assembly'
+--     when s.phase_type = 'advance' then 'advance'
+--     else 'stopped'
+--   end as status_kpi,
 
-  now() as refreshed_at
+--   now() as refreshed_at
 
-from tbm.tbm_list t
+-- from tbm.tbm_list t
 
-left join app.v_tbm_runtime_state s
-  on s.tbm_id = t.tbm_id
+-- left join app.v_tbm_runtime_state s
+--   on s.tbm_id = t.tbm_id
 
-left join app.v_tbm_progress_overview p
-  on p.tbm_id = t.tbm_id;
-
-
-create or replace view app.v_tunnel_command_center_kpi as
-select
-  ta.tunnel_id,
-  ta.tbm_id,
-
-  t.tbm_name,
-  t.tbm_code,
+-- left join app.v_tbm_progress_overview p
+--   on p.tbm_id = t.tbm_id;
 
 
-  tr.tunnel_name,
-  tr.project_id,
-  tr.project_name,
-  tr.region_id,
-  tr.region_name,
+-- create or replace view app.v_tunnel_command_center_kpi as
+-- select
+--   ta.tunnel_id,
+--   ta.tbm_id,
 
-  tr.tunnel_full_name,
-  tr.prefix,
-  Math.abs(tr.end_chainage-tr.start_chainage) as tunnel_length,
-  Math.abs(tr.end_ring-tr.start_ring) as tunnel_ring_count,
-  tr.schedule_start_date,
-  tr.schedule_end_date,
-  tr.actual_start_date,
-  tr.actual_end_date,
+--   t.tbm_name,
+--   t.tbm_code,
 
-  tr.longitude,
-  tr.latitude,
-  tr.sort_order,
-  tr.tunnel_status_id,
-  tr.tunnel_status_name,
 
-  -- =========================
-  -- 状态
-  -- =========================
-  s.phase_type,
-  s.heartbeat_is_online,
-  s.realdata_is_online,
+--   tr.tunnel_name,
+--   tr.project_id,
+--   tr.project_name,
+--   tr.region_id,
+--   tr.region_name,
 
-  -- =========================
-  -- 当前进度（实时）
-  -- =========================
-  s.ring_no,
-  s.chainage,
+--   tr.tunnel_full_name,
+--   tr.prefix,
+--   Math.abs(tr.end_chainage-tr.start_chainage) as tunnel_length,
+--   Math.abs(tr.end_ring-tr.start_ring) as tunnel_ring_count,
+--   tr.schedule_start_date,
+--   tr.schedule_end_date,
+--   tr.actual_start_date,
+--   tr.actual_end_date,
 
-  -- =========================
-  -- 进度指标（来自 overview）
-  -- =========================
-  p.today_ring_count,
-  p.week_ring_count,
-  p.month_ring_count,
+--   tr.longitude,
+--   tr.latitude,
+--   tr.sort_order,
+--   tr.tunnel_status_id,
+--   tr.tunnel_status_name,
 
-  p.today_advance_meter,
-  p.week_advance_meter,
-  p.month_advance_meter,
+--   -- =========================
+--   -- 状态
+--   -- =========================
+--   s.phase_type,
+--   s.heartbeat_is_online,
+--   s.realdata_is_online,
 
-  p.total_ring_end,
-  p.total_advance_meter,
+--   -- =========================
+--   -- 当前进度（实时）
+--   -- =========================
+--   s.ring_no,
+--   s.chainage,
 
-  -- =========================
-  -- 计划（未来扩展）
-  -- =========================
-  p.today_plan_ring,
-  p.week_plan_ring,
-  p.month_plan_ring,
+--   -- =========================
+--   -- 进度指标（来自 overview）
+--   -- =========================
+--   p.today_ring_count,
+--   p.week_ring_count,
+--   p.month_ring_count,
 
-  p.today_plan_meter,
-  p.week_plan_meter,
-  p.month_plan_meter,
+--   p.today_advance_meter,
+--   p.week_advance_meter,
+--   p.month_advance_meter,
 
-  -- =========================
-  -- 派生 KPI
-  -- =========================
-  case 
-    when p.today_plan_ring > 0 
-    then p.today_ring_count::float / p.today_plan_ring
-    else null
-  end as today_progress_rate,
+--   p.total_ring_end,
+--   p.total_advance_meter,
 
-  case 
-    when p.month_plan_ring > 0 
-    then p.month_ring_count::float / p.month_plan_ring
-    else null
-  end as month_progress_rate,
+--   -- =========================
+--   -- 计划（未来扩展）
+--   -- =========================
+--   p.today_plan_ring,
+--   p.week_plan_ring,
+--   p.month_plan_ring,
 
-  -- =========================
-  -- 在线状态综合
-  -- =========================
-  case
-    when s.realdat_is_online = false then 'offline'
-    when s.phase_type = 'fault' then 'fault'
-    when s.phase_type = 'assembly' then 'assembly'
-    when s.phase_type = 'advance' then 'advance'
-    else 'stopped'
-  end as status_kpi,
+--   p.today_plan_meter,
+--   p.week_plan_meter,
+--   p.month_plan_meter,
 
-  now() as refreshed_at
+--   -- =========================
+--   -- 派生 KPI
+--   -- =========================
+--   case 
+--     when p.today_plan_ring > 0 
+--     then p.today_ring_count::float / p.today_plan_ring
+--     else null
+--   end as today_progress_rate,
 
-from tbm.tbm_assignments ta
+--   case 
+--     when p.month_plan_ring > 0 
+--     then p.month_ring_count::float / p.month_plan_ring
+--     else null
+--   end as month_progress_rate,
 
-left join app.v_tunnel_runtime tr
-  on t.tunnel_id = ta.tunnel_id
+--   -- =========================
+--   -- 在线状态综合
+--   -- =========================
+--   case
+--     when s.realdat_is_online = false then 'offline'
+--     when s.phase_type = 'fault' then 'fault'
+--     when s.phase_type = 'assembly' then 'assembly'
+--     when s.phase_type = 'advance' then 'advance'
+--     else 'stopped'
+--   end as status_kpi,
 
-left join app.v_tbm_runtime_state s
-  on s.tbm_id = ta.tbm_id
+--   now() as refreshed_at
 
-left join app.v_tbm_progress_overview p
-  on p.tbm_id = ta.tbm_id;
+-- from tbm.tbm_assignments ta
+
+-- left join app.v_tunnel_runtime tr
+--   on t.tunnel_id = ta.tunnel_id
+
+-- left join app.v_tbm_runtime_state s
+--   on s.tbm_id = ta.tbm_id
+
+-- left join app.v_tbm_progress_overview p
+--   on p.tbm_id = ta.tbm_id;

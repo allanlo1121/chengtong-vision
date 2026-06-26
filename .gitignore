@@ -2,8 +2,8 @@
 node_modules/
 
 # next.js
-apps/frontend/.next/
-apps/frontend/out/
+apps/admin/.next/
+apps/admin/out/
 
 # turbo
 .turbo/
@@ -16,9 +16,9 @@ apps/backend/dist/
 *.env
 *.env.local
 *.env.production
-apps/frontend/.env.production
-apps/frontend/.env.local
-apps/frontend/.env
+apps/admin/.env.production
+apps/admin/.env.local
+apps/admin/.env
 apps/backend/.env
 
 # supabase local data

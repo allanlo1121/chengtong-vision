@@ -5,5 +5,5 @@ dist
 package-lock.json
 pnpm-lock.yaml
 supabase
-apps/frontend/.next
+apps/admin/.next
 apps/backend/dist
