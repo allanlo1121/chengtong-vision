@@ -20,6 +20,8 @@ export function mapTunnelList(row: TunnelListRow): TunnelListItem {
     projectName: row.project_name,
     organizationId: row.organization_id,
     organizationName: row.organization_name,
+    regionId: row.region_id,
+    regionName: row.region_name,
 
     prefix: row.prefix,
     startChainage: row.start_chainage,
@@ -61,6 +63,8 @@ export function mapTunnelListItem(row: TunnelListRow): TunnelListItem {
     organizationName: row.organization_name,
     projectId: row.project_id,
     projectName: row.project_name,
+    regionId: row.region_id,
+    regionName: row.region_name,
     prefix: row.prefix,
     startRing: row.start_ring,
     endRing: row.end_ring,

@@ -8,5 +8,4 @@ export * from "./tbm-daily-progress.service";
 
 export * from "./tbm-parameter-config.service";
 
-export * from "./realdata.service";
 export * from "./tbm-plc-tag.service";

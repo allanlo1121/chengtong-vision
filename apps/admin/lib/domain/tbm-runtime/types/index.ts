@@ -4,7 +4,6 @@ export * from "./subsystem.types";
 export * from "./parameter-template.types";
 export * from "./tbm-parameter-configs.types";
 export * from "./tbm-parameter-configs.types";
-export * from "./realdata.types";
 export * from "./tbm-daily-progress.types";
-export * from "./ui.types";
+
 export * from "./tbm-plc-tag.types";

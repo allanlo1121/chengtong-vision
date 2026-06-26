@@ -40,7 +40,7 @@ export async function getEntityNameByPath(entity: string, id: string): Promise<s
   switch (entity) {
     case "tbms": {
       const { data, error } = await supabase
-        .schema("eqp")
+        .schema("tbm")
         .from("tbms")
         .select("name")
         .eq("id", id)

@@ -57,7 +57,7 @@ export const useParameterNameMap = create<ParameterNameStore>((set, get) => ({
       const to = from + PAGE_SIZE - 1;
 
       const { data, error } = await supabase
-        .schema("eqp")
+        .schema("tbm")
         .from("tbm_runtime_parameters")
         .select("code, name, unit")
         .eq("is_disabled", false)
