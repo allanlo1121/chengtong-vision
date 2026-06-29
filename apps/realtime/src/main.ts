@@ -4,13 +4,13 @@ import cors from "@fastify/cors";
 
 import { createServer } from "http";
 
-import { createSocketServer } from "../socket/socket.server";
+import { createSocketServer } from "./socket/socket.server";
 
-import "../mqtt/mqtt.client";
-import { checkConnectionTimeouts } from "../runtime/connection-online/check-connection-timeouts";
+import "./mqtt/mqtt.client";
+import { checkConnectionTimeouts } from "./runtime/connection-online/check-connection-timeouts";
 
-import { loadTbmProgressCache } from "../runtime/tbm-progress-cache";
-import { loadStatSettings } from "../runtime/stat-period";
+import { loadTbmProgressCache } from "./runtime/tbm-progress-cache";
+import { loadStatSettings } from "./runtime/stat-period";
 
 async function bootstrap() {
   const app = Fastify();

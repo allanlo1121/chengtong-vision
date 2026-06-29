@@ -11,6 +11,11 @@ apps/admin/out/
 # build
 dist/
 apps/backend/dist/
+apps/realtime/dist/
+apps/admin/dist/
+apps/admin/.turbo/
+apps/admin/.next/
+
 
 # env
 *.env
