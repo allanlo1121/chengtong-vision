@@ -21,3 +21,15 @@ services:
     volumes:
       - ./data:/opt/emqx/data
       - ./log:/opt/emqx/log
+    
+    networks:
+      - emqx
+      - supabase
+
+networks:
+  emqx:
+    name: emqx_network
+
+  supabase:
+    external: true
+    name: supabase_network_chengtong-vision

@@ -38,7 +38,7 @@ async function bootstrap() {
 
   createSocketServer(server);
 
-  const PORT = Number(process.env.PORT ?? 6001);
+  const PORT = Number(process.env.PORT ?? 4000);
 
   server.listen(PORT, "0.0.0.0", () => {
     console.log(`realtime server running :${PORT}`);
